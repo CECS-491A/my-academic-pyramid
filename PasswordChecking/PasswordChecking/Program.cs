@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PasswordChecking.HashFunctions;
+using System;
 
 namespace PasswordChecking
 {
@@ -11,9 +8,18 @@ namespace PasswordChecking
 
         static void Main(string[] args)
         {
-            Console.WriteLine("Vong is Tsundere!");
+            // Use SHA1 Hash Function
+            SHA1HashFunction sha = new SHA1HashFunction();
 
-            Console.WriteLine("Press any key to continue...");
+            // Make Password Validation Object
+            string password = "password";
+            Console.WriteLine("Password: " + password);
+            PasswordValidation pv = new PasswordValidation(sha, password);
+
+            // Run validation and return hash object
+            Hash hash = pv.Run();
+            Console.WriteLine(hash);
+            Console.WriteLine("End");
             Console.ReadKey(true);
         }
     }
