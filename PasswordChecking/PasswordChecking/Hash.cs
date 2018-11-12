@@ -3,8 +3,8 @@ namespace PasswordChecking
 {
     class Hash
     {
-        private string _hashValue;
-        private int _count;
+        private string _hashValue; // Hash Value
+        private int _count; // Number of times the password has been cracked.
 
         public Hash(string hashValue, int count)
         {

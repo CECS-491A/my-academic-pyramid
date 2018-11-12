@@ -5,29 +5,40 @@ namespace PasswordChecking.HashFunctions
 {
     class PasswordValidation
     {
-        private IHashFunction _hashFunction;
-        private string _password;
-        private string _hashValue;
+        private IHashFunction _hashFunction; // Hash Function
+        private string _password; // Password
+        private string _url; // URL
+        private string _hashValue; // Hash Value Result
         WebClient client = new WebClient();
 
-        public PasswordValidation(IHashFunction hashFunction, string password)
+        public PasswordValidation(IHashFunction hashFunction, string password, string url)
         {
             _hashFunction = hashFunction;
             _password = password;
+            _url = url;
         }
 
+        /// <summary>
+        /// Calls the functions to hash the password,
+        /// request the hash, and find a matching hash
+        /// in the response.
+        /// </summary>
+        /// <returns>The matching hash if found, null if not found</returns>
         public Hash Run()
         {
             // Use the hash function to get the hash value of the password.
             _hashValue = _hashFunction.GetHashValue(_password);
 
+            // First 5 character of the hash value
             string prefix = _hashValue.Substring(0, 5);
-            string url = "https://api.pwnedpasswords.com/range/" + prefix;
 
-            string response = client.DownloadString(url);
+            // GET request
+            string response = client.DownloadString(_url + prefix);
+
+            // Find a matching hash
             Hash hash = FindHash(_hashValue, prefix, response);
 
-            // Return hash?
+            // Return hash
             return hash;
         }
 

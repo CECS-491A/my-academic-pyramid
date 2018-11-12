@@ -14,7 +14,9 @@ namespace PasswordChecking
             // Make Password Validation Object
             string password = "password";
             Console.WriteLine("Password: " + password);
-            PasswordValidation pv = new PasswordValidation(sha, password);
+            string url = "https://api.pwnedpasswords.com/range/";
+            Console.WriteLine("URL: " + url);
+            PasswordValidation pv = new PasswordValidation(sha, password, url);
 
             // Run validation and return hash object
             Hash hash = pv.Run();
