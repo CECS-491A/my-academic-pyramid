@@ -3,7 +3,7 @@ using System.Text;
 
 namespace PasswordChecking.HashFunctions
 {
-    class SHA1HashFunction : IHashFunction
+    public class SHA1HashFunction : IHashFunction
     {
         public string GetHashValue(string input)
         {

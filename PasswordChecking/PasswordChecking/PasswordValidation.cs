@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Net;
-
 namespace PasswordChecking.HashFunctions
 {
-    class PasswordValidation
+    public class PasswordValidation
     {
         private IHashFunction _hashFunction; // Hash Function
         private string _password; // Password
@@ -52,17 +51,17 @@ namespace PasswordChecking.HashFunctions
         public Hash FindHash(string hashValue, string prefix, string list)
         {
             // Split each line of the hash list into an array
-            string[] hashesString = list.Split('\n');
+            string[] hashList = list.Split('\n');
 
             // Binary search
             int min = 0;
-            int max = hashesString.Length - 1;
+            int max = hashList.Length - 1;
 
             while(min <= max)
             {
                 int mid = (min + max) / 2;
                 // Split the hash value from the count
-                string[] hash = hashesString[mid].Split(':');
+                string[] hash = hashList[mid].Split(':');
                 // Full hash value to match
                 string value = prefix + hash[0];
 

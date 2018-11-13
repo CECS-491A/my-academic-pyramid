@@ -2,7 +2,7 @@
 
 namespace PasswordChecking.HashFunctions
 {
-    interface IHashFunction
+    public interface IHashFunction
     {
         /// <summary>
         /// Implementation of a hash function.

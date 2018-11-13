@@ -1,7 +1,7 @@
 ﻿
 namespace PasswordChecking
 {
-    class Hash
+    public class Hash
     {
         private string _hashValue; // Hash Value
         private int _count; // Number of times the password has been cracked.
@@ -12,8 +12,28 @@ namespace PasswordChecking
             _count = count;
         }
 
-        public string HashValue { get; set; }
-        public string Count { get; set; }
+        public string HashValue // Hash Value
+        {
+            get
+            {
+                return _hashValue;
+            }
+            private set
+            {
+                _hashValue = value;
+            }
+        }
+        public int Count // Number of times the password has been cracked.
+        {
+            get
+            {
+                return _count;
+            }
+            private set
+            {
+                _count = value;
+            }
+        }
 
         public override string ToString()
         {
