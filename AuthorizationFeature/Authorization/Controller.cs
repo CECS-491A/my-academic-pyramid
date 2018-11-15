@@ -8,11 +8,11 @@ namespace Authorization
 {
     public static class Controller
     {
-        //Method to access Student Area
+        // Method to access Student Area
         
         public static void AccessStudentArea(AuthorizedUser authorizedUser)
         {
-            //Check if user has require claim
+            // Check if user has require claim
             if (authorizedUser.hasClaim("CanAccessStudentArea"))
             {
 
@@ -27,7 +27,7 @@ namespace Authorization
 
         }
 
-        //Check if user has require claim
+        // Check if user has require claim
         public static void AccessAdminArea(AuthorizedUser authorizedUser)
         {
             if (authorizedUser.hasClaim("CanAccessAdminArea"))

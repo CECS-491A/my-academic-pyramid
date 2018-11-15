@@ -24,10 +24,10 @@ namespace Authorization
         public String UserName { get; set; }
         public String UserType { get; set; }
 
-        //List of claims
+        // List of claims
         public List<Claim> UserClaims { get; set; }
 
-        //Check if the user has a claim 
+        // Check if the user has a claim 
         public bool hasClaim(String claimName)
         {
             foreach(Claim claim in UserClaims)

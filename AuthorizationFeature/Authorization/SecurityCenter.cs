@@ -8,7 +8,7 @@ namespace Authorization
 {
     class SecurityCenter
     {
-        //Make an authorized user object 
+        // Make an authorized user object 
         public AuthorizedUser AuthorizeUser(AuthorizedUser user)
         {
             AuthorizedUser authUserObj = new AuthorizedUser();
@@ -17,18 +17,18 @@ namespace Authorization
             authUserObj.UserName = user.UserName;
             authUserObj.UserType = user.UserType;
 
-            //Retrieve claims from the claim table in the database
+            // Retrieve claims from the claim table in the database
             authUserObj.UserClaims = GetUserClaim(user);
             return authUserObj;
         }
 
-        //The method will go to the database and get claims of user. The claims is based on type of user (Admin or Student)
+        // The method will go to the database and get claims of user. The claims is based on type of user (Admin or Student)
         public List<Claim> GetUserClaim(AuthorizedUser authUser)
         {
             List<Claim>list  = new List<Claim>();
             try
             {
-                //Create instance of database context using Entity Framework
+                // Create instance of database context using Entity Framework
                 using (var db = new DatabaseEntities())
                 {
                     list = db.Claims.Where(
@@ -43,12 +43,12 @@ namespace Authorization
 
         }
 
-        //Method to disable a claim in claim table
+        // Method to disable a claim in claim table
         public void DisableClaim(String claim)
         {
             try
             {
-                //Create instance of database context using Entity Framework
+                // Create instance of database context using Entity Framework
                 using (var db = new DatabaseEntities())
                 {
                     var claimObj = db.Claims.SingleOrDefault(c => c.ClaimType.Equals(claim));
@@ -69,12 +69,12 @@ namespace Authorization
             
         }
 
-        //Method to enable a claim in claim table
+        // Method to enable a claim in claim table
         public void EnableClaim(String claim)
         {
             try
             {
-                //Create instance of database context using Entity Framework
+                // Create instance of database context using Entity Framework
                 using (var db = new DatabaseEntities())
                 {
                     var claimObj = db.Claims.SingleOrDefault(c => c.ClaimType.Equals(claim));

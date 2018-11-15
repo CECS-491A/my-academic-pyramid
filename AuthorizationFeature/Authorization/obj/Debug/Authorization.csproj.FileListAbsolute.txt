@@ -22,3 +22,15 @@ C:\Users\nguye\source\repos\CECS491\Authorization\Authorization\obj\Debug\Author
 C:\Users\nguye\source\repos\CECS491\Authorization\Authorization\obj\Debug\Authorization.exe
 C:\Users\nguye\source\repos\CECS491\Authorization\Authorization\obj\Debug\Authorization.pdb
 C:\Users\nguye\source\repos\CECS491\Authorization\Authorization\obj\Debug\Authorization.csprojAssemblyReference.cache
+C:\Users\nguye\Documents\GitHub\my-academic-pyramid\AuthorizationFeature\Authorization\bin\Debug\Authorization.exe.config
+C:\Users\nguye\Documents\GitHub\my-academic-pyramid\AuthorizationFeature\Authorization\bin\Debug\Authorization.exe
+C:\Users\nguye\Documents\GitHub\my-academic-pyramid\AuthorizationFeature\Authorization\bin\Debug\Authorization.pdb
+C:\Users\nguye\Documents\GitHub\my-academic-pyramid\AuthorizationFeature\Authorization\bin\Debug\EntityFramework.dll
+C:\Users\nguye\Documents\GitHub\my-academic-pyramid\AuthorizationFeature\Authorization\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\nguye\Documents\GitHub\my-academic-pyramid\AuthorizationFeature\Authorization\bin\Debug\EntityFramework.xml
+C:\Users\nguye\Documents\GitHub\my-academic-pyramid\AuthorizationFeature\Authorization\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\nguye\Documents\GitHub\my-academic-pyramid\AuthorizationFeature\Authorization\obj\Debug\Authorization.csprojAssemblyReference.cache
+C:\Users\nguye\Documents\GitHub\my-academic-pyramid\AuthorizationFeature\Authorization\obj\Debug\Authorization.csproj.CoreCompileInputs.cache
+C:\Users\nguye\Documents\GitHub\my-academic-pyramid\AuthorizationFeature\Authorization\obj\Debug\Authorization.csproj.CopyComplete
+C:\Users\nguye\Documents\GitHub\my-academic-pyramid\AuthorizationFeature\Authorization\obj\Debug\Authorization.exe
+C:\Users\nguye\Documents\GitHub\my-academic-pyramid\AuthorizationFeature\Authorization\obj\Debug\Authorization.pdb
