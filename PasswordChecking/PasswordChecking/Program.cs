@@ -19,8 +19,8 @@ namespace PasswordChecking
             PasswordValidation pv = new PasswordValidation(sha, password, url);
 
             // Run validation and return hash object
-            Hash hash = pv.Run();
-            Console.WriteLine(hash);
+            int hashCount = pv.Run();
+            Console.WriteLine("Count: " + hashCount);
             Console.WriteLine("End");
             Console.ReadKey(true);
         }
