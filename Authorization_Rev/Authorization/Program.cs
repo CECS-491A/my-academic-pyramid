@@ -33,7 +33,7 @@ namespace Authorization
 
             //Assign CanDeleteUserOwnAccount and CanDeleteUserOwnAccount
             Krystal.addClaim("CanDeleteUserOwnAccount", true);
-            Krystal.addClaim("CanDeleteUserOwnAccount", true);
+            Krystal.addClaim("CanDeleteOtherAccount", true);
 
             Controller c2 = new Controller(Krystal);
 
