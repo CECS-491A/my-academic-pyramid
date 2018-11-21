@@ -8,12 +8,13 @@ namespace PasswordChecking.HashFunctions
         private string _password; // Password
         private string _url; // URL
         private string _hashValue; // Hash Value Result
-        WebClient client = new WebClient();
+        private WebClient _client; // Web client
 
-        public PasswordValidation(IHashFunction hashFunction, string password, string url)
+        public PasswordValidation(IHashFunction hashFunction, string password, WebClient client, string url)
         {
             _hashFunction = hashFunction;
             _password = password;
+            _client = client;
             _url = url;
         }
 
@@ -48,7 +49,7 @@ namespace PasswordChecking.HashFunctions
         /// <returns>string response of request</returns>
         public string GET(string url)
         {
-            return client.DownloadString(url);
+            return _client.DownloadString(url);
         }
 
         /// <summary>
