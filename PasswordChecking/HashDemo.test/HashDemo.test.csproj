@@ -58,7 +58,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FindHashTest.cs" />
+    <Compile Include="RunHashTest.cs" />
     <Compile Include="HashTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
