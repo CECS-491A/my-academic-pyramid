@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Authorization
 {
-    public interface IAdminAction
+
+    public interface IStudentManagement
     {
-         void AddUserAccount();
-         void DeleteOtherAccount(String userId);
+        void DeleteUserOwnAccount();
     }
 }
