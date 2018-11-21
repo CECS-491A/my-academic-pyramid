@@ -34,6 +34,7 @@ namespace Authorization
             //Assign CanDeleteUserOwnAccount and CanDeleteUserOwnAccount
             Krystal.addClaim("CanDeleteUserOwnAccount", true);
             Krystal.addClaim("CanDeleteOtherAccount", true);
+            Krystal.addClaim("HasPoints", true);
 
             //Create a user management for Krysital account
             UserManagement userMag2 = new UserManagement(Krystal);
