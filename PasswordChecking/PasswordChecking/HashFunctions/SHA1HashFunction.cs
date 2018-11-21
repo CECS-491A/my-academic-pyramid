@@ -11,7 +11,7 @@ namespace PasswordChecking.HashFunctions
             byte[] hash; // Hash value
             StringBuilder sb; // To store hash value
 
-            sha = new SHA1CryptoServiceProvider();
+            sha = new SHA1Managed(); // SHA1CryptoServiceProvider();
             hash = sha.ComputeHash(Encoding.UTF8.GetBytes(input)); // Get hash in bytes
 
             // Store hash value as string with uppercase letters.

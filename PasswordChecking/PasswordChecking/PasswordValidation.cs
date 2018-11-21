@@ -8,12 +8,13 @@ namespace PasswordChecking.HashFunctions
         private string _password; // Password
         private string _url; // URL
         private string _hashValue; // Hash Value Result
-        WebClient client = new WebClient();
+        private WebClient _client; // Web client
 
-        public PasswordValidation(IHashFunction hashFunction, string password, string url)
+        public PasswordValidation(IHashFunction hashFunction, string password, WebClient client, string url)
         {
             _hashFunction = hashFunction;
             _password = password;
+            _client = client;
             _url = url;
         }
 
@@ -23,7 +24,7 @@ namespace PasswordChecking.HashFunctions
         /// in the response.
         /// </summary>
         /// <returns>The matching hash if found, null if not found</returns>
-        public Hash Run()
+        public int Run()
         {
             // Use the hash function to get the hash value of the password.
             _hashValue = _hashFunction.GetHashValue(_password);
@@ -32,23 +33,33 @@ namespace PasswordChecking.HashFunctions
             string prefix = _hashValue.Substring(0, 5);
 
             // GET request
-            string response = client.DownloadString(_url + prefix);
+            string response = GET(_url + prefix);
 
             // Find a matching hash
-            Hash hash = FindHash(_hashValue, prefix, response);
+            int hashCount = FindHash(_hashValue, prefix, response);
 
             // Return hash
-            return hash;
+            return hashCount;
         }
 
         /// <summary>
-        /// Implemenatation of Binary Search to find matching hash value.
+        /// Implementation of HTTP GET request.
+        /// </summary>
+        /// <param name="url">URL address to request</param>
+        /// <returns>string response of request</returns>
+        public string GET(string url)
+        {
+            return _client.DownloadString(url);
+        }
+
+        /// <summary>
+        /// Implemenatation of Binary Search to find the matching hash value in a list.
         /// </summary>
         /// <param name="hashValue">Hash Value to find.</param>
         /// <param name="prefix">5 character prefix of hash value.</param>
         /// <param name="list">All hash values with matching prefixes and their counts</param>
-        /// <returns>Matching hash value if found, null if not found</returns>
-        public Hash FindHash(string hashValue, string prefix, string list)
+        /// <returns>Hash value count if found, zero if not found</returns>
+        public int FindHash(string hashValue, string prefix, string list)
         {
             // Split each line of the hash list into an array
             string[] hashList = list.Split('\n');
@@ -67,7 +78,7 @@ namespace PasswordChecking.HashFunctions
 
                 if (value.CompareTo(hashValue) == 0) // Match found
                 {
-                    return new Hash(value, Convert.ToInt32(hash[1])); // Return matching hash value
+                    return Convert.ToInt32(hash[1]); // Return hash value count
                 }
                 else if(value.CompareTo(hashValue) > 0) // Searched hash value precedes compared hash value
                 {
@@ -78,7 +89,7 @@ namespace PasswordChecking.HashFunctions
                     min = mid + 1;
                 }
             }
-            return null;
+            return 0;
         }
     }
 }
