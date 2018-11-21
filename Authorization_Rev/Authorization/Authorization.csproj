@@ -66,11 +66,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Interfaces\IAdminAction.cs" />
-    <Compile Include="Interfaces\IStudentAction.cs" />
+    <Compile Include="UserManagment\UserManagement.cs" />
+    <Compile Include="AuthorizationController.cs" />
+    <Compile Include="Interfaces\IUserManagement.cs" />
     <Compile Include="User.cs" />
     <Compile Include="Claim.cs" />
-    <Compile Include="Controller.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

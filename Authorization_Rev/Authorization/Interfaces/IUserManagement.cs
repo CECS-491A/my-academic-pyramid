@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 
 namespace Authorization
 {
-    public interface IAdminManagement
+    public interface IUserManagement
     {
          void EnableUser();
          void DisableUser();
          void DeleteOtherAccount();
          void DeleteUserPost();
+         void DeleteUserOwnAccount();
     }
 }

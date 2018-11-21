@@ -16,17 +16,17 @@ namespace Authorization
             //Assign claim CanDeleteUserOwnAccount
             Trong.addClaim("CanDeleteUserOwnAccount", true);
 
-            //Create controller and use it to authorize user
-            Controller c1 = new Controller(Trong);
+            //Create a user management for trong account
+            UserManagement userMag1= new UserManagement(Trong);
             Console.WriteLine("***Let Trong delete his own user account***");
 
             //Access DeleteUserOwnAccount method using the controller
-            c1.DeleteUserOwnAccount();
+            userMag1.DeleteUserOwnAccount();
 
             Console.WriteLine("***Let Trong delete other user account***");
 
             //Access DeleteOtherAccount method using the controller
-            c1.DeleteOtherAccount("Krystal");
+            userMag1.DeleteOtherAccount();
 
             //Create user Krystal 
             User Krystal = new User("Krystal", "Admin");
@@ -35,13 +35,14 @@ namespace Authorization
             Krystal.addClaim("CanDeleteUserOwnAccount", true);
             Krystal.addClaim("CanDeleteOtherAccount", true);
 
-            Controller c2 = new Controller(Krystal);
+            //Create a user management for Krysital account
+            UserManagement userMag2 = new UserManagement(Krystal);
 
             Console.WriteLine("\n***Let Krystal delete her own user account***");
-            c2.DeleteUserOwnAccount();
+            userMag2.DeleteUserOwnAccount();
 
             Console.WriteLine("***Let Krystal delete other user account***");
-            c2.DeleteOtherAccount("Krystal");
+            userMag2.DeleteOtherAccount();
 
             Console.ReadLine();
 
