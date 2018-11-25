@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Authorization.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace Authorization
 {
-    public class UserManagement : AuthorizationController, IUserManagement
+    public class UserManagement : IUserManagement
     {
         
-        public UserManagement(User user) : base(user)
+        public UserManagement()
         {
             
         }
@@ -17,67 +18,27 @@ namespace Authorization
 
         public void DeleteOtherAccount()
         {
-            if (CheckClaims(new List<string>() { "CanDeleteOtherAccount",
-                                                 "HasPoints"} ))
-            {
-               Console.WriteLine("DeleteOtherAccount is allowed");
-            }
-            else
-            {
-                Console.WriteLine("DeleteOtherAccount is BLOCKED");
-            }
-            
+            Console.WriteLine("DeleteOtherAccount is allowed");
         }
 
         public void DeleteUserPost()
         {
-            if (CheckClaims(new List<string>() { "CanDeleteUserPost" }))
-            {
-                Console.WriteLine("DeleteUserPost is allowed");
-            }
-            else
-            {
-                Console.WriteLine("DeleteUserPost is BLOCKED");
-            }
+            Console.WriteLine("DeleteUserPost is allowed");
         }
 
         public void DisableUser()
         {
-            if (CheckClaims(new List<string>() { "CanDisableUser" }))
-            {
-                Console.WriteLine("DisableUser is allowed");
-            }
-            else
-            {
-                Console.WriteLine("DisableUser is BLOCKED");
-
-            }
+            Console.WriteLine("DisableUser is allowed");
         }
 
         public void EnableUser()
         {
-            if (CheckClaims(new List<string>() { "CanEnableUser" }))
-            {
-                Console.WriteLine("EnableUser is allowed");
-            }
-            else
-            {
-                Console.WriteLine("EnableUser is BLOCKED");
-
-            }
+            Console.WriteLine("EnableUser is allowed");
         }
 
         public void DeleteUserOwnAccount()
         {
-            if (CheckClaims(new List<string>() { "CanDeleteUserOwnAccount" }))
-            {
-                Console.WriteLine("DeleteUserOwnAccount is allowed");
-            }
-            else
-            {
-                Console.WriteLine("DeleteUserOwnAccount is BLOCKED");
-
-            }
+            Console.WriteLine("DeleteUserOwnAccount is allowed");
 
         }
     }

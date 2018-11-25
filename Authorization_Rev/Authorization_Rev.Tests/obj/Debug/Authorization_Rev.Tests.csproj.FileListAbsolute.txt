@@ -18,3 +18,23 @@ C:\Users\khk40_\Desktop\Secret Room\github\my-academic-pyramid\Authorization_Rev
 C:\Users\khk40_\Desktop\Secret Room\github\my-academic-pyramid\Authorization_Rev\Authorization_Rev.Tests\obj\Debug\Authorization_Rev.Tests.csproj.CopyComplete
 C:\Users\khk40_\Desktop\Secret Room\github\my-academic-pyramid\Authorization_Rev\Authorization_Rev.Tests\obj\Debug\Authorization_Rev.Tests.dll
 C:\Users\khk40_\Desktop\Secret Room\github\my-academic-pyramid\Authorization_Rev\Authorization_Rev.Tests\obj\Debug\Authorization_Rev.Tests.pdb
+C:\Users\Luis\senior_project\my-academic-pyramid\Authorization_Rev\Authorization_Rev.Tests\bin\Debug\xunit.runner.visualstudio.testadapter.dll
+C:\Users\Luis\senior_project\my-academic-pyramid\Authorization_Rev\Authorization_Rev.Tests\bin\Debug\xunit.runner.reporters.net452.dll
+C:\Users\Luis\senior_project\my-academic-pyramid\Authorization_Rev\Authorization_Rev.Tests\bin\Debug\xunit.runner.utility.net452.dll
+C:\Users\Luis\senior_project\my-academic-pyramid\Authorization_Rev\Authorization_Rev.Tests\bin\Debug\xunit.abstractions.dll
+C:\Users\Luis\senior_project\my-academic-pyramid\Authorization_Rev\Authorization_Rev.Tests\bin\Debug\Authorization_Rev.Tests.dll
+C:\Users\Luis\senior_project\my-academic-pyramid\Authorization_Rev\Authorization_Rev.Tests\bin\Debug\Authorization_Rev.Tests.pdb
+C:\Users\Luis\senior_project\my-academic-pyramid\Authorization_Rev\Authorization_Rev.Tests\bin\Debug\Authorization.exe
+C:\Users\Luis\senior_project\my-academic-pyramid\Authorization_Rev\Authorization_Rev.Tests\bin\Debug\xunit.assert.dll
+C:\Users\Luis\senior_project\my-academic-pyramid\Authorization_Rev\Authorization_Rev.Tests\bin\Debug\xunit.core.dll
+C:\Users\Luis\senior_project\my-academic-pyramid\Authorization_Rev\Authorization_Rev.Tests\bin\Debug\xunit.execution.desktop.dll
+C:\Users\Luis\senior_project\my-academic-pyramid\Authorization_Rev\Authorization_Rev.Tests\bin\Debug\Authorization.pdb
+C:\Users\Luis\senior_project\my-academic-pyramid\Authorization_Rev\Authorization_Rev.Tests\bin\Debug\Authorization.exe.config
+C:\Users\Luis\senior_project\my-academic-pyramid\Authorization_Rev\Authorization_Rev.Tests\bin\Debug\xunit.assert.xml
+C:\Users\Luis\senior_project\my-academic-pyramid\Authorization_Rev\Authorization_Rev.Tests\bin\Debug\xunit.core.xml
+C:\Users\Luis\senior_project\my-academic-pyramid\Authorization_Rev\Authorization_Rev.Tests\bin\Debug\xunit.execution.desktop.xml
+C:\Users\Luis\senior_project\my-academic-pyramid\Authorization_Rev\Authorization_Rev.Tests\obj\Debug\Authorization_Rev.Tests.csprojAssemblyReference.cache
+C:\Users\Luis\senior_project\my-academic-pyramid\Authorization_Rev\Authorization_Rev.Tests\obj\Debug\Authorization_Rev.Tests.csproj.CoreCompileInputs.cache
+C:\Users\Luis\senior_project\my-academic-pyramid\Authorization_Rev\Authorization_Rev.Tests\obj\Debug\Authorization_Rev.Tests.csproj.CopyComplete
+C:\Users\Luis\senior_project\my-academic-pyramid\Authorization_Rev\Authorization_Rev.Tests\obj\Debug\Authorization_Rev.Tests.dll
+C:\Users\Luis\senior_project\my-academic-pyramid\Authorization_Rev\Authorization_Rev.Tests\obj\Debug\Authorization_Rev.Tests.pdb

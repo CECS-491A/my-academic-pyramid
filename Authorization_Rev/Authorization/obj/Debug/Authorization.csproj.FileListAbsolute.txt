@@ -58,3 +58,15 @@ C:\Users\khk40_\Desktop\Secret Room\github\my-academic-pyramid\Authorization_Rev
 C:\Users\khk40_\Desktop\Secret Room\github\my-academic-pyramid\Authorization_Rev\Authorization\obj\Debug\Authorization.csproj.CopyComplete
 C:\Users\khk40_\Desktop\Secret Room\github\my-academic-pyramid\Authorization_Rev\Authorization\obj\Debug\Authorization.exe
 C:\Users\khk40_\Desktop\Secret Room\github\my-academic-pyramid\Authorization_Rev\Authorization\obj\Debug\Authorization.pdb
+C:\Users\Luis\senior_project\my-academic-pyramid\Authorization_Rev\Authorization\bin\Debug\Authorization.exe.config
+C:\Users\Luis\senior_project\my-academic-pyramid\Authorization_Rev\Authorization\bin\Debug\Authorization.exe
+C:\Users\Luis\senior_project\my-academic-pyramid\Authorization_Rev\Authorization\bin\Debug\Authorization.pdb
+C:\Users\Luis\senior_project\my-academic-pyramid\Authorization_Rev\Authorization\bin\Debug\EntityFramework.dll
+C:\Users\Luis\senior_project\my-academic-pyramid\Authorization_Rev\Authorization\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\Luis\senior_project\my-academic-pyramid\Authorization_Rev\Authorization\bin\Debug\EntityFramework.xml
+C:\Users\Luis\senior_project\my-academic-pyramid\Authorization_Rev\Authorization\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\Luis\senior_project\my-academic-pyramid\Authorization_Rev\Authorization\obj\Debug\Authorization.csprojAssemblyReference.cache
+C:\Users\Luis\senior_project\my-academic-pyramid\Authorization_Rev\Authorization\obj\Debug\Authorization.csproj.CoreCompileInputs.cache
+C:\Users\Luis\senior_project\my-academic-pyramid\Authorization_Rev\Authorization\obj\Debug\Authorization.csproj.CopyComplete
+C:\Users\Luis\senior_project\my-academic-pyramid\Authorization_Rev\Authorization\obj\Debug\Authorization.exe
+C:\Users\Luis\senior_project\my-academic-pyramid\Authorization_Rev\Authorization\obj\Debug\Authorization.pdb
