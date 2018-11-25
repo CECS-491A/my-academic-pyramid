@@ -17,7 +17,7 @@ namespace Authorization
 
         public void DeleteOtherAccount()
         {
-            if (checkClaims(new List<string>() { "CanDeleteOtherAccount",
+            if (CheckClaims(new List<string>() { "CanDeleteOtherAccount",
                                                  "HasPoints"} ))
             {
                Console.WriteLine("DeleteOtherAccount is allowed");
@@ -31,7 +31,7 @@ namespace Authorization
 
         public void DeleteUserPost()
         {
-            if (checkClaims(new List<string>() { "CanDeleteUserPost" }))
+            if (CheckClaims(new List<string>() { "CanDeleteUserPost" }))
             {
                 Console.WriteLine("DeleteUserPost is allowed");
             }
@@ -43,7 +43,7 @@ namespace Authorization
 
         public void DisableUser()
         {
-            if (checkClaims(new List<string>() { "CanDisableUser" }))
+            if (CheckClaims(new List<string>() { "CanDisableUser" }))
             {
                 Console.WriteLine("DisableUser is allowed");
             }
@@ -56,7 +56,7 @@ namespace Authorization
 
         public void EnableUser()
         {
-            if (checkClaims(new List<string>() { "CanEnableUser" }))
+            if (CheckClaims(new List<string>() { "CanEnableUser" }))
             {
                 Console.WriteLine("EnableUser is allowed");
             }
@@ -69,7 +69,7 @@ namespace Authorization
 
         public void DeleteUserOwnAccount()
         {
-            if (checkClaims(new List<string>() { "CanDeleteUserOwnAccount" }))
+            if (CheckClaims(new List<string>() { "CanDeleteUserOwnAccount" }))
             {
                 Console.WriteLine("DeleteUserOwnAccount is allowed");
             }

@@ -26,8 +26,8 @@ namespace Authorization
 
         }
 
-        public String UserName { get; set; }
-        public String UserType { get; set; }
+        public String UserName { get; private set; }
+        public String UserType { get; private set; }
 
         // Add claim method
         public void addClaim(String _claimType, bool _claimValue)

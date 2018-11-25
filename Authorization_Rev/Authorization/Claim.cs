@@ -8,13 +8,13 @@ namespace Authorization
 {
     public class Claim
     {
-        public Claim(String _claimType, bool _claimValue)
+        public Claim(string _claimType, bool _claimValue)
         {
             ClaimType = _claimType;
             ClaimValue = _claimValue;
         }
 
-        public String ClaimType { get; set; }
-        public bool ClaimValue { get; set; }
+        public string ClaimType { get; private set; }
+        public bool ClaimValue { get; private set; }
     }
 }

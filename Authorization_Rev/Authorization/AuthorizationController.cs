@@ -10,7 +10,7 @@ namespace Authorization
     public abstract class AuthorizationController
     {
         
-        User authorizedUser;
+        private User authorizedUser;
 
         public AuthorizationController(User user)
         { 
@@ -19,7 +19,7 @@ namespace Authorization
 
 
 
-        public bool checkClaims(List<String> requiredClaimTypes)
+        public bool CheckClaims(List<String> requiredClaimTypes)
         {
             
             // To check if a claim type exists in user's claim list and the claim value is true
