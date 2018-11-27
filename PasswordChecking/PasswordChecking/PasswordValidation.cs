@@ -1,21 +1,20 @@
-﻿using PasswordChecking.PasswordValidations;
-using System;
-using System.Net.Http;
-using System.Threading.Tasks;
-
+﻿using System;
+using System.Net;
 namespace PasswordChecking.HashFunctions
 {
-    public class PwnedPasswordsValidation : IPasswordValidation
+    public class PasswordValidation
     {
         private IHashFunction _hashFunction; // Hash Function
         private string _password; // Password
-        private string _url; // URL address
+        private string _url; // URL
         private string _hashValue; // Hash Value Result
+        private WebClient _client; // Web client
 
-        public PwnedPasswordsValidation(IHashFunction hashFunction, string password, string url)
+        public PasswordValidation(IHashFunction hashFunction, string password, WebClient client, string url)
         {
             _hashFunction = hashFunction;
             _password = password;
+            _client = client;
             _url = url;
         }
 
@@ -24,7 +23,7 @@ namespace PasswordChecking.HashFunctions
         /// request the hash, and find a matching hash
         /// in the response.
         /// </summary>
-        /// <returns>The hash value count.</returns>
+        /// <returns>The matching hash if found, null if not found</returns>
         public int Run()
         {
             // Use the hash function to get the hash value of the password.
@@ -34,14 +33,23 @@ namespace PasswordChecking.HashFunctions
             string prefix = _hashValue.Substring(0, 5);
 
             // GET request
-            Task<string> response = HttpClientMethods.RequestData(_url + prefix);
-            string hashList = response.Result;
+            string response = GET(_url + prefix);
 
             // Find a matching hash
-            int hashCount = FindHash(_hashValue, prefix, hashList);
+            int hashCount = FindHash(_hashValue, prefix, response);
 
             // Return hash
             return hashCount;
+        }
+
+        /// <summary>
+        /// Implementation of HTTP GET request.
+        /// </summary>
+        /// <param name="url">URL address to request</param>
+        /// <returns>string response of request</returns>
+        public string GET(string url)
+        {
+            return _client.DownloadString(url);
         }
 
         /// <summary>
