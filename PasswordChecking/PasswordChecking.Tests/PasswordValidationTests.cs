@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Threading.Tasks;
 using PasswordChecking.HashFunctions;
 using Xunit;
 
@@ -14,8 +15,7 @@ namespace PasswordChecking.Tests
             SHA1HashFunction sha = new SHA1HashFunction();
             string password = "password";
             string url = "https://api.pwnedpasswords.com/range/";
-            WebClient client = new WebClient();
-            PasswordValidation pv = new PasswordValidation(sha, password, client, url);
+            PwnedPasswordsValidation pv = new PwnedPasswordsValidation(sha, password, url);
 
             string hashValue = "5BAA61E4C9B93F3F0682250B6CF8331B7EE68FD8";
             string prefix = "5BAA6";
@@ -40,8 +40,7 @@ namespace PasswordChecking.Tests
             SHA1HashFunction sha = new SHA1HashFunction();
             string password = "fw836g1";
             string url = "https://api.pwnedpasswords.com/range/";
-            WebClient client = new WebClient();
-            PasswordValidation pv = new PasswordValidation(sha, password, client, url);
+            PwnedPasswordsValidation pv = new PwnedPasswordsValidation(sha, password, url);
 
             //hash for 
             string hashValue = "D30E1753D006EBCE8F59C93364725A9D5C4EC6BC";
@@ -67,8 +66,7 @@ namespace PasswordChecking.Tests
             SHA1HashFunction sha = new SHA1HashFunction();
             string password = "password";
             string url = "https://api.pwnedpasswords.com/range/";
-            WebClient client = new WebClient();
-            PasswordValidation pv = new PasswordValidation(sha, password, client, url);
+            PwnedPasswordsValidation pv = new PwnedPasswordsValidation(sha, password, url);
 
             string prefix = "5BAA6";
             string response = "1D72CD07550416C216D8AD296BF5C0AE8E0: 10 \n" +
@@ -92,8 +90,7 @@ namespace PasswordChecking.Tests
             SHA1HashFunction sha = new SHA1HashFunction();
             string password = "password";
             string url = "https://api.pwnedpasswords.com/range/";
-            WebClient client = new WebClient();
-            PasswordValidation pv = new PasswordValidation(sha, password, client, url);
+            PwnedPasswordsValidation pv = new PwnedPasswordsValidation(sha, password, url);
 
             string hashValue = "5BAA61E4C9B93F3F0682250B6CF8331B7EE68FD8";
             string response = "1D72CD07550416C216D8AD296BF5C0AE8E0: 10 \n" +
@@ -117,8 +114,7 @@ namespace PasswordChecking.Tests
             SHA1HashFunction sha = new SHA1HashFunction();
             string password = "password";
             string url = "https://api.pwnedpasswords.com/range/";
-            WebClient client = new WebClient();
-            PasswordValidation pv = new PasswordValidation(sha, password, client, url);
+            PwnedPasswordsValidation pv = new PwnedPasswordsValidation(sha, password, url);
 
             string hashValue = "5BAA61E4C9B93F3F0682250B6CF8331B7EE68FD8";
             string prefix = "5BAA6";
@@ -147,8 +143,7 @@ namespace PasswordChecking.Tests
             SHA1HashFunction sha = new SHA1HashFunction();
             string password = "password";
             string url = "https://api.pwnedpasswords.com/range/";
-            WebClient client = new WebClient();
-            PasswordValidation pv = new PasswordValidation(sha, password, client, url);
+            PwnedPasswordsValidation pv = new PwnedPasswordsValidation(sha, password, url);
 
             bool expected = true;
             bool actual;
@@ -169,14 +164,13 @@ namespace PasswordChecking.Tests
         }
 
         [Fact]
-        public void GET_ShouldPass()
+        public void RequestData_ShouldPass()
         {
             // Arrange
             SHA1HashFunction sha = new SHA1HashFunction();
             string password = "password";
             string url = "https://api.pwnedpasswords.com/range/";
-            WebClient client = new WebClient();
-            PasswordValidation pv = new PasswordValidation(sha, password, client, url);
+            PwnedPasswordsValidation HttpClientMethods = new PwnedPasswordsValidation(sha, password, url);
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
             bool expected = true;
@@ -185,7 +179,7 @@ namespace PasswordChecking.Tests
             //Act
             try
             {
-                string response = pv.GET("https://api.pwnedpasswords.com/range/5BAA6");
+                //Task<string> response = HttpClientMethods.RequestData("https://api.pwnedpasswords.com/range/5BAA6");
                 actual = true;
             }
             catch (WebException e)
@@ -198,14 +192,13 @@ namespace PasswordChecking.Tests
         }
 
         [Fact]
-        public void GET_InvalidUrlShouldFail()
+        public void RequestData_InvalidUrlShouldFail()
         {
             // Arrange
             SHA1HashFunction sha = new SHA1HashFunction();
             string password = "password";
             string url = "https://api.pwnedpasswords.com/range/";
-            WebClient client = new WebClient();
-            PasswordValidation pv = new PasswordValidation(sha, password, client, url);
+            PwnedPasswordsValidation pv = new PwnedPasswordsValidation(sha, password, url);
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
             bool expected = true;
@@ -214,7 +207,7 @@ namespace PasswordChecking.Tests
             //Act
             try
             {
-                string response = pv.GET("should throw exception");
+                //Task<string> response = HttpClientMethods.RequestData("should throw exception");
             }
             catch (WebException e)
             {

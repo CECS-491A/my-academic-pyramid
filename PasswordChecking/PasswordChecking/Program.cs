@@ -1,5 +1,6 @@
 ﻿using PasswordChecking.HashFunctions;
 using System;
+using System.Diagnostics;
 using System.Net;
 
 namespace PasswordChecking
@@ -18,10 +19,14 @@ namespace PasswordChecking
             string url = "https://api.pwnedpasswords.com/range/";
             Console.WriteLine("URL: " + url);
             WebClient client = new WebClient();
-            PasswordValidation pv = new PasswordValidation(sha, password, client, url);
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            PwnedPasswordsValidation pv = new PwnedPasswordsValidation(sha, password, url);
 
             // Run validation and return hash object
             int hashCount = pv.Run();
+            sw.Stop();
+            Console.WriteLine("Duration: " + sw.ElapsedMilliseconds + " ms");
             Console.WriteLine("Count: " + hashCount);
             Console.WriteLine("End");
             Console.ReadKey(true);
