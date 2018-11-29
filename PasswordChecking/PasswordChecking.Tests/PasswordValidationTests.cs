@@ -8,17 +8,16 @@ namespace PasswordChecking.Tests
 {
     public class PasswordValidationTests
     {
+        // Arrange
+        static SHA1HashFunction sha = new SHA1HashFunction();
+        static string url = "https://api.pwnedpasswords.com/range/";
+        static PwnedPasswordsValidation pv = new PwnedPasswordsValidation(sha, url);
+
         [Fact]
         public void FindHash_FoundShouldReturnCount()
         {
             // Arrange
-            SHA1HashFunction sha = new SHA1HashFunction();
-            string password = "password";
-            string url = "https://api.pwnedpasswords.com/range/";
-            PwnedPasswordsValidation pv = new PwnedPasswordsValidation(sha, password, url);
-
-            string hashValue = "5BAA61E4C9B93F3F0682250B6CF8331B7EE68FD8";
-            string prefix = "5BAA6";
+            string hashValue = "1E4C9B93F3F0682250B6CF8331B7EE68FD8"; // password: "password"
             string response = "1D72CD07550416C216D8AD296BF5C0AE8E0: 10 \n" +
                 "1E2AAA439972480CEC7F16C795BBB429372: 1 \n" +
                 "1E3687A61BFCE35F69B7408158101C8E414: 1 \n" +
@@ -27,7 +26,7 @@ namespace PasswordChecking.Tests
             int actual;
 
             //Act
-            actual = pv.FindHash(hashValue, prefix, response);
+            actual = pv.FindHash(hashValue, response);
 
             // Assert
             Assert.Equal(expected, actual);
@@ -37,14 +36,7 @@ namespace PasswordChecking.Tests
         public void FindHash_NotFoundShouldReturnZero()
         {
             // Arrange
-            SHA1HashFunction sha = new SHA1HashFunction();
-            string password = "fw836g1";
-            string url = "https://api.pwnedpasswords.com/range/";
-            PwnedPasswordsValidation pv = new PwnedPasswordsValidation(sha, password, url);
-
-            //hash for 
-            string hashValue = "D30E1753D006EBCE8F59C93364725A9D5C4EC6BC";
-            string prefix = "D30E1";
+            string hashValue = "753D006EBCE8F59C93364725A9D5C4EC6BC"; // password = "fw836g1"
             string response = "1D72CD07550416C216D8AD296BF5C0AE8E0: 10 \n" +
                 "1E2AAA439972480CEC7F16C795BBB429372: 1 \n" +
                 "1E3687A61BFCE35F69B7408158101C8E414: 1 \n" +
@@ -53,55 +45,33 @@ namespace PasswordChecking.Tests
             int actual;
 
             //Act
-            actual = pv.FindHash(hashValue, prefix, response);
+            actual = pv.FindHash(hashValue, response);
 
             // Assert
             Assert.Equal(expected, actual);
         }
 
         [Fact]
-        public void FindHash_InvalidHashValueShouldReturnZero()
+        public void FindHash_InvalidHashValueShouldThrowException()
         {
             // Arrange
-            SHA1HashFunction sha = new SHA1HashFunction();
-            string password = "password";
-            string url = "https://api.pwnedpasswords.com/range/";
-            PwnedPasswordsValidation pv = new PwnedPasswordsValidation(sha, password, url);
-
-            string prefix = "5BAA6";
             string response = "1D72CD07550416C216D8AD296BF5C0AE8E0: 10 \n" +
                 "1E2AAA439972480CEC7F16C795BBB429372: 1 \n" +
                 "1E3687A61BFCE35F69B7408158101C8E414: 1 \n" +
                 "1E4C9B93F3F0682250B6CF8331B7EE68FD8: 3533661 \n";
-            int expected = 0;
-            int actual;
+            Boolean expected = true;
+            Boolean actual;
 
             //Act
-            actual = pv.FindHash(null, prefix, response);
-
-            // Assert
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
-        public void FindHash_InvalidPrefixShouldReturnZero()
-        {
-            // Arrange
-            SHA1HashFunction sha = new SHA1HashFunction();
-            string password = "password";
-            string url = "https://api.pwnedpasswords.com/range/";
-            PwnedPasswordsValidation pv = new PwnedPasswordsValidation(sha, password, url);
-
-            string hashValue = "5BAA61E4C9B93F3F0682250B6CF8331B7EE68FD8";
-            string response = "1D72CD07550416C216D8AD296BF5C0AE8E0: 10 \n" +
-                "1E2AAA439972480CEC7F16C795BBB429372: 1 \n" +
-                "1E3687A61BFCE35F69B7408158101C8E414: 1 \n" +
-                "1E4C9B93F3F0682250B6CF8331B7EE68FD8: 3533661 \n";
-            int expected = 0;
-            int actual;
-
-            //Act
-            actual = pv.FindHash(hashValue, null, response);
+            try
+            {
+                int test = pv.FindHash(null, response);
+                actual = false;
+            }
+            catch (ArgumentNullException e)
+            {
+                actual = true;
+            }
 
             // Assert
             Assert.Equal(expected, actual);
@@ -111,20 +81,14 @@ namespace PasswordChecking.Tests
         public void FindHash_InvalidResponseShouldThrowExecption()
         {
             // Arrange
-            SHA1HashFunction sha = new SHA1HashFunction();
-            string password = "password";
-            string url = "https://api.pwnedpasswords.com/range/";
-            PwnedPasswordsValidation pv = new PwnedPasswordsValidation(sha, password, url);
-
-            string hashValue = "5BAA61E4C9B93F3F0682250B6CF8331B7EE68FD8";
-            string prefix = "5BAA6";
+            string hashValue = "1E4C9B93F3F0682250B6CF8331B7EE68FD8"; // password = "password"
             bool expected = true;
             bool actual;
 
             //Act
             try
             {
-                int test = pv.FindHash(hashValue, prefix, null);
+                int test = pv.FindHash(hashValue, null);
                 actual = false;
             }
             catch (NullReferenceException e)
@@ -140,18 +104,13 @@ namespace PasswordChecking.Tests
         public void FindHash_AllNullValuesShouldThrowException()
         {
             // Arrange
-            SHA1HashFunction sha = new SHA1HashFunction();
-            string password = "password";
-            string url = "https://api.pwnedpasswords.com/range/";
-            PwnedPasswordsValidation pv = new PwnedPasswordsValidation(sha, password, url);
-
             bool expected = true;
             bool actual;
 
             //Act
             try
             {
-                int test = pv.FindHash(null, null, null);
+                int test = pv.FindHash(null, null);
                 actual = false;
             }
             catch (NullReferenceException e)
@@ -167,10 +126,6 @@ namespace PasswordChecking.Tests
         public void RequestData_ShouldPass()
         {
             // Arrange
-            SHA1HashFunction sha = new SHA1HashFunction();
-            string password = "password";
-            string url = "https://api.pwnedpasswords.com/range/";
-            PwnedPasswordsValidation HttpClientMethods = new PwnedPasswordsValidation(sha, password, url);
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
             bool expected = true;
@@ -179,7 +134,8 @@ namespace PasswordChecking.Tests
             //Act
             try
             {
-                //Task<string> response = HttpClientMethods.RequestData("https://api.pwnedpasswords.com/range/5BAA6");
+                Uri uri = new Uri("https://api.pwnedpasswords.com/range/5BAA6");
+                Task<string> response = HttpClientMethods.RequestData(uri);
                 actual = true;
             }
             catch (WebException e)
@@ -195,10 +151,6 @@ namespace PasswordChecking.Tests
         public void RequestData_InvalidUrlShouldFail()
         {
             // Arrange
-            SHA1HashFunction sha = new SHA1HashFunction();
-            string password = "password";
-            string url = "https://api.pwnedpasswords.com/range/";
-            PwnedPasswordsValidation pv = new PwnedPasswordsValidation(sha, password, url);
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
             bool expected = true;
@@ -207,9 +159,10 @@ namespace PasswordChecking.Tests
             //Act
             try
             {
-                //Task<string> response = HttpClientMethods.RequestData("should throw exception");
+                Uri uri = new Uri("should throw exception");
+                Task<string> response = HttpClientMethods.RequestData(uri);
             }
-            catch (WebException e)
+            catch (UriFormatException e)
             {
                 actual = true;
                 //Assert

@@ -7,15 +7,11 @@ namespace PasswordChecking.HashFunctions
     {
         public string GetHashValue(string input)
         {
-            SHA1 sha; // Hash function
-            byte[] hash; // Hash value
-            StringBuilder sb; // To store hash value
-
-            sha = new SHA1Managed(); // SHA1CryptoServiceProvider();
-            hash = sha.ComputeHash(Encoding.UTF8.GetBytes(input)); // Get hash in bytes
+            SHA1 sha = new SHA1Cng(); // Hash function
+            byte[] hash = sha.ComputeHash(Encoding.UTF8.GetBytes(input)); // Get hash in bytes
 
             // Store hash value as string with uppercase letters.
-            sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder(); // To store the hash value
             foreach(byte b in hash)
             {
                 sb.Append(b.ToString("X2"));

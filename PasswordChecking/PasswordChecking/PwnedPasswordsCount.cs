@@ -1,18 +1,16 @@
-﻿using PasswordChecking.PasswordValidations;
-using System;
-using System.Diagnostics;
+﻿using System;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace PasswordChecking.HashFunctions
 {
-    public class PwnedPasswordsValidation : IPasswordValidation
+    public class PwnedPasswordsCount
     {
         private IHashFunction _hashFunction; // Hash Function
         private string _url; // URL address
         private string _hashValue; // Hash Value Result
 
-        public PwnedPasswordsValidation(IHashFunction hashFunction, string url)
+        public PwnedPasswordsCount(IHashFunction hashFunction, string url)
         {
             _hashFunction = hashFunction;
             _url = url;
@@ -42,7 +40,7 @@ namespace PasswordChecking.HashFunctions
                 Task<string> response = HttpClientMethods.RequestData(uri);
                 string hashListString = response.Result;
 
-                // Find a matching hash within the string
+                // Find a matching hash within the response
                 int hashCount = FindHash(_hashValue.Substring(5), hashListString);
 
                 //// Split the string list of hashes into an array.

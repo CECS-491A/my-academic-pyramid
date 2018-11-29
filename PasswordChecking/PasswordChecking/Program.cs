@@ -7,27 +7,35 @@ namespace PasswordChecking
 {
     class Program
     {
+        private static SHA1HashFunction sha = new SHA1HashFunction();
+        private static string url = "https://api.pwnedpasswords.com/range/";
+        private static PwnedPasswordsCount pv = new PwnedPasswordsCount(sha, url);
 
         static void Main(string[] args)
         {
-            // Use SHA1 Hash Function
-            SHA1HashFunction sha = new SHA1HashFunction();
-
-            // Make Password Validation Object
+            // Password Input
             string password = "password";
             Console.WriteLine("Password: " + password);
-            string url = "https://api.pwnedpasswords.com/range/";
-            Console.WriteLine("URL: " + url);
-            WebClient client = new WebClient();
+
             Stopwatch sw = new Stopwatch();
             sw.Start();
-            PwnedPasswordsValidation pv = new PwnedPasswordsValidation(sha, password, url);
 
-            // Run validation and return hash object
-            int hashCount = pv.Run();
+            // Get password count
+            int hashCount = pv.GetCount(password);
+            Console.WriteLine("Count: " + hashCount);
+
+            if(hashCount < 0)
+            {
+                Console.WriteLine("Invalid Values");
+            }
+            else
+            {
+                // Check Business Rules
+                PasswordCheckingBR.CheckPasswordCount(hashCount);
+            }
+
             sw.Stop();
             Console.WriteLine("Duration: " + sw.ElapsedMilliseconds + " ms");
-            Console.WriteLine("Count: " + hashCount);
             Console.WriteLine("End");
             Console.ReadKey(true);
         }
