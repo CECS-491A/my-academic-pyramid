@@ -6,7 +6,7 @@ using Xunit;
 
 namespace PasswordChecking.Tests
 {
-    public class PasswordValidationTests
+    public class PwnedPasswordsValidationTests
     {
         // Arrange
         static SHA1HashFunction sha = new SHA1HashFunction();
@@ -122,6 +122,7 @@ namespace PasswordChecking.Tests
             Assert.Equal(expected, actual);
         }
 
+<<<<<<< HEAD:PasswordChecking/PasswordChecking.Tests/PasswordValidationTests.cs
         [Fact]
         public void RequestData_ShouldPass()
         {
@@ -169,6 +170,8 @@ namespace PasswordChecking.Tests
                 Assert.Equal(expected, actual);
             }
         }
+=======
+>>>>>>> 408717abf3b9694d7ed30e708800cfe07abba056:PasswordChecking/PasswordChecking.Tests/PwnedPasswordsValidationTests.cs
     }
 }
 
