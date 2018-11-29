@@ -1,7 +1,6 @@
 ﻿using PasswordChecking.HashFunctions;
 using System;
 using System.Diagnostics;
-using System.Net;
 
 namespace PasswordChecking
 {

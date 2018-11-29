@@ -6,22 +6,22 @@ using Xunit;
 
 namespace PasswordChecking.Tests
 {
-    public class PwnedPasswordsValidationTests
+    public class PwnedPasswordsCountTests
     {
         // Arrange
         static SHA1HashFunction sha = new SHA1HashFunction();
         static string url = "https://api.pwnedpasswords.com/range/";
-        static PwnedPasswordsValidation pv = new PwnedPasswordsValidation(sha, url);
+        static PwnedPasswordsCount pv = new PwnedPasswordsCount(sha, url);
 
         [Fact]
         public void FindHash_FoundShouldReturnCount()
         {
             // Arrange
             string hashValue = "1E4C9B93F3F0682250B6CF8331B7EE68FD8"; // password: "password"
-            string response = "1D72CD07550416C216D8AD296BF5C0AE8E0: 10 \n" +
-                "1E2AAA439972480CEC7F16C795BBB429372: 1 \n" +
-                "1E3687A61BFCE35F69B7408158101C8E414: 1 \n" +
-                "1E4C9B93F3F0682250B6CF8331B7EE68FD8: 3533661 \n";
+            string response = "1D72CD07550416C216D8AD296BF5C0AE8E0:10 \n" +
+                "1E2AAA439972480CEC7F16C795BBB429372:1 \n" +
+                "1E3687A61BFCE35F69B7408158101C8E414:1 \n" +
+                "1E4C9B93F3F0682250B6CF8331B7EE68FD8:3533661 \n";
             int expected = 3533661;
             int actual;
 
@@ -37,10 +37,10 @@ namespace PasswordChecking.Tests
         {
             // Arrange
             string hashValue = "753D006EBCE8F59C93364725A9D5C4EC6BC"; // password = "fw836g1"
-            string response = "1D72CD07550416C216D8AD296BF5C0AE8E0: 10 \n" +
-                "1E2AAA439972480CEC7F16C795BBB429372: 1 \n" +
-                "1E3687A61BFCE35F69B7408158101C8E414: 1 \n" +
-                "1E4C9B93F3F0682250B6CF8331B7EE68FD8: 3533661 \n";
+            string response = "1D72CD07550416C216D8AD296BF5C0AE8E0:10 \n" +
+                "1E2AAA439972480CEC7F16C795BBB429372:1 \n" +
+                "1E3687A61BFCE35F69B7408158101C8E414:1 \n" +
+                "1E4C9B93F3F0682250B6CF8331B7EE68FD8:3533661 \n";
             int expected = 0;
             int actual;
 
@@ -56,9 +56,9 @@ namespace PasswordChecking.Tests
         {
             // Arrange
             string response = "1D72CD07550416C216D8AD296BF5C0AE8E0: 10 \n" +
-                "1E2AAA439972480CEC7F16C795BBB429372: 1 \n" +
-                "1E3687A61BFCE35F69B7408158101C8E414: 1 \n" +
-                "1E4C9B93F3F0682250B6CF8331B7EE68FD8: 3533661 \n";
+                "1E2AAA439972480CEC7F16C795BBB429372:1 \n" +
+                "1E3687A61BFCE35F69B7408158101C8E414:1 \n" +
+                "1E4C9B93F3F0682250B6CF8331B7EE68FD8:3533661 \n";
             Boolean expected = true;
             Boolean actual;
 
@@ -121,8 +121,7 @@ namespace PasswordChecking.Tests
             // Assert
             Assert.Equal(expected, actual);
         }
-
-<<<<<<< HEAD:PasswordChecking/PasswordChecking.Tests/PasswordValidationTests.cs
+        
         [Fact]
         public void RequestData_ShouldPass()
         {
@@ -170,8 +169,6 @@ namespace PasswordChecking.Tests
                 Assert.Equal(expected, actual);
             }
         }
-=======
->>>>>>> 408717abf3b9694d7ed30e708800cfe07abba056:PasswordChecking/PasswordChecking.Tests/PwnedPasswordsValidationTests.cs
     }
 }
 
