@@ -1,5 +1,8 @@
 ﻿using PasswordChecking.HashFunctions;
+<<<<<<< HEAD
 using PasswordChecking.PasswordValidations;
+=======
+>>>>>>> parent of 5d4489a... Update Program.cs
 using System;
 using System.Diagnostics;
 
@@ -13,32 +16,35 @@ namespace PasswordChecking
 
         static void Main(string[] args)
         {
-            while (true)
+            // Password Input
+            string password = "password";
+            Console.WriteLine("Password: " + password);
+
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+
+            for (int i = 0; i < 1000; i++)
             {
-                // Password Input
-                Console.Write("\nPassword: ");
-                string password = Console.ReadLine();
-
-                Stopwatch sw = new Stopwatch();
-                sw.Start();
-
                 // Get password count
-                Validation validation = pv.Validate(password);
-
-                if (validation is null)
+                int hashCount = pv.GetCount(password);
+                //Console.WriteLine("Count: " + hashCount);
+                if(hashCount < 0)
                 {
-                    Console.WriteLine("FAIL");
+                    Console.WriteLine("Invalid Values");
                 }
                 else
                 {
-                    Console.WriteLine("PASS");
+                    // Check Business Rules
+                    //PasswordCheckingBR.CheckPasswordCount(hashCount);
                 }
 
-                sw.Stop();
-                Console.WriteLine("Duration: " + sw.ElapsedMilliseconds + " ms");
-                Console.WriteLine("End");
-                Console.ReadKey(true);
             }
+
+            sw.Stop();
+            Console.WriteLine("Duration: " + sw.ElapsedMilliseconds + " ms");
+            Console.WriteLine("End");
+            Console.ReadKey(true);//80005 ms, 80643, 79484
+            // 75954, 87209, 76206
         }
     }
 }
