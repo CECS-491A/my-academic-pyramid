@@ -10,6 +10,6 @@ namespace UserManagement.Interfaces
         void CreateUser(CustomUser user);
         void DeleteUser(CustomUser user);
         void UpdateUser(CustomUser user);
-        CustomUser FindUserbyUserName(string userName);
+        int FindUserbyUserName(string userName);
     }
 }

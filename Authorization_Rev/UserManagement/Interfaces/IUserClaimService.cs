@@ -13,7 +13,7 @@ namespace UserManagement.Interfaces
         //Claim claim = new Claim(_claimType, _claimValue);
         //userClaims.Add(claim);
 
-        IList<String> getClaims(CustomUser user);
+        IList<String> GetClaims(CustomUser user);
         void AddClaim(CustomUser user, String claim );
         void RemoveClaim(CustomUser user, String claim);
         

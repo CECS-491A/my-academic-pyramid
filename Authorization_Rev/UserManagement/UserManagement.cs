@@ -58,7 +58,7 @@ namespace UserManagement
             
         }
 
-        public IList<string> getClaims(CustomUser user)
+        public IList<string> GetClaims(CustomUser user)
         {
 
             return user.userClaims;
@@ -74,10 +74,5 @@ namespace UserManagement
             throw new NotImplementedException();
         }
 
-        CustomUser IUserAccountService<CustomUser>.FindUserbyUserName(string userName)
-        {
-            var user = DbContext.Find(c => c.UserName.Equals(userName));
-            return user;
-        }
     }
 }
