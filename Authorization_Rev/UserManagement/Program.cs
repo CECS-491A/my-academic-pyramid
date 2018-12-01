@@ -11,7 +11,7 @@ namespace UserManagement
     {
         static void Main(string[] args)
         {
-            var userManagement = new UserManagement.UserManagement<CustomUser>();
+            var userManagement = new UserManagement<CustomUser>();
 
             userManagement.CreateUser(new CustomUser("Trong"));
 

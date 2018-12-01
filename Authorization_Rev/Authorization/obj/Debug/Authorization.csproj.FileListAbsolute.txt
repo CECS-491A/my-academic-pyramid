@@ -69,3 +69,4 @@ C:\Users\nguye\Documents\GitHub\my-academic-pyramid\Authorization_Rev\Authorizat
 C:\Users\nguye\Documents\GitHub\my-academic-pyramid\Authorization_Rev\Authorization\obj\Debug\Authorization.csproj.CopyComplete
 C:\Users\nguye\Documents\GitHub\my-academic-pyramid\Authorization_Rev\Authorization\obj\Debug\Authorization.exe
 C:\Users\nguye\Documents\GitHub\my-academic-pyramid\Authorization_Rev\Authorization\obj\Debug\Authorization.pdb
+C:\Users\nguye\Documents\GitHub\my-academic-pyramid\Authorization_Rev\Authorization\obj\Debug\Authorization.csprojAssemblyReference.cache

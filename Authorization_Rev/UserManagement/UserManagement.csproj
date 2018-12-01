@@ -47,7 +47,6 @@
   <ItemGroup>
     <Compile Include="Interfaces\IUserAccountService.cs" />
     <Compile Include="Interfaces\IUserClaimService.cs" />
-    <Compile Include="Interfaces\IUserManagement.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserManagement.cs" />

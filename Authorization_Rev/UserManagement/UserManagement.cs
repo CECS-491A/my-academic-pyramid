@@ -9,7 +9,7 @@ using Authorization.Interfaces;
 
 namespace UserManagement
 {
-    public class UserManagement<CustomUser> where CustomUser:class, IUser
+    public class UserManagement<CustomUser>:  IUserClaimService<CustomUser>, IUserAccountService<CustomUser> where CustomUser:class, IUser
     {
         List<CustomUser> DbContext;
 
@@ -69,5 +69,15 @@ namespace UserManagement
             user.userClaims.Remove(claim);
         }
 
+        public void AddClaim(CustomUser user, string claim)
+        {
+            throw new NotImplementedException();
+        }
+
+        CustomUser IUserAccountService<CustomUser>.FindUserbyUserName(string userName)
+        {
+            var user = DbContext.Find(c => c.UserName.Equals(userName));
+            return user;
+        }
     }
 }
