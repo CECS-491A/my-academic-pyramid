@@ -9,13 +9,11 @@ namespace Authorization.Interfaces
 {
     public interface IUser
     {
-             
-
+            
          String UserName { get;  set; }
-         
          List<String> userClaims { get; set; }
 
-        // Add claim method
+
 
 
     }
