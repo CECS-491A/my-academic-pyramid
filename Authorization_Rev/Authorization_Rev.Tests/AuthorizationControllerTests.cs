@@ -14,7 +14,7 @@ namespace Authorization_Rev.Tests
         public void CheckClaims_FoundShouldReturnTrue()
         {
             // Arrange 
-            User Trong = new User("Trong", "Student");
+            CustomUser Trong = new CustomUser("Trong", "Student");
             Trong.addClaim("CanDeleteUserPost", true);
             AuthorizationManager TrongAuthorization = new AuthorizationManager(Trong);
             bool expected = true;
@@ -30,7 +30,7 @@ namespace Authorization_Rev.Tests
         public void CheckClaims_NotFoundShouldReturnFalse()
         {
             // Arrange 
-            User Trong = new User("Trong", "Student");
+            CustomUser Trong = new CustomUser("Trong", "Student");
             Trong.addClaim("CanDeleteUserOwnAccount", true);
             AuthorizationManager TrongAuthorization = new AuthorizationManager(Trong);
             bool expected = false;
@@ -47,7 +47,7 @@ namespace Authorization_Rev.Tests
         public void CheckClaims_ClaimValueFalseShouldReturnFalse()
         {
             // Arrange 
-            User Trong = new User("Trong", "Student");
+            CustomUser Trong = new CustomUser("Trong", "Student");
             Trong.addClaim("CanDeleteUserPost", false);
             AuthorizationManager TrongAuthorization = new AuthorizationManager(Trong);
             bool expected = false;
@@ -80,7 +80,7 @@ namespace Authorization_Rev.Tests
         public void CheckClaims_MultipleClaimFoundShouldReturnTrue()
         {
             // Arrange 
-            User Krystal = new User("Krystal", "Admin");
+            CustomUser Krystal = new CustomUser("Krystal", "Admin");
             Krystal.addClaim("CanDeleteOtherAccount", true);
             Krystal.addClaim("HasPoints", true);
             AuthorizationManager KrystalAuthorization = new AuthorizationManager(Krystal);
@@ -117,7 +117,7 @@ namespace Authorization_Rev.Tests
         public void CheckClaims_MultipleClaimNotFoundTwoClaimShouldReturnFalse()
         {
             // Arrange 
-            User Krystal = new User("Krystal", "Admin");
+            CustomUser Krystal = new CustomUser("Krystal", "Admin");
             AuthorizationManager KrystalAuthorization = new AuthorizationManager(Krystal);
             bool expected = false;
 

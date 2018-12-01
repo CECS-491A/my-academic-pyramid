@@ -38,3 +38,7 @@ C:\Users\Luis\senior_project\my-academic-pyramid\Authorization_Rev\Authorization
 C:\Users\Luis\senior_project\my-academic-pyramid\Authorization_Rev\Authorization_Rev.Tests\obj\Debug\Authorization_Rev.Tests.csproj.CopyComplete
 C:\Users\Luis\senior_project\my-academic-pyramid\Authorization_Rev\Authorization_Rev.Tests\obj\Debug\Authorization_Rev.Tests.dll
 C:\Users\Luis\senior_project\my-academic-pyramid\Authorization_Rev\Authorization_Rev.Tests\obj\Debug\Authorization_Rev.Tests.pdb
+C:\Users\nguye\Documents\GitHub\my-academic-pyramid\Authorization_Rev\Authorization_Rev.Tests\obj\Debug\Authorization_Rev.Tests.csprojAssemblyReference.cache
+C:\Users\nguye\Documents\GitHub\my-academic-pyramid\Authorization_Rev\Authorization_Rev.Tests\obj\Debug\Authorization_Rev.Tests.csproj.CoreCompileInputs.cache
+C:\Users\nguye\Documents\GitHub\my-academic-pyramid\Authorization_Rev\Authorization_Rev.Tests\obj\Debug\Authorization_Rev.Tests.dll
+C:\Users\nguye\Documents\GitHub\my-academic-pyramid\Authorization_Rev\Authorization_Rev.Tests\obj\Debug\Authorization_Rev.Tests.pdb
