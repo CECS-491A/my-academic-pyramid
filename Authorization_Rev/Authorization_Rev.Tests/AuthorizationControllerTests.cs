@@ -77,6 +77,42 @@ namespace Authorization_Rev.Tests
         }
 
         [Fact]
+        public void CheckClaims_DuplicatedClaimShouldReturnFalse()
+        {
+            // Arrange 
+            User Trong = new User("Trong", "Student");
+            Trong.addClaim("CanDeleteUserOwnAccount", true);
+            Trong.addClaim("CanDeleteUserOwnAccount", false);
+            AuthorizationManager TrongAuthorization = new AuthorizationManager(Trong);
+            bool expected = false;
+
+            // Act
+            bool actual = TrongAuthorization.CheckClaims(new List<string>() { "CanDeleteUserPost" });
+
+            // Assert
+            Assert.Equal(expected, actual);
+
+        }
+
+        [Fact]
+        public void CheckClaims_DuplicatedClaim2ShouldReturnFalse()
+        {
+            // Arrange 
+            User Trong = new User("Trong", "Student");
+            Trong.addClaim("CanDeleteUserOwnAccount", false);
+            Trong.addClaim("CanDeleteUserOwnAccount", true);
+            AuthorizationManager TrongAuthorization = new AuthorizationManager(Trong);
+            bool expected = false;
+
+            // Act
+            bool actual = TrongAuthorization.CheckClaims(new List<string>() { "CanDeleteUserPost" });
+
+            // Assert
+            Assert.Equal(expected, actual);
+
+        }
+
+        [Fact]
         public void CheckClaims_MultipleClaimFoundShouldReturnTrue()
         {
             // Arrange 
