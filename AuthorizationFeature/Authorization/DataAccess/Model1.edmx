@@ -1,0 +1,195 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Database1Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Claims">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ClaimType" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ClaimValue" Type="bit" Nullable="false" />
+          <Property Name="UserTypeId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserAccount">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserName" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="UserTypeId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserType">
+          <Key>
+            <PropertyRef Name="UserTypeId" />
+          </Key>
+          <Property Name="UserTypeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserType" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Claim_UserTypeId">
+          <End Role="UserType" Type="Self.UserType" Multiplicity="1" />
+          <End Role="Claims" Type="Self.Claims" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserType">
+              <PropertyRef Name="UserTypeId" />
+            </Principal>
+            <Dependent Role="Claims">
+              <PropertyRef Name="UserTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserAccount_UserTypeId">
+          <End Role="UserType" Type="Self.UserType" Multiplicity="1" />
+          <End Role="UserAccount" Type="Self.UserAccount" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserType">
+              <PropertyRef Name="UserTypeId" />
+            </Principal>
+            <Dependent Role="UserAccount">
+              <PropertyRef Name="UserTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Database1ModelStoreContainer">
+          <EntitySet Name="Claims" EntityType="Self.Claims" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserAccount" EntityType="Self.UserAccount" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserType" EntityType="Self.UserType" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Claim_UserTypeId" Association="Self.FK_Claim_UserTypeId">
+            <End Role="UserType" EntitySet="UserType" />
+            <End Role="Claims" EntitySet="Claims" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserAccount_UserTypeId" Association="Self.FK_UserAccount_UserTypeId">
+            <End Role="UserType" EntitySet="UserType" />
+            <End Role="UserAccount" EntitySet="UserAccount" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Database1Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Claim">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ClaimType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ClaimValue" Type="Boolean" Nullable="false" />
+          <Property Name="UserTypeId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="UserType" Relationship="Self.FK_Claim_UserTypeId" FromRole="Claims" ToRole="UserType" />
+        </EntityType>
+        <EntityType Name="UserAccount">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserName" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="UserTypeId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="UserType" Relationship="Self.FK_UserAccount_UserTypeId" FromRole="UserAccount" ToRole="UserType" />
+        </EntityType>
+        <EntityType Name="UserType">
+          <Key>
+            <PropertyRef Name="UserTypeId" />
+          </Key>
+          <Property Name="UserTypeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserType1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Claims" Relationship="Self.FK_Claim_UserTypeId" FromRole="UserType" ToRole="Claims" />
+          <NavigationProperty Name="UserAccounts" Relationship="Self.FK_UserAccount_UserTypeId" FromRole="UserType" ToRole="UserAccount" />
+        </EntityType>
+        <Association Name="FK_Claim_UserTypeId">
+          <End Role="UserType" Type="Self.UserType" Multiplicity="1" />
+          <End Role="Claims" Type="Self.Claim" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserType">
+              <PropertyRef Name="UserTypeId" />
+            </Principal>
+            <Dependent Role="Claims">
+              <PropertyRef Name="UserTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserAccount_UserTypeId">
+          <End Role="UserType" Type="Self.UserType" Multiplicity="1" />
+          <End Role="UserAccount" Type="Self.UserAccount" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserType">
+              <PropertyRef Name="UserTypeId" />
+            </Principal>
+            <Dependent Role="UserAccount">
+              <PropertyRef Name="UserTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DatabaseEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Claims" EntityType="Self.Claim" />
+          <EntitySet Name="UserAccounts" EntityType="Self.UserAccount" />
+          <EntitySet Name="UserTypes" EntityType="Self.UserType" />
+          <AssociationSet Name="FK_Claim_UserTypeId" Association="Self.FK_Claim_UserTypeId">
+            <End Role="UserType" EntitySet="UserTypes" />
+            <End Role="Claims" EntitySet="Claims" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserAccount_UserTypeId" Association="Self.FK_UserAccount_UserTypeId">
+            <End Role="UserType" EntitySet="UserTypes" />
+            <End Role="UserAccount" EntitySet="UserAccounts" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Database1ModelStoreContainer" CdmEntityContainer="DatabaseEntities">
+          <EntitySetMapping Name="Claims">
+            <EntityTypeMapping TypeName="Database1Model.Claim">
+              <MappingFragment StoreEntitySet="Claims">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="ClaimType" ColumnName="ClaimType" />
+                <ScalarProperty Name="ClaimValue" ColumnName="ClaimValue" />
+                <ScalarProperty Name="UserTypeId" ColumnName="UserTypeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserAccounts">
+            <EntityTypeMapping TypeName="Database1Model.UserAccount">
+              <MappingFragment StoreEntitySet="UserAccount">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="UserTypeId" ColumnName="UserTypeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserTypes">
+            <EntityTypeMapping TypeName="Database1Model.UserType">
+              <MappingFragment StoreEntitySet="UserType">
+                <ScalarProperty Name="UserTypeId" ColumnName="UserTypeId" />
+                <ScalarProperty Name="UserType1" ColumnName="UserType" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
