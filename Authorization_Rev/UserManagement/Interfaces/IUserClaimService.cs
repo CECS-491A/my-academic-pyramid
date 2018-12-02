@@ -5,7 +5,7 @@ using Authorization.Interfaces;
 
 namespace UserManagement.Interfaces
 {
-    public interface IUserClaimService<CustomUser>: IUserAccountService<CustomUser> where CustomUser : class, IUser
+    public interface IUserClaimService<CustomUser> where CustomUser : class, IUser
     {
         
 
