@@ -1,4 +1,5 @@
 ﻿using PasswordChecking.HashFunctions;
+using PasswordChecking.PasswordValidations;
 using System;
 using System.Diagnostics;
 
@@ -12,35 +13,32 @@ namespace PasswordChecking
 
         static void Main(string[] args)
         {
-            // Password Input
-            string password = "password";
-            Console.WriteLine("Password: " + password);
-
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
-
-            for (int i = 0; i < 1000; i++)
+            while (true)
             {
+                // Password Input
+                Console.Write("\nPassword: ");
+                string password = Console.ReadLine();
+
+                Stopwatch sw = new Stopwatch();
+                sw.Start();
+
                 // Get password count
-                int hashCount = pv.GetCount(password);
-                //Console.WriteLine("Count: " + hashCount);
-                if(hashCount < 0)
+                Validation validation = pv.Validate(password);
+
+                if (validation is null)
                 {
-                    Console.WriteLine("Invalid Values");
+                    Console.WriteLine("FAIL");
                 }
                 else
                 {
-                    // Check Business Rules
-                    //PasswordCheckingBR.CheckPasswordCount(hashCount);
+                    Console.WriteLine("PASS");
                 }
 
+                sw.Stop();
+                Console.WriteLine("Duration: " + sw.ElapsedMilliseconds + " ms");
+                Console.WriteLine("End");
+                Console.ReadKey(true);
             }
-
-            sw.Stop();
-            Console.WriteLine("Duration: " + sw.ElapsedMilliseconds + " ms");
-            Console.WriteLine("End");
-            Console.ReadKey(true);//80005 ms, 80643, 79484
-            // 75954, 87209, 76206
         }
     }
 }
