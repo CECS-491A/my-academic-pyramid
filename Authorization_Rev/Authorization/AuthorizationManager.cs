@@ -11,34 +11,32 @@ namespace Authorization
     public class AuthorizationManager:IAuthorizationManager
     {
         
-        private User authorizedUser;
+        private CustomUser authorizedUser;
 
-        public AuthorizationManager(User user)
+        public AuthorizationManager(CustomUser user)
         { 
-            if (user == null)
-                throw new ArgumentNullException("user", "User cannot be null.");
             authorizedUser = user;
         }
 
 
-
-        public bool CheckClaims(List<String> requiredClaims)
+        public bool CheckClaims(List<String> requiredClaimTypes)
         {
-            if (requiredClaims == null)
-                throw new ArgumentNullException(
-                    "requiredClaims", "List of required claims can't be null."
-                );
-            // Checks if each required claim exists in user's claim list
-            return requiredClaims.All(rc =>
+
+            // To check if a claim type exists in user's claim list and the claim value is true
+            if (requiredClaimTypes.All(rc =>
             {
                 // body of lambda function
-                // looks for a uc (user claim) that matches rc (required claim)
-                string foundClaim = authorizedUser.userClaims.Find(
-                    uc => uc.Equals(rc)
-                );
-                // If claim not found, then foundClaim will be null.
-                return (foundClaim != null);
-            });
+                String foundClaim = authorizedUser.userClaims.Find(uc => uc.Equals(rc));
+                if (foundClaim != null )
+                    return true;
+                else
+                    return false;
+
+            }))
+            {
+                return true;
+            }
+            return false;
         }
     }
 }
