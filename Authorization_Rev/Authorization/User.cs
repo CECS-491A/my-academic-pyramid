@@ -1,42 +1,42 @@
-﻿using System;
+﻿using Authorization.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-
 namespace Authorization
 {
-    public class User
+    public class User 
     {
-        //List of string to store user Claims
-        public List<string> userClaims;
-
-        public User()
-        {
- 
-        }
-             
-        public User(String _userName, String _userType)
+        List<String> claims;
+        public User(String _userName)
         {
             UserName = _userName;
-            UserType = _userType;
-            userClaims = new List<string>();
+            claims = new List<string>();
 
         }
 
-        public String UserName { get; private set; }
-        public String UserType { get; private set; }
-
-        // Add claim method
-        public void addClaim(String claim)
+        public User(String _userName, String _role)
         {
-            userClaims.Add(claim);
+            UserName = _userName;
+            claims = new List<string>();
+
+        }
+        public String UserName { get; set; }
+        public List<string> userClaims
+        {
+            get
+            {
+                return claims;
+            }
+            set
+            {
+                claims = value;
+            }
+
         }
 
+        
     }
-
-
-
-
 }
