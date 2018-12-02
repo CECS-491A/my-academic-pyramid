@@ -7,17 +7,17 @@ using System.Threading.Tasks;
 
 namespace Authorization
 {
-    public class CustomUser : IUser
+    public class User 
     {
         List<String> claims;
-        public CustomUser(String _userName)
+        public User(String _userName)
         {
             UserName = _userName;
             claims = new List<string>();
 
         }
 
-        public CustomUser(String _userName, String _role)
+        public User(String _userName, String _role)
         {
             UserName = _userName;
             claims = new List<string>();

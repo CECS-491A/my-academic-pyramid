@@ -7,9 +7,9 @@ namespace UserManagement
     {
         static void Main(string[] args)
         {
-            var userManagement = new UserManagement<CustomUser>();
+            var userManagement = new UserManagement();
 
-            userManagement.CreateUser(new CustomUser("Trong"));
+            userManagement.CreateUser(new User("Trong"));
 
             userManagement.AddClaim("Trong", "AccountManager");
             Console.ReadKey();

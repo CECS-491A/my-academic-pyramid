@@ -1,12 +1,13 @@
-﻿using Authorization.Interfaces;
+﻿using Authorization;
+using Authorization.Interfaces;
 
 namespace UserManagement.Interfaces
 {
-    public interface IUserAccountService<CustomUser> where CustomUser : class , IUser
+    public interface IUserAccountService
     {
-        void CreateUser(CustomUser user);
-        void DeleteUser(CustomUser user);
-        void UpdateUser(CustomUser user);
+        void CreateUser(User user);
+        void DeleteUser(User user);
+        void UpdateUser(User user);
         int FindUserbyUserName(string userName);
     }
 }

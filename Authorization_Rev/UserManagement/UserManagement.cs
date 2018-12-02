@@ -2,18 +2,19 @@
 using System.Collections.Generic;
 using UserManagement.Interfaces;
 using Authorization.Interfaces;
+using Authorization;
 
 namespace UserManagement
 {
-    public class UserManagement<CustomUser>:  IUserClaimService<CustomUser>, IUserAccountService<CustomUser> where CustomUser:class, IUser
-    {
-        List<CustomUser> DbContext;
+    public class UserManagement
+    { 
+        List<User> DbContext;
 
         public UserManagement()
         {
-            DbContext = new List<CustomUser>();
+            DbContext = new List<User>();
         }
-        public void CreateUser(CustomUser user)
+        public void CreateUser(User user)
         {
             
             DbContext.Add(user);
@@ -25,12 +26,12 @@ namespace UserManagement
             
         }
 
-        public void DeleteUser(CustomUser user)
+        public void DeleteUser(User user)
         {
             DbContext.Remove(user);
         }
 
-        public void UpdateUser(CustomUser user)
+        public void UpdateUser(User user)
         {
             throw new NotImplementedException();
         }
@@ -54,18 +55,18 @@ namespace UserManagement
             
         }
 
-        public IList<string> GetClaims(CustomUser user)
+        public IList<string> GetClaims(User user)
         {
 
             return user.userClaims;
         }
 
-        public void RemoveClaim(CustomUser user, string claim)
+        public void RemoveClaim(User user, string claim)
         {
             user.userClaims.Remove(claim);
         }
 
-        public void AddClaim(CustomUser user, string claim)
+        public void AddClaim(User user, string claim)
         {
             throw new NotImplementedException();
         }

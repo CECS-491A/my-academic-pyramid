@@ -66,11 +66,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CustomUser.cs" />
+    <Compile Include="User.cs" />
     <Compile Include="Interfaces\IAuthorizationManager.cs" />
     <Compile Include="AuthorizationManager.cs" />
-    <Compile Include="Interfaces\IUserManagement.cs" />
-    <Compile Include="Interfaces\IUser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

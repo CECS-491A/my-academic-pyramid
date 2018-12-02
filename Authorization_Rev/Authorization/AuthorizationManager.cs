@@ -11,9 +11,9 @@ namespace Authorization
     public class AuthorizationManager:IAuthorizationManager
     {
         
-        private CustomUser authorizedUser;
+        private User authorizedUser;
 
-        public AuthorizationManager(CustomUser user)
+        public AuthorizationManager(User user)
         { 
             authorizedUser = user;
         }
