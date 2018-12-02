@@ -9,8 +9,8 @@ namespace Authorization
 {
     public class User
     {
-        //List of type Claim to store user Claims
-        public List<Claim> userClaims;
+        //List of string to store user Claims
+        public List<string> userClaims;
 
         public User()
         {
@@ -19,10 +19,9 @@ namespace Authorization
              
         public User(String _userName, String _userType)
         {
-            
             UserName = _userName;
             UserType = _userType;
-            userClaims = new List<Claim>();
+            userClaims = new List<string>();
 
         }
 
@@ -30,9 +29,8 @@ namespace Authorization
         public String UserType { get; private set; }
 
         // Add claim method
-        public void addClaim(String _claimType, bool _claimValue)
+        public void addClaim(String claim)
         {
-            Claim claim = new Claim(_claimType, _claimValue);
             userClaims.Add(claim);
         }
 

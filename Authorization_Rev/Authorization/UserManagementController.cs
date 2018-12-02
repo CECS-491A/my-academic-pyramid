@@ -9,6 +9,10 @@ namespace Authorization
 {
     class UserManagementController
     {
+        /*
+         * Class that demonstrates how authorization class might be used in
+         * a controller.
+         * */
         IUserManagement userManagement = null;
         public UserManagementController()
         {
@@ -40,6 +44,7 @@ namespace Authorization
                 "CanDeleteOtherAccount",
                 "HasPoints"
             };
+            delOtherRequiredClaimTypes = null;
             if (authManager.CheckClaims(delOtherRequiredClaimTypes))
             {
                 userManagement.DeleteOtherAccount();

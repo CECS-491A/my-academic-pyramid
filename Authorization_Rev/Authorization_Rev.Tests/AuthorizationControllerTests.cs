@@ -15,7 +15,7 @@ namespace Authorization_Rev.Tests
         {
             // Arrange 
             User Trong = new User("Trong", "Student");
-            Trong.addClaim("CanDeleteUserPost", true);
+            Trong.addClaim("CanDeleteUserPost");
             AuthorizationManager TrongAuthorization = new AuthorizationManager(Trong);
             bool expected = true;
 
@@ -31,7 +31,7 @@ namespace Authorization_Rev.Tests
         {
             // Arrange 
             User Trong = new User("Trong", "Student");
-            Trong.addClaim("CanDeleteUserOwnAccount", true);
+            Trong.addClaim("CanDeleteUserOwnAccount");
             AuthorizationManager TrongAuthorization = new AuthorizationManager(Trong);
             bool expected = false;
 
@@ -48,7 +48,7 @@ namespace Authorization_Rev.Tests
         {
             // Arrange 
             User Trong = new User("Trong", "Student");
-            Trong.addClaim("CanDeleteUserPost", false);
+            Trong.addClaim("CanDeleteUserPost");
             AuthorizationManager TrongAuthorization = new AuthorizationManager(Trong);
             bool expected = false;
 
@@ -64,7 +64,7 @@ namespace Authorization_Rev.Tests
         {
             // Arrange 
             User Trong = new User("Trong", "Student");
-            Trong.addClaim("CanDeleteUserOwnAccount", false);
+            Trong.addClaim("CanDeleteUserOwnAccount");
             AuthorizationManager TrongAuthorization = new AuthorizationManager(Trong);
             bool expected = false;
 
@@ -81,8 +81,8 @@ namespace Authorization_Rev.Tests
         {
             // Arrange 
             User Trong = new User("Trong", "Student");
-            Trong.addClaim("CanDeleteUserOwnAccount", true);
-            Trong.addClaim("CanDeleteUserOwnAccount", false);
+            Trong.addClaim("CanDeleteUserOwnAccount");
+            Trong.addClaim("CanDeleteUserOwnAccount");
             AuthorizationManager TrongAuthorization = new AuthorizationManager(Trong);
             bool expected = false;
 
@@ -99,8 +99,8 @@ namespace Authorization_Rev.Tests
         {
             // Arrange 
             User Trong = new User("Trong", "Student");
-            Trong.addClaim("CanDeleteUserOwnAccount", false);
-            Trong.addClaim("CanDeleteUserOwnAccount", true);
+            Trong.addClaim("CanDeleteUserOwnAccount");
+            Trong.addClaim("CanDeleteUserOwnAccount");
             AuthorizationManager TrongAuthorization = new AuthorizationManager(Trong);
             bool expected = false;
 
@@ -117,8 +117,8 @@ namespace Authorization_Rev.Tests
         {
             // Arrange 
             User Krystal = new User("Krystal", "Admin");
-            Krystal.addClaim("CanDeleteOtherAccount", true);
-            Krystal.addClaim("HasPoints", true);
+            Krystal.addClaim("CanDeleteOtherAccount");
+            Krystal.addClaim("HasPoints");
             AuthorizationManager KrystalAuthorization = new AuthorizationManager(Krystal);
             bool expected = true;
 
@@ -136,12 +136,13 @@ namespace Authorization_Rev.Tests
         {
             // Arrange 
             User Krystal = new User("Krystal", "Admin");
-            Krystal.addClaim("CanDeleteOtherAccount", true);
+            Krystal.addClaim("CanDeleteOtherAccount");
             AuthorizationManager KrystalAuthorization = new AuthorizationManager(Krystal);
             bool expected = false;
 
             // Act
             bool actual = KrystalAuthorization.CheckClaims(new List<string>() { "CanDeleteOtherAccount",
+                                                 "HasPoints",
                                                  "HasPoints"});
 
             // Assert
@@ -171,8 +172,8 @@ namespace Authorization_Rev.Tests
         {
             // Arrange 
             User Krystal = new User("Krystal", "Admin");
-            Krystal.addClaim("CanDeleteOtherAccount", true);
-            Krystal.addClaim("HasPoints", false);
+            Krystal.addClaim("CanDeleteOtherAccount");
+            Krystal.addClaim("HasPoints");
             AuthorizationManager KrystalAuthorization = new AuthorizationManager(Krystal);
             bool expected = false;
 
@@ -190,8 +191,8 @@ namespace Authorization_Rev.Tests
         {
             // Arrange 
             User Krystal = new User("Krystal", "Admin");
-            Krystal.addClaim("CanDeleteOtherAccount", false);
-            Krystal.addClaim("HasPoints", false);
+            Krystal.addClaim("CanDeleteOtherAccount");
+            Krystal.addClaim("HasPoints");
             AuthorizationManager KrystalAuthorization = new AuthorizationManager(Krystal);
             bool expected = false;
 
