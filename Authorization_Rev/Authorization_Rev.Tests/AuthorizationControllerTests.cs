@@ -14,8 +14,8 @@ namespace Authorization_Rev.Tests
         public void CheckClaims_FoundShouldReturnTrue()
         {
             // Arrange 
-            CustomUser Trong = new CustomUser("Trong", "Student");
-            Trong.addClaim("CanDeleteUserPost", true);
+            User Trong = new User("Trong", "Student");
+            Trong.addClaim("CanDeleteUserPost");
             AuthorizationManager TrongAuthorization = new AuthorizationManager(Trong);
             bool expected = true;
 
@@ -30,8 +30,8 @@ namespace Authorization_Rev.Tests
         public void CheckClaims_NotFoundShouldReturnFalse()
         {
             // Arrange 
-            CustomUser Trong = new CustomUser("Trong", "Student");
-            Trong.addClaim("CanDeleteUserOwnAccount", true);
+            User Trong = new User("Trong", "Student");
+            Trong.addClaim("CanDeleteUserOwnAccount");
             AuthorizationManager TrongAuthorization = new AuthorizationManager(Trong);
             bool expected = false;
 
@@ -47,8 +47,8 @@ namespace Authorization_Rev.Tests
         public void CheckClaims_ClaimValueFalseShouldReturnFalse()
         {
             // Arrange 
-            CustomUser Trong = new CustomUser("Trong", "Student");
-            Trong.addClaim("CanDeleteUserPost", false);
+            User Trong = new User("Trong", "Student");
+            Trong.addClaim("CanDeleteUserPost");
             AuthorizationManager TrongAuthorization = new AuthorizationManager(Trong);
             bool expected = false;
 
@@ -64,7 +64,43 @@ namespace Authorization_Rev.Tests
         {
             // Arrange 
             User Trong = new User("Trong", "Student");
-            Trong.addClaim("CanDeleteUserOwnAccount", false);
+            Trong.addClaim("CanDeleteUserOwnAccount");
+            AuthorizationManager TrongAuthorization = new AuthorizationManager(Trong);
+            bool expected = false;
+
+            // Act
+            bool actual = TrongAuthorization.CheckClaims(new List<string>() { "CanDeleteUserPost" });
+
+            // Assert
+            Assert.Equal(expected, actual);
+
+        }
+
+        [Fact]
+        public void CheckClaims_DuplicatedClaimShouldReturnFalse()
+        {
+            // Arrange 
+            User Trong = new User("Trong", "Student");
+            Trong.addClaim("CanDeleteUserOwnAccount");
+            Trong.addClaim("CanDeleteUserOwnAccount");
+            AuthorizationManager TrongAuthorization = new AuthorizationManager(Trong);
+            bool expected = false;
+
+            // Act
+            bool actual = TrongAuthorization.CheckClaims(new List<string>() { "CanDeleteUserPost" });
+
+            // Assert
+            Assert.Equal(expected, actual);
+
+        }
+
+        [Fact]
+        public void CheckClaims_DuplicatedClaim2ShouldReturnFalse()
+        {
+            // Arrange 
+            User Trong = new User("Trong", "Student");
+            Trong.addClaim("CanDeleteUserOwnAccount");
+            Trong.addClaim("CanDeleteUserOwnAccount");
             AuthorizationManager TrongAuthorization = new AuthorizationManager(Trong);
             bool expected = false;
 
@@ -80,9 +116,9 @@ namespace Authorization_Rev.Tests
         public void CheckClaims_MultipleClaimFoundShouldReturnTrue()
         {
             // Arrange 
-            CustomUser Krystal = new CustomUser("Krystal", "Admin");
-            Krystal.addClaim("CanDeleteOtherAccount", true);
-            Krystal.addClaim("HasPoints", true);
+            User Krystal = new User("Krystal", "Admin");
+            Krystal.addClaim("CanDeleteOtherAccount");
+            Krystal.addClaim("HasPoints");
             AuthorizationManager KrystalAuthorization = new AuthorizationManager(Krystal);
             bool expected = true;
 
@@ -100,12 +136,13 @@ namespace Authorization_Rev.Tests
         {
             // Arrange 
             User Krystal = new User("Krystal", "Admin");
-            Krystal.addClaim("CanDeleteOtherAccount", true);
+            Krystal.addClaim("CanDeleteOtherAccount");
             AuthorizationManager KrystalAuthorization = new AuthorizationManager(Krystal);
             bool expected = false;
 
             // Act
             bool actual = KrystalAuthorization.CheckClaims(new List<string>() { "CanDeleteOtherAccount",
+                                                 "HasPoints",
                                                  "HasPoints"});
 
             // Assert
@@ -117,7 +154,7 @@ namespace Authorization_Rev.Tests
         public void CheckClaims_MultipleClaimNotFoundTwoClaimShouldReturnFalse()
         {
             // Arrange 
-            CustomUser Krystal = new CustomUser("Krystal", "Admin");
+            User Krystal = new User("Krystal", "Admin");
             AuthorizationManager KrystalAuthorization = new AuthorizationManager(Krystal);
             bool expected = false;
 
@@ -135,8 +172,8 @@ namespace Authorization_Rev.Tests
         {
             // Arrange 
             User Krystal = new User("Krystal", "Admin");
-            Krystal.addClaim("CanDeleteOtherAccount", true);
-            Krystal.addClaim("HasPoints", false);
+            Krystal.addClaim("CanDeleteOtherAccount");
+            Krystal.addClaim("HasPoints");
             AuthorizationManager KrystalAuthorization = new AuthorizationManager(Krystal);
             bool expected = false;
 
@@ -154,8 +191,8 @@ namespace Authorization_Rev.Tests
         {
             // Arrange 
             User Krystal = new User("Krystal", "Admin");
-            Krystal.addClaim("CanDeleteOtherAccount", false);
-            Krystal.addClaim("HasPoints", false);
+            Krystal.addClaim("CanDeleteOtherAccount");
+            Krystal.addClaim("HasPoints");
             AuthorizationManager KrystalAuthorization = new AuthorizationManager(Krystal);
             bool expected = false;
 
