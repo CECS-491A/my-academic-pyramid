@@ -20,12 +20,10 @@ namespace Authorization
         public CustomUser(String _userName, String _role)
         {
             UserName = _userName;
-            Role = _role;
             claims = new List<string>();
 
         }
         public String UserName { get; set; }
-        public String Role { get; set; }
         public List<string> userClaims
         {
             get
