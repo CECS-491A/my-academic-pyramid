@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Net;
 using System.Threading.Tasks;
-using PasswordChecking.HashFunctions;
+using ManagerLayer.Logic.PasswordChecking.PasswordValidations;
+using ServiceLayer;
+using ServiceLayer.PasswordChecking.HashFunctions;
 using Xunit;
 
-namespace PasswordChecking.Tests
+namespace ManagerLayerTests.Tests
 {
-    public class PwnedPasswordsCountTests
+    public class PasswordCheckerTests
     {
         // Arrange
         static SHA1HashFunction sha = new SHA1HashFunction();
         static string url = "https://api.pwnedpasswords.com/range/";
-        static PwnedPasswordsCount pv = new PwnedPasswordsCount(sha, url);
+        static PwnedPasswordsValidation pv = new PwnedPasswordsValidation(sha, url);
 
         [Fact]
         public void FindHash_FoundShouldReturnCount()

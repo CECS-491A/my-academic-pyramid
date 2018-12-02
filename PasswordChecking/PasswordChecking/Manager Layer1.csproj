@@ -48,11 +48,10 @@
   <ItemGroup>
     <Compile Include="HashFunctions\IHashFunction.cs" />
     <Compile Include="HttpClientMethods.cs" />
-    <Compile Include="PasswordCheckingBR.cs" />
-    <Compile Include="PasswordValidations\IPasswordValidation.cs" />
-    <Compile Include="PasswordValidations\PwnedPasswordsValidation.cs" />
-    <Compile Include="Validation.cs" />
-    <Compile Include="PwnedPasswordsCount.cs" />
+    <Compile Include="Business Rules\PasswordCheckingBR.cs" />
+    <Compile Include="Logic\PasswordValidations\IPasswordValidation.cs" />
+    <Compile Include="Logic\PasswordValidations\PwnedPasswordsValidation.cs" />
+    <Compile Include="Logic\Validation.cs" />
     <Compile Include="HashFunctions\SHA1HashFunction.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -61,5 +60,6 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

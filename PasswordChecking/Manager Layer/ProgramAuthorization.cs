@@ -1,12 +1,10 @@
+using ManagerLayer.Logic.UserManagement;
+using ServiceLayer;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Authorization
+namespace ManagerLayer
 {
-    class Program
+    class ProgramAuthorization
     {
         
         static void Main(string[] args)

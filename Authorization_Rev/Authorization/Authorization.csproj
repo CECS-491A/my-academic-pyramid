@@ -66,11 +66,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="InterfacesUM\IUserAccountService.cs" />
+    <Compile Include="InterfacesUM\IUserClaimService.cs" />
     <Compile Include="User.cs" />
-    <Compile Include="Interfaces\IAuthorizationManager.cs" />
+    <Compile Include="AuthorizationManagers\IAuthorizationManager.cs" />
     <Compile Include="AuthorizationManager.cs" />
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserManagement.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

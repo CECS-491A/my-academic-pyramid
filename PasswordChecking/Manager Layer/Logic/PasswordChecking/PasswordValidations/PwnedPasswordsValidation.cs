@@ -1,80 +1,83 @@
-﻿using System;
+﻿using ManagerLayer.BusinessRules;
+using ServiceLayer;
+using ServiceLayer.PasswordChecking.HashFunctions;
+using System;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace PasswordChecking.HashFunctions
+namespace ManagerLayer.Logic.PasswordChecking.PasswordValidations
 {
-    public class PwnedPasswordsCount
+    public class PwnedPasswordsValidation : IPasswordValidation
     {
         private IHashFunction _hashFunction; // Hash Function
         private string _url; // URL address
         private string _hashValue; // Hash Value Result
 
-        public PwnedPasswordsCount(IHashFunction hashFunction, string url)
+        public PwnedPasswordsValidation(IHashFunction hashFunction, string url)
         {
             _hashFunction = hashFunction;
             _url = url;
         }
 
-        /// <summary>
-        /// Calls the functions to hash the password,
-        /// request the hash, and find a matching hash
-        /// in the response.
-        /// </summary>
-        /// <returns>The hash value count.</returns>
-        public int GetCount(string password)
+        public Validation Validate(string password)
         {
-
             try
             {
                 // Use the hash function to get the hash value of the password.
                 _hashValue = _hashFunction.GetHashValue(password);
+                Console.WriteLine("Hash Value: " + _hashValue);
 
                 // First 5 characters of the hash value
                 string prefix = _hashValue.Substring(0, 5);
 
                 // Full URL address
                 Uri uri = new Uri(_url + prefix);
+                Console.WriteLine("Url: " + uri);
 
                 // GET request
                 Task<string> response = HttpClientMethods.RequestData(uri);
                 string hashListString = response.Result;
 
-                // Find a matching hash within the response
+                // Find a matching hash within the string
                 int hashCount = FindHash(_hashValue.Substring(5), hashListString);
+                Console.WriteLine("Count: " + hashCount);
 
-                //// Split the string list of hashes into an array.
-                //string[] hashListArray = StringToArray(hashListString);
+                if(hashCount >= 0)
+                {
+                    // Check business rules
+                    Validation validation = PasswordCheckingBR.CheckPasswordCount(hashCount);
 
-                //// Find a matching hash within the array
-                //int hashCount = FindHash(_hashValue.Substring(5), hashListArray);
-
-                // Return hash count
-                return hashCount;
+                    return validation;
+                }
             }
             catch (ArgumentOutOfRangeException e) // Invalid hash value
             {
-                Console.WriteLine(e.StackTrace);
+                //Console.WriteLine(e.StackTrace);
+                Console.WriteLine("ArgumentOutOfRangeException: Invalid hash value.");
             }
             catch (UriFormatException e) // Invalid URI address
             {
-                Console.WriteLine(e.StackTrace);
+                //Console.WriteLine(e.StackTrace);
+                Console.WriteLine("UriFormatException: Invalid URI adress.");
             }
             catch (AggregateException e) // GET request failed.
             {
-                Console.WriteLine(e.StackTrace);
+                //Console.WriteLine(e.StackTrace);
+                Console.WriteLine("AggregateException: GET request failed.");
             }
             catch (ArgumentNullException e) // Null values were used.
             {
-                Console.WriteLine(e.StackTrace);
+                //Console.WriteLine(e.StackTrace);
+                Console.WriteLine("ArgumentNullException: Null values were used.");
             }
             catch (NullReferenceException e) // Null values were used.
             {
-                Console.WriteLine(e.StackTrace);
+                //Console.WriteLine(e.StackTrace);
+                Console.WriteLine("NullReferenceException: Null values were used.");
             }
 
             // An exception was thrown
-            return -1;
+            return null;
         }
 
         /// <summary>
@@ -84,11 +87,12 @@ namespace PasswordChecking.HashFunctions
         /// <param name="hashValue">The hash value to find</param>
         /// <param name="list">A string list of hashes</param>
         /// <returns>The count of the found hash value, or zero if not found.</returns>
-        public int FindHash(string hashValue, string list)
+        public int FindHash(string hashValue, string list) // How to check if list is valid response? integration testing?
         {
             // The hash value was found in the list
             if (list.Contains(hashValue))
             {
+                Console.WriteLine("Hash Value Found.");
                 // Find index of found hash value
                 int start = list.IndexOf(hashValue);
 
@@ -99,14 +103,15 @@ namespace PasswordChecking.HashFunctions
                 // Check that the count found is an integer
                 if (int.TryParse(countString.Value.Substring(1), out int count))
                 {
+                    Console.WriteLine("Hash Count Found.");
                     // Return the count of the hash value
                     return count;
                 }
-
+                Console.WriteLine("Hash Count NOT Found.");
                 // The count was not found
                 return -1;
             }
-
+            Console.WriteLine("Hash Value NOT Found.");
             // The hash value was not found
             return 0;
         }
