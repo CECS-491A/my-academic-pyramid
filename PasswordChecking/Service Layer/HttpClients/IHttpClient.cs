@@ -1,0 +1,12 @@
+﻿using System;
+using System.Threading.Tasks;
+
+namespace ServiceLayer.HttpClients
+{
+    // An http client to make http requests and
+    // convert the response to a string.
+    public interface IHttpClient
+    {
+       Task<string> RequestData(Uri uri);
+    }
+}

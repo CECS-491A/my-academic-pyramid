@@ -78,10 +78,7 @@
     <Compile Include="Logic\UserManagement\UserManagements\IUserManagement.cs" />
     <Compile Include="Logic\UserManagement\UserManagementController.cs" />
     <Compile Include="Logic\UserManagement\UserManagements\MockUserManagement.cs" />
-    <Compile Include="Logic\Validation.cs" />
-    <Compile Include="ProgramAuthorization.cs" />
-    <Compile Include="ProgramPassword.cs" />
-    <Compile Include="ProgramUM.cs" />
+    <Compile Include="Logic\PasswordStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

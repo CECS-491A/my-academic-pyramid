@@ -71,9 +71,10 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HttpClients\IHttpClient.cs" />
     <Compile Include="PasswordChecking\HashFunctions\IHashFunction.cs" />
     <Compile Include="PasswordChecking\HashFunctions\SHA1HashFunction.cs" />
-    <Compile Include="HttpClientMethods.cs" />
+    <Compile Include="HttpClients\HttpClientString.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserManagement\UserAccountServices\IUserAccountService.cs" />
     <Compile Include="UserManagement\UserManagement.cs" />
