@@ -1,5 +1,5 @@
 using ManagerLayer.Logic.UserManagement;
-using ServiceLayer;
+using DataAccessLayer;
 using System;
 
 namespace ManagerLayer
@@ -13,9 +13,8 @@ namespace ManagerLayer
             UserManagementController userManagementController = new UserManagementController();
 
             // Create user Trong 
-            User Trong = new User("Trong", "Student");
+            User Trong = new User("Trong", 1);
             //Assign claim CanDeleteUserOwnAccount
-            Trong.addClaim("CanDeleteUserOwnAccount");
 
             // Delete own account request is received
             Console.WriteLine("***Let Trong delete his own user account***");
@@ -28,12 +27,9 @@ namespace ManagerLayer
             userManagementController.DeleteOtherAction(Trong);
 
             //Create user Krystal 
-            User Krystal = new User("Krystal", "Admin");
+            User Krystal = new User("Krystal", 2);
 
-            //Assign CanDeleteUserOwnAccount and CanDeleteUserOwnAccount
-            Krystal.addClaim("CanDeleteUserOwnAccount");
-            Krystal.addClaim("CanDeleteOtherAccount");
-            Krystal.addClaim("HasPoints");
+            //Assign CanDeleteUserOwnAccount and CanDeleteUserOwnAccount;
 
             // Delete own account request is received
             Console.WriteLine("\n***Let Krystal delete her own user account***");
@@ -44,11 +40,12 @@ namespace ManagerLayer
             userManagementController.DeleteOtherAction(Krystal);
 
             // null example
-            //userManagementController.DeleteOwnAction(null);
+            userManagementController.DeleteOwnAction(null);
             Console.ReadLine();
 
 
-           
+
+
         }
     }
 }

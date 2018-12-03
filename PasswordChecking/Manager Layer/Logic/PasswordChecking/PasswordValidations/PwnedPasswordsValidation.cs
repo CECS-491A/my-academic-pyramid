@@ -1,6 +1,6 @@
 ﻿using ManagerLayer.BusinessRules;
-using ServiceLayer;
-using ServiceLayer.PasswordChecking.HashFunctions;
+using DataAccessLayer;
+using DataAccessLayer.PasswordChecking.HashFunctions;
 using System;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;

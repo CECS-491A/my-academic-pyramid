@@ -1,73 +1,60 @@
-﻿using ServiceLayer.UserManagement.UserClaimServices;
+﻿using DataAccessLayer.UserManagement.UserClaimServices;
 using System;
 using System.Collections.Generic;
+using DataAccessLayer.Repository;
+using System.Linq;
 
-namespace ServiceLayer.UserManagement.UserAccountServices
+namespace DataAccessLayer.UserManagement.UserAccountServices
 {
     public class UserManagement: IUserAccountService, IUserClaimService
-    { 
-        List<User> DbContext;
+    {
+        private readonly UserRepository _userRepository;
+       
 
         public UserManagement()
         {
-            DbContext = new List<User>();
+            _userRepository = new UserRepository();
+            
         }
         public void CreateUser(User user)
         {
-            
-            DbContext.Add(user);
 
-            if(DbContext.Exists(u => u.UserName.Equals(user.UserName)))
-            {
-                Console.WriteLine("Add User Succesfully");
-            }
+            _userRepository.Insert(user);
             
         }
 
         public void DeleteUser(User user)
         {
-            DbContext.Remove(user);
+            _userRepository.Delete(user);
         }
 
         public void UpdateUser(User user)
         {
-            throw new NotImplementedException();
+            _userRepository.Update(user);
         }
 
-        public int FindUserbyUserName(string userName)
+        public User FindUserbyUserName(string userName)
         {
-            int userIndex = DbContext.FindIndex( u => u.UserName.Equals(userName));
-            return userIndex;
+            IQueryable<User> users = _userRepository.SearchFor(u => u.UserName.Equals(userName));
+            return users.FirstOrDefault();
         }
 
-        public void AddClaim(String userName, string claim)
-        {
-
-            int userIndex = FindUserbyUserName(userName);
-            DbContext[userIndex].userClaims.Add(claim);
-
-            if(DbContext[userIndex].userClaims.Exists(c => c.Equals(claim)))
-            {
-                Console.WriteLine("Add claim succesfully");
-            }
-            
-        }
 
         public IList<string> GetClaims(User user)
         {
 
-            return user.userClaims;
+            return user.Claims;
         }
 
         public void RemoveClaim(User user, string claim)
         {
-            user.userClaims.Remove(claim);
+            user.Claims.Remove(claim);
         }
 
         public void AddClaim(User user, string claim)
         {
-            throw new NotImplementedException();
+            
+            user.Claims.Add(claim);
         }
-
     }
 }

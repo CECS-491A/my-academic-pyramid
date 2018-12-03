@@ -2,8 +2,8 @@
 using System.Net;
 using System.Threading.Tasks;
 using ManagerLayer.Logic.PasswordChecking.PasswordValidations;
-using ServiceLayer;
-using ServiceLayer.PasswordChecking.HashFunctions;
+using DataAccessLayer;
+using DataAccessLayer.PasswordChecking.HashFunctions;
 using Xunit;
 
 namespace ManagerLayerTests.Tests

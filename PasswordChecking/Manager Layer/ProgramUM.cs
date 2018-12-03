@@ -1,6 +1,6 @@
 using System;
-using ServiceLayer;
-using ServiceLayer.UserManagement.UserAccountServices;
+using DataAccessLayer;
+using DataAccessLayer.UserManagement.UserAccountServices;
 
 namespace ManagerLayer
 {
@@ -10,9 +10,11 @@ namespace ManagerLayer
         {
             var userManagement = new UserManagement();
 
-            userManagement.CreateUser(new User("Trong"));
+            userManagement.CreateUser(new User("Trong", 1));
 
-            userManagement.AddClaim("Trong", "AccountManager");
+            User searchUser = userManagement.FindUserbyUserName("Trong");
+
+            userManagement.AddClaim(searchUser, "AccountManager");
             Console.ReadKey();
         }
     }

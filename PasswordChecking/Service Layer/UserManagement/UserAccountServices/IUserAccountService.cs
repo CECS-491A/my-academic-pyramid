@@ -1,10 +1,10 @@
-﻿namespace ServiceLayer.UserManagement.UserAccountServices
+﻿namespace DataAccessLayer.UserManagement.UserAccountServices
 {
     public interface IUserAccountService
     {
         void CreateUser(User user);
         void DeleteUser(User user);
         void UpdateUser(User user);
-        int FindUserbyUserName(string userName);
+        User FindUserbyUserName(string userName);
     }
 }

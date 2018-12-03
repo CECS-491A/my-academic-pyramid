@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace ServiceLayer.PasswordChecking.HashFunctions
+namespace DataAccessLayer.PasswordChecking.HashFunctions
 {
     public class SHA1HashFunction : IHashFunction
     {

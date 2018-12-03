@@ -94,6 +94,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DataAccessLayer\DataAccessLayer.csproj">
+      <Project>{6a61e75b-b35b-4f17-b7f4-da1af5806b23}</Project>
+      <Name>DataAccessLayer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Service Layer\ServiceLayer.csproj">
       <Project>{2a875510-9d8c-482f-99fd-19001548f681}</Project>
       <Name>ServiceLayer</Name>

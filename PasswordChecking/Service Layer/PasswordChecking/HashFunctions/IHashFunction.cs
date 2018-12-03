@@ -1,6 +1,6 @@
 ﻿
 
-namespace ServiceLayer.PasswordChecking.HashFunctions
+namespace DataAccessLayer.PasswordChecking.HashFunctions
 {
     public interface IHashFunction
     {

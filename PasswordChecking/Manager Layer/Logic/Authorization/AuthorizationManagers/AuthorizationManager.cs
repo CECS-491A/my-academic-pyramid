@@ -1,7 +1,9 @@
-﻿using ServiceLayer;
+﻿
+using DataAccessLayer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+
 
 
 namespace ManagerLayer.Logic.Authorization.AuthorizationManagers
@@ -31,7 +33,7 @@ namespace ManagerLayer.Logic.Authorization.AuthorizationManagers
             {
                 // body of lambda function
                 // looks for a uc (user claim) that matches rc (required claim)
-                string foundClaim = authorizedUser.userClaims.Find(
+                string foundClaim = authorizedUser.Claims.Find(
                     uc => uc.Equals(rc)
                 );
                 // If claim not found, then foundClaim will be null.

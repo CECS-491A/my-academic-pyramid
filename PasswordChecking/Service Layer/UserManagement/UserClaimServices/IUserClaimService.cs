@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 
-namespace ServiceLayer.UserManagement.UserClaimServices
+namespace DataAccessLayer.UserManagement.UserClaimServices
 {
     public interface IUserClaimService
     {
