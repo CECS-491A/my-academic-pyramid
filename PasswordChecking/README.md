@@ -1,25 +1,25 @@
 # Project
 ## About
-about
+This repository contains all the files for the Password Checking code, from the program itself to the tests we included for each of our classes.
 ## Directory Structure
 * DataAccessLayer
-  * a
+  * This directory contains the program that will read the user into the DataAccessLayer. It is not completed at the moment.
 * DataAcessLayer
-  * a
+  * This directory is our prototype DataAccessLayer.
 * DemoProject
-  * a
+  * This directory contains the demo for the features we have built. This will be used during our sprint 3 review.
 * HashDemo.test
-  * a
+  * This directory contains the unit testing for hash validation for SHA1Function.
 * ManagerLayer
-  * a
+  * This directory contains the Business Rules and Validation for our features.
 * PasswordChecking.Tests
-  * a
+  * This directory contains the unit testing for the password validation for the PasswordChecking.
 * PasswordChecking
-  * a
+  * This directory contains the program for PasswordChecking.
 * ServiceLayer
-  * a
+  * This directory contains the hash classes for the PasswordChecker that changes the password into a SHA1 hash value.
 * UnitTesting.Tests
-  * a
+  * This directory contains our prototype unit testing.
 ## Files
 * My Academic Pyramid.sln
   * a
