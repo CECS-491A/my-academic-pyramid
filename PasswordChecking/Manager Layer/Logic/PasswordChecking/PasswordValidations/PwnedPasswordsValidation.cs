@@ -1,17 +1,22 @@
 ﻿using ManagerLayer.BusinessRules;
-using DataAccessLayer;
 using DataAccessLayer.PasswordChecking.HashFunctions;
 using System;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using ServiceLayer.HttpClients;
 
 namespace ManagerLayer.Logic.PasswordChecking.PasswordValidations
 {
+    /// <summary>
+    /// A password validation implementation using Troy Hunt's Pwned Passwords Service.
+    /// <https://www.troyhunt.com/ive-just-launched-pwned-passwords-version-2/>
+    /// </summary>
     public class PwnedPasswordsValidation : IPasswordValidation
     {
         private IHashFunction _hashFunction; // Hash Function
         private string _url; // URL address
         private string _hashValue; // Hash Value Result
+        private IHttpClient client = new HttpClientString(); // Http Client
 
         public PwnedPasswordsValidation(IHashFunction hashFunction, string url)
         {
@@ -19,35 +24,41 @@ namespace ManagerLayer.Logic.PasswordChecking.PasswordValidations
             _url = url;
         }
 
-        public Validation Validate(string password)
+        /// <summary>
+        /// Validates the security of a password based on the number
+        /// of times it has been breached according to Pwned Passwords.
+        /// </summary>
+        /// <param name="password">A user password</param>
+        /// <returns></returns>
+        public PasswordStatus Validate(string password)
         {
             try
             {
                 // Use the hash function to get the hash value of the password.
                 _hashValue = _hashFunction.GetHashValue(password);
-                Console.WriteLine("Hash Value: " + _hashValue);
+                Console.WriteLine("Hash Value: " + _hashValue); // Demo
 
                 // First 5 characters of the hash value
                 string prefix = _hashValue.Substring(0, 5);
 
                 // Full URL address
                 Uri uri = new Uri(_url + prefix);
-                Console.WriteLine("Url: " + uri);
+                Console.WriteLine("Url: " + uri); // Demo
 
-                // GET request
-                Task<string> response = HttpClientMethods.RequestData(uri);
+                // Http GET request
+                Task<string> response = client.RequestData(uri);
                 string hashListString = response.Result;
 
-                // Find a matching hash within the string
+                // Find a matching hash within the response
                 int hashCount = FindHash(_hashValue.Substring(5), hashListString);
-                Console.WriteLine("Count: " + hashCount);
+                Console.WriteLine("Count: " + hashCount); // Demo
 
-                if(hashCount >= 0)
+                if(hashCount >= 0) // A hash count was found within the response.
                 {
                     // Check business rules
-                    Validation validation = PasswordCheckingBR.CheckPasswordCount(hashCount);
+                    PasswordStatus status = PasswordCheckingBR.CheckPasswordCount(hashCount);
 
-                    return validation;
+                    return status;
                 }
             }
             catch (ArgumentOutOfRangeException e) // Invalid hash value
@@ -86,13 +97,15 @@ namespace ManagerLayer.Logic.PasswordChecking.PasswordValidations
         /// </summary>
         /// <param name="hashValue">The hash value to find</param>
         /// <param name="list">A string list of hashes</param>
-        /// <returns>The count of the found hash value, or zero if not found.</returns>
+        /// <returns>The count of the found hash value, zero if not found,
+        /// or -1 if no hash count was found in the list</returns>
         public int FindHash(string hashValue, string list) // How to check if list is valid response? integration testing?
         {
             // The hash value was found in the list
             if (list.Contains(hashValue))
             {
-                Console.WriteLine("Hash Value Found.");
+                Console.WriteLine("Hash Value Found."); // Demo
+
                 // Find index of found hash value
                 int start = list.IndexOf(hashValue);
 
@@ -103,15 +116,15 @@ namespace ManagerLayer.Logic.PasswordChecking.PasswordValidations
                 // Check that the count found is an integer
                 if (int.TryParse(countString.Value.Substring(1), out int count))
                 {
-                    Console.WriteLine("Hash Count Found.");
+                    Console.WriteLine("Hash Count Found."); // Demo
                     // Return the count of the hash value
                     return count;
                 }
-                Console.WriteLine("Hash Count NOT Found.");
+                Console.WriteLine("Hash Count NOT Found."); // Demo
                 // The count was not found
                 return -1;
             }
-            Console.WriteLine("Hash Value NOT Found.");
+            Console.WriteLine("Hash Value NOT Found."); // Demo
             // The hash value was not found
             return 0;
         }
