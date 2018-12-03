@@ -5,9 +5,8 @@ using DataAccessLayer.Repository;
 namespace DataAccessLayer
 {
     public class User : IEntity
-    {
-        //List of string to store user Claims
-        
+    {   
+        // Constructor which accept username and id 
         public User(String _userName, int id) 
         {
             Id = id;
@@ -18,6 +17,8 @@ namespace DataAccessLayer
         public String UserName { get; private set; }
 
         public int Id { get; set; }
+
+        // List of string to store user Claims
         public List<String> Claims { get; set; }
 
 
