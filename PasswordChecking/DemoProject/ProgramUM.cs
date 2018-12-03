@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using DataAccessLayer;
 using DataAccessLayer.UserManagement.UserAccountServices;
 
@@ -10,11 +11,43 @@ namespace ManagerLayer
         {
             var userManagement = new UserManagement();
 
+            Console.WriteLine("Create new user named Trong");
             userManagement.CreateUser(new User("Trong", 1));
+
 
             User searchUser = userManagement.FindUserbyUserName("Trong");
 
+            Console.WriteLine("Add new claim to Trong ");
             userManagement.AddClaim(searchUser, "AccountManager");
+
+            Console.WriteLine("Trying to search Trong's account and print out the claims");
+            searchUser = userManagement.FindUserbyUserName("Trong");
+
+            Console.WriteLine($"Name: {searchUser.UserName}");
+
+            Console.WriteLine("Trying to get claim from Trong's account");
+            IList<String> claims = userManagement.GetClaims(searchUser);
+            foreach (String claim in claims )
+            {
+                Console.WriteLine(claim);
+            }
+
+            Console.WriteLine("Trying to remove a claim from account");
+            userManagement.RemoveClaim(searchUser, "AccountManager");
+
+            Console.WriteLine("Trying to retrieve claim from the account again ");     
+
+            claims = userManagement.GetClaims(searchUser);
+            foreach (String claim in claims)
+            {
+                Console.WriteLine(claim);
+            }
+
+            Console.WriteLine("Trying to delete user");
+
+            userManagement.DeleteUser(searchUser);
+
+
             Console.ReadKey();
         }
     }
