@@ -1,6 +1,6 @@
 # Project
 ## About
-This repository contains all the files for the Password Checking code, from the program itself to the tests we included for each of our classes.
+This repository contains all the files for the features we have built, from the program itself to the tests we included for each of our classes. The features included in this directory are authentication, password checking, and user management.
 ## Directory Structure
 * DataAccessLayer
   * This directory contains the program that will read the user into the DataAccessLayer. It is not completed at the moment.
@@ -22,4 +22,4 @@ This repository contains all the files for the Password Checking code, from the 
   * This directory contains our prototype unit testing.
 ## Files
 * My Academic Pyramid.sln
-  * a
+  * This solution runs the features we have built for our sprint 3.
