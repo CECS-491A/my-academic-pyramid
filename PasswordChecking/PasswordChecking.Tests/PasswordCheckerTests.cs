@@ -123,7 +123,7 @@ namespace ManagerLayerTests.Tests
             // Assert
             Assert.Equal(expected, actual);
         }
-        
+
         [Fact]
         public void RequestData_ShouldPass()
         {
