@@ -1,4 +1,4 @@
-# Project
+# PasswordChecking
 ## About
 This folder contains the program code for the PasswordChecking feature, which will return the hash value for the password as well as the count for the password. 
 ## Directory Structure
