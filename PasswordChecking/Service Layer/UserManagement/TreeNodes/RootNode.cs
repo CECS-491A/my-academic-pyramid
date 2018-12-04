@@ -39,7 +39,7 @@ namespace Service_Layer.UserManagement.TreeNodes
         {
             // Checks that the level exists in the tree and
             // that the user does not already exist in the tree.
-            if(LevelIsValid(level - 1) && FindUserParent(user) != null)
+            if(LevelIsValid(level - 1) && FindUserParent(user) == null)
             {
                 // The parent of the user to be added
                 RootNode root = GetRootAtLevel(level - 1);
