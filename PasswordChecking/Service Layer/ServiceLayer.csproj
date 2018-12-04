@@ -76,9 +76,12 @@
     <Compile Include="PasswordChecking\HashFunctions\SHA1HashFunction.cs" />
     <Compile Include="HttpClients\HttpClientString.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserManagement\TreeNodes\INode.cs" />
+    <Compile Include="UserManagement\TreeNodes\RootNode.cs" />
     <Compile Include="UserManagement\UserAccountServices\IUserAccountService.cs" />
     <Compile Include="UserManagement\UserManagement.cs" />
     <Compile Include="UserManagement\UserClaimServices\IUserClaimService.cs" />
+    <Compile Include="UserManagement\TreeNodes\UserNode.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

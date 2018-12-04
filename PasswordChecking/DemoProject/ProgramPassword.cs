@@ -4,7 +4,7 @@ using DataAccessLayer.PasswordChecking.HashFunctions;
 using ManagerLayer.Logic.PasswordChecking.PasswordValidations;
 using ManagerLayer.Logic;
 
-namespace ManagerLayer
+namespace DemoProject
 {
     class ProgramPassword
     {
@@ -24,9 +24,9 @@ namespace ManagerLayer
                 sw.Start();
 
                 // Get password count
-                Validation validation = pv.Validate(password);
+                PasswordStatus status = pv.Validate(password);
 
-                if (validation is null)
+                if (status is null)
                 {
                     Console.WriteLine("FAIL");
                 }

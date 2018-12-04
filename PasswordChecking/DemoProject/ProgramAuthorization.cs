@@ -2,7 +2,7 @@ using ManagerLayer.Logic.UserManagement;
 using DataAccessLayer;
 using System;
 
-namespace ManagerLayer
+namespace DemoProject
 {
     class ProgramAuthorization
     {

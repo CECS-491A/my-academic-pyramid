@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using DataAccessLayer;
 using DataAccessLayer.UserManagement.UserAccountServices;
 
-namespace ManagerLayer
+namespace DemoProject
 {
     class ProgramUM
     {
