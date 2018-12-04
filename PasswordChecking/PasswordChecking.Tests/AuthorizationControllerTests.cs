@@ -1,4 +1,5 @@
 ﻿using ManagerLayer.Logic.Authorization.AuthorizationManagers;
+using ManagerLayer;
 using System.Collections.Generic;
 using DataAccessLayer;
 using Xunit;
