@@ -1,11 +1,11 @@
 # DataAccessLayer
 ## About
-about
+This folder contains the data access layer which will pull data from the database.
 ## Directory Structure
 * Properties
-  * a
+  * Contains the AssemblyInfo for the Data Access LAyer
 * Repository
-  * a
+  * Contains the repository programs for users who are managing their own or someone else's account.
 ## Files
 * App.config
   * a
@@ -14,4 +14,4 @@ about
 * Program.cs
   * a
 * User.cs
-  * a
+  * The file contains the constructors for the username, ID, and the user claims.
