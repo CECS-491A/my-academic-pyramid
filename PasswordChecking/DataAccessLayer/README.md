@@ -1,6 +1,6 @@
 # DataAccessLayer
 ## About
-This folder contains the program that will pull data from the data base.
+This folder contains the data access layer which will pull data from the database.
 ## Directory Structure
 * Properties
   * Contains the AssemblyInfo for the Data Access LAyer
