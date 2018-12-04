@@ -6,6 +6,12 @@ namespace DataAccessLayer
 {
     public class User : IEntity
     {   
+        public User(string userName)
+        {
+            UserName = userName;
+            Claims = new List<string>();
+        }
+
         // Constructor which accept username and id 
         public User(String _userName, int id) 
         {

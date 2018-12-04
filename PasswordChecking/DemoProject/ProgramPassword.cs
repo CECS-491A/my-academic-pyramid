@@ -24,9 +24,9 @@ namespace ManagerLayer
                 sw.Start();
 
                 // Get password count
-                Validation validation = pv.Validate(password);
+                PasswordStatus pwStatus = pv.Validate(password);
 
-                if (validation is null)
+                if (pwStatus is null)
                 {
                     Console.WriteLine("FAIL");
                 }

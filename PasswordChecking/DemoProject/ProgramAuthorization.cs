@@ -40,7 +40,7 @@ namespace ManagerLayer
             userManagementController.DeleteOtherAction(Krystal);
 
             // null example
-            userManagementController.DeleteOwnAction(null);
+            //userManagementController.DeleteOwnAction(null);
             Console.ReadLine();
 
 
