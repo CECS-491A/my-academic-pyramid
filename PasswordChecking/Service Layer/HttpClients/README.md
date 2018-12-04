@@ -1,7 +1,7 @@
 # HttpClients
-# About
+## About
 This folder contains the interface and implementations of an Http client that communicates with third party servers.
-# Files
+## Files
 * HttpClientString.cs
   * Implementation of HttpClient interface that makes requests to a server whose response is a string.
 * IHttpClient.cs
