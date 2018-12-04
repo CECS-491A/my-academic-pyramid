@@ -1,12 +1,12 @@
 # Service Layer
 ## About
-This repository contains the code that will get the strings from HTTP along managing the user account/claim services.
+This repository contains the code for stand alone services.
 ## Directory Structure
 * HttpClients
-  * This folder contains the request/get functions for the server which will response is a string.
+  * This folder contains the interface and implementations of an Http client that communicates with third party servers.
 * PasswordChecking/HashFunctions
-  * This code contains the Sha1Function and IHashFunction, which will retreive the hash function for a password.
+  * This folder contains the interface and implementations for hashing functions.
 * Properties
-  * The folder contains the assembly info for the service layer
+  * The folder contains the assembly information for the service layer
 * User Management
-  * This folder contains the account and claim services for the users.
+  * This folder contains user management related services.
