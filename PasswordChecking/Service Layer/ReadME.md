@@ -1,6 +1,6 @@
 # Service Layer
 ## About
-This repository contains the code for single services.
+This repository contains the code for stand alone services.
 ## Directory Structure
 * HttpClients
   * This folder contains the interface and implementations of an Http client that communicates with third party servers.
