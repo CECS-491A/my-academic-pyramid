@@ -33,7 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>ManagerLayer.ProgramUM</StartupObject>
+    <StartupObject>DemoProject.ProgramUMTree</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -49,6 +49,7 @@
     <Compile Include="ProgramAuthorization.cs" />
     <Compile Include="ProgramPassword.cs" />
     <Compile Include="ProgramUM.cs" />
+    <Compile Include="ProgramUMTree.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
