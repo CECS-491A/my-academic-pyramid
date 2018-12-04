@@ -1,4 +1,4 @@
-# HasDemo.test
+# HashDemo.test
 ## About
 This folder contains the unit testing for the Sha1HashFunction
 ## Directory Structure
