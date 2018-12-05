@@ -44,6 +44,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -73,6 +74,8 @@
     <Compile Include="BusinessRules\PasswordCheckingBR.cs" />
     <Compile Include="Logic\Authorization\AuthorizationManagers\AuthorizationManager.cs" />
     <Compile Include="Logic\Authorization\AuthorizationManagers\IAuthorizationManager.cs" />
+    <Compile Include="Logic\PasswordChecking\Hash.cs" />
+    <Compile Include="Logic\PasswordChecking\ListConverter.cs" />
     <Compile Include="Logic\PasswordChecking\PasswordValidations\IPasswordValidation.cs" />
     <Compile Include="Logic\PasswordChecking\PasswordValidations\PwnedPasswordsValidation.cs" />
     <Compile Include="Logic\UserManagement\UserManagements\IUserManagement.cs" />
