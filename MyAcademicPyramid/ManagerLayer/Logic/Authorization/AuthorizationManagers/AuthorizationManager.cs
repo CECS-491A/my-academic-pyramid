@@ -9,7 +9,8 @@ using System.Linq;
 namespace ManagerLayer.Logic.Authorization.AuthorizationManagers
 {
     /// <summary>
-    /// 
+    /// Checks the existence of the user and privileges of the user.  
+    /// An instance of AuthorizationManager will be created for every request from the user by Controller.
     /// </summary>
     public class AuthorizationManager:IAuthorizationManager
     {
@@ -30,7 +31,7 @@ namespace ManagerLayer.Logic.Authorization.AuthorizationManagers
         /// If the required claim is not in the requiredClaims, it would return false and user wouldn't be able to use the feature.
         /// </summary>
         /// <param name="requiredClaims"></param>
-        /// <returns></returns>
+        /// <returns> true/false </returns>
         public bool CheckClaims(List<String> requiredClaims)
         {
             if (requiredClaims == null)

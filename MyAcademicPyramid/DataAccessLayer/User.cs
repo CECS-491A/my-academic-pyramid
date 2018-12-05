@@ -4,10 +4,19 @@ using DataAccessLayer.Repository;
 
 namespace DataAccessLayer
 {
+    /// <summary>
+    /// Class that implements IEntity class
+    /// an instance of User class will be created for every people who own an account of My Academic Pyramid web application. 
+    /// </summary>
     public class User : IEntity
     {
 
-        // Constructor which accept username and id 
+        /// <summary>
+        /// Constructor of class User 
+        /// Takes in userName and id 
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <param name="id"></param>
         public User(string userName, int id) 
         {
             Id = id;
@@ -15,6 +24,11 @@ namespace DataAccessLayer
             Claims = new List<string>();
         }
 
+        /// <summary>
+        /// Overloading Constructor of class User
+        /// Takes in the userName
+        /// </summary>
+        /// <param name="userName"></param>
         public User(string userName)
         {
             UserName = userName;
@@ -28,20 +42,31 @@ namespace DataAccessLayer
         // List of string to store user Claims
         public List<String> Claims { get; set; }
 
-
+        /// <summary>
+        /// Compares the UserName with other object
+        /// It's used to check the existence of the user in the tree.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns> true/false </returns>
         public override bool Equals(object obj)
         {
-            if (!(obj is User item))
+            if (obj is User item)
+            {
+                return UserName.Equals(item.UserName);
+            }
+            else
             {
                 return false;
             }
-
-            return this.UserName.Equals(item.UserName);
         }
 
+        /// <summary>
+        /// returns the hash code of the UserName
+        /// </summary>
+        /// <returns></returns>
         public override int GetHashCode()
         {
-            return this.UserName.GetHashCode();
+            return UserName.GetHashCode();
         }
 
     }
