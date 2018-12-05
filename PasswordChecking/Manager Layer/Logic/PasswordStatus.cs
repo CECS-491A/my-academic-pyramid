@@ -6,13 +6,11 @@
     public class PasswordStatus
     {
         // An integer representation of a password's security
-        private int _status;
+        public int status { get; private set; }
 
-        public PasswordStatus(int status)
+        public PasswordStatus(int s)
         {
-            _status = status;
+            status = s;
         }
-
-        public int Status { get; set; }
     }
 }

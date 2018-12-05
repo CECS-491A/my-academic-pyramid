@@ -6,6 +6,10 @@ using DataAccessLayer;
 using DataAccessLayer.PasswordChecking.HashFunctions;
 using ServiceLayer.HttpClients;
 using Xunit;
+using ManagerLayer.Logic;
+using ManagerLayer.BusinessRules;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace ManagerLayerTests.Tests
 {
@@ -18,7 +22,7 @@ namespace ManagerLayerTests.Tests
         private IHttpClient HttpClientMethods = new HttpClientString(); // Http Client
 
         [Fact]
-        public void FindHash_FoundShouldReturnCount()
+        public void PwnedPassword_FindHash_FoundShouldReturnCount()
         {
             // Arrange
             string hashValue = "1E4C9B93F3F0682250B6CF8331B7EE68FD8"; // password: "password"
@@ -37,7 +41,7 @@ namespace ManagerLayerTests.Tests
         }
 
         [Fact]
-        public void FindHash_NotFoundShouldReturnZero()
+        public void PwnedPassword_FindHash_NotFoundShouldReturnZero()
         {
             // Arrange
             string hashValue = "753D006EBCE8F59C93364725A9D5C4EC6BC"; // password = "fw836g1"
@@ -56,7 +60,7 @@ namespace ManagerLayerTests.Tests
         }
 
         [Fact]
-        public void FindHash_InvalidHashValueShouldThrowException()
+        public void PwnedPasswordValidation_FindHash_InvalidHashValueShouldThrowException()
         {
             // Arrange
             string response = "1D72CD07550416C216D8AD296BF5C0AE8E0: 10 \n" +
@@ -82,7 +86,7 @@ namespace ManagerLayerTests.Tests
         }
 
         [Fact]
-        public void FindHash_InvalidResponseShouldThrowExecption()
+        public void PwnedPasswordValidation_FindHash_InvalidResponseShouldThrowExecption()
         {
             // Arrange
             string hashValue = "1E4C9B93F3F0682250B6CF8331B7EE68FD8"; // password = "password"
@@ -105,7 +109,7 @@ namespace ManagerLayerTests.Tests
         }
 
         [Fact]
-        public void FindHash_AllNullValuesShouldThrowException()
+        public void PwnedPasswordValidation_FindHash_AllNullValuesShouldThrowException()
         {
             // Arrange
             bool expected = true;
@@ -127,7 +131,7 @@ namespace ManagerLayerTests.Tests
         }
 
         [Fact]
-        public void RequestData_ShouldPass()
+        public void HttpClientString_RequestData_ShouldPass()
         {
             // Arrange
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
@@ -152,7 +156,7 @@ namespace ManagerLayerTests.Tests
         }
 
         [Fact]
-        public void RequestData_InvalidUrlShouldFail()
+        public void HttpClientString_RequestData_InvalidUrlShouldFail()
         {
             // Arrange
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
@@ -173,22 +177,57 @@ namespace ManagerLayerTests.Tests
                 Assert.Equal(expected, actual);
             }
         }
+
+        //Data for PasswordCheckingBR_CheckPasswordCount_ShouldReturnValidStatus
+        public static IEnumerable<object[]> GetPasswordStatusesData()
+        {
+            PasswordStatus e0 = new PasswordStatus(0); 
+            PasswordStatus a0 = PasswordCheckingBR.CheckPasswordCount(0);
+            yield return new object[] { e0, a0 };
+
+            PasswordStatus e1 = new PasswordStatus(1);
+            PasswordStatus a1 = PasswordCheckingBR.CheckPasswordCount(1);
+            yield return new object[] { e1, a1 };
+
+            PasswordStatus e2 = new PasswordStatus(2);
+            PasswordStatus a2 = PasswordCheckingBR.CheckPasswordCount(2);
+            yield return new object[] { e2, a2 };
+
+            PasswordStatus e3 = new PasswordStatus(2);
+            PasswordStatus a3 = PasswordCheckingBR.CheckPasswordCount(100);
+            yield return new object[] { e3, a3 };
+
+            PasswordStatus e4 = new PasswordStatus(2);
+            PasswordStatus a4 = PasswordCheckingBR.CheckPasswordCount(-100);
+            yield return new object[] { e4, a4 };
+        }
+
+        [Theory]
+        //Arrange 
+        [MemberData(nameof(GetPasswordStatusesData))]
+        public void PasswordCheckingBR_CheckPasswordCount_ShouldReturnValidStatus(PasswordStatus e, PasswordStatus a)
+        {
+            // Act 
+            int expected = e.status;
+            int actual = a.status;
+
+            // Assert
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void PwnedPasswordsValidation_Validate_ShouldBeFasterThanOneSecond()
+        {
+            // Arrange
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
+            // Act
+            pv.Validate("password");
+            stopwatch.Stop();
+
+            // Assert
+            Assert.True(stopwatch.ElapsedMilliseconds < 1000);
+        }
     }
 }
-
-//go to code and put a try catch around the code
-//catch will set the value to true
-//so if the error happens then that means the code went into the catch 
-//set actual = to true in catch 
-//this makes sure that the error happens
-//can put assertion in catch to speed things up or some bs
-//assert.equals(expected, actual)
-
-//test valid values, invalid values, performance - how long did something take, 
-//test for duration - create a stop watch. stopwatch.Start() at start and stopwatch.End()
-//at the end. Then Assert.IsTrue(stopwatch.ElapsedMilliseconds < 1000); 
-//makes sure it took less than 1 second
-
-//can have multiple assertions in a test 
-//advice to create a unit test that only tests 1 scenario
-//valid inputs, invalid inputs, performance testing at the end 

@@ -15,6 +15,12 @@ namespace DataAccessLayer
             Claims = new List<string>();
         }
 
+        public User(string userName)
+        {
+            UserName = userName;
+            Claims = new List<string>();
+        }
+
         public int Id { get; set; }
 
         public string UserName { get; set; }

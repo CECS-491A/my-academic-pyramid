@@ -3,7 +3,7 @@ using System;
 
 namespace ManagerLayer.BusinessRules
 {
-    class PasswordCheckingBR
+    public class PasswordCheckingBR
     {
         /// <summary>
         /// Checks the security of a password based on the number
