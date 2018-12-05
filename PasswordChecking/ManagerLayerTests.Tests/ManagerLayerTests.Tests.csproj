@@ -19,8 +19,8 @@
     <ProjectGuid>{52F09B68-B916-4E8E-8E8A-B1EFF9FA9BDB}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PasswordChecking.Tests</RootNamespace>
-    <AssemblyName>PasswordChecking.Tests</AssemblyName>
+    <RootNamespace>ManagerLayer.Tests</RootNamespace>
+    <AssemblyName>ManagerLayer.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -86,7 +86,7 @@
       <Project>{6a61e75b-b35b-4f17-b7f4-da1af5806b23}</Project>
       <Name>DataAccessLayer</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Manager Layer\ManagerLayer.csproj">
+    <ProjectReference Include="..\ManagerLayer\ManagerLayer.csproj">
       <Project>{1f873dd8-8a42-411b-b217-ebe6e8eeb002}</Project>
       <Name>ManagerLayer</Name>
     </ProjectReference>
