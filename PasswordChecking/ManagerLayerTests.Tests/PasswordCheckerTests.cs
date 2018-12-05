@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using ManagerLayer.Logic.PasswordChecking.PasswordValidations;
 using DataAccessLayer;
 using DataAccessLayer.PasswordChecking.HashFunctions;
+using ServiceLayer.HttpClients;
 using Xunit;
 
 namespace ManagerLayerTests.Tests
@@ -14,6 +15,7 @@ namespace ManagerLayerTests.Tests
         static SHA1HashFunction sha = new SHA1HashFunction();
         static string url = "https://api.pwnedpasswords.com/range/";
         static PwnedPasswordsValidation pv = new PwnedPasswordsValidation(sha, url);
+        private IHttpClient HttpClientMethods = new HttpClientString(); // Http Client
 
         [Fact]
         public void FindHash_FoundShouldReturnCount()
@@ -70,7 +72,7 @@ namespace ManagerLayerTests.Tests
                 int test = pv.FindHash(null, response);
                 actual = false;
             }
-            catch (ArgumentNullException e)
+            catch (ArgumentNullException)
             {
                 actual = true;
             }
@@ -93,7 +95,7 @@ namespace ManagerLayerTests.Tests
                 int test = pv.FindHash(hashValue, null);
                 actual = false;
             }
-            catch (NullReferenceException e)
+            catch (NullReferenceException)
             {
                 actual = true;
             }
@@ -115,7 +117,7 @@ namespace ManagerLayerTests.Tests
                 int test = pv.FindHash(null, null);
                 actual = false;
             }
-            catch (NullReferenceException e)
+            catch (NullReferenceException)
             {
                 actual = true;
             }
@@ -140,7 +142,7 @@ namespace ManagerLayerTests.Tests
                 Task<string> response = HttpClientMethods.RequestData(uri);
                 actual = true;
             }
-            catch (WebException e)
+            catch (WebException)
             {
                 actual = false;
             }
@@ -164,7 +166,7 @@ namespace ManagerLayerTests.Tests
                 Uri uri = new Uri("should throw exception");
                 Task<string> response = HttpClientMethods.RequestData(uri);
             }
-            catch (UriFormatException e)
+            catch (UriFormatException)
             {
                 actual = true;
                 //Assert
