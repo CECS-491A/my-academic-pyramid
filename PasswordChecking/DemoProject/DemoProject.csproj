@@ -33,7 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>DemoProject.ProgramUMTree</StartupObject>
+    <StartupObject>DemoProject.ProgramPassword</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -59,10 +59,6 @@
     <ProjectReference Include="..\DataAccessLayer\DataAccessLayer.csproj">
       <Project>{6a61e75b-b35b-4f17-b7f4-da1af5806b23}</Project>
       <Name>DataAccessLayer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Manager Layer\ManagerLayer.csproj">
-      <Project>{1f873dd8-8a42-411b-b217-ebe6e8eeb002}</Project>
-      <Name>ManagerLayer</Name>
     </ProjectReference>
     <ProjectReference Include="..\Service Layer\ServiceLayer.csproj">
       <Project>{2a875510-9d8c-482f-99fd-19001548f681}</Project>
