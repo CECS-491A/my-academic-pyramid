@@ -12,7 +12,7 @@ namespace ServicLayerTests.Tests
     {
         SHA1HashFunction Sha1 = new SHA1HashFunction();
         [Fact]
-        public void GetHashValue_CheckIfValid()
+        public void SHA1HashFunctions_GetHashValue_CheckIfValid()
         {
             
             //Arrange
@@ -25,7 +25,7 @@ namespace ServicLayerTests.Tests
         }
 
         [Fact]
-        public void GetHashValue_CheckIfInvalid()
+        public void SHA1HashFunctions_GetHashValue_CheckIfInvalid()
         {
             //Arrange
             string expected = "25E6A14076898A344AB680E2A589A09885EB04C2";
