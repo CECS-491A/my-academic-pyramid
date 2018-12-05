@@ -20,15 +20,30 @@ namespace DataAccessLayer
             UserName = userName;
             Claims = new List<string>();
         }
-
+        
         public int Id { get; set; }
 
         public string UserName { get; set; }
 
-
         // List of string to store user Claims
         public List<String> Claims { get; set; }
-        
+
+
+        public override bool Equals(object obj)
+        {
+            if (!(obj is User item))
+            {
+                return false;
+            }
+
+            return this.UserName.Equals(item.UserName);
+        }
+
+        public override int GetHashCode()
+        {
+            return this.UserName.GetHashCode();
+        }
+
     }
 
 
