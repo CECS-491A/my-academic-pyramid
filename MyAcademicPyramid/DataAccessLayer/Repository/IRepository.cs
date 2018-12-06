@@ -24,8 +24,7 @@ namespace DataAccessLayer.Repository
         /// Return an element of generic entity by providing a search condition 
         IQueryable<T> SearchFor(Expression<Func<T, bool>> predicate);
 
-        //Return all elements of generic entity
-        IEnumerable<T> GetAll();
+
 
     }
 }

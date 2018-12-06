@@ -1,14 +1,12 @@
 using System;
 using DataAccessLayer;
 using DataAccessLayer.UserManagement.UserAccountServices;
-using DataAccessLayer.Repository;
-using Moq;
-using System.Data.Entity;
+
 
 
 namespace DemoProject
 {
-    class ProgramUM
+     class ProgramUM
     {
         static void Main(string[] args)
         {
