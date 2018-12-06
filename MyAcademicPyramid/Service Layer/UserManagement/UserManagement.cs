@@ -8,62 +8,61 @@ namespace DataAccessLayer.UserManagement.UserAccountServices
 {
     public class UserManagement: IUserAccountService, IUserClaimService
     {
-     
-        private readonly UserRepository _userRepository;
+
+        protected UnitOfWork unitOfWork;
        
         // Constructor which initialize the userRepository 
         public UserManagement()
         {
-            _userRepository = new UserRepository();
-            
+            unitOfWork = new UnitOfWork();
         }
 
         // Create user account  
         public void CreateUser(User user)
         {
 
-            _userRepository.Insert(user);
-            
+            unitOfWork.UserRepository.Insert(user);
+            unitOfWork.Save();
+
         }
 
         // Delete user account  
         public void DeleteUser(User user)
         {
-            _userRepository.Delete(user);
+            unitOfWork.UserRepository.Delete(user);
+            unitOfWork.Save();
         }
 
         // Update user account 
         public void UpdateUser(User user)
         {
-            _userRepository.Update(user);
+            unitOfWork.UserRepository.Update(user);
+            unitOfWork.Save();
         }
 
         // Find user by providing a user name
         public User FindUserbyUserName(string userName)
         {
-            IQueryable<User> users = _userRepository.SearchFor(u => u.UserName.Equals(userName));
+            IQueryable<User> users = unitOfWork.UserRepository.SearchFor(u => u.UserName.Equals(userName));
             return users.FirstOrDefault();
-        }
 
-        // Get claim method from a user account
-        public IList<string> GetClaims(User user)
-        {
-
-            return user.Claims;
         }
 
         // Remove a claim from a user account
-        public void RemoveClaim(User user, string claim)
+        public void RemoveClaim(User user, Claim claim)
         {
-            user.Claims.Remove(claim);
+            User searchuser = unitOfWork.UserRepository.SearchFor(u => u.Id == user.Id).FirstOrDefault();
+            searchuser.Claims.Remove(claim);
+            unitOfWork.Save();
         }
 
 
         // Add a claim to a user account
-        public void AddClaim(User user, string claim)
+        public void AddClaim(User user, Claim claim)
         {
-            
-            user.Claims.Add(claim);
+            User searchuser = unitOfWork.UserRepository.SearchFor(u => u.Id == user.Id).FirstOrDefault();
+            searchuser.Claims.Add(claim);
+            unitOfWork.Save();
         }
     }
 }
