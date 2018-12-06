@@ -24,12 +24,22 @@ namespace DataAccessLayer.Repository
         // Insert an element of generic entity 
         public void Insert(T entity)
         {
+            //Insert Exception
+            if (entity == null)
+            {
+                throw new ArgumentNullException("Required input. Input is empty.");
+            }
             _context.Add(entity);
         }
 
         // Delete an element of generic entity 
         public void Delete(T entity)
         {
+            //Delete Exception
+            if (entity == null)
+            {
+                throw new ArgumentNullException("Required input. Input is empty.");
+            }
             // Search by ID, then remove the element
             _context.RemoveAll(e => e.Id == entity.Id);
         }
@@ -37,8 +47,19 @@ namespace DataAccessLayer.Repository
         // Update an element of generic entity 
         public void Update(T entity)
         {
+            //Update Exception
+            if (entity == null)
+            {
+                throw new ArgumentNullException("Required I.D. I.D. is not found.");
+            }
             // Find the index of the element by search for the Id 
             int index = _context.FindIndex(e => e.Id == entity.Id);
+
+            //Index Exception
+            if (index == null)
+            {
+                throw new ArgumentNullException("Required Index, Index is found.");
+            }
 
             // Remove the element at the index 
             _context.RemoveAt(index);
@@ -50,12 +71,17 @@ namespace DataAccessLayer.Repository
         //Return all elements of generic entity
         public IEnumerable<T> GetAll()
         {
+            
             return _context;
         }
 
         // Return an element by id
         public T GetByID(int id)
         {
+            if (id == null)
+            {
+                throw new ArgumentNullException("Required I.D. I.D. is not found.");
+            }
             return _context.SingleOrDefault(e => e.Id == id);
         }
 
