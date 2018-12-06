@@ -6,10 +6,10 @@ using Xunit;
 
 namespace ManagerLayerTests.Tests
 {
-    public class AuthorizationControllerTests
+    public class AuthorizationManagerTests
     {
         [Fact]
-        public void CheckClaims_FoundShouldReturnTrue()
+        public void AuthorizationManager_CheckClaims_ClaimFoundShouldReturnTrue()
         {
             // Arrange 
             User Trong = new User("Trong");
@@ -25,7 +25,7 @@ namespace ManagerLayerTests.Tests
         }
 
         [Fact]
-        public void CheckClaims_NotFoundShouldReturnFalse()
+        public void AuthorizationManager_CheckClaims_ClaimNotFoundShouldReturnFalse()
         {
             // Arrange 
             User Trong = new User("Trong");
@@ -42,29 +42,14 @@ namespace ManagerLayerTests.Tests
         }
 
         [Fact]
-        public void CheckClaims_ClaimValueFalseShouldReturnFalse()
+        public void AuthorizationManager_CheckClaims_DuplicatedRightClaimShouldReturnTrue()
         {
             // Arrange 
             User Trong = new User("Trong");
             Trong.Claims.Add("CanDeleteUserPost");
+            Trong.Claims.Add("CanDeleteUserPost");
             AuthorizationManager TrongAuthorization = new AuthorizationManager(Trong);
-            bool expected = false;
-
-            // Act
-            bool actual = TrongAuthorization.CheckClaims(new List<string>() { "CanDeleteUserPost" });
-
-            // Assert
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
-        public void CheckClaims_NotFoundClaimValueFalseShouldReturnFalse()
-        {
-            // Arrange 
-            User Trong = new User("Trong");
-            Trong.Claims.Add("CanDeleteUserOwnAccount");
-            AuthorizationManager TrongAuthorization = new AuthorizationManager(Trong);
-            bool expected = false;
+            bool expected = true;
 
             // Act
             bool actual = TrongAuthorization.CheckClaims(new List<string>() { "CanDeleteUserPost" });
@@ -75,7 +60,7 @@ namespace ManagerLayerTests.Tests
         }
 
         [Fact]
-        public void CheckClaims_DuplicatedClaimShouldReturnFalse()
+        public void AuthorizationManager_CheckClaims_DuplicatedWrongClaim2ShouldReturnFalse()
         {
             // Arrange 
             User Trong = new User("Trong");
@@ -93,25 +78,7 @@ namespace ManagerLayerTests.Tests
         }
 
         [Fact]
-        public void CheckClaims_DuplicatedClaim2ShouldReturnFalse()
-        {
-            // Arrange 
-            User Trong = new User("Trong");
-            Trong.Claims.Add("CanDeleteUserOwnAccount");
-            Trong.Claims.Add("CanDeleteUserOwnAccount");
-            AuthorizationManager TrongAuthorization = new AuthorizationManager(Trong);
-            bool expected = false;
-
-            // Act
-            bool actual = TrongAuthorization.CheckClaims(new List<string>() { "CanDeleteUserPost" });
-
-            // Assert
-            Assert.Equal(expected, actual);
-
-        }
-
-        [Fact]
-        public void CheckClaims_MultipleClaimFoundShouldReturnTrue()
+        public void AuthorizationManager_CheckClaims_MultiplClaimFoundShouldReturnTrue()
         {
             // Arrange 
             User Krystal = new User("Krystal");
@@ -130,7 +97,7 @@ namespace ManagerLayerTests.Tests
         }
 
         [Fact]
-        public void CheckClaims_MultipleClaimNotFoundSingleClaimShouldReturnFalse()
+        public void AuthorizationManager_CheckClaims_HasPointsClaimNotFoundShouldReturnFalse()
         {
             // Arrange 
             User Krystal = new User("Krystal");
@@ -149,7 +116,26 @@ namespace ManagerLayerTests.Tests
         }
 
         [Fact]
-        public void CheckClaims_MultipleClaimNotFoundTwoClaimShouldReturnFalse()
+        public void AuthorizationManager_CheckClaims_CanDeleteOtherAccountClaimNotFoundHashShouldReturnFalse()
+        {
+            // Arrange 
+            User Krystal = new User("Krystal");
+            Krystal.Claims.Add("HasPoints");
+            AuthorizationManager KrystalAuthorization = new AuthorizationManager(Krystal);
+            bool expected = false;
+
+            // Act
+            bool actual = KrystalAuthorization.CheckClaims(new List<string>() { "CanDeleteOtherAccount",
+                                                 "HasPoints",
+                                                 "HasPoints"});
+
+            // Assert
+            Assert.Equal(expected, actual);
+
+        }
+
+        [Fact]
+        public void AuthorizationManager_CheckClaims_MultipleClaimNotFoundTwoClaimShouldReturnFalse()
         {
             // Arrange 
             User Krystal = new User("Krystal");
@@ -166,14 +152,16 @@ namespace ManagerLayerTests.Tests
         }
 
         [Fact]
-        public void CheckClaims_MultipleClaimSingleValueFalseShouldReturnFalse()
+        public void AuthorizationManager_CheckClaims_DuplicatedMultiplClaimFoundShouldReturnTrue()
         {
             // Arrange 
             User Krystal = new User("Krystal");
             Krystal.Claims.Add("CanDeleteOtherAccount");
+            Krystal.Claims.Add("CanDeleteOtherAccount");
+            Krystal.Claims.Add("HasPoints");
             Krystal.Claims.Add("HasPoints");
             AuthorizationManager KrystalAuthorization = new AuthorizationManager(Krystal);
-            bool expected = false;
+            bool expected = true;
 
             // Act
             bool actual = KrystalAuthorization.CheckClaims(new List<string>() { "CanDeleteOtherAccount",
@@ -184,23 +172,5 @@ namespace ManagerLayerTests.Tests
 
         }
 
-        [Fact]
-        public void CheckClaims_MultipleClaimTwoValueFalseShouldReturnFalse()
-        {
-            // Arrange 
-            User Krystal = new User("Krystal");
-            Krystal.Claims.Add("CanDeleteOtherAccount");
-            Krystal.Claims.Add("HasPoints");
-            AuthorizationManager KrystalAuthorization = new AuthorizationManager(Krystal);
-            bool expected = false;
-
-            // Act
-            bool actual = KrystalAuthorization.CheckClaims(new List<string>() { "CanDeleteOtherAccount",
-                                                 "HasPoints"});
-
-            // Assert
-            Assert.Equal(expected, actual);
-
-        }
     }
 }
