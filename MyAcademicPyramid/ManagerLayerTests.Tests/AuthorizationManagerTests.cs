@@ -60,7 +60,7 @@ namespace ManagerLayerTests.Tests
         }
 
         [Fact]
-        public void AuthorizationManager_CheckClaims_DuplicatedWrongClaim2ShouldReturnFalse()
+        public void AuthorizationManager_CheckClaims_DuplicatedWrongClaimShouldReturnFalse()
         {
             // Arrange 
             User Trong = new User("Trong");
