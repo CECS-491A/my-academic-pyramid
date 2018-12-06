@@ -11,9 +11,11 @@ namespace DemoProject
 {
    public class EffortFactory : IDbConnectionFactory
     {
+        // Handle one instance of DbConnection when Entity FrameWork ask for this 
         private static DbConnection connection;
         private static object _lock = new object(); 
 
+        // Method used to dispose the previous connection
         public static void ResetDb()
         {
             lock(_lock)
@@ -21,6 +23,7 @@ namespace DemoProject
                 connection = null;
             }
         }
+
 
         public DbConnection CreateConnection(string nameOrConnectionString)
         {

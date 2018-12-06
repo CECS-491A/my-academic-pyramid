@@ -26,12 +26,12 @@ namespace DataAccessLayer
         /// <param name="userName"></param>
         public User ()
         {
-
+            Claims = new List<Claim>();
         }
         public User(string userName)
         {
             UserName = userName;
-           
+            Claims = new List<Claim>();
         }
         
         public int Id { get; set; }
@@ -39,7 +39,7 @@ namespace DataAccessLayer
         public string UserName { get; set; }
 
         // List of string to store user Claims
-        public List<Claim> Claims { get; set; }
+        public virtual List<Claim> Claims { get; set; }
 
         /// <summary>
         /// Compares the UserName with other object
