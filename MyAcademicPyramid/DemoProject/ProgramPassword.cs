@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
-using DataAccessLayer.PasswordChecking.HashFunctions;
+using ServiceLayer.PasswordChecking.HashFunctions;
 using ManagerLayer.Logic.PasswordChecking.PasswordValidations;
 using ManagerLayer.Logic;
 

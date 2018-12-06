@@ -1,10 +1,11 @@
-﻿using DataAccessLayer.UserManagement.UserClaimServices;
+﻿
 using System;
 using System.Collections.Generic;
-using DataAccessLayer.Repository;
+using DataAccessLayer;
 using System.Linq;
+using ServiceLayer.UserManagement.UserClaimServices;
 
-namespace DataAccessLayer.UserManagement.UserAccountServices
+namespace ServiceLayer.UserManagement.UserAccountServices
 {
     public class UserManagement: IUserAccountService, IUserClaimService
     {

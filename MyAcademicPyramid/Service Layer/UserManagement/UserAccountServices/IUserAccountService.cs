@@ -1,4 +1,6 @@
-﻿namespace DataAccessLayer.UserManagement.UserAccountServices
+﻿using DataAccessLayer;
+
+namespace ServiceLayer.UserManagement.UserAccountServices
 {
     public interface IUserAccountService
     {

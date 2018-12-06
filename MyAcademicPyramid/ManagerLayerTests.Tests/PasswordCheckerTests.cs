@@ -3,7 +3,7 @@ using System.Net;
 using System.Threading.Tasks;
 using ManagerLayer.Logic.PasswordChecking.PasswordValidations;
 using DataAccessLayer;
-using DataAccessLayer.PasswordChecking.HashFunctions;
+using ServiceLayer.PasswordChecking.HashFunctions;
 using ServiceLayer.HttpClients;
 using Xunit;
 using ManagerLayer.Logic;
