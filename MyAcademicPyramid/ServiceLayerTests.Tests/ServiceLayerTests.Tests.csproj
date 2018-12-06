@@ -79,6 +79,7 @@
   <ItemGroup>
     <Compile Include="HashTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserManagementTest.cs" />
     <Compile Include="UserTreeTest.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -4,7 +4,7 @@ using DataAccessLayer.UserManagement.UserAccountServices;
 using DemoProject;
 using System;
 
-namespace ManagerLayer.Tests
+namespace ServiceLayerTests.Tests
 {
     public class UserManagementTest
     {
