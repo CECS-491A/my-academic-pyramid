@@ -8,7 +8,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{175819F1-7FBA-45A7-96E5-2CC75A26D981}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <RootNamespace>ServiceLayerTests.Tests</RootNamespace>
     <AssemblyName>ServiceLayerTests.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
@@ -78,9 +78,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HashTest.cs" />
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UserManagementTest.cs" />
+    <Compile Include="UserTreeTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
