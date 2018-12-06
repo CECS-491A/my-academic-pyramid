@@ -36,7 +36,7 @@ namespace ManagerLayer.Logic.Authorization.AuthorizationManagers
         /// If the required claim is in the requiredClaims, it would return true and user would be able to use the feature that user requested to use.
         /// If the required claim is not in the requiredClaims, it would return false and user wouldn't be able to use the feature.
         /// </summary>
-        /// <param name="requiredClaims"></param> required claim(s) to get a permission to use the feature
+        /// <param name="requiredClaims"></param>
         /// <returns> true/false </returns>
         public bool CheckClaims(List<Claim> requiredClaims)
         {

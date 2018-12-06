@@ -1,7 +1,12 @@
-﻿using DataAccessLayer.PasswordChecking.HashFunctions;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using DataAccessLayer.PasswordChecking.HashFunctions;
 using Xunit;
 
-namespace ServiceLayerTests.Tests
+namespace ServicLayerTests.Tests
 {
     public class HashTest
     {
@@ -10,25 +15,25 @@ namespace ServiceLayerTests.Tests
         public void SHA1HashFunctions_GetHashValue_CheckIfValid()
         {
             
-            // Arrange
+            //Arrange
             string expected = "25E6A14076898A344AB680E2A589A09885EB04C2";
-            // Act
+            //Act
             string input = "PolarIceCaps";
             string actual = Sha1.GetHashValue(input);
-            // Assert
+            //Assert
             Assert.Equal(expected, actual);
         }
 
         [Fact]
         public void SHA1HashFunctions_GetHashValue_CheckIfInvalid()
         {
-            // Arrange
+            //Arrange
             string expected = "25E6A14076898A344AB680E2A589A09885EB04C2";
             string input = "Polar";
-            // Act
+            //Act
 
             string actual = Sha1.GetHashValue(input);
-            // Assert
+            //Assert
             Assert.NotEqual(expected, actual);
         }
 

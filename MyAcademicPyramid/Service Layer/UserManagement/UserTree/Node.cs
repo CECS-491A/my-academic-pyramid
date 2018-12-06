@@ -139,13 +139,8 @@ namespace Service_Layer.UserManagement.UserTree
         /// <returns>Node is found, null if not found</returns>
         public Node FindNodeAtLevel(int level)
         {
-            // Invalid level
-            if(level < 0)
-            {
-                return null;
-            }
             // Specified level is current node
-            else if(level == 0)
+            if(level == 0)
             {
                 return this;
             }
@@ -241,18 +236,6 @@ namespace Service_Layer.UserManagement.UserTree
 
             for (int i = 0; i < Children.Count; i++)
                 Children[i].PrintTree(indent, i == Children.Count - 1);
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (obj is Node item)
-            {
-                return User.Equals(item.User);
-            }
-            else
-            {
-                return false;
-            }
         }
     }
 }
