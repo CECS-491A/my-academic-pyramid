@@ -9,12 +9,12 @@ namespace DataAccessLayer.UserManagement.UserAccountServices
     public class UserManagement: IUserAccountService, IUserClaimService
     {
 
-        protected UnitOfWork unitOfWork;
+        protected UnitOfWork unitOfWork = new UnitOfWork();
        
         // Constructor which initialize the userRepository 
-        public UserManagement(DatabaseContext context)
+        public UserManagement()
         {
-            unitOfWork = new UnitOfWork(context);
+         
             
         }
 

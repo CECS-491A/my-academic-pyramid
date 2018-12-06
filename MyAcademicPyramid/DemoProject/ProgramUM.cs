@@ -13,13 +13,8 @@ namespace DemoProject
         static void Main(string[] args)
         {
 
-            var mockUserSet = new Mock<DbSet<User>>();
-            var mockClaimSet = new Mock<DbSet<Claim>>();
-
-            var mockContext = new Mock<DatabaseContext>();
-            mockContext.Setup(m => m.Users).Returns(mockUserSet.Object);
-            mockContext.Setup(m => m.Claims).Returns(mockClaimSet.Object);
-            var userManagement = new UserManagement(mockContext.Object);
+            Effort.Provider.EffortProviderConfiguration.RegisterProvider();
+            var userManagement = new UserManagement();
 
             // Create a new user account
             Console.WriteLine("Create new user account - Trong");

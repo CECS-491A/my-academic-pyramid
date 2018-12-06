@@ -24,6 +24,10 @@ namespace DataAccessLayer
         /// Takes in the userName
         /// </summary>
         /// <param name="userName"></param>
+        public User ()
+        {
+
+        }
         public User(string userName)
         {
             UserName = userName;
