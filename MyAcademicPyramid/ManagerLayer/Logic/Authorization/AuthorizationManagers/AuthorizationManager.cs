@@ -17,6 +17,12 @@ namespace ManagerLayer.Logic.Authorization.AuthorizationManagers
         
         private User authorizedUser;
 
+        /// <summary>
+        /// Constructor of AuthorizationManager.
+        /// Takes in user as a parameter and save the value.
+        /// It would throw an exception, if the user is null
+        /// </summary>
+        /// <param name="user"></param>
         public AuthorizationManager(User user)
         { 
             if (user == null)
