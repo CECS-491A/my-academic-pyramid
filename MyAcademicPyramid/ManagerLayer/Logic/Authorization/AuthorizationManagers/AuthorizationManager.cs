@@ -32,7 +32,7 @@ namespace ManagerLayer.Logic.Authorization.AuthorizationManagers
         /// </summary>
         /// <param name="requiredClaims"></param>
         /// <returns> true/false </returns>
-        public bool CheckClaims(List<String> requiredClaims)
+        public bool CheckClaims(List<Claim> requiredClaims)
         {
             if (requiredClaims == null)
                 throw new ArgumentNullException(
@@ -43,8 +43,8 @@ namespace ManagerLayer.Logic.Authorization.AuthorizationManagers
             {
                 // body of lambda function
                 // looks for a uc (user claim) that matches rc (required claim)
-                string foundClaim = authorizedUser.Claims.Find(
-                    uc => uc.Equals(rc)
+                Claim foundClaim = authorizedUser.Claims.Find(
+                    uc => uc.Value.Equals(rc.Value)
                 );
                 // If claim not found, then foundClaim will be null.
                 return (foundClaim != null);

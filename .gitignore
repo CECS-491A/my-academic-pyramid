@@ -1,0 +1,11 @@
+
+*.user
+*.cache
+*.cache
+*.txt
+*.txt
+*.ide
+*.lock
+*.config
+*.csproj
+*.csproj
