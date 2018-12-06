@@ -9,13 +9,12 @@ namespace DataAccessLayer.UserManagement.UserAccountServices
     public class UserManagement: IUserAccountService, IUserClaimService
     {
 
-        protected UnitOfWork unitOfWork = new UnitOfWork();
+        protected UnitOfWork unitOfWork;
        
         // Constructor which initialize the userRepository 
         public UserManagement()
         {
-         
-            
+            unitOfWork = new UnitOfWork();
         }
 
         // Create user account  
@@ -23,19 +22,22 @@ namespace DataAccessLayer.UserManagement.UserAccountServices
         {
 
             unitOfWork.UserRepository.Insert(user);
-            
+            unitOfWork.Save();
+
         }
 
         // Delete user account  
         public void DeleteUser(User user)
         {
             unitOfWork.UserRepository.Delete(user);
+            unitOfWork.Save();
         }
 
         // Update user account 
         public void UpdateUser(User user)
         {
             unitOfWork.UserRepository.Update(user);
+            unitOfWork.Save();
         }
 
         // Find user by providing a user name
@@ -49,15 +51,18 @@ namespace DataAccessLayer.UserManagement.UserAccountServices
         // Remove a claim from a user account
         public void RemoveClaim(User user, Claim claim)
         {
-            unitOfWork.ClaimRepository.Delete(claim);
+            User searchuser = unitOfWork.UserRepository.SearchFor(u => u.Id == user.Id).FirstOrDefault();
+            searchuser.Claims.Remove(claim);
+            unitOfWork.Save();
         }
 
 
         // Add a claim to a user account
         public void AddClaim(User user, Claim claim)
         {
-
-            unitOfWork.ClaimRepository.Insert(claim);
+            User searchuser = unitOfWork.UserRepository.SearchFor(u => u.Id == user.Id).FirstOrDefault();
+            searchuser.Claims.Add(claim);
+            unitOfWork.Save();
         }
     }
 }
