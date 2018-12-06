@@ -1,10 +1,10 @@
-﻿
+﻿using System.Data.Entity;
 
 namespace DataAccessLayer.Repository
 {
     public class UserRepository : Repository<User>, IUserRepository
     {
-        public UserRepository(DatabaseContext context ) : base (context)
+        public UserRepository(DbContext context ) : base (context)
         {
 
         }
