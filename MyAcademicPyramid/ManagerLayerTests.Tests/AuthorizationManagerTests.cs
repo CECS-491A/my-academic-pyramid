@@ -60,7 +60,7 @@ namespace ManagerLayerTests.Tests
         }
 
         [Fact]
-        public void AuthorizationManager_CheckClaims_DuplicatedWrongClaim2ShouldReturnFalse()
+        public void AuthorizationManager_CheckClaims_DuplicatedWrongClaimShouldReturnFalse()
         {
             // Arrange 
             User Trong = new User("Trong");
@@ -116,7 +116,7 @@ namespace ManagerLayerTests.Tests
         }
 
         [Fact]
-        public void AuthorizationManager_CheckClaims_CanDeleteOtherAccountClaimNotFoundHashShouldReturnFalse()
+        public void AuthorizationManager_CheckClaims_CanDeleteOtherAccountClaimNotFoundShouldReturnFalse()
         {
             // Arrange 
             User Krystal = new User("Krystal");
@@ -135,7 +135,7 @@ namespace ManagerLayerTests.Tests
         }
 
         [Fact]
-        public void AuthorizationManager_CheckClaims_MultipleClaimNotFoundTwoClaimShouldReturnFalse()
+        public void AuthorizationManager_CheckClaims_MultipleClaimNotFoundShouldReturnFalse()
         {
             // Arrange 
             User Krystal = new User("Krystal");
