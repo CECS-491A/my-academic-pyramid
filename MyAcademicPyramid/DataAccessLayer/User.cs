@@ -69,6 +69,11 @@ namespace DataAccessLayer
             return UserName.GetHashCode();
         }
 
+        public override string ToString()
+        {
+            return UserName;
+        }
+
     }
 
 

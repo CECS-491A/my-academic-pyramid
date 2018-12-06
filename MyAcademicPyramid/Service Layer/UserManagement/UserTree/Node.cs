@@ -1,14 +1,21 @@
 ﻿using DataAccessLayer;
+using System;
 using System.Collections.Generic;
 
 namespace Service_Layer.UserManagement.UserTree
 {
     /// <summary>
-    /// Node that acts as the parent for all user
-    /// nodes in each level of authorization.
+    /// Node in a user tree.
     /// </summary>
     public class Node
     {
+        public Node()
+        {
+            Children = new List<Node>();
+            User = new User("");
+            Parent = null;
+        }
+
         public Node(string userName)
         {
             Children = new List<Node> ();
@@ -22,135 +29,181 @@ namespace Service_Layer.UserManagement.UserTree
 
         public Node Parent { get; set; }
 
+        /// <summary>
+        /// Add a direct child to the node, by specifying a user.
+        /// </summary>
+        /// <param name="user">User to add</param>
+        /// <returns>Whether the user add was successful</returns>
         public bool AddChild(User user)
         {
+            // Create a user node
             Node child = new Node(user.UserName)
             {
+                // Set the parent to the current node
                 Parent = this
             };
 
+            // User is not already a direct child
             if (!Children.Contains(child))
             {
+                // Add the user
                 Children.Add(child);
                 return true;
             }
+            // User was already a child
             return false;
         }
 
-        public bool AddChild(Node child)
+        /// <summary>
+        /// Add a direct child to the node, by specifying a user node.
+        /// </summary>
+        /// <param name="user">User to add</param>
+        /// <returns>Whether the user add was successful</returns>
+        public bool AddChild(Node user)
         {
-            child.Parent = this;
+            user.Parent = this;
 
-            if (!Children.Contains(child))
+            // User is not already a direct child
+            if (!Children.Contains(user))
             {
-                Children.Add(child);
+                // Add the user
+                Children.Add(user);
                 return true;
             }
+            // User was already a child
             return false;
         }
 
-        public bool AddParent(User user)
-        {
-            Node parent = new Node(user.UserName);
-            if (Parent != null && !Parent.Children.Contains(parent))
-            {
-                Parent.Children.Add(parent);
-                Parent = parent; // does this reference right parent?
-                return true;
-            }
-            return false;
-        }
 
-        // depth
+        /// <summary>
+        /// Gets the depth of the node in a tree
+        /// </summary>
+        /// <returns>depth</returns>
         public int Depth()
         {
+            // Node is the root
             if(Parent == null)
             {
                 return 0;
             }
-            else if(Parent.User == null)
-            {
-                return 1;
-            }
+            // Node is not the root
             else
             {
+                // Get the depth of the next level up
                 return 1 + Parent.Depth();
             }
         }
 
+        /// <summary>
+        /// Finds a user below the current node.
+        /// </summary>
+        /// <param name="user">User to find</param>
+        /// <returns>User node if found, null if not found</returns>
         public Node FindUser(User user)
         {
-            if(user == User)
+            // Current node matches the user
+            if(user.Equals(User))
             {
                 return this;
             }
+            // Current node has no children
             else if(Children.Count < 1)
             {
+                // User not found
                 return null;
             }
+            // Current node has children
             else
             {
-                foreach(Node child in Children)
+                // Search each child
+                foreach (Node child in Children)
                 {
+                    // Find node in child
                     Node node = child.FindUser(user);
+                    // User is found
                     if(node != null)
                     {
+                        // Return user
                         return node;
                     }
                 }
+                // User was not found
                 return null;
             }
         }
 
+        /// <summary>
+        /// Find a node at a specified depth
+        /// </summary>
+        /// <param name="level">Depth of node</param>
+        /// <returns>Node is found, null if not found</returns>
         public Node FindNodeAtLevel(int level)
         {
+            // Specified level is current node
             if(level == 0)
             {
                 return this;
             }
-            else if(level == 1)
+            // Current node has children
+            else if(Children.Count > 0)
             {
-                if(Children.Count > 0)
+                if(level == 1)
                 {
+                    // Return a child
                     return Children[0];
                 }
-                return null;
-            }
-            else
-            {
-                if(Children.Count > 0)
+
+                // Check the level of each child
+                foreach (Node child in Children)
                 {
-                    foreach (Node child in Children)
+                    Node node = child.FindNodeAtLevel(level - 1);
+                    if (node != null)
                     {
-                        Node node = FindNodeAtLevel(level-1);
-                        if(node != null)
-                        {
-                            return node;
-                        }
+                        // A node was found.
+                        return node;
                     }
                 }
-
-                return null;
             }
+            // No node was found
+            return null;
         }
 
+        /// <summary>
+        /// Checks if current node is a direct parent of a user.
+        /// </summary>
+        /// <param name="user">User to check</param>
+        /// <returns>Whether node is a parent</returns>
         public bool IsDirectParentOf(User user)
         {
+            // Compare each child with user
             foreach(Node child in Children)
             {
                 if (child.User.Equals(user))
                 {
+                    // User was found as child
                     return true;
                 }
             }
+            // User was not found
             return false;
         }
 
+        /// <summary>
+        /// Compare the depth of current node to another node.
+        /// </summary>
+        /// <param name="user">User node to compare</param>
+        /// <returns>0 if equal, negative is this node's depth is less than the user node's,
+        /// and positive is this node's depth is greater than the user node's</returns>
         public int CompareTo(Node user)
         {
             return Depth() - user.Depth();
         }
 
+        /// <summary>
+        /// Checks if the current node's depth is lower than another node's
+        /// </summary>
+        /// <param name="user">User node to compare</param>
+        /// <returns>Whether the current node is higher in the tree than the other node</returns>
         public bool IsAbove(Node user)
         {
             if(Depth() < user.Depth())
@@ -160,9 +213,29 @@ namespace Service_Layer.UserManagement.UserTree
             return false;
         }
 
-        public override string ToString()
+        /// <summary>
+        /// Prints the tree in the console.
+        /// Use: For demo and testing purposes.
+        /// </summary>
+        /// <param name="indent">Indendtion string</param>
+        /// <param name="last">Last node</param>
+        public void PrintTree(string indent, bool last)
         {
-            return User.ToString();
+            Console.Write(indent);
+            if (last)
+            {
+                Console.Write("\\-");
+                indent += "  ";
+            }
+            else
+            {
+                Console.Write("|-");
+                indent += "| ";
+            }
+            Console.WriteLine(User);
+
+            for (int i = 0; i < Children.Count; i++)
+                Children[i].PrintTree(indent, i == Children.Count - 1);
         }
     }
 }
