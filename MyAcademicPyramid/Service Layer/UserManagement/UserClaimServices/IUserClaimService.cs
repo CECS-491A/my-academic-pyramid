@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using DataAccessLayer;
 
 
-namespace DataAccessLayer.UserManagement.UserClaimServices
+namespace ServiceLayer.UserManagement.UserClaimServices
 {
     public interface IUserClaimService
     {

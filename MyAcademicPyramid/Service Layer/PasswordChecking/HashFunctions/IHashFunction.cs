@@ -1,6 +1,6 @@
 ﻿
 
-namespace DataAccessLayer.PasswordChecking.HashFunctions
+namespace ServiceLayer.PasswordChecking.HashFunctions
 {
     /// <summary>
     /// A hash function that returns a hash value.

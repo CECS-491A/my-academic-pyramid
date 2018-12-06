@@ -1,7 +1,7 @@
 ﻿
 
 using ManagerLayer.BusinessRules;
-using DataAccessLayer.PasswordChecking.HashFunctions;
+using ServiceLayer.PasswordChecking.HashFunctions;
 using System;
 using ServiceLayer.HttpClients;
 using Newtonsoft.Json;

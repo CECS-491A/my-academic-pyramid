@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace DataAccessLayer.PasswordChecking.HashFunctions
+namespace ServiceLayer.PasswordChecking.HashFunctions
 {
     /// <summary>
     /// SHA1 implementation of a hash function.

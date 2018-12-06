@@ -1,6 +1,6 @@
 ﻿using Xunit;
 using DataAccessLayer;
-using DataAccessLayer.UserManagement.UserAccountServices;
+using ServiceLayer.UserManagement.UserAccountServices;
 using DemoProject;
 using System;
 

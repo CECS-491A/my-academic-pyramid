@@ -1,4 +1,4 @@
-﻿using DataAccessLayer.PasswordChecking.HashFunctions;
+﻿using ServiceLayer.PasswordChecking.HashFunctions;
 using Xunit;
 
 namespace ServiceLayerTests.Tests
