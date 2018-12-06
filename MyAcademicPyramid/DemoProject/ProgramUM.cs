@@ -2,6 +2,8 @@ using System;
 using DataAccessLayer;
 using DataAccessLayer.UserManagement.UserAccountServices;
 using DataAccessLayer.Repository;
+using Moq;
+using System.Data.Entity;
 
 
 namespace DemoProject
@@ -11,8 +13,13 @@ namespace DemoProject
         static void Main(string[] args)
         {
 
-            
-            var userManagement = new UserManagement();
+            var mockUserSet = new Mock<DbSet<User>>();
+            var mockClaimSet = new Mock<DbSet<Claim>>();
+
+            var mockContext = new Mock<DatabaseContext>();
+            mockContext.Setup(m => m.Users).Returns(mockUserSet.Object);
+            mockContext.Setup(m => m.Claims).Returns(mockClaimSet.Object);
+            var userManagement = new UserManagement(mockContext.Object);
 
             // Create a new user account
             Console.WriteLine("Create new user account - Trong");

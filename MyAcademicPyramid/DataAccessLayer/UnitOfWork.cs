@@ -5,10 +5,14 @@ namespace DataAccessLayer
 {
     public class UnitOfWork 
     {
-        private DatabaseContext _context = new DatabaseContext();
+        private DatabaseContext _context;
         private Repository<User> _userRepository;
         private Repository<Claim> _claimRepository;
 
+        public UnitOfWork(DatabaseContext context)
+        {
+            _context = context;
+        }
         public Repository<User> UserRepository
         {
             get
