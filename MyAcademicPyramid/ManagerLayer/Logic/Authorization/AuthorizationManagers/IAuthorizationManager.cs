@@ -1,5 +1,4 @@
-﻿using DataAccessLayer;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace ManagerLayer.Logic.Authorization.AuthorizationManagers
@@ -10,6 +9,6 @@ namespace ManagerLayer.Logic.Authorization.AuthorizationManagers
     /// </summary>
     interface IAuthorizationManager
     {
-        bool CheckClaims(List<Claim> requiredClaimTypes);
+        bool CheckClaims(List<String> requiredClaimTypes);
     }
 }

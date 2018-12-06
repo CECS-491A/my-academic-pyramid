@@ -21,9 +21,9 @@ namespace ManagerLayer.Logic.UserManagement
         public void DeleteOwnAction(User requestingUser)
         {
             IAuthorizationManager authManager = new AuthorizationManager(requestingUser);
-            List<Claim> delOwnRequiredClaimTypes = new List<Claim>
+            List<string> delOwnRequiredClaimTypes = new List<string>
             {
-                new Claim("CanDeleteUserOwnAccount")
+                "CanDeleteUserOwnAccount"
             };
             if (authManager.CheckClaims(delOwnRequiredClaimTypes))
             {
@@ -38,10 +38,10 @@ namespace ManagerLayer.Logic.UserManagement
         public void DeleteOtherAction(User requestingUser)
         {
             IAuthorizationManager authManager = new AuthorizationManager(requestingUser);
-            List<Claim> delOtherRequiredClaimTypes = new List<Claim>
+            List<string> delOtherRequiredClaimTypes = new List<string>
             {
-                new Claim("CanDeleteOtherAccount"),
-                new Claim("HasPoints")
+                "CanDeleteOtherAccount",
+                "HasPoints"
             };
             // delOtherRequiredClaimTypes = null;
             if (authManager.CheckClaims(delOtherRequiredClaimTypes))
@@ -57,9 +57,9 @@ namespace ManagerLayer.Logic.UserManagement
         public void DisableUserAction(User requestingUser)
         {
             IAuthorizationManager authManager = new AuthorizationManager(requestingUser);
-            List<Claim> disableUserRequiredClaimTypes = new List<Claim>
+            List<string> disableUserRequiredClaimTypes = new List<string>
             {
-                new Claim("CanDisableUser")
+                "CanDisableUser"
             };
             if (authManager.CheckClaims(disableUserRequiredClaimTypes))
             {
@@ -74,9 +74,9 @@ namespace ManagerLayer.Logic.UserManagement
         public void EnableUserAction(User requestingUser)
         {
             IAuthorizationManager authManager = new AuthorizationManager(requestingUser);
-            List<Claim> enableUserRequiredClaimTypes = new List<Claim>
+            List<string> enableUserRequiredClaimTypes = new List<string>
             {
-                new Claim("CanEnableUser"),
+                "CanEnableUser"
             };
             if (authManager.CheckClaims(enableUserRequiredClaimTypes))
             {

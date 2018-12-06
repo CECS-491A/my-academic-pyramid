@@ -13,7 +13,7 @@ namespace DemoProject
             UserManagementController userManagementController = new UserManagementController();
 
             // Create user Trong 
-            User Trong = new User("Trong");
+            User Trong = new User("Trong", 1);
             //Assign claim CanDeleteUserOwnAccount
 
             // Delete own account request is received
@@ -27,7 +27,7 @@ namespace DemoProject
             userManagementController.DeleteOtherAction(Trong);
 
             //Create user Krystal 
-            User Krystal = new User("Krystal");
+            User Krystal = new User("Krystal", 2);
 
             //Assign CanDeleteUserOwnAccount and CanDeleteUserOwnAccount;
 

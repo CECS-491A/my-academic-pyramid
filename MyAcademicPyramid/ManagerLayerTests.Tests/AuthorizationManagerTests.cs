@@ -13,12 +13,12 @@ namespace ManagerLayerTests.Tests
         {
             // Arrange 
             User Trong = new User("Trong");
-            Trong.Claims.Add(new Claim("CanDeleteUserPost"));
+            Trong.Claims.Add("CanDeleteUserPost");
             AuthorizationManager TrongAuthorization = new AuthorizationManager(Trong);
             bool expected = true;
 
             // Act
-            bool actual = TrongAuthorization.CheckClaims(new List<Claim>() { new Claim("CanDeleteUserPost" )});
+            bool actual = TrongAuthorization.CheckClaims(new List<string>() { "CanDeleteUserPost" });
 
             // Assert
             Assert.Equal(expected, actual);
@@ -29,12 +29,12 @@ namespace ManagerLayerTests.Tests
         {
             // Arrange 
             User Trong = new User("Trong");
-            Trong.Claims.Add(new Claim("CanDeleteUserOwnAccount"));
+            Trong.Claims.Add("CanDeleteUserOwnAccount");
             AuthorizationManager TrongAuthorization = new AuthorizationManager(Trong);
             bool expected = false;
 
             // Act
-            bool actual = TrongAuthorization.CheckClaims(new List<Claim>() { new Claim( "CanDeleteUserPost" )});
+            bool actual = TrongAuthorization.CheckClaims(new List<string>() { "CanDeleteUserPost" });
 
             // Assert
             Assert.Equal(expected, actual);
