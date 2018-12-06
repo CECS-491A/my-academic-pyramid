@@ -13,12 +13,13 @@ namespace ManagerLayerTests.Tests
         {
             // Arrange 
             User Trong = new User("Trong");
-            Trong.Claims.Add("CanDeleteUserPost");
+            Trong.Claims.Add(new Claim("CanDeleteUserPost"));
+            Trong.Claims.Add(new Claim("CanUpdatePost"));
             AuthorizationManager TrongAuthorization = new AuthorizationManager(Trong);
             bool expected = true;
 
             // Act
-            bool actual = TrongAuthorization.CheckClaims(new List<string>() { "CanDeleteUserPost" });
+            bool actual = TrongAuthorization.CheckClaims(new List<Claim>() { new Claim("CanDeleteUserPost" )});
 
             // Assert
             Assert.Equal(expected, actual);
@@ -29,12 +30,13 @@ namespace ManagerLayerTests.Tests
         {
             // Arrange 
             User Trong = new User("Trong");
-            Trong.Claims.Add("CanDeleteUserOwnAccount");
+            Trong.Claims.Add(new Claim("CanDeleteUserOwnAccount"));
+            Trong.Claims.Add(new Claim("CanUpdatePost"));
             AuthorizationManager TrongAuthorization = new AuthorizationManager(Trong);
             bool expected = false;
 
             // Act
-            bool actual = TrongAuthorization.CheckClaims(new List<string>() { "CanDeleteUserPost" });
+            bool actual = TrongAuthorization.CheckClaims(new List<Claim>() { new Claim( "CanDeleteUserPost" )});
 
             // Assert
             Assert.Equal(expected, actual);
@@ -46,13 +48,14 @@ namespace ManagerLayerTests.Tests
         {
             // Arrange 
             User Trong = new User("Trong");
-            Trong.Claims.Add("CanDeleteUserPost");
-            Trong.Claims.Add("CanDeleteUserPost");
+            Trong.Claims.Add(new Claim("CanDeleteUserPost"));
+            Trong.Claims.Add(new Claim("CanDeleteUserPost"));
+            Trong.Claims.Add(new Claim("CanUpdatePost"));
             AuthorizationManager TrongAuthorization = new AuthorizationManager(Trong);
             bool expected = true;
 
             // Act
-            bool actual = TrongAuthorization.CheckClaims(new List<string>() { "CanDeleteUserPost" });
+            bool actual = TrongAuthorization.CheckClaims(new List<Claim>() { new Claim("CanDeleteUserPost") });
 
             // Assert
             Assert.Equal(expected, actual);
@@ -64,13 +67,14 @@ namespace ManagerLayerTests.Tests
         {
             // Arrange 
             User Trong = new User("Trong");
-            Trong.Claims.Add("CanDeleteUserOwnAccount");
-            Trong.Claims.Add("CanDeleteUserOwnAccount");
+            Trong.Claims.Add(new Claim("CanDeleteUserOwnAccount"));
+            Trong.Claims.Add(new Claim("CanDeleteUserOwnAccount"));
+            Trong.Claims.Add(new Claim("CanUpdatePost"));
             AuthorizationManager TrongAuthorization = new AuthorizationManager(Trong);
             bool expected = false;
 
             // Act
-            bool actual = TrongAuthorization.CheckClaims(new List<string>() { "CanDeleteUserPost" });
+            bool actual = TrongAuthorization.CheckClaims(new List<Claim>() { new Claim("CanDeleteUserPost") });
 
             // Assert
             Assert.Equal(expected, actual);
@@ -82,14 +86,14 @@ namespace ManagerLayerTests.Tests
         {
             // Arrange 
             User Krystal = new User("Krystal");
-            Krystal.Claims.Add("CanDeleteOtherAccount");
-            Krystal.Claims.Add("HasPoints");
+            Krystal.Claims.Add(new Claim("CanDeleteOtherAccount"));
+            Krystal.Claims.Add(new Claim("HasPoints"));
+            Krystal.Claims.Add(new Claim("CanUpdatePost"));
             AuthorizationManager KrystalAuthorization = new AuthorizationManager(Krystal);
             bool expected = true;
 
             // Act
-            bool actual = KrystalAuthorization.CheckClaims(new List<string>() { "CanDeleteOtherAccount",
-                                                 "HasPoints"});
+            bool actual = KrystalAuthorization.CheckClaims(new List<Claim>() { new Claim("CanDeleteUserPost"), new Claim("HasPoints") });
 
             // Assert
             Assert.Equal(expected, actual);
@@ -101,14 +105,13 @@ namespace ManagerLayerTests.Tests
         {
             // Arrange 
             User Krystal = new User("Krystal");
-            Krystal.Claims.Add("CanDeleteOtherAccount");
+            Krystal.Claims.Add(new Claim("CanDeleteOtherAccount"));
+            Krystal.Claims.Add(new Claim("CanUpdatePost"));
             AuthorizationManager KrystalAuthorization = new AuthorizationManager(Krystal);
             bool expected = false;
 
             // Act
-            bool actual = KrystalAuthorization.CheckClaims(new List<string>() { "CanDeleteOtherAccount",
-                                                 "HasPoints",
-                                                 "HasPoints"});
+            bool actual = KrystalAuthorization.CheckClaims(new List<Claim>() { new Claim("CanDeleteUserPost"), new Claim("HasPoints") });
 
             // Assert
             Assert.Equal(expected, actual);
@@ -120,14 +123,13 @@ namespace ManagerLayerTests.Tests
         {
             // Arrange 
             User Krystal = new User("Krystal");
-            Krystal.Claims.Add("HasPoints");
+            Krystal.Claims.Add(new Claim("HasPoints"));
+            Krystal.Claims.Add(new Claim("CanUpdatePost"));
             AuthorizationManager KrystalAuthorization = new AuthorizationManager(Krystal);
             bool expected = false;
 
             // Act
-            bool actual = KrystalAuthorization.CheckClaims(new List<string>() { "CanDeleteOtherAccount",
-                                                 "HasPoints",
-                                                 "HasPoints"});
+            bool actual = KrystalAuthorization.CheckClaims(new List<Claim>() { new Claim("CanDeleteUserPost"), new Claim("HasPoints") });
 
             // Assert
             Assert.Equal(expected, actual);
@@ -139,12 +141,12 @@ namespace ManagerLayerTests.Tests
         {
             // Arrange 
             User Krystal = new User("Krystal");
+            Krystal.Claims.Add(new Claim("CanUpdatePost"));
             AuthorizationManager KrystalAuthorization = new AuthorizationManager(Krystal);
             bool expected = false;
 
             // Act
-            bool actual = KrystalAuthorization.CheckClaims(new List<string>() { "CanDeleteOtherAccount",
-                                                 "HasPoints"});
+            bool actual = KrystalAuthorization.CheckClaims(new List<Claim>() { new Claim("CanDeleteUserPost"), new Claim("HasPoints") });
 
             // Assert
             Assert.Equal(expected, actual);
@@ -156,16 +158,16 @@ namespace ManagerLayerTests.Tests
         {
             // Arrange 
             User Krystal = new User("Krystal");
-            Krystal.Claims.Add("CanDeleteOtherAccount");
-            Krystal.Claims.Add("CanDeleteOtherAccount");
-            Krystal.Claims.Add("HasPoints");
-            Krystal.Claims.Add("HasPoints");
+            Krystal.Claims.Add(new Claim("CanDeleteOtherAccount"));
+            Krystal.Claims.Add(new Claim("CanDeleteOtherAccount"));
+            Krystal.Claims.Add(new Claim("HasPoints"));
+            Krystal.Claims.Add(new Claim("HasPoints"));
+            Krystal.Claims.Add(new Claim("CanUpdatePost"));
             AuthorizationManager KrystalAuthorization = new AuthorizationManager(Krystal);
             bool expected = true;
 
             // Act
-            bool actual = KrystalAuthorization.CheckClaims(new List<string>() { "CanDeleteOtherAccount",
-                                                 "HasPoints"});
+            bool actual = KrystalAuthorization.CheckClaims(new List<Claim>() { new Claim("CanDeleteUserPost"), new Claim("HasPoints") });
 
             // Assert
             Assert.Equal(expected, actual);

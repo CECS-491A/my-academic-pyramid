@@ -36,9 +36,9 @@ namespace ManagerLayer.Logic.Authorization.AuthorizationManagers
         /// If the required claim is in the requiredClaims, it would return true and user would be able to use the feature that user requested to use.
         /// If the required claim is not in the requiredClaims, it would return false and user wouldn't be able to use the feature.
         /// </summary>
-        /// <param name="requiredClaims"></param>
+        /// <param name="requiredClaims"></param> required claim(s) to get a permission to use the feature
         /// <returns> true/false </returns>
-        public bool CheckClaims(List<String> requiredClaims)
+        public bool CheckClaims(List<Claim> requiredClaims)
         {
             if (requiredClaims == null)
                 throw new ArgumentNullException(
@@ -49,8 +49,8 @@ namespace ManagerLayer.Logic.Authorization.AuthorizationManagers
             {
                 // body of lambda function
                 // looks for a uc (user claim) that matches rc (required claim)
-                string foundClaim = authorizedUser.Claims.Find(
-                    uc => uc.Equals(rc)
+                Claim foundClaim = authorizedUser.Claims.Find(
+                    uc => uc.Equals(rc.Value)
                 );
                 // If claim not found, then foundClaim will be null.
                 return (foundClaim != null);
