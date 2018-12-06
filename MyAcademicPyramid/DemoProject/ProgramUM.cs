@@ -31,12 +31,15 @@ namespace DemoProject
             Console.WriteLine("Add new claim to Trong ");
              user = userManagement.FindUserbyUserName("Trong");
 
+            Console.WriteLine("Remove the claim from Trong ");
+            user = userManagement.FindUserbyUserName("Trong");
 
             // Remove claim from the account
             Console.WriteLine("Trying to remove a claim from account");
             userManagement.RemoveClaim(user, claim);
 
-           
+            //Try to retrive the user again
+            user = userManagement.FindUserbyUserName("Trong");
 
             //Try to delete user account
 
