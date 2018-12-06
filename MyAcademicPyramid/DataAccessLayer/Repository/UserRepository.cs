@@ -1,11 +1,10 @@
-﻿using DataAccessLayer;
-using System.Collections.Generic;
+﻿using System.Data.Entity;
 
 namespace DataAccessLayer.Repository
 {
     public class UserRepository : Repository<User>, IUserRepository
     {
-        public UserRepository() : base (new List<User> ())
+        public UserRepository(DbContext context ) : base (context)
         {
 
         }
