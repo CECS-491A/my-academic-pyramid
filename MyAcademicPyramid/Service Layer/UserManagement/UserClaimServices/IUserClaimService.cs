@@ -6,9 +6,9 @@ namespace DataAccessLayer.UserManagement.UserClaimServices
 {
     public interface IUserClaimService
     {
-        
-        void AddClaim(User user, Claim claim );
-        void RemoveClaim(User user, Claim claim);
+        IList<String> GetClaims(User user);
+        void AddClaim(User user, String claim );
+        void RemoveClaim(User user, String claim);
         
     }
 }

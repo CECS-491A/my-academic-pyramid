@@ -11,12 +11,12 @@ namespace DemoProject
         {
             // Create users
             Console.WriteLine("Create Users:");
-            User krystal = new User("Krystal");
-            User luis = new User("Luis");
-            User trong = new User("Trong");
-            User arturo = new User("Arturo");
-            User kevin = new User("Kevin");
-            User victor = new User("Victor");
+            User krystal = new User("Krystal", 100);
+            User luis = new User("Luis", 200);
+            User trong = new User("Trong", 300);
+            User arturo = new User("Arturo", 400);
+            User kevin = new User("Kevin", 500);
+            User victor = new User("Victor", 600);
 
             Console.WriteLine(krystal.Id + ":" + krystal.UserName);
             Console.WriteLine(luis.Id + ":" + luis.UserName);
