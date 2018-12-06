@@ -26,9 +26,6 @@ namespace DemoProject
             Claim claim = new Claim("ManageAccount");
             userManagement.AddClaim(user, claim);
 
-            Console.WriteLine("Add new claim to Trong ");
-             user = userManagement.FindUserbyUserName("Trong");
-
             Console.WriteLine("Remove the claim from Trong ");
             user = userManagement.FindUserbyUserName("Trong");
 
