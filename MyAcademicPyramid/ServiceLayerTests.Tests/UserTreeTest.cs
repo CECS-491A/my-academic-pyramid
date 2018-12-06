@@ -9,8 +9,8 @@ namespace ServiceLayerTests.Tests
     public class UserTreeTest
     {
         Node root = new Node("Root");
-        User krystal = new User("Krystal", 100);
-        User luis = new User("Luis", 200);
+        User krystal = new User("Krystal");
+        User luis = new User("Luis");
 
         [Fact]
         public void Node_AddChild_InputUser_UniqueChildShouldReturnTrue()

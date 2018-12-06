@@ -10,7 +10,6 @@ namespace ServiceLayerTests.Tests
     {
 
 
-
         [Fact]
         public void UserManagement_CreateUser_ShouldAbleFindUserAfterCreation()
         {
