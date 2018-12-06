@@ -51,7 +51,8 @@ namespace DataAccessLayer.UserManagement.UserAccountServices
         // Remove a claim from a user account
         public void RemoveClaim(User user, Claim claim)
         {
-            unitOfWork.ClaimRepository.Delete(claim);
+            User searchuser = unitOfWork.UserRepository.SearchFor(u => u.Id == user.Id).FirstOrDefault();
+            searchuser.Claims.Remove(claim);
             unitOfWork.Save();
         }
 
