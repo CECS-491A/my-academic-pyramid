@@ -47,7 +47,7 @@ namespace ServiceLayerTests.Tests
             bool expected = true;
 
             // Act
-            bool actual = false; ;
+            bool actual = false;
             try
             {
                 root.AddChild(user);
@@ -98,7 +98,7 @@ namespace ServiceLayerTests.Tests
             bool expected = true;
 
             // Act
-            bool actual = false; ;
+            bool actual = false;
             try
             {
                 root.AddChild(user);
@@ -251,7 +251,7 @@ namespace ServiceLayerTests.Tests
             root.AddChild(krystal);
             Node user = new Node(krystal.UserName);
             user.Parent = root;
-            bool expected = true; ;
+            bool expected = true;
 
             // Act
             bool actual = root.IsDirectParentOf(krystal);
@@ -267,7 +267,7 @@ namespace ServiceLayerTests.Tests
             root.AddChild(krystal);
             Node krystalNode = root.FindUser(krystal);
             krystalNode.AddChild(luis);
-            bool expected = false; ;
+            bool expected = false;
 
             // Act
             bool actual = root.IsDirectParentOf(luis);
@@ -281,7 +281,7 @@ namespace ServiceLayerTests.Tests
         {
             // Arrange
             User user = null;
-            bool expected = false; ;
+            bool expected = false;
 
             // Act
             bool actual = root.IsDirectParentOf(user);
@@ -364,7 +364,7 @@ namespace ServiceLayerTests.Tests
             krystalNode.AddChild(luisNode);
             root.AddChild(krystalNode);
             Node user = root.FindUser(luis);
-            bool expected = true; ;
+            bool expected = true;
 
             // Act
             bool actual = root.IsAbove(user);
@@ -382,7 +382,7 @@ namespace ServiceLayerTests.Tests
             krystalNode.AddChild(luisNode);
             root.AddChild(krystalNode);
             Node user = root.FindUser(luis);
-            bool expected = false; ;
+            bool expected = false;
 
             // Act
             bool actual = user.IsAbove(root);
@@ -419,7 +419,7 @@ namespace ServiceLayerTests.Tests
             // Arrange
             Tree tree = new Tree(root);
             tree.Root.AddChild(krystal);
-            bool expected = true; ;
+            bool expected = true;
 
             // Act
             bool actual = tree.AddUser(luis,krystal);
@@ -433,7 +433,7 @@ namespace ServiceLayerTests.Tests
         {
             // Arrange
             Tree tree = new Tree(root);
-            bool expected = false; ;
+            bool expected = false;
 
             // Act
             bool actual = tree.AddUser(luis,krystal);
@@ -469,7 +469,7 @@ namespace ServiceLayerTests.Tests
         {
             // Arrange
             Tree tree = new Tree(root);
-            bool expected = true; ;
+            bool expected = true;
 
             // Act
             bool actual = tree.AddUser(krystal,1);
@@ -530,7 +530,7 @@ namespace ServiceLayerTests.Tests
             bool expected = true;
 
             // Act
-            bool actual = false; ;
+            bool actual = false;
             try
             {
                 tree.DeleteUser(user);
