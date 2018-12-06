@@ -1,24 +1,27 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
+using System.Data.Entity;
+
 
 namespace DataAccessLayer.Repository
 {
     public class Repository<T> : IRepository<T> where T : class,  IEntity
     {
         // Use a list to simulate a database. We can replace it with a real SQL database later 
-        private List<T> _context;
+        protected DbContext context;
+        protected DbSet<T> Dbset;
 
         // Allow property ID in domain entities  which  can be accessed in this repository class
         public int Id { get; set; }
 
         // Constructor which accept list of any data type and initialize the context. 
-        public Repository(List<T> list)
+        public Repository(DbContext context)
         {
-            _context = list;
+            this.context = context;
+            Dbset = context.Set<T>();
         }
 
         // Insert an element of generic entity 
@@ -41,7 +44,8 @@ namespace DataAccessLayer.Repository
                 throw new ArgumentNullException("Required input. Input is empty.");
             }
             // Search by ID, then remove the element
-            _context.RemoveAll(e => e.Id == entity.Id);
+            context.Entry(entity).State = System.Data.Entity.EntityState.Deleted;
+            context.SaveChanges();
         }
 
         // Update an element of generic entity 
@@ -71,7 +75,6 @@ namespace DataAccessLayer.Repository
         //Return all elements of generic entity
         public IEnumerable<T> GetAll()
         {
-            
             return _context;
         }
 
@@ -88,7 +91,7 @@ namespace DataAccessLayer.Repository
         //Return all elements of generic entity
         public IQueryable<T> SearchFor(Expression<Func<T, bool>> predicate)
         {
-             return _context.AsQueryable().Where(predicate);
+            return Dbset.Where(predicate);
         }
 
     }
