@@ -54,7 +54,7 @@ namespace ManagerLayer.Logic.PasswordChecking.PasswordValidations
             Dictionary<string, int> hashes = JsonToDictionary(hashlistString);
 
             // Find the hashvalue in the dictionary
-            int hashCount = FindHashValue(_hashValue.Substring(5), hashes);
+            int hashCount = FindHash(_hashValue.Substring(5), hashes);
 
             // Check business rules
             PasswordStatus status = PasswordCheckingBR.CheckPasswordCount(hashCount);
@@ -69,7 +69,6 @@ namespace ManagerLayer.Logic.PasswordChecking.PasswordValidations
         /// <returns></returns>
         public Dictionary<string,int> JsonToDictionary(string list)
         {
-            Console.WriteLine(list);
             // Format json string with double quotation marks and commas
             list = list.Replace("\n", ",\"");
             list = list.Replace(":", "\":");
@@ -87,7 +86,7 @@ namespace ManagerLayer.Logic.PasswordChecking.PasswordValidations
         /// <param name="hashValue">Hash value to find</param>
         /// <param name="hashes">Dictionary of hash hvalues and counts</param>
         /// <returns>Hash value count if found, zero if not found.</returns>
-        public int FindHashValue(string hashValue, Dictionary<string, int> hashes)
+        public int FindHash(string hashValue, Dictionary<string, int> hashes)
         {
             if (hashes.TryGetValue(hashValue, out int count))
             {
