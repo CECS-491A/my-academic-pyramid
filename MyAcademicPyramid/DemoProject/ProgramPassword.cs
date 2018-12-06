@@ -24,17 +24,7 @@ namespace DemoProject
                 sw.Start();
 
                 // Get password count
-
                 PasswordStatus pwStatus = pv.Validate(password);
-
-                if (pwStatus is null)
-                {
-                    Console.WriteLine("FAIL");
-                }
-                else
-                {
-                    Console.WriteLine("PASS");
-                }
 
                 sw.Stop();
                 Console.WriteLine("Duration: " + sw.ElapsedMilliseconds + " ms");
