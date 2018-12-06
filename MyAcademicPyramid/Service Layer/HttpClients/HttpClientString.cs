@@ -27,5 +27,7 @@ namespace ServiceLayer.HttpClients
                 return await client.GetStringAsync(uri);
             }
         }
+
+        
     }
 }

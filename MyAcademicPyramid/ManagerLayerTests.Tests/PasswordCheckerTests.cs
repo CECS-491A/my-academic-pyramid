@@ -22,61 +22,43 @@ namespace ManagerLayerTests.Tests
         private IHttpClient HttpClientMethods = new HttpClientString(); // Http Client
 
         [Fact]
-        public void PwnedPassword_FindHash_FoundShouldReturnCount()
+        public void PwnedPassword_JsonToDictionary_ValidStringShouldReturnDictionary()
         {
             // Arrange
-            string hashValue = "1E4C9B93F3F0682250B6CF8331B7EE68FD8"; // password: "password"
-            string response = "1D72CD07550416C216D8AD296BF5C0AE8E0:10 \n" +
-                "1E2AAA439972480CEC7F16C795BBB429372:1 \n" +
-                "1E3687A61BFCE35F69B7408158101C8E414:1 \n" +
-                "1E4C9B93F3F0682250B6CF8331B7EE68FD8:3533661 \n";
-            int expected = 3533661;
-            int actual;
+            string response = "1D2DA4053E34E76F6576ED1DA63134B5E2A:2\n1D72CD07550416C216D8AD296BF5C0AE8E0: 10\n1E2AAA439972480CEC7F16C795BBB429372: 1\n1E3687A61BFCE35F69B7408158101C8E414: 1\n1E4C9B93F3F0682250B6CF8331B7EE68FD8: 3533661";
+            Dictionary<string, int> expected = new Dictionary<string, int>();
+            expected.Add("1D72CD07550416C216D8AD296BF5C0AE8E0", 10);
+            expected.Add("1E2AAA439972480CEC7F16C795BBB429372", 1);
+            expected.Add("1E3687A61BFCE35F69B7408158101C8E414", 1);
+            expected.Add("1E4C9B93F3F0682250B6CF8331B7EE68FD8", 3533661);
+            
 
-            //Act
-            actual = pv.FindHash(hashValue, response);
+            // Act
+            Dictionary<string,int> actual = pv.JsonToDictionary(response);
 
             // Assert
-            Assert.Equal(expected, actual);
+            Assert.True(expected.TryGetValue(");
         }
 
         [Fact]
-        public void PwnedPassword_FindHash_NotFoundShouldReturnZero()
+        public void PwnedPassword_JsonToDictionary_InvalidStringShouldThrowException()
         {
             // Arrange
-            string hashValue = "753D006EBCE8F59C93364725A9D5C4EC6BC"; // password = "fw836g1"
-            string response = "1D72CD07550416C216D8AD296BF5C0AE8E0:10 \n" +
-                "1E2AAA439972480CEC7F16C795BBB429372:1 \n" +
-                "1E3687A61BFCE35F69B7408158101C8E414:1 \n" +
-                "1E4C9B93F3F0682250B6CF8331B7EE68FD8:3533661 \n";
-            int expected = 0;
-            int actual;
-
-            //Act
-            actual = pv.FindHash(hashValue, response);
-
-            // Assert
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
-        public void PwnedPasswordValidation_FindHash_InvalidHashValueShouldThrowException()
-        {
             // Arrange
-            string response = "1D72CD07550416C216D8AD296BF5C0AE8E0: 10 \n" +
-                "1E2AAA439972480CEC7F16C795BBB429372:1 \n" +
-                "1E3687A61BFCE35F69B7408158101C8E414:1 \n" +
-                "1E4C9B93F3F0682250B6CF8331B7EE68FD8:3533661 \n";
+            string response = "1D72CD07550416C216D8AD296BF5C0AE8E0:'10' \n" +
+                "1E2AAA439972480CEC7F16C795BBB429372:'1' \n" +
+                "1E3687A61BFCE35F69B7408158101C8E414:'1' \n" +
+                "1E4C9B93F3F0682250B6CF8331B7EE68FD8:'3533661' \n";
             Boolean expected = true;
             Boolean actual;
 
             //Act
             try
             {
-                int test = pv.FindHash(null, response);
+                Dictionary<string, int> test = pv.JsonToDictionary(response);
                 actual = false;
             }
-            catch (ArgumentNullException)
+            catch (Newtonsoft.Json.JsonReaderException)
             {
                 actual = true;
             }
@@ -86,17 +68,18 @@ namespace ManagerLayerTests.Tests
         }
 
         [Fact]
-        public void PwnedPasswordValidation_FindHash_InvalidResponseShouldThrowExecption()
+        public void PwnedPassword_JsonToDictionary_NullStringShouldThrowException()
         {
             // Arrange
-            string hashValue = "1E4C9B93F3F0682250B6CF8331B7EE68FD8"; // password = "password"
-            bool expected = true;
-            bool actual;
+            // Arrange
+            string response = null;
+            Boolean expected = true;
+            Boolean actual;
 
             //Act
             try
             {
-                int test = pv.FindHash(hashValue, null);
+                Dictionary<string, int> test = pv.JsonToDictionary(response);
                 actual = false;
             }
             catch (NullReferenceException)
@@ -109,7 +92,97 @@ namespace ManagerLayerTests.Tests
         }
 
         [Fact]
-        public void PwnedPasswordValidation_FindHash_AllNullValuesShouldThrowException()
+        public void PwnedPassword_FindHashValue_FoundShouldReturnCount()
+        {
+            // Arrange
+            string hashValue = "1E4C9B93F3F0682250B6CF8331B7EE68FD8"; // password: "password"
+            Dictionary<string, int> hashes = new Dictionary<string, int>();
+            hashes.Add("1D72CD07550416C216D8AD296BF5C0AE8E0", 10);
+            hashes.Add("1E2AAA439972480CEC7F16C795BBB429372", 1);
+            hashes.Add("1E3687A61BFCE35F69B7408158101C8E414", 1);
+            hashes.Add("1E4C9B93F3F0682250B6CF8331B7EE68FD8", 3533661);
+            int expected = 3533661;
+            int actual;
+
+            //Act
+            actual = pv.FindHashValue(hashValue, hashes);
+
+            // Assert
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void PwnedPassword_FindHashValue_NotFoundShouldReturnZero()
+        {
+            // Arrange
+            string hashValue = "753D006EBCE8F59C93364725A9D5C4EC6BC"; // password = "fw836g1"
+            Dictionary<string, int> hashes = new Dictionary<string, int>();
+            hashes.Add("1D72CD07550416C216D8AD296BF5C0AE8E0", 10);
+            hashes.Add("1E2AAA439972480CEC7F16C795BBB429372", 1);
+            hashes.Add("1E3687A61BFCE35F69B7408158101C8E414", 1);
+            hashes.Add("1E4C9B93F3F0682250B6CF8331B7EE68FD8", 3533661);
+            int expected = 0;
+            int actual;
+
+            //Act
+            actual = pv.FindHashValue(hashValue, hashes);
+
+            // Assert
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void PwnedPasswordValidation_FindHashValue_InvalidHashValueShouldThrowException()
+        {
+            // Arrange
+            Dictionary<string, int> hashes = new Dictionary<string, int>();
+            hashes.Add("1D72CD07550416C216D8AD296BF5C0AE8E0", 10);
+            hashes.Add("1E2AAA439972480CEC7F16C795BBB429372", 1);
+            hashes.Add("1E3687A61BFCE35F69B7408158101C8E414", 1);
+            hashes.Add("1E4C9B93F3F0682250B6CF8331B7EE68FD8", 3533661);
+            Boolean expected = true;
+            Boolean actual;
+
+            //Act
+            try
+            {
+                int test = pv.FindHashValue(null, hashes);
+                actual = false;
+            }
+            catch (ArgumentNullException)
+            {
+                actual = true;
+            }
+
+            // Assert
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void PwnedPasswordValidation_FindHashValue_InvalidResponseShouldThrowExecption()
+        {
+            // Arrange
+            string hashValue = "1E4C9B93F3F0682250B6CF8331B7EE68FD8"; // password = "password"
+            bool expected = true;
+            bool actual;
+
+            //Act
+            try
+            {
+                int test = pv.FindHashValue(hashValue, null);
+                actual = false;
+            }
+            catch (NullReferenceException)
+            {
+                actual = true;
+            }
+
+            // Assert
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void PwnedPasswordValidation_FindHashValue_AllNullValuesShouldThrowException()
         {
             // Arrange
             bool expected = true;
@@ -118,7 +191,7 @@ namespace ManagerLayerTests.Tests
             //Act
             try
             {
-                int test = pv.FindHash(null, null);
+                int test = pv.FindHashValue(null, null);
                 actual = false;
             }
             catch (NullReferenceException)
