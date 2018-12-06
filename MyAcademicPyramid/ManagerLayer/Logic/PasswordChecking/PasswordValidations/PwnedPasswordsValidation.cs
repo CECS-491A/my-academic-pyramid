@@ -1,9 +1,12 @@
-﻿using ManagerLayer.BusinessRules;
+﻿
+
+using ManagerLayer.BusinessRules;
 using DataAccessLayer.PasswordChecking.HashFunctions;
 using System;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using ServiceLayer.HttpClients;
+using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ManagerLayer.Logic.PasswordChecking.PasswordValidations
 {
@@ -44,12 +47,14 @@ namespace ManagerLayer.Logic.PasswordChecking.PasswordValidations
             Console.WriteLine("Url: " + uri); // Demo
 
             // Http GET request
-            Task<string> response = client.RequestData(uri);
-            string hashListString = response.Result;
+            Task<string> response = client.RequestData(uri); 
+            string hashlistString = response.Result;
 
-            // Find a matching hash within the response
-            int hashCount = FindHash(_hashValue.Substring(5), hashListString);
-            Console.WriteLine("Count: " + hashCount); // Demo
+            // Deserialize json into a dictionary<hashValue,counts>
+            Dictionary<string, int> hashes = JsonToDictionary(hashlistString);
+
+            // Find the hashvalue in the dictionary
+            int hashCount = FindHash(_hashValue.Substring(5), hashes);
 
             // Check business rules
             PasswordStatus status = PasswordCheckingBR.CheckPasswordCount(hashCount);
@@ -58,40 +63,37 @@ namespace ManagerLayer.Logic.PasswordChecking.PasswordValidations
         }
 
         /// <summary>
-        /// Finds the hash value within a string list of hash values
-        /// and their counts.
+        /// Deserialize json string into a dictionary.
         /// </summary>
-        /// <param name="hashValue">The hash value to find</param>
-        /// <param name="list">A string list of hashes</param>
-        /// <returns>The count of the found hash value, zero if not found,
-        /// or -1 if no hash count was found in the list</returns>
-        public int FindHash(string hashValue, string list) // FIX: deal with -1 return in BR? or will JSON throw exception
+        /// <param name="list"></param>
+        /// <returns></returns>
+        public Dictionary<string,int> JsonToDictionary(string list)
         {
-            // The hash value was found in the list
-            if (list.Contains(hashValue))
+            // Format json string with double quotation marks and commas
+            list = list.Replace("\n", ",\"");
+            list = list.Replace(":", "\":");
+            list = "{\"" + list + "}";
+
+            // Deserializae as dictionary
+            var hashes = JsonConvert.DeserializeObject<Dictionary<string, int>>(list);
+
+            return hashes;
+        }
+
+        /// <summary>
+        /// Find a hash value within a dictionary.
+        /// </summary>
+        /// <param name="hashValue">Hash value to find</param>
+        /// <param name="hashes">Dictionary of hash hvalues and counts</param>
+        /// <returns>Hash value count if found, zero if not found.</returns>
+        public int FindHash(string hashValue, Dictionary<string, int> hashes)
+        {
+            if (hashes.TryGetValue(hashValue, out int count))
             {
-                Console.WriteLine("Hash Value Found."); // Demo
-
-                // Find index of found hash value
-                int start = list.IndexOf(hashValue);
-
-                // Find the count after the hash value
-                Regex regex = new Regex(@":(\d+)");
-                Match countString = regex.Match(list, start);
-
-                // Check that the count found is an integer
-                if (int.TryParse(countString.Value.Substring(1), out int count))
-                {
-                    Console.WriteLine("Hash Count Found."); // Demo
-                    // Return the count of the hash value
-                    return count;
-                }
-                Console.WriteLine("Hash Count NOT Found."); // Demo
-                // The count was not found
-                return -1;
+                // Return hash count
+                return count;
             }
-            Console.WriteLine("Hash Value NOT Found."); // Demo
-            // The hash value was not found
+            // Hash value was not found
             return 0;
         }
     }
