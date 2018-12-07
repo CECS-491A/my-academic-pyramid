@@ -13,7 +13,7 @@ using System.Diagnostics;
 
 namespace ManagerLayerTests.Tests
 {
-    public class PasswordCheckerTests
+    public class PwnedPasswordValidationTests
     {
         // Arrange
         static SHA1HashFunction sha = new SHA1HashFunction();
@@ -204,54 +204,6 @@ namespace ManagerLayerTests.Tests
             Assert.Equal(expected, actual);
         }
 
-        [Fact]
-        public void HttpClientString_RequestData_ShouldPass()
-        {
-            // Arrange
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-
-            bool expected = true;
-            bool actual;
-
-            //Act
-            try
-            {
-                Uri uri = new Uri("https://api.pwnedpasswords.com/range/5BAA6");
-                Task<string> response = HttpClientMethods.RequestData(uri);
-                actual = true;
-            }
-            catch (WebException)
-            {
-                actual = false;
-            }
-
-            // Assert
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
-        public void HttpClientString_RequestData_InvalidUrlShouldFail()
-        {
-            // Arrange
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-
-            bool expected = true;
-            bool actual;
-
-            //Act
-            try
-            {
-                Uri uri = new Uri("should throw exception");
-                Task<string> response = HttpClientMethods.RequestData(uri);
-            }
-            catch (UriFormatException)
-            {
-                actual = true;
-                //Assert
-                Assert.Equal(expected, actual);
-            }
-        }
-
         //Data for PasswordCheckingBR_CheckPasswordCount_ShouldReturnValidStatus
         public static IEnumerable<object[]> GetPasswordStatusesData()
         {
@@ -295,6 +247,7 @@ namespace ManagerLayerTests.Tests
             // Arrange
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
             // Act
             pv.Validate("password");
