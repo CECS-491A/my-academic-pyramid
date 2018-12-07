@@ -13,7 +13,7 @@ namespace ManagerLayerTests.Tests
             // Arrange 
             User Trong = new User("Trong");
             Trong.Claims.Add(new Claim("CanDeleteUserPost"));
-            Trong.Claims.Add(new Claim("CanUpdatePost"));
+            //Trong.Claims.Add(new Claim("CanUpdatePost"));
             AuthorizationManager TrongAuthorization = new AuthorizationManager(Trong);
             bool expected = true;
 
@@ -85,7 +85,7 @@ namespace ManagerLayerTests.Tests
         {
             // Arrange 
             User Krystal = new User("Krystal");
-            Krystal.Claims.Add(new Claim("CanDeleteOtherAccount"));
+            Krystal.Claims.Add(new Claim("CanDeleteUserPost"));
             Krystal.Claims.Add(new Claim("HasPoints"));
             Krystal.Claims.Add(new Claim("CanUpdatePost"));
             AuthorizationManager KrystalAuthorization = new AuthorizationManager(Krystal);
@@ -157,8 +157,8 @@ namespace ManagerLayerTests.Tests
         {
             // Arrange 
             User Krystal = new User("Krystal");
-            Krystal.Claims.Add(new Claim("CanDeleteOtherAccount"));
-            Krystal.Claims.Add(new Claim("CanDeleteOtherAccount"));
+            Krystal.Claims.Add(new Claim("CanDeleteUserPost"));
+            Krystal.Claims.Add(new Claim("CanDeleteUserPost"));
             Krystal.Claims.Add(new Claim("HasPoints"));
             Krystal.Claims.Add(new Claim("HasPoints"));
             Krystal.Claims.Add(new Claim("CanUpdatePost"));

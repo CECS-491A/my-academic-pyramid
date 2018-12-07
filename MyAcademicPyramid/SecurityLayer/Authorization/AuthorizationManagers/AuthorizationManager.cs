@@ -50,7 +50,7 @@ namespace SecurityLayer.Authorization.AuthorizationManagers
                 // body of lambda function
                 // looks for a uc (user claim) that matches rc (required claim)
                 Claim foundClaim = authorizedUser.Claims.Find(
-                    uc => uc.Equals(rc.Value)
+                    uc => uc.Value.Equals(rc.Value)
                 );
                 // If claim not found, then foundClaim will be null.
                 return (foundClaim != null);
