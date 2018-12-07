@@ -6,7 +6,7 @@ using System.Linq;
 
 
 
-namespace ManagerLayer.Logic.Authorization.AuthorizationManagers
+namespace SecurityLayer.Authorization.AuthorizationManagers
 {
     /// <summary>
     /// Checks the existence of the user and privileges of the user.  

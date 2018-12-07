@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ManagerLayer.Logic.UserManagement.UserManagements
+namespace DemoProject.MockUserManagementNameSpace
 {
     public class MockUserManagement : IUserManagement
     {

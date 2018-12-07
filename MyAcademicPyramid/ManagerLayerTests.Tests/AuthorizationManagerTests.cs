@@ -1,8 +1,7 @@
-﻿using ManagerLayer.Logic.Authorization.AuthorizationManagers;
-using ManagerLayer;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using DataAccessLayer;
 using Xunit;
+using SecurityLayer.Authorization.AuthorizationManagers;
 
 namespace ManagerLayerTests.Tests
 {

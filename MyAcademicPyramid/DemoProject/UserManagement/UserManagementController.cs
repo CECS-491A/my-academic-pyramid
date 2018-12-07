@@ -1,10 +1,9 @@
-﻿using ManagerLayer.Logic.Authorization.AuthorizationManagers;
-using ManagerLayer.Logic.UserManagement.UserManagements;
-using DataAccessLayer;
+﻿using DataAccessLayer;
 using System;
 using System.Collections.Generic;
+using SecurityLayer.Authorization.AuthorizationManagers;
 
-namespace ManagerLayer.Logic.UserManagement
+namespace DemoProject.MockUserManagementNameSpace
 {
     public class UserManagementController
     {
