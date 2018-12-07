@@ -77,7 +77,6 @@
     <Compile Include="Repository\IRepository.cs" />
     <Compile Include="Repository\IUserRepository.cs" />
     <Compile Include="Repository\Repository.cs" />
-    <Compile Include="Repository\UserRepository.cs" />
     <Compile Include="UnitOfWork.cs" />
     <Compile Include="Models\User.cs" />
   </ItemGroup>
