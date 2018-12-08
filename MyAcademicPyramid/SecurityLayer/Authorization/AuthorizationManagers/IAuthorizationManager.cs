@@ -10,6 +10,7 @@ namespace SecurityLayer.Authorization.AuthorizationManagers
     /// </summary>
     public interface IAuthorizationManager
     {
+       
         bool CheckClaims(List<Claim> requiredClaimTypes);
     }
 }

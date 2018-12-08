@@ -1,5 +1,6 @@
-﻿using System;
+﻿
 using System.Collections.Generic;
+
 using DataAccessLayer.Repository;
 
 namespace DataAccessLayer
@@ -8,6 +9,7 @@ namespace DataAccessLayer
     /// Class that implements IEntity class
     /// an instance of User class will be created for every people who own an account of My Academic Pyramid web application. 
     /// </summary>
+    /// 
     public class User : IEntity
     {
 
@@ -27,19 +29,29 @@ namespace DataAccessLayer
         public User ()
         {
             Claims = new List<Claim>();
+            
         }
         public User(string userName)
         {
             UserName = userName;
             Claims = new List<Claim>();
+            
         }
         
+
         public int Id { get; set; }
+
 
         public string UserName { get; set; }
 
         // List of string to store user Claims
         public virtual List<Claim> Claims { get; set; }
+
+        public int? ParentUserId { get; set; }
+        public virtual User ParentUser { get; set; }
+
+        public int? ChildrenUserId { get; set; }
+        public virtual ICollection<User> ChildrenUsers { get; set; }
 
         /// <summary>
         /// Compares the UserName with other object

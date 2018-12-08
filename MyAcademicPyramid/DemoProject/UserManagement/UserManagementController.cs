@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using SecurityLayer.Authorization.AuthorizationManagers;
+using ServiceLayer.UserManagement.UserAccountServices;
 
 namespace DemoProject.MockUserManagementNameSpace
 {
@@ -11,22 +12,26 @@ namespace DemoProject.MockUserManagementNameSpace
          * Class that demonstrates how authorization class might be used in
          * a controller.
          * */
-        IUserManagement userManagement = null;
-        public UserManagementController()
+        UserManagement userManagement = null;
+        User _requestingUser;
+        public UserManagementController(User requestingUser )
         {
-            userManagement = new MockUserManagement();
+
+            userManagement = new UserManagement();
+            _requestingUser = requestingUser;
         }
 
-        public void DeleteOwnAction(User requestingUser)
+        public void DeleteOwnAction(User targetedUser)
         {
-            IAuthorizationManager authManager = new AuthorizationManager(requestingUser);
+            IAuthorizationManager authManager = new AuthorizationManager(_requestingUser);
             List<Claim> delOwnRequiredClaimTypes = new List<Claim>
             {
                 new Claim("CanDeleteUserOwnAccount")
             };
             if (authManager.CheckClaims(delOwnRequiredClaimTypes))
             {
-                userManagement.DeleteUserOwnAccount();
+                
+                userManagement.DeleteUser(targetedUser);
             }
             else
             {
@@ -34,9 +39,9 @@ namespace DemoProject.MockUserManagementNameSpace
             }
         }
 
-        public void DeleteOtherAction(User requestingUser)
+        public void DeleteOtherAction(User targetedUser)
         {
-            IAuthorizationManager authManager = new AuthorizationManager(requestingUser);
+            IAuthorizationManager authManager = new AuthorizationManager(_requestingUser);
             List<Claim> delOtherRequiredClaimTypes = new List<Claim>
             {
                 new Claim("CanDeleteOtherAccount"),
@@ -45,7 +50,7 @@ namespace DemoProject.MockUserManagementNameSpace
             // delOtherRequiredClaimTypes = null;
             if (authManager.CheckClaims(delOtherRequiredClaimTypes))
             {
-                userManagement.DeleteOtherAccount();
+                userManagement.DeleteUser(targetedUser);
             }
             else
             {
@@ -53,38 +58,92 @@ namespace DemoProject.MockUserManagementNameSpace
             }
         }
 
-        public void DisableUserAction(User requestingUser)
+
+        public void CreateUserAction(User targetedUser)
         {
-            IAuthorizationManager authManager = new AuthorizationManager(requestingUser);
-            List<Claim> disableUserRequiredClaimTypes = new List<Claim>
+            IAuthorizationManager authManager = new AuthorizationManager(_requestingUser);
+            List<Claim> createUserRequiredClaimTypes = new List<Claim>
             {
-                new Claim("CanDisableUser")
+            
+                new Claim("UserManager")
             };
-            if (authManager.CheckClaims(disableUserRequiredClaimTypes))
+            // delOtherRequiredClaimTypes = null;
+            if (authManager.CheckClaims(createUserRequiredClaimTypes))
             {
-                userManagement.DisableUser();
+                
+                userManagement.CreateUser(targetedUser);
+                targetedUser = userManagement.FindUserbyUserName(targetedUser.UserName);
+
+                _requestingUser = userManagement.FindUserbyUserName(_requestingUser.UserName);
+                targetedUser.ParentUser = _requestingUser;
+
+                userManagement.UpdateUser(targetedUser);
+
+                _requestingUser.ChildrenUsers.Add(targetedUser);
+
+                userManagement.UpdateUser(_requestingUser);
+                
+
             }
             else
             {
-                Console.WriteLine("DisableUser is BLOCKED");
+                Console.WriteLine("Create Account is BLOCKED");
             }
         }
 
-        public void EnableUserAction(User requestingUser)
+
+        public User FindUserAction(String userName)
         {
-            IAuthorizationManager authManager = new AuthorizationManager(requestingUser);
-            List<Claim> enableUserRequiredClaimTypes = new List<Claim>
-            {
-                new Claim("CanEnableUser"),
-            };
-            if (authManager.CheckClaims(enableUserRequiredClaimTypes))
-            {
-                userManagement.EnableUser();
-            }
-            else
-            {
-                Console.WriteLine("EnableUser is BLOCKED");
-            }
+            IAuthorizationManager authManager = new AuthorizationManager(_requestingUser);
+
+
+                return userManagement.FindUserbyUserName(userName);
+        
+  
         }
+
+
+        public void addClaimAction(Claim claim)
+        {
+            IAuthorizationManager authManager = new AuthorizationManager(_requestingUser);
+
+
+            userManagement.AddClaim(_requestingUser, claim);
+
+        }
+
+        //public void DisableUserAction(User targetedUser)
+        //{
+        //    IAuthorizationManager authManager = new AuthorizationManager(targetedUser);
+        //    List<Claim> disableUserRequiredClaimTypes = new List<Claim>
+        //    {
+        //        new Claim("CanDisableUser")
+        //    };
+        //    if (authManager.CheckClaims(disableUserRequiredClaimTypes))
+        //    {
+        //        userManagement.DisableUser();
+        //    }
+        //    else
+        //    {
+        //        Console.WriteLine("DisableUser is BLOCKED");
+        //    }
+        //}
+
+        //public void EnableUserAction(User targetedUser)
+        //{
+        //    IAuthorizationManager authManager = new AuthorizationManager(targetedUser);
+        //    List<Claim> enableUserRequiredClaimTypes = new List<Claim>
+        //    {
+        //        new Claim("CanEnableUser"),
+        //    };
+        //    if (authManager.CheckClaims(enableUserRequiredClaimTypes))
+        //    {
+        //        userManagement.EnableUser();
+        //    }
+        //    else
+        //    {
+        //        Console.WriteLine("EnableUser is BLOCKED");
+        //    }
+        //}
     }
 }
