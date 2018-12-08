@@ -29,6 +29,36 @@ namespace ServiceLayerTests.Tests
         }
 
         [Fact]
+        public void UserManagement_CreateUserWithDupplicateUsername_ShouldThrowException()
+        {
+            //Arrange
+            Effort.Provider.EffortProviderConfiguration.RegisterProvider();
+            EffortFactory.ResetDb();
+            User user1 = new User("Victor");
+            UserManagement userManagement = new UserManagement();
+            userManagement.CreateUser(user1);
+            User user2 = new User("Victor");
+            bool expect = true;
+            bool actual;
+
+
+            //Act
+            try
+            {
+                userManagement.CreateUser(user2);
+                actual = false;
+            }
+
+            catch(ArgumentException )
+            {
+                 actual = true;
+            }
+
+            //Assert
+            Assert.Equal(expect, actual);
+        }
+
+        [Fact]
         public void UserManagement_DeleteUser_UserShouldNotExistAfterDeletion()
         {
             //Arrange
@@ -89,6 +119,9 @@ namespace ServiceLayerTests.Tests
             Assert.Equal(expected, actual);
 
         }
+
+
+
 
         [Fact]
         public void UserManagement_RemoveClaim_ClaimsShouldBeRemovedFromUser()

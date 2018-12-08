@@ -90,6 +90,10 @@
       <Project>{1f873dd8-8a42-411b-b217-ebe6e8eeb002}</Project>
       <Name>ManagerLayer</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SecurityLayer\SecurityLayer.csproj">
+      <Project>{c9a70604-9c00-4586-a435-8d5254be05d4}</Project>
+      <Name>SecurityLayer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Service Layer\ServiceLayer.csproj">
       <Project>{2a875510-9d8c-482f-99fd-19001548f681}</Project>
       <Name>ServiceLayer</Name>

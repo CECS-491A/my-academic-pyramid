@@ -33,7 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>DemoProject.ProgramPassword</StartupObject>
+    <StartupObject>DemoProject.ProgramAuthorization</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
@@ -78,6 +78,9 @@
     <Compile Include="ProgramUM.cs" />
     <Compile Include="ProgramUMTree.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserManagement\UserManagementController.cs" />
+    <Compile Include="UserManagement\UserManagements\IUserManagement.cs" />
+    <Compile Include="UserManagement\UserManagements\MockUserManagement.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -93,6 +96,10 @@
     <ProjectReference Include="..\ManagerLayer\ManagerLayer.csproj">
       <Project>{1f873dd8-8a42-411b-b217-ebe6e8eeb002}</Project>
       <Name>ManagerLayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SecurityLayer\SecurityLayer.csproj">
+      <Project>{c9a70604-9c00-4586-a435-8d5254be05d4}</Project>
+      <Name>SecurityLayer</Name>
     </ProjectReference>
     <ProjectReference Include="..\Service Layer\ServiceLayer.csproj">
       <Project>{2a875510-9d8c-482f-99fd-19001548f681}</Project>

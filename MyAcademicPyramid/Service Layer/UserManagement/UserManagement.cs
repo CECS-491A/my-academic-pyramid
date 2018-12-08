@@ -21,9 +21,14 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         // Create user account  
         public void CreateUser(User user)
         {
-
-            unitOfWork.UserRepository.Insert(user);
-            unitOfWork.Save();
+            // Check if the username exist. Then add the user
+            if (FindUserbyUserName(user.UserName) == null)
+            {
+                unitOfWork.UserRepository.Insert(user);
+                unitOfWork.Save();
+            }
+            else throw new ArgumentException("The username is already used");
+                
 
         }
 
@@ -47,6 +52,14 @@ namespace ServiceLayer.UserManagement.UserAccountServices
             IQueryable<User> users = unitOfWork.UserRepository.SearchFor(u => u.UserName.Equals(userName));
             return users.FirstOrDefault();
 
+
+        }
+
+        // Find user by Id
+        public User FindById(int id)
+        {
+            IQueryable<User> users = unitOfWork.UserRepository.SearchFor(u => u.Id == id);
+            return users.FirstOrDefault();
         }
 
         // Remove a claim from a user account
@@ -58,12 +71,19 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         }
 
 
+
+
         // Add a claim to a user account
         public void AddClaim(User user, Claim claim)
         {
-            User searchuser = unitOfWork.UserRepository.SearchFor(u => u.Id == user.Id).FirstOrDefault();
-            searchuser.Claims.Add(claim);
-            unitOfWork.Save();
-        }
+  
+                User searchuser = unitOfWork.UserRepository.SearchFor(u => u.Id == user.Id).FirstOrDefault();
+                searchuser.Claims.Add(claim);
+                unitOfWork.Save();
+            }
+
+       
+
+        
     }
 }

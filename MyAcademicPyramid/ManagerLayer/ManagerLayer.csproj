@@ -72,13 +72,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BusinessRules\PasswordCheckingBR.cs" />
-    <Compile Include="Logic\Authorization\AuthorizationManagers\AuthorizationManager.cs" />
-    <Compile Include="Logic\Authorization\AuthorizationManagers\IAuthorizationManager.cs" />
     <Compile Include="Logic\PasswordChecking\PasswordValidations\IPasswordValidation.cs" />
     <Compile Include="Logic\PasswordChecking\PasswordValidations\PwnedPasswordsValidation.cs" />
-    <Compile Include="Logic\UserManagement\UserManagements\IUserManagement.cs" />
-    <Compile Include="Logic\UserManagement\UserManagementController.cs" />
-    <Compile Include="Logic\UserManagement\UserManagements\MockUserManagement.cs" />
     <Compile Include="Logic\PasswordStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
