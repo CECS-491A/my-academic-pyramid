@@ -1,11 +1,12 @@
-﻿using DataAccessLayer.Repository;
+﻿
+using DataAccessLayer.Repository;
 
 
 namespace DataAccessLayer
 {
     public class UnitOfWork 
     {
-        private myAPEntities1 _context = new myAPEntities1();
+        private DatabaseContext _context = new DatabaseContext();
         private Repository<User> _userRepository;
         private Repository<Claim> _claimRepository;
 

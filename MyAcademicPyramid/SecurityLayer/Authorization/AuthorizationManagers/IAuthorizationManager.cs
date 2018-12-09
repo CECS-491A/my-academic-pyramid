@@ -11,7 +11,7 @@ namespace SecurityLayer.Authorization.AuthorizationManagers
     public interface IAuthorizationManager
     {
        
-        bool CheckClaims(ICollection<Claim> requiredClaimTypes);
+        bool CheckClaims(List<Claim> requiredClaimTypes);
         bool DeletedUserIsChild(User user);
     }
 }

@@ -38,7 +38,7 @@ namespace SecurityLayer.Authorization.AuthorizationManagers
         /// </summary>
         /// <param name="requiredClaims"></param> required claim(s) to get a permission to use the feature
         /// <returns> true/false </returns>
-        public bool CheckClaims(ICollection<Claim> requiredClaims)
+        public bool CheckClaims(List<Claim> requiredClaims)
         {
             if (requiredClaims == null)
                 throw new ArgumentNullException(
@@ -59,7 +59,7 @@ namespace SecurityLayer.Authorization.AuthorizationManagers
 
         public bool DeletedUserIsChild(User user)
         {
-            if(authorizedUser.Id == user.ParentUser_Id && authorizedUser.Id < user.ParentUser_Id )
+            if(authorizedUser.Id == user.ParentUser_Id && authorizedUser.Id < user.Id )
             {
                 return true;
             }

@@ -15,36 +15,27 @@ namespace DataAccessLayer
     
     public partial class User : IEntity
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+ 
         public User()
         {
-            this.Users1 = new HashSet<User>();
+            this.ChildUsers = new HashSet<User>();
             this.Claims = new HashSet<Claim>();
         }
 
-        public User(String userName)
+        public User(string userName)
+
         {
-            this.Users1 = new HashSet<User>();
-            this.Claims = new HashSet<Claim>();
             UserName = userName;
         }
-        public User(int id, String userName)
-        {
-            Id = id;
-            this.Users1 = new HashSet<User>();
-            this.Claims = new HashSet<Claim>();
-            UserName = userName;
-        }
-
-
+    
         public int Id { get; set; }
         public string UserName { get; set; }
         public Nullable<int> ParentUser_Id { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<User> Users1 { get; set; }
-        public virtual User User1 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+
+        public virtual ICollection<User> ChildUsers { get; set; }
+        public virtual User ParentUser { get; set; }
+
         public virtual ICollection<Claim> Claims { get; set; }
     }
 }

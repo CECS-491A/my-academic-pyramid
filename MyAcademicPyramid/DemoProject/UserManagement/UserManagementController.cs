@@ -14,16 +14,22 @@ namespace DemoProject.MockUserManagementNameSpace
          * */
         UserManagement userManagement = null;
         User _requestingUser;
-        public UserManagementController(User requestingUser )
+        User _targetedUser;
+        UnitOfWork uOW = new UnitOfWork();
+        public UserManagementController(String requestingUserName )
         {
+         
+            
+            userManagement = new UserManagement(uOW);
+            _requestingUser = userManagement.FindUserbyUserName(requestingUserName);
+           
 
-            userManagement = new UserManagement();
-            _requestingUser = requestingUser;
         }
 
-        public void DeleteOwnAction(User targetedUser)
+        public void DeleteOwnAction(String targetedUserName)
         {
             IAuthorizationManager authManager = new AuthorizationManager(_requestingUser);
+            _targetedUser = userManagement.FindUserbyUserName(targetedUserName);
             List<Claim> delOwnRequiredClaimTypes = new List<Claim>
             {
                 new Claim("CanDeleteUserOwnAccount")
@@ -31,7 +37,7 @@ namespace DemoProject.MockUserManagementNameSpace
             if (authManager.CheckClaims(delOwnRequiredClaimTypes))
             {
                 
-                userManagement.DeleteUser(targetedUser);
+                userManagement.DeleteUser(_targetedUser);
             }
             else
             {
@@ -39,23 +45,25 @@ namespace DemoProject.MockUserManagementNameSpace
             }
         }
 
-        public void DeleteOtherAction(User targetedUser)
+        public void DeleteOtherAction(String targetedUserName)
         {
+            
             IAuthorizationManager authManager = new AuthorizationManager(_requestingUser);
+            _targetedUser = userManagement.FindUserbyUserName(targetedUserName);
             List<Claim> delOtherRequiredClaimTypes = new List<Claim>
             {
-                new Claim("CanDeleteOtherAccount"),
-                new Claim("HasPoints")
+                new Claim("UserManager"),
+   
             };
         
 
             // delOtherRequiredClaimTypes = null;
             if (authManager.CheckClaims(delOtherRequiredClaimTypes))
             {
-
-                if (authManager.DeletedUserIsChild(targetedUser))
+                
+                if (authManager.DeletedUserIsChild(_targetedUser))
                     {
-                    userManagement.DeleteUser(targetedUser);
+                    userManagement.DeleteUser(_targetedUser);
                 }
                 else
                 {
@@ -69,36 +77,30 @@ namespace DemoProject.MockUserManagementNameSpace
         }
 
 
-        public void CreateUserAction(User targetedUser)
+        public void CreateUserAction(String targetedUserName)
         {
             IAuthorizationManager authManager = new AuthorizationManager(_requestingUser);
-            //List<Claim> createUserRequiredClaimTypes = new List<Claim>
-            //{
-            
-            //    new Claim("UserManager")
-            //};
-            // delOtherRequiredClaimTypes = null;
-            //if (authManager.CheckClaims(createUserRequiredClaimTypes))
-            //{
+            List<Claim> createUserRequiredClaimTypes = new List<Claim>
+            {
+
+                new Claim("UserManager")
+            };
+       
+            if (authManager.CheckClaims(createUserRequiredClaimTypes))
+            {
+                _targetedUser = new User();
+                _targetedUser.UserName = targetedUserName;
+
+
+
+                _targetedUser.ParentUser = _requestingUser;
+                userManagement.CreateUser(_targetedUser);
                 
-                userManagement.CreateUser(targetedUser);
-                targetedUser = userManagement.FindUserbyUserName(targetedUser.UserName);
-
-                _requestingUser = userManagement.FindUserbyUserName(_requestingUser.UserName);
-                targetedUser.User1 = _requestingUser;
-
-                userManagement.UpdateUser(targetedUser);
-
-                _requestingUser.Users1.Add(targetedUser);
-
-                userManagement.UpdateUser(_requestingUser);
-                
-
-            //}
-            //else
-            //{
-            //    Console.WriteLine("Create Account is BLOCKED");
-            //}
+            }
+            else
+            {
+                Console.WriteLine("Create Account is BLOCKED");
+            }
         }
 
 

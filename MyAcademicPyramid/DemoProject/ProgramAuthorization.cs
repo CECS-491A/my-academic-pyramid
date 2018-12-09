@@ -56,29 +56,19 @@ namespace DemoProject
 
 
             // Create user Trong 
-            ResetDbandSeed resetDB = new ResetDbandSeed();
-            resetDB.Reseed();
-            User admin = new User(3, "Trong");
+            //ResetDbandSeed resetDB = new ResetDbandSeed();
+            //resetDB.Reseed();
+            UserManagementController userManagementController_Admin = new UserManagementController("Trong");
+            userManagementController_Admin.CreateUserAction("Arturo");
+            userManagementController_Admin.DeleteOtherAction("Arturo");
 
 
-            UserManagementController userManagementController_Admin = new UserManagementController(admin);
 
 
-
-            User user = new User("Arturo");
-            user.Claims.Add(new Claim("CanDeleteOtherAccount"));
-            user.Claims.Add(new Claim("HasPoints"));
-
-            userManagementController_Admin.CreateUserAction(user);
-            User User_Arturo = userManagementController_Admin.FindUserAction("Arturo");
+            //UserManagementController userManagementController_Arturo = new UserManagementController("Arturo");
+            //userManagementController_Arturo.DeleteOtherAction("Trong");
 
 
-            UserManagementController userManagementController_Arturo = new UserManagementController(User_Arturo);
-
-
-            userManagementController_Arturo.DeleteOtherAction(admin);
-
-            //userManagementController_Admin.DeleteOtherAction(deletedUser);
 
 
             //userManagementController_Admin.CreateUserAction(Krystal);

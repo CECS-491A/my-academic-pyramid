@@ -13,9 +13,9 @@ namespace DataAccessLayer
     using System;
     using System.Collections.Generic;
     
-    public partial class Claim :IEntity
+    public partial class Claim : IEntity
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+
         public Claim()
         {
             this.Users = new HashSet<User>();
@@ -23,14 +23,13 @@ namespace DataAccessLayer
 
         public Claim(String value)
         {
-            this.Users = new HashSet<User>();
             Value = value;
+            this.Users = new HashSet<User>();
         }
-
+    
         public int Id { get; set; }
         public string Value { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<User> Users { get; set; }
     }
 }

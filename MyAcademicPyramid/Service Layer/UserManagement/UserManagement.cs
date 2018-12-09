@@ -13,9 +13,9 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         protected UnitOfWork unitOfWork;
        
         // Constructor which initialize the userRepository 
-        public UserManagement()
+        public UserManagement(UnitOfWork unitOfWork)
         {
-            unitOfWork = new UnitOfWork();
+            this.unitOfWork = unitOfWork;
         }
 
         // Create user account  
@@ -23,11 +23,9 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         {
             // Check if the username exist. Then add the user
 
-                unitOfWork.UserRepository.Insert(user);
-                unitOfWork.Save();
-            
+            unitOfWork.UserRepository.Insert(user);
+            unitOfWork.Save();
 
-                
 
         }
 
@@ -36,6 +34,7 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         {
             unitOfWork.UserRepository.Delete(user);
             unitOfWork.Save();
+
         }
 
         // Update user account 
@@ -43,6 +42,7 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         {
             unitOfWork.UserRepository.Update(user);
             unitOfWork.Save();
+
         }
 
         // Find user by providing a user name
@@ -50,6 +50,7 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         {
             IQueryable<User> users = unitOfWork.UserRepository.SearchFor(u => u.UserName.Equals(userName));
             return users.FirstOrDefault();
+      
 
 
         }
@@ -59,6 +60,7 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         {
             IQueryable<User> users = unitOfWork.UserRepository.SearchFor(u => u.Id == id);
             return users.FirstOrDefault();
+ 
         }
 
         // Remove a claim from a user account
@@ -67,6 +69,7 @@ namespace ServiceLayer.UserManagement.UserAccountServices
             User searchuser = unitOfWork.UserRepository.SearchFor(u => u.Id == user.Id).FirstOrDefault();
             searchuser.Claims.Remove(claim);
             unitOfWork.Save();
+
         }
 
 
@@ -78,8 +81,10 @@ namespace ServiceLayer.UserManagement.UserAccountServices
   
                 User searchuser = unitOfWork.UserRepository.SearchFor(u => u.Id == user.Id).FirstOrDefault();
                 searchuser.Claims.Add(claim);
-                unitOfWork.Save();
+                 unitOfWork.Save();
+                
             }
+
 
        
 
