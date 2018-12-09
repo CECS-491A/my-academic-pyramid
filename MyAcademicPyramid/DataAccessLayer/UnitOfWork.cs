@@ -5,7 +5,7 @@ namespace DataAccessLayer
 {
     public class UnitOfWork 
     {
-        private DatabaseContext _context = new DatabaseContext();
+        private myAPEntities1 _context = new myAPEntities1();
         private Repository<User> _userRepository;
         private Repository<Claim> _claimRepository;
 

@@ -22,12 +22,11 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         public void CreateUser(User user)
         {
             // Check if the username exist. Then add the user
-            if (FindUserbyUserName(user.UserName) == null)
-            {
+
                 unitOfWork.UserRepository.Insert(user);
                 unitOfWork.Save();
-            }
-            else throw new ArgumentException("The username is already used");
+            
+
                 
 
         }

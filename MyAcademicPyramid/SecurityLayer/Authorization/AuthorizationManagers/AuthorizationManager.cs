@@ -38,7 +38,7 @@ namespace SecurityLayer.Authorization.AuthorizationManagers
         /// </summary>
         /// <param name="requiredClaims"></param> required claim(s) to get a permission to use the feature
         /// <returns> true/false </returns>
-        public bool CheckClaims(List<Claim> requiredClaims)
+        public bool CheckClaims(ICollection<Claim> requiredClaims)
         {
             if (requiredClaims == null)
                 throw new ArgumentNullException(
@@ -49,12 +49,21 @@ namespace SecurityLayer.Authorization.AuthorizationManagers
             {
                 // body of lambda function
                 // looks for a uc (user claim) that matches rc (required claim)
-                Claim foundClaim = authorizedUser.Claims.Find(
+                Claim foundClaim = authorizedUser.Claims.ToList().Find(
                     uc => uc.Value.Equals(rc.Value)
                 );
                 // If claim not found, then foundClaim will be null.
                 return (foundClaim != null);
             });
+        }
+
+        public bool DeletedUserIsChild(User user)
+        {
+            if(authorizedUser.Id == user.ParentUser_Id && authorizedUser.Id < user.ParentUser_Id )
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

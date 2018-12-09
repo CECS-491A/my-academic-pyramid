@@ -16,6 +16,7 @@ namespace DemoProject
 
             // Create a new user account
             Console.WriteLine("Create new user account - Trong");
+           
             userManagement.CreateUser(new User("Trong"));
 
             // Search for the user account which is just created 

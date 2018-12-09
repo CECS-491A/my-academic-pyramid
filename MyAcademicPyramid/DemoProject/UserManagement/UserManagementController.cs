@@ -47,10 +47,20 @@ namespace DemoProject.MockUserManagementNameSpace
                 new Claim("CanDeleteOtherAccount"),
                 new Claim("HasPoints")
             };
+        
+
             // delOtherRequiredClaimTypes = null;
             if (authManager.CheckClaims(delOtherRequiredClaimTypes))
             {
-                userManagement.DeleteUser(targetedUser);
+
+                if (authManager.DeletedUserIsChild(targetedUser))
+                    {
+                    userManagement.DeleteUser(targetedUser);
+                }
+                else
+                {
+                    Console.WriteLine("Cannot delete parent user");
+                }
             }
             else
             {
@@ -62,33 +72,33 @@ namespace DemoProject.MockUserManagementNameSpace
         public void CreateUserAction(User targetedUser)
         {
             IAuthorizationManager authManager = new AuthorizationManager(_requestingUser);
-            List<Claim> createUserRequiredClaimTypes = new List<Claim>
-            {
+            //List<Claim> createUserRequiredClaimTypes = new List<Claim>
+            //{
             
-                new Claim("UserManager")
-            };
+            //    new Claim("UserManager")
+            //};
             // delOtherRequiredClaimTypes = null;
-            if (authManager.CheckClaims(createUserRequiredClaimTypes))
-            {
+            //if (authManager.CheckClaims(createUserRequiredClaimTypes))
+            //{
                 
                 userManagement.CreateUser(targetedUser);
                 targetedUser = userManagement.FindUserbyUserName(targetedUser.UserName);
 
                 _requestingUser = userManagement.FindUserbyUserName(_requestingUser.UserName);
-                targetedUser.ParentUser = _requestingUser;
+                targetedUser.User1 = _requestingUser;
 
                 userManagement.UpdateUser(targetedUser);
 
-                _requestingUser.ChildrenUsers.Add(targetedUser);
+                _requestingUser.Users1.Add(targetedUser);
 
                 userManagement.UpdateUser(_requestingUser);
                 
 
-            }
-            else
-            {
-                Console.WriteLine("Create Account is BLOCKED");
-            }
+            //}
+            //else
+            //{
+            //    Console.WriteLine("Create Account is BLOCKED");
+            //}
         }
 
 
