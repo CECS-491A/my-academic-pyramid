@@ -4,6 +4,7 @@ using Xunit;
 using System;
 using SecurityLayer.Authorization.AuthorizationManagers;
 using ServiceLayer.UserManagement.UserAccountServices;
+using DemoProject;
 
 namespace ManagerLayerTests.Tests
 {
@@ -244,6 +245,7 @@ namespace ManagerLayerTests.Tests
         public void AuthorizationManager_FindHeight_ShouldReturnCorrectLevel1(int e, User a)
         {
             // Arrange
+           
             User Krystal = new User("Krystal");
 
             AuthorizationManager Authorization = new AuthorizationManager(Krystal);
@@ -262,7 +264,8 @@ namespace ManagerLayerTests.Tests
         public void AuthorizationManager_FindHeight_ShouldReturnCorrectLevel()
         {
             // Arrange
-            //Effort.Provider.EffortProviderConfiguration.RegisterProvider();
+            Effort.Provider.EffortProviderConfiguration.RegisterProvider();
+            EffortFactory.ResetDb();
             UnitOfWork uOW = new UnitOfWork();
             UserManagementServices userManager = new UserManagementServices(uOW);
 
@@ -275,6 +278,8 @@ namespace ManagerLayerTests.Tests
                 ParentUser_Id = Krystal.Id
             };
             userManager.CreateUser(Arturo);
+
+            Krystal = userManager.FindUserbyUserName("Krystal");
 
             AuthorizationManager Authorization = new AuthorizationManager(Krystal);
 

@@ -78,7 +78,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserManagement\IUserManagement.cs" />
     <Compile Include="UserManagement\MockUserManagement.cs" />
-    <Compile Include="UserManagement\UserManagement.cs" />
+    <Compile Include="UserManagement\UserManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -88,7 +88,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -98,6 +98,10 @@
     <ProjectReference Include="..\DataAccessLayer\DataAccessLayer.csproj">
       <Project>{6a61e75b-b35b-4f17-b7f4-da1af5806b23}</Project>
       <Name>DataAccessLayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DemoProject\DemoProject.csproj">
+      <Project>{445d4b44-bfaa-4f57-a24e-97ab90161a2d}</Project>
+      <Name>DemoProject</Name>
     </ProjectReference>
     <ProjectReference Include="..\ManagerLayer\ManagerLayer.csproj">
       <Project>{1f873dd8-8a42-411b-b217-ebe6e8eeb002}</Project>
