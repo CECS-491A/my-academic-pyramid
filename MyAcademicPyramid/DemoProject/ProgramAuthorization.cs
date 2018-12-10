@@ -1,8 +1,8 @@
 using DataAccessLayer;
 using System;
-using DemoProject.MockUserManagementNameSpace;
 using SecurityLayer.Authorization.AuthorizationManagers;
 using ServiceLayer.UserManagement.UserAccountServices;
+using ManagerLayer.UserManagement;
 
 namespace DemoProject
 {

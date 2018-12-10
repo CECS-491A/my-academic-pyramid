@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using SecurityLayer.Authorization.AuthorizationManagers;
 using ServiceLayer.UserManagement.UserAccountServices;
 
-namespace DemoProject.MockUserManagementNameSpace
+namespace ManagerLayer.UserManagement
 {
     public class UserManagement
     {
