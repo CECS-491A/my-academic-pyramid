@@ -48,11 +48,6 @@ namespace DemoProject
             Console.WriteLine("\nTry using  SubAdmin1 to delete SystemAdmin account . Should return error ");
             SubAdminManager1.DeleteAction("SystemAdmin");
 
-            // Try using  SubAdmin1 to delete SubAdmin2 account. Should be ok
-            Console.WriteLine("\nTry using  SubAdmin1 to delete SubAdmin2 account. Should be ok");
-            SubAdminManager1.DeleteAction("SubAdmin2");
-            Console.WriteLine("\nPrint all users in database again");
-            SystemAdminManager.PrintAllUser();
 
             // Let SubAdmin1 create an account call Sub_SubAdmin
             Console.WriteLine("\nLet SubAdmin1 create an account call User ");

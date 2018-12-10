@@ -32,6 +32,7 @@ namespace DataAccessLayer.Repository
             {
                 throw new ArgumentNullException("Required input. Input is empty.");
             }
+
             context.Entry(entity).State = System.Data.Entity.EntityState.Added;
         }
 

@@ -12,5 +12,6 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         void DeleteUser(User user);
         void UpdateUser(User user);
         User FindUserbyUserName(string userName);
+        User FindById(int id);
     }
 }

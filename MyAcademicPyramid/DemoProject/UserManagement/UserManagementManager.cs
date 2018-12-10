@@ -70,13 +70,6 @@ namespace DemoProject.MockUserManagementNameSpace
             // Check if the requesting user has the require claims
             if (authManager.CheckClaims(delOtherRequiredClaimTypes))
             {
-                // Check if the targeted user exists in database
-                if (userManagement.FindUserbyUserName(targetedUserName) == null)
-                {
-                    Console.WriteLine("ERROR--Deleted user cannot be found");
-                }
-                else
-                {
                     // Check if the requesting user is  at least same level  as  the targeted user   
                     if (authManager.HasEqualOrHigherPrivilege(_requestingUser, _targetedUser))
                     { 
@@ -86,7 +79,6 @@ namespace DemoProject.MockUserManagementNameSpace
                     {
                         Console.WriteLine("ERROR--Cannot delete parent user");
                     }
-                }
             }
             else
             {
@@ -131,7 +123,7 @@ namespace DemoProject.MockUserManagementNameSpace
         {
             // Call AuthorizationManager and pass the requesting user object in
             IAuthorizationManager authManager = new AuthorizationManager(_requestingUser);
-                return userManagement.FindUserbyUserName(userName);
+            return userManagement.FindUserbyUserName(userName);
         
         }
 
@@ -164,7 +156,7 @@ namespace DemoProject.MockUserManagementNameSpace
             // Check if the requesting user has the require claims
             if (authManager.CheckClaims(createUserRequiredClaimTypes))
             {
-                // Check if the targeted user exists in database
+                // Retrive targeted user exists from database
                 _targetedUser = userManagement.FindUserbyUserName(targetedUserName);
 
                 // Check if the requesting user is  at least same level as  the targeted user
