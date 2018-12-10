@@ -74,9 +74,10 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         /// <param name="user"></param>
         public void UpdateUser(User user)
         {
-            if (FindUserbyUserName(user.UserName) != null)
+            if (FindById(user.Id) != null)
             {
                 unitOfWork.UserRepository.Update(user);
+                unitOfWork.Save();
             }
             else
             {

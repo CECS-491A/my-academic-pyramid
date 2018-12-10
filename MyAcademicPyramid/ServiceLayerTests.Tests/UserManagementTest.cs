@@ -3,6 +3,7 @@ using DataAccessLayer;
 using ServiceLayer.UserManagement.UserAccountServices;
 using DemoProject;
 using System;
+using System.Collections.Generic;
 
 namespace ServiceLayerTests.Tests
 {
@@ -38,24 +39,14 @@ namespace ServiceLayerTests.Tests
             UserManagementServices userManagementServ = new UserManagementServices(new UnitOfWork());
             userManagementServ.CreateUser(user1);
             User user2 = new User("Victor");
-            bool expect = true;
-            bool actual;
-
+            userManagementServ.CreateUser(user2);
+            var expected = typeof(User);
 
             //Act
-            try
-            {
-                userManagementServ.CreateUser(user2);
-                actual = false;
-            }
-
-            catch(ArgumentException )
-            {
-                 actual = true;
-            }
+            var actual = userManagementServ.FindUserbyUserName("Victor");
 
             //Assert
-            Assert.Equal(expect, actual);
+            Assert.IsType(expected, actual);
         }
 
         [Fact]
