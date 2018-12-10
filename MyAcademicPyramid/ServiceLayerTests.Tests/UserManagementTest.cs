@@ -39,14 +39,23 @@ namespace ServiceLayerTests.Tests
             UserManagementServices userManagementServ = new UserManagementServices(new UnitOfWork());
             userManagementServ.CreateUser(user1);
             User user2 = new User("Victor");
-            userManagementServ.CreateUser(user2);
-            var expected = typeof(User);
 
+            bool expected = true;
+            bool actual;
             //Act
-            var actual = userManagementServ.FindUserbyUserName("Victor");
+            try
+            {
+                userManagementServ.CreateUser(user2);
+                actual = false;
+            }
+            catch(ArgumentException)
+            {
+                actual = true;
+            }
+     
 
             //Assert
-            Assert.IsType(expected, actual);
+            Assert.Equal(expected, actual);
         }
 
         [Fact]

@@ -36,7 +36,7 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         public void CreateUser(User user)
         {
             // Check if the username exist. Then add the user
-            User searchResult = unitOfWork.UserRepository.SearchFor(u => u.UserName.Equals(user.UserName)).FirstOrDefault();
+            User searchResult = FindUserbyUserName(user.UserName);
             if (searchResult == null)
             {
                 unitOfWork.UserRepository.Insert(user);
