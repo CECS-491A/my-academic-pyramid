@@ -44,7 +44,7 @@ namespace ServiceLayer.UserManagement.UserAccountServices
             }
             else
             {
-                Console.Error.WriteLine(("Error--Username already exists"));
+                throw new ArgumentException(("Error--Username already exists"));
             }
 
         }
@@ -64,7 +64,7 @@ namespace ServiceLayer.UserManagement.UserAccountServices
             }
             else
             {
-                Console.Error.WriteLine(("Error--Cannot find user to delete"));
+                throw new ArgumentException(("Error--Cannot find user to delete"));
             }
         }
 
@@ -81,7 +81,7 @@ namespace ServiceLayer.UserManagement.UserAccountServices
             }
             else
             {
-                Console.Error.WriteLine(("Error--Cannot find user to update"));
+                throw new ArgumentException(("Error--Cannot find user to update"));
             }
         }
 
@@ -128,9 +128,9 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         public void RemoveClaim(User user, Claim claim)
         {
             User searchedUser = FindUserbyUserName(user.UserName);
-            Claim searchedClaim = searchedUser.Claims.ToList().Find(c => c.Value.Equals(claim));
+            bool searchedClaim = searchedUser.Claims.Contains(claim);
 
-            if (searchedUser != null && searchedClaim != null)
+            if (searchedUser != null && searchedClaim != false)
             {
                 searchedUser.Claims.Remove(claim);
                 unitOfWork.UserRepository.Update(searchedUser);
@@ -138,11 +138,11 @@ namespace ServiceLayer.UserManagement.UserAccountServices
             }
             else if (searchedUser == null)
             {
-                Console.Error.WriteLine("Couldn't find user to remove claim");
+                throw new ArgumentException("Couldn't find user to remove claim");
             }
-            else if(searchedClaim == null)
+            else if(searchedClaim == false)
             {
-                Console.Error.WriteLine(("Couldn't find claim to remove "));
+                throw new ArgumentException(("Couldn't find claim to remove "));
             }
 
 
@@ -165,7 +165,7 @@ namespace ServiceLayer.UserManagement.UserAccountServices
             }
             else if (searchedUser == null)
             {
-                Console.Error.WriteLine("Couldn't  find user to add claim");
+                throw new ArgumentException("Couldn't  find user to add claim");
             }
 
         }
