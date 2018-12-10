@@ -6,7 +6,7 @@ using ServiceLayer.UserManagement.UserAccountServices;
 
 namespace DemoProject.MockUserManagementNameSpace
 {
-    public class UserManagementManager
+    public class UserManagement
     {
         /*
          * Class that demonstrates how authorization class might be used in
@@ -19,7 +19,7 @@ namespace DemoProject.MockUserManagementNameSpace
 
         // Constructor that accept a username of account and initiaize the UserManagementServices
         // User Account has to exist in database 
-        public UserManagementManager(String requestingUserName )
+        public UserManagement(String requestingUserName )
         {
             // Call UserManagementServices 
             userManagement = new UserManagementServices(uOW);
@@ -32,7 +32,7 @@ namespace DemoProject.MockUserManagementNameSpace
 
         // Special overload constructor which is only used to create System Admin for testing
         // The constructor will take a new username and a boolean true  to create a very first System Admin (Like the root of the tree)
-        public UserManagementManager(String newSystemAdminUserName, bool asSystemAdmin)
+        public UserManagement(String newSystemAdminUserName, bool asSystemAdmin)
         {
             if(asSystemAdmin ==true)
             {

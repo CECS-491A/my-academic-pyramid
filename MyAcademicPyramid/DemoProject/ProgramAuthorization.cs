@@ -16,7 +16,7 @@ namespace DemoProject
 
             // Create System Admin User Manager using overloading constructor
             Console.WriteLine("\nCreate System Admin User Manager using overloading constructor");
-            UserManagementManager SystemAdminManager = new UserManagementManager("SystemAdmin", true);
+            UserManagement SystemAdminManager = new UserManagement("SystemAdmin", true);
 
             // Use System Admin's user manager to create 2 additional account
             Console.WriteLine("\nUse System Admin's user manager to create 2 additional account");
@@ -28,7 +28,7 @@ namespace DemoProject
             SystemAdminManager.PrintAllUser();
 
             // Let SubAdmin1 initialize his user manager 
-            UserManagementManager SubAdminManager1 = new UserManagementManager("SubAdmin1");
+            UserManagement SubAdminManager1 = new UserManagement("SubAdmin1");
 
             // Try using  SubAdmin1 to delete SubAdmin2 account. 
             // Should return error because the SubAdmin1 does not have claim "UserManager"
@@ -43,7 +43,7 @@ namespace DemoProject
             // Should show error be
             Console.WriteLine("\nTry using  SubAdmin1 to delete SubAdmin2 account. Should be ok because  SubAdmin1 now has claim UserManager");
             // Reload SubAdminManager1
-            SubAdminManager1 = new UserManagementManager("SubAdmin1");
+            SubAdminManager1 = new UserManagement("SubAdmin1");
             SubAdminManager1.DeleteAction("SubAdmin2");
 
             // Try using  SubAdmin1 to delete SystemAdmin account. Should return error
