@@ -12,6 +12,7 @@ namespace SecurityLayer.Authorization.AuthorizationManagers
     {
        
         bool CheckClaims(List<Claim> requiredClaimTypes);
-        bool DeletedUserIsChild(User user);
+        bool HasEqualOrHigherPrivilege(User callingUser, User targetedUser);
+
     }
 }

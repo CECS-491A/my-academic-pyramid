@@ -71,15 +71,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Migrations\201812090916453_Initial3.cs" />
-    <Compile Include="Migrations\201812090916453_Initial3.Designer.cs">
-      <DependentUpon>201812090916453_Initial3.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201812090919526_Initial4.cs" />
-    <Compile Include="Migrations\201812090919526_Initial4.Designer.cs">
-      <DependentUpon>201812090919526_Initial4.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Claim.cs" />
     <Compile Include="DatabaseContext.cs" />
     <Compile Include="Models\User.cs" />
@@ -108,14 +99,6 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201812090916453_Initial3.resx">
-      <DependentUpon>201812090916453_Initial3.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201812090919526_Initial4.resx">
-      <DependentUpon>201812090919526_Initial4.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

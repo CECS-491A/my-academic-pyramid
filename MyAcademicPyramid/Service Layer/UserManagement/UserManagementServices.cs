@@ -7,13 +7,14 @@ using ServiceLayer.UserManagement.UserClaimServices;
 
 namespace ServiceLayer.UserManagement.UserAccountServices
 {
-    public class UserManagement: IUserAccountService, IUserClaimService
+
+    public class UserManagementServices: IUserAccountServices, IUserClaimServices
     {
 
         protected UnitOfWork unitOfWork;
        
         // Constructor which initialize the userRepository 
-        public UserManagement(UnitOfWork unitOfWork)
+        public UserManagementServices(UnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
         }
@@ -22,10 +23,16 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         public void CreateUser(User user)
         {
             // Check if the username exist. Then add the user
-
-            unitOfWork.UserRepository.Insert(user);
-            unitOfWork.Save();
-
+            User searchResult = unitOfWork.UserRepository.SearchFor(u => u.UserName.Equals(user.UserName)).FirstOrDefault();
+            if (searchResult == null)
+            {
+                unitOfWork.UserRepository.Insert(user);
+                unitOfWork.Save();
+            }
+            else
+            {
+                throw new ArgumentException("User with the username exists");
+            }
 
         }
 
@@ -50,8 +57,6 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         {
             IQueryable<User> users = unitOfWork.UserRepository.SearchFor(u => u.UserName.Equals(userName));
             return users.FirstOrDefault();
-      
-
 
         }
 
@@ -63,31 +68,35 @@ namespace ServiceLayer.UserManagement.UserAccountServices
  
         }
 
+        public List<User> GetAllUser()
+        {
+            IEnumerable<User> list = unitOfWork.UserRepository.GetAll();
+            return list.ToList();
+        }
+
+
+
         // Remove a claim from a user account
         public void RemoveClaim(User user, Claim claim)
         {
             User searchuser = unitOfWork.UserRepository.SearchFor(u => u.Id == user.Id).FirstOrDefault();
             searchuser.Claims.Remove(claim);
+            unitOfWork.UserRepository.Update(searchuser);
             unitOfWork.Save();
 
         }
 
 
-
-
         // Add a claim to a user account
         public void AddClaim(User user, Claim claim)
         {
-  
-                User searchuser = unitOfWork.UserRepository.SearchFor(u => u.Id == user.Id).FirstOrDefault();
-                searchuser.Claims.Add(claim);
+
+            User searchuser = unitOfWork.UserRepository.SearchFor(u => u.Id == user.Id).FirstOrDefault();
+            searchuser.Claims.Add(claim);
+            unitOfWork.UserRepository.Update(searchuser);
                  unitOfWork.Save();
                 
             }
 
-
-       
-
-        
-    }
+        }
 }

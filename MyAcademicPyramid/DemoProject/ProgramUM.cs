@@ -12,7 +12,7 @@ namespace DemoProject
         {
 
             Effort.Provider.EffortProviderConfiguration.RegisterProvider();
-            var userManagement = new UserManagement(new UnitOfWork());
+            var userManagement = new UserManagementServices(new UnitOfWork());
 
             // Create a new user account
             Console.WriteLine("Create new user account - Trong");

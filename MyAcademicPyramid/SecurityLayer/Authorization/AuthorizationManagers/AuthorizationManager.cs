@@ -57,13 +57,37 @@ namespace SecurityLayer.Authorization.AuthorizationManagers
             });
         }
 
-        public bool DeletedUserIsChild(User user)
+        // Method to check if the user who made the request is at least same level or higher level than the targeted user 
+        public bool HasEqualOrHigherPrivilege(User callingUser, User targetedUser)
         {
-            if(authorizedUser.Id == user.ParentUser_Id && authorizedUser.Id < user.Id )
+            if (callingUser.Id == targetedUser.Id)
             {
                 return true;
             }
+
+            else if(findHeight(callingUser) <= findHeight(targetedUser))
+            {
+                return true;
+            }
+
             return false;
+
         }
+
+        // Method to find level of user by trarvese back to the root using referenced parent Id. 
+        public int findHeight(User user)
+        {
+            UnitOfWork uOw = new UnitOfWork();
+            int level = 0;
+            while (user.ParentUser_Id != null)
+            {
+                int parentId = (int)user.ParentUser_Id;
+                user = uOw.UserRepository.GetByID(parentId);
+                level += 1;
+            }
+
+            return level;
+        }
+
     }
 }

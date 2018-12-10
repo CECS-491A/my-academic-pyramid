@@ -26,6 +26,7 @@ namespace DataAccessLayer
 
         {
             UserName = userName;
+            this.Claims = new HashSet<Claim>();
         }
     
         public int Id { get; set; }

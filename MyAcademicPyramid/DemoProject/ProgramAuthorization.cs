@@ -9,80 +9,68 @@ namespace DemoProject
         
         static void Main(string[] args)
         {
-            //// Create user Trong 
-            //User admin = new User("Trong");
+            // Initialize mock database with Effort Framework
+            Effort.Provider.EffortProviderConfiguration.RegisterProvider();
 
+            // Create System Admin User Manager using overloading constructor
+            Console.WriteLine("\nCreate System Admin User Manager using overloading constructor");
+            UserManagementManager SystemAdminManager = new UserManagementManager("SystemAdmin", true);
 
-            //// Controller that handles any request involving user management
-            //UserManagementController userManagementController = new UserManagementController(admin);
+            // Use System Admin's user manager to create 2 additional account
+            Console.WriteLine("\nUse System Admin's user manager to create 2 additional account");
+            SystemAdminManager.CreateUserAction("SubAdmin1");
+            SystemAdminManager.CreateUserAction("SubAdmin2");
 
-            //// Self Created admin
-            //userManagementController.CreateUserAction(admin);
-            ////Assign claim CanDeleteUserOwnAccount
+            // Print all users in database
+            Console.WriteLine("\nPrint all users in database");
+            SystemAdminManager.PrintAllUser();
 
+            // Let SubAdmin1 initialize his user manager 
+            UserManagementManager SubAdminManager1 = new UserManagementManager("SubAdmin1");
 
-            ////Create user Krystal 
-            //User Krystal = new User("Krystal");
-            //userManagementController.CreateUserAction(Krystal);
+            // Try using  SubAdmin1 to delete SubAdmin2 account. 
+            // Should return error because the SubAdmin1 does not have claim "UserManager"
+            Console.WriteLine("\nTry using  SubAdmin1 to delete SubAdmin2 account. Should return error");
+            SubAdminManager1.DeleteAction("SubAdmin2");
 
-            //// Delete other account request is received
-            //Console.WriteLine("***Let Trong delete other user account***");
-            ////Access DeleteOtherAccount method using the controller
-            //userManagementController.DeleteOtherAction(Krystal);
+            // Let System Admin grant SubAdmin1 the claim "UserManager" 
+            Console.WriteLine("\n Let System Admin grant SubAdmin1 the claim UserManager ");
+            SystemAdminManager.AddClaimAction("SubAdmin1", new Claim("UserManager"));
 
+            // Try using  SubAdmin1 to delete SubAdmin2 account agiain. 
+            // Should be ok because  SubAdmin1 now has claim "UserManager"
+            Console.WriteLine("\nTry using  SubAdmin1 to delete SubAdmin2 account. Should be ok because  SubAdmin1 now has claim UserManager");
+            // Reload SubAdminManager1
+            SubAdminManager1 = new UserManagementManager("SubAdmin1");
+            SubAdminManager1.DeleteAction("SubAdmin2");
 
-            //// Delete own account request is received
-            //Console.WriteLine("***Let Trong delete his own user account***");
-            ////Access DeleteUserOwnAccount method using the controller
-            //userManagementController.DeleteOwnAction(admin);
+            // Try using  SubAdmin1 to delete SystemAdmin account. Should return error
+            Console.WriteLine("\nTry using  SubAdmin1 to delete SystemAdmin account . Should return error ");
+            SubAdminManager1.DeleteAction("SystemAdmin");
 
+            // Try using  SubAdmin1 to delete SubAdmin2 account. Should be ok
+            Console.WriteLine("\nTry using  SubAdmin1 to delete SubAdmin2 account. Should be ok");
+            SubAdminManager1.DeleteAction("SubAdmin2");
+            Console.WriteLine("\nPrint all users in database again");
+            SystemAdminManager.PrintAllUser();
 
-            ////Assign CanDeleteUserOwnAccount and CanDeleteUserOwnAccount;
+            // Let SubAdmin1 create an account call Sub_SubAdmin
+            Console.WriteLine("\nLet SubAdmin1 create an account call User ");
+            SubAdminManager1.CreateUserAction("User");
+            Console.WriteLine("\nPrint all users in database again");
+            SystemAdminManager.PrintAllUser();
 
-            //// Delete own account request is received
-            //Console.WriteLine("\n***Let Krystal delete her own user account***");
+            // Let System Admin Delete User
+            Console.WriteLine("\nLet System Admin delete User. Should be ok");
+            SystemAdminManager.DeleteAction("User");
+            Console.WriteLine("\nPrint all users in database again");
+            SystemAdminManager.PrintAllUser();
 
-            //userManagementController.DeleteOwnAction(Krystal);
-
-            //// Delete other account request is received
-            //Console.WriteLine("***Let Krystal delete other user account***");
-            //userManagementController.DeleteOtherAction(Krystal);
-
-            //// null example
-            ////userManagementController.DeleteOwnAction(null);
-            //Console.ReadLine();
-
-
-
-
-            // Create user Trong 
-            //ResetDbandSeed resetDB = new ResetDbandSeed();
-            //resetDB.Reseed();
-            UserManagementController userManagementController_Admin = new UserManagementController("Trong");
-            userManagementController_Admin.CreateUserAction("Arturo");
-            userManagementController_Admin.DeleteOtherAction("Arturo");
-
-
-
-
-            //UserManagementController userManagementController_Arturo = new UserManagementController("Arturo");
-            //userManagementController_Arturo.DeleteOtherAction("Trong");
-
-
-
-
-            //userManagementController_Admin.CreateUserAction(Krystal);
-            //User deletedUser = userManagementController_Admin.FindUserAction("Krystal");
-
-            //UserManagementController userManagementController_LowerAdmin = new UserManagementController(Krystal);
-
-            // Let Lower Admin delete Upper Admin 
-            //Console.WriteLine("***Let Lower Admin delete Upper Admin ***");
-            //Access DeleteUserOwnAccount method using the controller
-            //userManagementController_Admin.DeleteOtherAction(Krystal);
-            // userManagementController_LowerAdmin.DeleteOtherAction(admin);
-            //Access DeleteUserOwnAccount method using the controller
-
+            // Let System Admin delete SubAdmin 1. Should be ok 
+            Console.WriteLine("\nLet System Admin delete SubAdmin 1 . Should be ok ");
+            SystemAdminManager.DeleteAction("SubAdmin1");
+            Console.WriteLine("\nPrint all users in database again");
+            SystemAdminManager.PrintAllUser();
 
             Console.ReadLine();
 

@@ -12,7 +12,7 @@ namespace DataAccessLayer
         public DbSet<User> Users { get; set; }
         public DbSet<Claim> Claims { get; set; }
 
-        public DatabaseContext () :base ("Name = myAPData")
+        public DatabaseContext () :base ()
         {
 
         }

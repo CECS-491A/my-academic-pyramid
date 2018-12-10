@@ -56,20 +56,24 @@ namespace DataAccessLayer.Repository
             {
                 throw new ArgumentNullException("Required I.D. I.D. is not found.");
             }
-            // Find the index of the element by search for the Id 
+    
             context.Entry(entity).State = System.Data.Entity.EntityState.Modified;
-
 
         }
 
+        public IEnumerable<T> GetAll()
+        {
+            return context.Set<T>().ToList();
+        }
 
-        // Return an element by id
+
+        // Return entity object by id
         public T GetByID(int id)
         {
             return context.Set<T>().Find(id);
         }
 
-        //Return all elements of generic entity
+        //Return all elements of generic entity by giving a search condition
         public IQueryable<T> SearchFor(Expression<Func<T, bool>> predicate)
         {
             return Dbset.Where(predicate);
