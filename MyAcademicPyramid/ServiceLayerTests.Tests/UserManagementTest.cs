@@ -30,7 +30,7 @@ namespace ServiceLayerTests.Tests
         }
 
         [Fact]
-        public void UserManagement_CreateUserWithDupplicateUsername_ShouldThrowException()
+        public void UserManagement_CreateUserWithDupplicateUsername_ShouldReturnOnlyOneUserObjectWhenFinding()
         {
             //Arrange
             Effort.Provider.EffortProviderConfiguration.RegisterProvider();
@@ -91,49 +91,52 @@ namespace ServiceLayerTests.Tests
 
         }
 
-        //[Fact]
-        //public void UserManagement_AddClaim_ClaimsShouldBeAddToUser()
-        //{
-        //    //Arrange
-        //    Effort.Provider.EffortProviderConfiguration.RegisterProvider();
-        //    EffortFactory.ResetDb();
-        //    User user = new User("Luis");
-        //    UserManagementServices userManagementServ = new UserManagementServices(new UnitOfWork());
-        //    userManagementServ.CreateUser(user);
-        //    userManagementServ.AddClaim(user, new Claim("Over 18"));
-        //    bool expected = userManagementServ.FindUserbyUserName("Luis").Claims.Exists(u => u.Value.Equals("Over 18"));
+        [Fact]
+        public void UserManagement_AddClaim_ClaimsShouldBeAddToUser()
+        {
+            //Arrange
+            Effort.Provider.EffortProviderConfiguration.RegisterProvider();
+            EffortFactory.ResetDb();
+            User user = new User("Luis");
+            UserManagementServices userManagementServ = new UserManagementServices(new UnitOfWork());
+            userManagementServ.CreateUser(user);
+            Claim claim = new Claim("Over 18");
+            userManagementServ.AddClaim(user, claim);
+            bool expected = userManagementServ.FindUserbyUserName("Luis").Claims.Contains(claim);
 
-        //    //Act
-        //    bool actual = true;
+            //Act
+            bool actual = true;
 
-        //    //Assert
-        //    Assert.Equal(expected, actual);
+            //Assert
+            Assert.Equal(expected, actual);
 
-        //}
-
-
+        }
 
 
-        //[Fact]
-        //public void UserManagement_RemoveClaim_ClaimsShouldBeRemovedFromUser()
-        //{
-        //    //Arrange
-        //    Effort.Provider.EffortProviderConfiguration.RegisterProvider();
-        //    EffortFactory.ResetDb();
-        //    User user = new User("Luis");
-        //    UserManagementServices userManagementServ = new UserManagementServices(new UnitOfWork());
-        //    userManagementServ.CreateUser(user);
-        //    userManagementServ.AddClaim(user, new Claim("Over 18"));
-        //    userManagementServ.RemoveClaim(user, new Claim("Over 18"));
-        //    bool expected = userManagementServ.FindUserbyUserName("Luis").Claims.(u => u.Value.Equals("Over 18"));
 
-        //    //Act
-        //    bool actual = true;
 
-        //    //Assert
-        //    Assert.Equal(expected, actual);
+        [Fact]
+        public void UserManagement_RemoveClaim_ClaimsShouldBeRemovedFromUser()
+        {
+            //Arrange
+            Effort.Provider.EffortProviderConfiguration.RegisterProvider();
+            EffortFactory.ResetDb();
+            User user = new User("Luis");
+            UserManagementServices userManagementServ = new UserManagementServices(new UnitOfWork());
+            userManagementServ.CreateUser(user);
+            Claim claim = new Claim("Over 18");
 
-        //}
+            userManagementServ.AddClaim(user,claim);
+            userManagementServ.RemoveClaim(user, claim);
+            bool expected = userManagementServ.FindUserbyUserName("Luis").Claims.Contains(claim);
+
+            //Act
+            bool actual = false;
+
+            //Assert
+            Assert.Equal(expected, actual);
+
+        }
 
 
 
