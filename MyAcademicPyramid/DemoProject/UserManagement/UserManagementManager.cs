@@ -54,9 +54,10 @@ namespace DemoProject.MockUserManagementNameSpace
         // Method to delete self user account or other account
         public void DeleteAction(String targetedUserName)
         {
-            // Call AuthorizationManager and pass the requesting user object in
-            IAuthorizationManager authManager = new AuthorizationManager(_requestingUser);
 
+            // Call AuthorizationManager and pass the requesting user object in
+
+                IAuthorizationManager authManager = new AuthorizationManager(_requestingUser);
             // Retrieve the target user object from database which delete action applies on 
             _targetedUser = userManagement.FindUserbyUserName(targetedUserName);
 

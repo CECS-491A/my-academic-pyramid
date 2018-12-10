@@ -38,7 +38,7 @@ namespace DemoProject
             SystemAdminManager.AddClaimAction("SubAdmin1", new Claim("UserManager"));
 
             // Try using  SubAdmin1 to delete SubAdmin2 account agiain. 
-            // Should be ok because  SubAdmin1 now has claim "UserManager"
+            // Should show error be
             Console.WriteLine("\nTry using  SubAdmin1 to delete SubAdmin2 account. Should be ok because  SubAdmin1 now has claim UserManager");
             // Reload SubAdminManager1
             SubAdminManager1 = new UserManagementManager("SubAdmin1");
