@@ -57,15 +57,15 @@ namespace SecurityLayer.Authorization.AuthorizationManagers
             });
         }
 
-        // Method to check if the user who made the request is at least same level or higher level than the targeted user 
-        public bool HasEqualOrHigherPrivilege(User callingUser, User targetedUser)
+        // Method to check if the user who made the request is at a higher level than the targeted user 
+        public bool HasHigherPrivilege(User callingUser, User targetedUser)
         {
             if (callingUser.Id == targetedUser.Id)
             {
                 return true;
             }
 
-            else if(findHeight(callingUser) <= findHeight(targetedUser))
+            else if(FindHeight(callingUser) < FindHeight(targetedUser))
             {
                 return true;
             }
@@ -75,7 +75,7 @@ namespace SecurityLayer.Authorization.AuthorizationManagers
         }
 
         // Method to find level of user by trarvese back to the root using referenced parent Id. 
-        public int findHeight(User user)
+        public int FindHeight(User user)
         {
             UnitOfWork uOw = new UnitOfWork();
             int level = 0;

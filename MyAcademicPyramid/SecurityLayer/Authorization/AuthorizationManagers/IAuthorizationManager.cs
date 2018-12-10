@@ -12,7 +12,7 @@ namespace SecurityLayer.Authorization.AuthorizationManagers
     {
        
         bool CheckClaims(List<Claim> requiredClaimTypes);
-        bool HasEqualOrHigherPrivilege(User callingUser, User targetedUser);
+        bool HasHigherPrivilege(User callingUser, User targetedUser);
 
     }
 }

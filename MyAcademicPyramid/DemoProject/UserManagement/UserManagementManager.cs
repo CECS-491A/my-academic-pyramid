@@ -71,7 +71,7 @@ namespace DemoProject.MockUserManagementNameSpace
             if (authManager.CheckClaims(delOtherRequiredClaimTypes))
             {
                     // Check if the requesting user is  at least same level  as  the targeted user   
-                    if (authManager.HasEqualOrHigherPrivilege(_requestingUser, _targetedUser))
+                    if (authManager.HasHigherPrivilege(_requestingUser, _targetedUser))
                     { 
                         userManagement.DeleteUser(_targetedUser);
                     }
@@ -104,9 +104,10 @@ namespace DemoProject.MockUserManagementNameSpace
             {
                 // Create user object
                 _targetedUser = new User(targetedUserName);
-                
+
                 // Assign newly created user account with the ID the User who make request as parentID
                 _targetedUser.ParentUser = _requestingUser;
+                
 
                 // Tell userManagement services to create user in database 
                 userManagement.CreateUser(_targetedUser);
@@ -160,7 +161,7 @@ namespace DemoProject.MockUserManagementNameSpace
                 _targetedUser = userManagement.FindUserbyUserName(targetedUserName);
 
                 // Check if the requesting user is  at least same level as  the targeted user
-                if (authManager.HasEqualOrHigherPrivilege(_requestingUser, _targetedUser))
+                if (authManager.HasHigherPrivilege(_requestingUser, _targetedUser))
                 {
                     userManagement.AddClaim(_targetedUser, claim);
                 }

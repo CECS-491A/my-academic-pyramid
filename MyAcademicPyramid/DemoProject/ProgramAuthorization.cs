@@ -1,6 +1,8 @@
 using DataAccessLayer;
 using System;
 using DemoProject.MockUserManagementNameSpace;
+using SecurityLayer.Authorization.AuthorizationManagers;
+using ServiceLayer.UserManagement.UserAccountServices;
 
 namespace DemoProject
 {
@@ -65,13 +67,64 @@ namespace DemoProject
             Console.WriteLine("\nLet System Admin delete SubAdmin 1 . Should be ok ");
             SystemAdminManager.DeleteAction("SubAdmin1");
             Console.WriteLine("\nPrint all users in database again");
+
+// For AuthorizationManager FindHeight(User) testing purposes 
+            UnitOfWork uOW = new UnitOfWork();
+            UserManagementServices userManager = new UserManagementServices(uOW);
+
+            // Arrange 
+            // Highes lv
+            User Krystal = new User("Krystal");
+            userManager.CreateUser(Krystal);
+            // Level 2
+            User Arturo = new User("Arturo")
+            {
+                ParentUser_Id = Krystal.Id
+            };
+            userManager.CreateUser(Arturo);
+            // Level 3
+            User Kevin = new User("Kevin")
+            {
+                ParentUser_Id = Arturo.Id
+            };
+            userManager.CreateUser(Kevin);
+            User Victor = new User("Victor")
+            {
+                ParentUser_Id = Arturo.Id
+            };
+            userManager.CreateUser(Victor);
+            // Level 4
+            User Luis = new User("Luis")
+            {
+                ParentUser_Id = Kevin.Id
+            };
+            userManager.CreateUser(Luis);
+            User Trong = new User("Trong")
+            {
+                ParentUser_Id = Victor.Id
+            };
+            userManager.CreateUser(Trong);
+
+            Console.WriteLine("\n\n\n\n\nPrint levels");
+
+            AuthorizationManager KrystalAuthorization = new AuthorizationManager(Krystal);
+
+            int level0 = KrystalAuthorization.FindHeight(Krystal);
+            int level1 = KrystalAuthorization.FindHeight(Arturo);
+            int level2 = KrystalAuthorization.FindHeight(Kevin);
+            int level3 = KrystalAuthorization.FindHeight(Victor);
+            int level4 = KrystalAuthorization.FindHeight(Luis);
+            int level5 = KrystalAuthorization.FindHeight(Trong);
+
+            Console.WriteLine("Krystal's lv: " + level0 + " Arturo's lv: " + level1 + " Kevin's lv: " + level2 +
+                " Victor's lv: " + level3 + " Luis' lv: " + level4 + " Trong's lv: " +  level5);
+// End of Find Height test
+
+
+
             SystemAdminManager.PrintAllUser();
 
             Console.ReadLine();
-
-
-
-
         }
     }
 }
