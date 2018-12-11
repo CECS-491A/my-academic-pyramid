@@ -86,6 +86,7 @@
     <Compile Include="AuthorizationManagerTests.cs" />
     <Compile Include="PwnedPasswordValidationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserManagerTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

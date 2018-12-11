@@ -17,6 +17,11 @@ namespace SecurityLayer.Authorization.AuthorizationManagers
         
         private User authorizedUser;
 
+        public AuthorizationManager()
+        {
+
+        }
+
         /// <summary>
         /// Constructor of AuthorizationManager.
         /// Takes in user as a parameter and save the value.
