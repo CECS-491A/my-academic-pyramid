@@ -5,7 +5,7 @@ using System;
 using SecurityLayer.Authorization.AuthorizationManagers;
 using ServiceLayer.UserManagement.UserAccountServices;
 
-namespace ManagerLayerTests.Tests
+namespace SecurityLayer.Tests
 {
     public class AuthorizationManagerTests
     {
@@ -20,7 +20,7 @@ namespace ManagerLayerTests.Tests
             bool expected = true;
 
             // Act
-            bool actual = TrongAuthorization.CheckClaims(new List<Claim>() { new Claim("CanDeleteUserPost" )});
+            bool actual = TrongAuthorization.CheckClaims(new List<Claim>() { new Claim("CanDeleteUserPost") });
 
             // Assert
             Assert.Equal(expected, actual);
@@ -37,7 +37,7 @@ namespace ManagerLayerTests.Tests
             bool expected = false;
 
             // Act
-            bool actual = TrongAuthorization.CheckClaims(new List<Claim>() { new Claim( "CanDeleteUserPost" )});
+            bool actual = TrongAuthorization.CheckClaims(new List<Claim>() { new Claim("CanDeleteUserPost") });
 
             // Assert
             Assert.Equal(expected, actual);
@@ -216,7 +216,7 @@ namespace ManagerLayerTests.Tests
             };
             userManager.CreateUser(Trong);
 
-            yield return new object[] { 0, Krystal }; 
+            yield return new object[] { 0, Krystal };
             yield return new object[] { 1, Arturo };
             yield return new object[] { 2, Kevin };
             yield return new object[] { 2, Victor };
@@ -250,7 +250,7 @@ namespace ManagerLayerTests.Tests
         {
             // Arrange
             Effort.Provider.EffortProviderConfiguration.RegisterProvider();
-           
+
             UnitOfWork uOW = new UnitOfWork();
             UserManagementServices userManager = new UserManagementServices(uOW);
             User Krystal = new User("Krystal");
@@ -314,7 +314,7 @@ namespace ManagerLayerTests.Tests
             };
             userManager.CreateUser(Trong);
 
-            yield return new object[] { Krystal, Arturo }; 
+            yield return new object[] { Krystal, Arturo };
             yield return new object[] { Krystal, Kevin };
             yield return new object[] { Krystal, Luis };
             yield return new object[] { Arturo, Victor };
@@ -388,7 +388,7 @@ namespace ManagerLayerTests.Tests
             yield return new object[] { Victor, Arturo };
             yield return new object[] { Trong, Arturo };
             yield return new object[] { Trong, Kevin };
-            yield return new object[] { Luis, Victor }; 
+            yield return new object[] { Luis, Victor };
             yield return new object[] { Luis, Trong }; // same level
         }
 
@@ -425,7 +425,7 @@ namespace ManagerLayerTests.Tests
                 bool test = Authorization.HasHigherPrivilege(null, Krystal);
                 actual = false;
             }
-            catch (ArgumentException  )
+            catch (ArgumentException)
             {
                 actual = true;
             }
