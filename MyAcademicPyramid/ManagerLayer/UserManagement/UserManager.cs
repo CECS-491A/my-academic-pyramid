@@ -21,12 +21,20 @@ namespace ManagerLayer.UserManagement
         // User Account has to exist in database 
         public UserManager(String requestingUserName )
         {
+            if (requestingUserName == null)
+            {
+                throw new ArgumentNullException("requestingUserName");
+            }
             // Call UserManagementServices 
             userManagement = new UserManagementServices(uOW);
 
             // Find the user account in database and assign it to data member _requestingUser
             // _requestingUser  will be used to compare with targeted User parameter for Delete method  
             _requestingUser = userManagement.FindUserbyUserName(requestingUserName);
+            if (_requestingUser == null)
+            {
+                throw new ArgumentNullException("_requestingUser", "User has to exist in database.");
+            }
            
         }
 
@@ -34,6 +42,10 @@ namespace ManagerLayer.UserManagement
         // The constructor will take a new username and a boolean true  to create a very first System Admin (Like the root of the tree)
         public UserManager(String newSystemAdminUserName, bool asSystemAdmin)
         {
+            if(newSystemAdminUserName == null)
+            {
+                throw new ArgumentNullException("newSystemAdminUserName");
+            }
             if(asSystemAdmin ==true)
             {
                 // Call UserManagementServices 
@@ -47,19 +59,30 @@ namespace ManagerLayer.UserManagement
 
             else
             {
-                Console.WriteLine("boolean asSystemAdmin need to be true to craete a System Admin");
+                throw new ArgumentException(
+                    "asSystemAdmin", "Variable need to be true to create a System Admin."
+                );
             }
         }
 
         // Method to delete self user account or other account
         public void DeleteAction(String targetedUserName)
         {
+            if (targetedUserName == null)
+            {
+                throw new ArgumentNullException("targetedUserName");
+            }
 
             // Call AuthorizationManager and pass the requesting user object in
-
-                IAuthorizationManager authManager = new AuthorizationManager(_requestingUser);
+            IAuthorizationManager authManager = new AuthorizationManager(_requestingUser);
             // Retrieve the target user object from database which delete action applies on 
             _targetedUser = userManagement.FindUserbyUserName(targetedUserName);
+            if (_targetedUser == null)
+            {
+                throw new ArgumentNullException(
+                    "_targetedUser", "The user to be deleted doesn't exist."
+                );
+            }
 
             // List of required claims needed for DeleteUser Method
             List<Claim> delOtherRequiredClaimTypes = new List<Claim>
@@ -78,18 +101,26 @@ namespace ManagerLayer.UserManagement
                     }
                     else
                     {
-                        Console.WriteLine("ERROR--Cannot delete parent user");
+                        throw new ArgumentException(
+                            "ERROR--Calling user isn't of a higher level as targeted user."
+                        );
                     }
             }
             else
             {
-                Console.WriteLine("ERROR--DeleteOtherAccount action is BLOCKED because the required claims are not meet");
+                throw new ArgumentException(
+                    "ERROR--DeleteOtherAccount action is BLOCKED because the required claims are not meet"
+                );
             }
         }
 
         // Method to create user account
         public void CreateUserAction(String targetedUserName)
         {
+            if (targetedUserName == null)
+            {
+                throw new ArgumentNullException("targetedUserName");
+            }
             // Call AuthorizationManager and pass the requesting user object in
             IAuthorizationManager authManager = new AuthorizationManager(_requestingUser);
 
@@ -116,7 +147,9 @@ namespace ManagerLayer.UserManagement
             }
             else
             {
-                Console.WriteLine("ERROR--Create Account action is BLOCKED because the required claims are not meet");
+                throw new ArgumentException(
+                    "ERROR--Create Account action is BLOCKED because the required claims are not meet"
+                );
             }
         }
 
@@ -124,7 +157,14 @@ namespace ManagerLayer.UserManagement
         public User FindUserAction(String userName)
         {
             // Call AuthorizationManager and pass the requesting user object in
-            IAuthorizationManager authManager = new AuthorizationManager(_requestingUser);
+            try
+            {
+                IAuthorizationManager authManager = new AuthorizationManager(_requestingUser);
+            }
+            catch (ArgumentNullException)
+            {
+                throw;
+            }
             return userManagement.FindUserbyUserName(userName);
         
         }
@@ -145,6 +185,14 @@ namespace ManagerLayer.UserManagement
         // The method will take username of the account whom give the claim to and a claim onje
         public void AddClaimAction(string targetedUserName, Claim claim)
         {
+            if (targetedUserName == null)
+            {
+                throw new ArgumentNullException("targetedUserName");
+            }
+            else if (claim == null)
+            {
+                throw new ArgumentNullException("claim");
+            }
             // Call AuthorizationManager and pass the requesting user object in
             IAuthorizationManager authManager = new AuthorizationManager(_requestingUser);
 
@@ -160,7 +208,10 @@ namespace ManagerLayer.UserManagement
             {
                 // Retrive targeted user exists from database
                 _targetedUser = userManagement.FindUserbyUserName(targetedUserName);
-
+                if (_targetedUser == null)
+                {
+                    throw new ArgumentException("There was no targeted user in database.");
+                }
                 // Check if the requesting user is  at least same level as  the targeted user
                 if (authManager.HasHigherPrivilege(_requestingUser, _targetedUser))
                 {
@@ -170,7 +221,9 @@ namespace ManagerLayer.UserManagement
 
             else
             {
-                Console.WriteLine("ERROR--Add Claim action is BLOCKED because the required claims are not meet");
+                throw new ArgumentException(
+                    "ERROR--Add Claim action is BLOCKED because the required claims are not meet"
+                );
             }
 
         }

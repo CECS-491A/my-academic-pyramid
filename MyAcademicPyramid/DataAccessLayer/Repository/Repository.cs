@@ -27,6 +27,10 @@ namespace DataAccessLayer.Repository
         /// <param name="context"></param>
         public Repository(DbContext context)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
             this.context = context;
             Dbset = context.Set<T>();
         }
@@ -40,7 +44,7 @@ namespace DataAccessLayer.Repository
             //Insert Exception
             if (entity == null)
             {
-                throw new ArgumentNullException("Required input. Input is empty.");
+                throw new ArgumentNullException("entity");
             }
 
             context.Entry(entity).State = System.Data.Entity.EntityState.Added;
@@ -55,7 +59,7 @@ namespace DataAccessLayer.Repository
             //Delete Exception
             if (entity == null)
             {
-                throw new ArgumentNullException("Required input. Input is empty.");
+                throw new ArgumentNullException("entity");
             }
             // Search by ID, then remove the element
             context.Entry(entity).State = System.Data.Entity.EntityState.Deleted;
@@ -71,7 +75,7 @@ namespace DataAccessLayer.Repository
             //Update Exception
             if (entity == null)
             {
-                throw new ArgumentNullException("Required I.D. I.D. is not found.");
+                throw new ArgumentNullException("entity.");
             }
     
             context.Entry(entity).State = System.Data.Entity.EntityState.Modified;

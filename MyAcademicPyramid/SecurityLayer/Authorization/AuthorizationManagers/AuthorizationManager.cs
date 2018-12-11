@@ -26,7 +26,10 @@ namespace SecurityLayer.Authorization.AuthorizationManagers
         public AuthorizationManager(User user)
         { 
             if (user == null)
+            {
                 throw new ArgumentNullException("user", "User cannot be null.");
+            }
+                
             authorizedUser = user;
         }
 
@@ -41,9 +44,12 @@ namespace SecurityLayer.Authorization.AuthorizationManagers
         public bool CheckClaims(List<Claim> requiredClaims)
         {
             if (requiredClaims == null)
+            {
                 throw new ArgumentNullException(
                     "requiredClaims", "List of required claims can't be null."
                 );
+            }
+                
             // Checks if each required claim exists in user's claim list
             return requiredClaims.All(rc =>
             {
@@ -60,6 +66,14 @@ namespace SecurityLayer.Authorization.AuthorizationManagers
         // Method to check if the user who made the request is at a higher level than the targeted user 
         public bool HasHigherPrivilege(User callingUser, User targetedUser)
         {
+            if (callingUser == null)
+            {
+                throw new ArgumentNullException("callingUser", "Parameter can't be null.");
+            }
+            else if (targetedUser == null)
+            {
+                throw new ArgumentNullException("targetedUser", "Parameter can't be null.");
+            }
             if (callingUser.Id == targetedUser.Id)
             {
                 return true;
@@ -77,6 +91,11 @@ namespace SecurityLayer.Authorization.AuthorizationManagers
         // Method to find level of user by trarvese back to the root using referenced parent Id. 
         public int FindHeight(User user)
         {
+            if(user == null)
+            {
+                throw new ArgumentNullException("user", "user can't be null.");
+            }
+
             UnitOfWork uOw = new UnitOfWork();
             int level = 0;
             while (user.ParentUser_Id != null)
@@ -91,3 +110,4 @@ namespace SecurityLayer.Authorization.AuthorizationManagers
 
     }
 }
+

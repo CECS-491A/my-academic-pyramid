@@ -33,7 +33,18 @@ namespace DemoProject
             // Try using  SubAdmin1 to delete SubAdmin2 account. 
             // Should return error because the SubAdmin1 does not have claim "UserManager"
             Console.WriteLine("\n---Try using  SubAdmin1 to delete SubAdmin2 account. Should return error---");
-            SubAdminManager1.DeleteAction("SubAdmin2");
+            try
+            {
+                SubAdminManager1.DeleteAction("SubAdmin2");
+            }
+            catch (ArgumentException argEx)
+            {
+                Console.WriteLine("Message: {0}", argEx.Message);
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("An error occured in deleting SubAdmin2");
+            }
 
             // Let System Admin grant SubAdmin1 the claim "UserManager" 
             Console.WriteLine("\n---Let System Admin give SubAdmin1 the claim UserManager to delete other account--- ");
@@ -41,14 +52,37 @@ namespace DemoProject
 
             // Try using  SubAdmin1 to delete SubAdmin2 account agiain. 
             // Should show error be
-            Console.WriteLine("\n---Try using  SubAdmin1 to delete SubAdmin2 account. Should be ok because  SubAdmin1 now has claim UserManager---");
+            Console.WriteLine("\n---Try using  SubAdmin1 to delete SubAdmin2 account. Still not possible because they are on the same level.---");
             // Reload SubAdminManager1
             SubAdminManager1 = new UserManager("SubAdmin1");
-            SubAdminManager1.DeleteAction("SubAdmin2");
+            try
+            {
+                SubAdminManager1.DeleteAction("SubAdmin2");
+            }
+            catch (ArgumentException argEx)
+            {
+                Console.WriteLine("Message: {0}", argEx.Message);
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("An error occured.");
+            }
 
             // Try using  SubAdmin1 to delete SystemAdmin account. Should return error
             Console.WriteLine("\n---Try using  SubAdmin1 to delete SystemAdmin account . Should return error--- ");
-            SubAdminManager1.DeleteAction("SystemAdmin");
+            try
+            {
+
+                SubAdminManager1.DeleteAction("SystemAdmin");
+            }
+            catch (ArgumentException argEx)
+            {
+                Console.WriteLine("Message: {0}", argEx.Message);
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("An error occured.");
+            }
 
 
             // Let SubAdmin1 create an account call Sub_SubAdmin

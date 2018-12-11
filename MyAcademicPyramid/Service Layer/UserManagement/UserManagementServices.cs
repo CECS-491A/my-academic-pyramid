@@ -25,6 +25,10 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         /// <param name="unitOfWork"></param>
         public UserManagementServices(UnitOfWork unitOfWork)
         {
+            if (unitOfWork == null)
+            {
+                throw new ArgumentNullException("unitOfWork");
+            }
             this.unitOfWork = unitOfWork;
         }
 
@@ -35,6 +39,10 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         /// <param name="user"></param>
         public void CreateUser(User user)
         {
+            if (user == null)
+            {
+                throw new ArgumentNullException("user");
+            }
             // Check if the username exist. Then add the user
             User searchResult = FindUserbyUserName(user.UserName);
             if (searchResult == null)
@@ -56,6 +64,10 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         /// <param name="user"></param>
         public void DeleteUser(User user)
         {
+            if (user == null)
+            {
+                throw new ArgumentNullException("user");
+            }
             if (FindUserbyUserName(user.UserName) != null)
             {
 
@@ -74,6 +86,10 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         /// <param name="user"></param>
         public void UpdateUser(User user)
         {
+            if (user == null)
+            {
+                throw new ArgumentNullException("user");
+            }
             if (FindById(user.Id) != null)
             {
                 unitOfWork.UserRepository.Update(user);
@@ -92,7 +108,6 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         /// <returns></returns>
         public User FindUserbyUserName(string userName)
         {
-         
             IQueryable<User> users = unitOfWork.UserRepository.SearchFor(u => u.UserName.Equals(userName));
             return users.FirstOrDefault();
 

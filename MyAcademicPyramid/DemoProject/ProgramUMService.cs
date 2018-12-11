@@ -6,18 +6,17 @@ using  ServiceLayer.UserManagement.UserAccountServices;
 
 namespace DemoProject
 {
-     class ProgramUM
+     class ProgramUMService
     {
         static void Main(string[] args)
         {
 
             Effort.Provider.EffortProviderConfiguration.RegisterProvider();
             var userManagement = new UserManagementServices(new UnitOfWork());
-
             // Create a new user account
             Console.WriteLine("Create new user account - Trong");
            
-            //userManagement.CreateUser(new User("Trong"));
+            userManagement.CreateUser(new User("Trong"));
 
             // Search for the user account which is just created 
             User user = userManagement.FindUserbyUserName("Trong");
