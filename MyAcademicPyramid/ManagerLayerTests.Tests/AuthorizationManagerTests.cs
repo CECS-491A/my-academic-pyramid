@@ -81,7 +81,7 @@ namespace ManagerLayerTests.Tests
         }
 
         [Fact]
-        public void AuthorizationManager_CheckClaims_MultiplClaimFoundShouldReturnTrue()
+        public void AuthorizationManager_CheckClaims_MultipleClaimFoundShouldReturnTrue()
         {
             // Arrange 
             User Krystal = new User("Krystal");
@@ -153,7 +153,7 @@ namespace ManagerLayerTests.Tests
         }
 
         [Fact]
-        public void AuthorizationManager_CheckClaims_DuplicatedMultiplClaimFoundShouldReturnTrue()
+        public void AuthorizationManager_CheckClaims_DuplicatedMultipleClaimFoundShouldReturnTrue()
         {
             // Arrange 
             User Krystal = new User("Krystal");
