@@ -74,14 +74,17 @@ namespace SecurityLayer.Authorization.AuthorizationManagers
             {
                 throw new ArgumentNullException("targetedUser", "Parameter can't be null.");
             }
-            if (callingUser.Id == targetedUser.Id)
+            else
             {
-                return true;
-            }
+                if (callingUser.Id == targetedUser.Id)
+                {
+                    return true;
+                }
 
-            else if(FindHeight(callingUser) < FindHeight(targetedUser))
-            {
-                return true;
+                else if(FindHeight(callingUser) < FindHeight(targetedUser))
+                {
+                    return true;
+                }
             }
 
             return false;
