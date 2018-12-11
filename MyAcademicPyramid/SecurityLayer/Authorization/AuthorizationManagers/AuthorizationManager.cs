@@ -63,7 +63,12 @@ namespace SecurityLayer.Authorization.AuthorizationManagers
             });
         }
 
-        // Method to check if the user who made the request is at a higher level than the targeted user 
+        /// <summary>
+        /// Checks if the user who made the request is at a higher level than the targeted user 
+        /// </summary>
+        /// <param name="callingUser"></param> can't be null or it will throw an exception.
+        /// <param name="targetedUser"></param> can't be null or it will throw an exception.
+        /// <returns> true/false </returns>
         public bool HasHigherPrivilege(User callingUser, User targetedUser)
         {
             if (callingUser == null)
@@ -74,21 +79,29 @@ namespace SecurityLayer.Authorization.AuthorizationManagers
             {
                 throw new ArgumentNullException("targetedUser", "Parameter can't be null.");
             }
-            if (callingUser.Id == targetedUser.Id)
+            else
             {
-                return true;
+                if (callingUser.Id == targetedUser.Id)
+                {
+                    return true;
+                }
+
+                else if(FindHeight(callingUser) < FindHeight(targetedUser))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
+        } // end of HasHigherPrivilege()
 
-            else if(FindHeight(callingUser) < FindHeight(targetedUser))
-            {
-                return true;
-            }
-
-            return false;
-
-        }
-
-        // Method to find level of user by trarvese back to the root using referenced parent Id. 
+        /// <summary>
+        /// Finds level of user by trarvese back to the root using referenced parent Id
+        /// </summary>
+        /// <param name="user"></param> can't be null or it will throw an exception
+        /// <returns> level </returns>
         public int FindHeight(User user)
         {
             if(user == null)

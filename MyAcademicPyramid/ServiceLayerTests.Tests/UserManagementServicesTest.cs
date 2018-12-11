@@ -7,30 +7,71 @@ using System.Collections.Generic;
 
 namespace ServiceLayerTests.Tests
 {
-    public class UserManagementTest
+    public class UserManagementServicesTest
     {
+        [Fact]
+        public void UserManagementServices_Constructor_ShouldReturnArgumentNullException()
+        {
+            //Arrange
+            bool exceptionRaised = false;
+            bool expected = true;
 
+            try
+            {
+                UserManagementServices userManagementServ = new UserManagementServices(null);
+            }
+            catch (ArgumentNullException)
+            {
+                exceptionRaised = true;
+            }
+
+            Assert.Equal(expected, exceptionRaised);
+        }
 
         [Fact]
-        public void UserManagement_CreateUser_ShouldAbleFindUserAfterCreation()
+        public void UserManagementServices_CreateUser_ShouldAbleFindUserAfterCreation()
         {
             //Arrange
             Effort.Provider.EffortProviderConfiguration.RegisterProvider();
             EffortFactory.ResetDb();
             User user = new User("Victor");
             UserManagementServices userManagementServ = new UserManagementServices(new UnitOfWork());
-            userManagementServ.CreateUser(user);
-            User expectedUser = userManagementServ.FindUserbyUserName("Victor");
+            User actualUser = new User("Victor");
 
             //Act
-            User actualUser = new User("Victor");
+            userManagementServ.CreateUser(user);
+            User expectedUser = userManagementServ.FindUserbyUserName("Victor");
 
             //Assert
             Assert.Equal(expectedUser.UserName, actualUser.UserName);
         }
 
         [Fact]
-        public void UserManagement_CreateUserWithDupplicateUsername_ShouldReturnOnlyOneUserObjectWhenFinding()
+        public void UserManagementServices_CreateUser_NullUserShouldRaiseException()
+        {
+            //Arrange
+            Effort.Provider.EffortProviderConfiguration.RegisterProvider();
+            EffortFactory.ResetDb();
+            UserManagementServices userManagementServ = new UserManagementServices(new UnitOfWork());
+            bool raiseException = false;
+            bool expected = true;
+
+            //Act
+            try
+            {
+                userManagementServ.CreateUser(null);
+            }
+            catch (ArgumentNullException)
+            {
+                raiseException = true;
+            }
+
+            //Assert
+            Assert.Equal(expected, raiseException);
+        }
+
+        [Fact]
+        public void UserManagementServices_CreateUserWithDupplicateUsername_ShouldReturnOnlyOneUserObjectWhenFinding()
         {
             //Arrange
             Effort.Provider.EffortProviderConfiguration.RegisterProvider();
@@ -59,7 +100,7 @@ namespace ServiceLayerTests.Tests
         }
 
         [Fact]
-        public void UserManagement_DeleteUser_UserShouldNotExistAfterDeletion()
+        public void UserManagementServices_DeleteUser_UserShouldNotExistAfterDeletion()
         {
             //Arrange
             Effort.Provider.EffortProviderConfiguration.RegisterProvider();
@@ -79,7 +120,54 @@ namespace ServiceLayerTests.Tests
         }
 
         [Fact]
-        public void UserManagement_UpdateUser_UserNameShouldGetUpdate()
+        public void UserManagementServices_DeleteUser_NullUserShouldRaiseException()
+        {
+            //Arrange
+            Effort.Provider.EffortProviderConfiguration.RegisterProvider();
+            EffortFactory.ResetDb();
+            User user = new User("Trong");
+            UserManagementServices userManagementServ = new UserManagementServices(new UnitOfWork());
+            userManagementServ.CreateUser(user);
+            User actualUser = null;
+
+            //Act
+            userManagementServ.DeleteUser(user);
+            User expectedUser = userManagementServ.FindUserbyUserName("Trong");
+
+            //Assert
+            Assert.Equal(expectedUser, actualUser);
+
+        }
+
+        [Fact]
+        public void UserManagementServices_DeleteUser_UserNotFoundShouldRaiseException()
+        {
+            //Arrange
+            Effort.Provider.EffortProviderConfiguration.RegisterProvider();
+            EffortFactory.ResetDb();
+            User user = new User("Trong");
+            UserManagementServices userManagementServ = new UserManagementServices(new UnitOfWork());
+            userManagementServ.CreateUser(user);
+            bool actual = true;
+            bool exceptionRaised = false;
+
+            //Act
+            try
+            {
+                userManagementServ.DeleteUser(new User("John"));
+            }
+            catch (ArgumentException)
+            {
+                exceptionRaised = true;
+            }
+
+            //Assert
+            Assert.Equal(actual, exceptionRaised);
+
+        }
+
+        [Fact]
+        public void UserManagementServices_UpdateUser_UserNameShouldGetUpdate()
         {
             //Arrange
             Effort.Provider.EffortProviderConfiguration.RegisterProvider();
@@ -101,7 +189,7 @@ namespace ServiceLayerTests.Tests
         }
 
         [Fact]
-        public void UserManagement_AddClaim_ClaimsShouldBeAddToUser()
+        public void UserManagementServices_AddClaim_ClaimsShouldBeAddToUser()
         {
             //Arrange
             Effort.Provider.EffortProviderConfiguration.RegisterProvider();
@@ -125,7 +213,7 @@ namespace ServiceLayerTests.Tests
 
 
         [Fact]
-        public void UserManagement_RemoveClaim_ClaimsShouldBeRemovedFromUser()
+        public void UserManagementServices_RemoveClaim_ClaimsShouldBeRemovedFromUser()
         {
             //Arrange
             Effort.Provider.EffortProviderConfiguration.RegisterProvider();
