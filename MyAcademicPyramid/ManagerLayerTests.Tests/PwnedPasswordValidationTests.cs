@@ -46,10 +46,10 @@ namespace ManagerLayerTests.Tests
         {
             // Arrange
             // Arrange
-            string response = "1D72CD07550416C216D8AD296BF5C0AE8E0:'10' \n" +
-                "1E2AAA439972480CEC7F16C795BBB429372:'1' \n" +
-                "1E3687A61BFCE35F69B7408158101C8E414:'1' \n" +
-                "1E4C9B93F3F0682250B6CF8331B7EE68FD8:'3533661' \n";
+            string response = "1D72CD07550416C216D8AD296BF5C0AE8E0;10 \n" +
+                "1E2AAA439972480CEC7F16C795BBB429372;1 \n" +
+                "1E3687A61BFCE35F69B7408158101C8E414;1 \n" +
+                "1E4C9B93F3F0682250B6CF8331B7EE68FD8;3533661 \n";
             Boolean expected = true;
             Boolean actual;
 
