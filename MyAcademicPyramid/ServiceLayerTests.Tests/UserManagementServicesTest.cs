@@ -89,14 +89,57 @@ namespace ServiceLayerTests.Tests
                 userManagementServ.CreateUser(user2);
                 actual = false;
             }
-            catch(ArgumentException)
+            catch (ArgumentException)
             {
                 actual = true;
             }
-     
+
 
             //Assert
             Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void UserManagementServices_FindUserbyUserName_ExistingUserShouldBeFound()
+        {
+            //Arrange
+            Effort.Provider.EffortProviderConfiguration.RegisterProvider();
+            EffortFactory.ResetDb();
+            User victorUser = new User("Victor");
+            User kevinUser = new User("Kevin");
+            User johnUser = new User("John");
+            UserManagementServices userManagementServ = new UserManagementServices(new UnitOfWork());
+            userManagementServ.CreateUser(victorUser);
+            userManagementServ.CreateUser(kevinUser);
+            userManagementServ.CreateUser(johnUser);
+            User actualUser = johnUser;
+
+            //Act
+            User expectedUser = userManagementServ.FindUserbyUserName("John");
+
+            //Assert
+            Assert.Equal(expectedUser.UserName, actualUser.UserName);
+        }
+
+        [Fact]
+        public void UserManagementServices_FindUserbyUserName_NonExistingUserShouldRaiseException()
+        {
+            //Arrange
+            Effort.Provider.EffortProviderConfiguration.RegisterProvider();
+            EffortFactory.ResetDb();
+            User victorUser = new User("Victor");
+            User kevinUser = new User("Kevin");
+            UserManagementServices userManagementServ = new UserManagementServices(new UnitOfWork());
+            userManagementServ.CreateUser(victorUser);
+            userManagementServ.CreateUser(kevinUser);
+            User nonExistingUser = new User("John");
+            User actualUser = null;
+
+            //Act
+            User expectedUser = userManagementServ.FindUserbyUserName(nonExistingUser.UserName);
+
+            //Assert
+            Assert.Equal(expectedUser, actualUser);
         }
 
         [Fact]
@@ -176,15 +219,70 @@ namespace ServiceLayerTests.Tests
             UserManagementServices userManagementServ = new UserManagementServices(new UnitOfWork());
             userManagementServ.CreateUser(user);
             user.UserName = "Arturo";
-            userManagementServ.UpdateUser(user);
-
-            String ExpectedUserName = userManagementServ.FindUserbyUserName("Arturo").UserName;
+            String expectedUserName = "Arturo";
 
             //Act
-            String actualUserName = "Arturo";
+            userManagementServ.UpdateUser(user);
+            String actualUserName = userManagementServ.FindUserbyUserName("Arturo").UserName;
 
             //Assert
-            Assert.Equal(ExpectedUserName, actualUserName);
+            Assert.Equal(expectedUserName, actualUserName);
+
+        }
+
+        [Fact]
+        public void UserManagementServices_UpdateUser_NullUserShouldRaiseException()
+        {
+            //Arrange
+            Effort.Provider.EffortProviderConfiguration.RegisterProvider();
+            EffortFactory.ResetDb();
+            User user = new User("Trong");
+            UserManagementServices userManagementServ = new UserManagementServices(new UnitOfWork());
+            userManagementServ.CreateUser(user);
+            user.UserName = "Arturo";
+            bool raiseException = false;
+            bool actual = true;
+
+            //Act
+            try
+            {
+                userManagementServ.UpdateUser(null);
+            }
+            catch (ArgumentNullException)
+            {
+                raiseException = true;
+            }
+
+            //Assert
+            Assert.Equal(raiseException, actual);
+
+        }
+
+        [Fact]
+        public void UserManagementServices_UpdateUser_UserNotFoundShouldRaiseException()
+        {
+            //Arrange
+            Effort.Provider.EffortProviderConfiguration.RegisterProvider();
+            EffortFactory.ResetDb();
+            User user = new User("Trong");
+            UserManagementServices userManagementServ = new UserManagementServices(new UnitOfWork());
+            userManagementServ.CreateUser(user);
+            user.UserName = "Arturo";
+            bool exceptionRaised = false;
+            bool actual = true;
+
+            //Act
+            try
+            {
+                userManagementServ.UpdateUser(new User("Kevin"));
+            }
+            catch (ArgumentException)
+            {
+                exceptionRaised = true;
+            }
+
+            //Assert
+            Assert.Equal(exceptionRaised, actual);
 
         }
 
@@ -198,11 +296,11 @@ namespace ServiceLayerTests.Tests
             UserManagementServices userManagementServ = new UserManagementServices(new UnitOfWork());
             userManagementServ.CreateUser(user);
             Claim claim = new Claim("Over 18");
-            userManagementServ.AddClaim(user, claim);
-            bool expected = userManagementServ.FindUserbyUserName("Luis").Claims.Contains(claim);
+            bool actual = true;
 
             //Act
-            bool actual = true;
+            userManagementServ.AddClaim(user, claim);
+            bool expected = userManagementServ.FindUserbyUserName("Luis").Claims.Contains(claim);
 
             //Assert
             Assert.Equal(expected, actual);
@@ -223,7 +321,7 @@ namespace ServiceLayerTests.Tests
             userManagementServ.CreateUser(user);
             Claim claim = new Claim("Over 18");
 
-            userManagementServ.AddClaim(user,claim);
+            userManagementServ.AddClaim(user, claim);
             userManagementServ.RemoveClaim(user, claim);
             bool expected = userManagementServ.FindUserbyUserName("Luis").Claims.Contains(claim);
 
@@ -238,5 +336,5 @@ namespace ServiceLayerTests.Tests
 
 
     }
-    
+
 }
