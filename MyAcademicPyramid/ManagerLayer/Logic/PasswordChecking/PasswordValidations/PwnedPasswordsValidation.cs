@@ -70,9 +70,8 @@ namespace ManagerLayer.Logic.PasswordChecking.PasswordValidations
         public Dictionary<string,int> JsonToDictionary(string list)
         {
             // Format json string with double quotation marks and commas
-            list = list.Replace("\n", ",\"");
-            list = list.Replace(":", "\":");
-            list = "{\"" + list + "}";
+            list = list.Replace("\n", ",");
+            list = "{" + list + "}";
 
             // Deserializae as dictionary
             var hashes = JsonConvert.DeserializeObject<Dictionary<string, int>>(list);

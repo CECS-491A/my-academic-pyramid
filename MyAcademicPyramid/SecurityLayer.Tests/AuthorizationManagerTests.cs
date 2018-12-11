@@ -4,11 +4,17 @@ using Xunit;
 using System;
 using SecurityLayer.Authorization.AuthorizationManagers;
 using ServiceLayer.UserManagement.UserAccountServices;
+using DemoProject;
 
-namespace SecurityLayer.Tests
+namespace ManagerLayerTests.Tests
 {
     public class AuthorizationManagerTests
     {
+        public AuthorizationManagerTests()
+        {
+            EffortFactory.ResetDb();
+        }
+
         [Fact]
         public void AuthorizationManager_CheckClaims_ClaimFoundShouldReturnTrue()
         {
@@ -182,35 +188,36 @@ namespace SecurityLayer.Tests
             Effort.Provider.EffortProviderConfiguration.RegisterProvider();
             UnitOfWork uOW = new UnitOfWork();
             UserManagementServices userManager = new UserManagementServices(uOW);
+            EffortFactory.ResetDb();
 
-            User Krystal = new User("Krystal0"); // Level 0
+            User Krystal = new User("Krystal"); // Level 0
             userManager.CreateUser(Krystal);
 
-            User Arturo = new User("Arturo0")
+            User Arturo = new User("Arturo")
             {
                 ParentUser_Id = Krystal.Id // Level 1
             };
             userManager.CreateUser(Arturo);
 
-            User Kevin = new User("Kevin0")
+            User Kevin = new User("Kevin")
             {
                 ParentUser_Id = Arturo.Id // Level 2
             };
             userManager.CreateUser(Kevin);
 
-            User Victor = new User("Victor0")
+            User Victor = new User("Victor")
             {
                 ParentUser_Id = Arturo.Id // Level 2
             };
             userManager.CreateUser(Victor);
 
-            User Luis = new User("Luis0")
+            User Luis = new User("Luis")
             {
                 ParentUser_Id = Kevin.Id // Level 3
             };
             userManager.CreateUser(Luis);
 
-            User Trong = new User("Trong0")
+            User Trong = new User("Trong")
             {
                 ParentUser_Id = Victor.Id // Level 3
             };
@@ -225,14 +232,11 @@ namespace SecurityLayer.Tests
         }
 
         [Theory]
-        // Arrange 
         [MemberData(nameof(GetFindHeightData))]
         public void AuthorizationManager_FindHeight_ShouldReturnCorrectLevel(int e, User a)
         {
             // Arrange
-            Effort.Provider.EffortProviderConfiguration.RegisterProvider();
             User Trong2 = new User("Trong2");
-
             AuthorizationManager Authorization = new AuthorizationManager(Trong2);
 
             int expected = e;
@@ -249,10 +253,6 @@ namespace SecurityLayer.Tests
         public void AuthorizationManager_FindHeight_NullUserShouldThrowNullReferenceException()
         {
             // Arrange
-            Effort.Provider.EffortProviderConfiguration.RegisterProvider();
-
-            UnitOfWork uOW = new UnitOfWork();
-            UserManagementServices userManager = new UserManagementServices(uOW);
             User Krystal = new User("Krystal");
             AuthorizationManager Authorization = new AuthorizationManager(Krystal);
             bool expected = true;
@@ -280,6 +280,7 @@ namespace SecurityLayer.Tests
             Effort.Provider.EffortProviderConfiguration.RegisterProvider();
             UnitOfWork uOW = new UnitOfWork();
             UserManagementServices userManager = new UserManagementServices(uOW);
+            EffortFactory.ResetDb();
 
             User Krystal = new User("Krystal2"); // Level 0
             userManager.CreateUser(Krystal);
@@ -324,7 +325,6 @@ namespace SecurityLayer.Tests
         }
 
         [Theory]
-        // Arrange 
         [MemberData(nameof(GetPrivelegeLevelDataForTrue))]
         public void AuthorizationManager_HasHigherPrivilege_ShouldReturnTrue(User parent, User child)
         {
@@ -348,35 +348,36 @@ namespace SecurityLayer.Tests
             Effort.Provider.EffortProviderConfiguration.RegisterProvider();
             UnitOfWork uOW = new UnitOfWork();
             UserManagementServices userManager = new UserManagementServices(uOW);
+            EffortFactory.ResetDb();
 
-            User Krystal = new User("Krystal"); // Level 0
+            User Krystal = new User("Krystal3"); // Level 0
             userManager.CreateUser(Krystal);
 
-            User Arturo = new User("Arturo")
+            User Arturo = new User("Arturo3")
             {
                 ParentUser_Id = Krystal.Id // Level 1
             };
             userManager.CreateUser(Arturo);
 
-            User Kevin = new User("Kevin")
+            User Kevin = new User("Kevin3")
             {
                 ParentUser_Id = Arturo.Id // Level 2
             };
             userManager.CreateUser(Kevin);
 
-            User Victor = new User("Victor")
+            User Victor = new User("Victor3")
             {
                 ParentUser_Id = Arturo.Id // Level 2
             };
             userManager.CreateUser(Victor);
 
-            User Luis = new User("Luis")
+            User Luis = new User("Luis3")
             {
                 ParentUser_Id = Kevin.Id // Level 3
             };
             userManager.CreateUser(Luis);
 
-            User Trong = new User("Trong")
+            User Trong = new User("Trong3")
             {
                 ParentUser_Id = Victor.Id // Level 3
             };
@@ -393,7 +394,6 @@ namespace SecurityLayer.Tests
         }
 
         [Theory]
-        // Arrange 
         [MemberData(nameof(GetPrivelegeLevelDataForFalse))]
         public void AuthorizationManager_HasHigherPrivilege_ShouldReturnFalse(User parent, User child)
         {
