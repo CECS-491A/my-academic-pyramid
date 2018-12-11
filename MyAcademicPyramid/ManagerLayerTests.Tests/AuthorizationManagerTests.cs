@@ -185,6 +185,7 @@ namespace ManagerLayerTests.Tests
         public static IEnumerable<object[]> GetFindHeightData()
         {
             // Arrange 
+            Effort.Provider.EffortProviderConfiguration.RegisterProvider();
             UnitOfWork uOW = new UnitOfWork();
             UserManagementServices userManager = new UserManagementServices(uOW);
 
@@ -245,10 +246,10 @@ namespace ManagerLayerTests.Tests
         public void AuthorizationManager_FindHeight_ShouldReturnCorrectLevel1(int e, User a)
         {
             // Arrange
-           
-            User Krystal = new User("Krystal");
+            Effort.Provider.EffortProviderConfiguration.RegisterProvider();
+            User Trong = new User("Trong");
 
-            AuthorizationManager Authorization = new AuthorizationManager(Krystal);
+            AuthorizationManager Authorization = new AuthorizationManager(Trong);
 
             int expected = e;
             int actual;
@@ -299,6 +300,8 @@ namespace ManagerLayerTests.Tests
         public void AuthorizationManager_FindHeight_NullUserShouldThrowNullReferenceException()
         {
             // Arrange
+            Effort.Provider.EffortProviderConfiguration.RegisterProvider();
+           
             UnitOfWork uOW = new UnitOfWork();
             UserManagementServices userManager = new UserManagementServices(uOW);
             User Krystal = new User("Krystal");
@@ -313,7 +316,7 @@ namespace ManagerLayerTests.Tests
                 int test = Authorization.FindHeight(null);
                 actual = false;
             }
-            catch (NullReferenceException)
+            catch (ArgumentNullException)
             {
                 actual = true;
             }
@@ -398,6 +401,7 @@ namespace ManagerLayerTests.Tests
         public static IEnumerable<object[]> GetPrivelegeLevelDataForFalse()
         {
             // Arrange 
+            Effort.Provider.EffortProviderConfiguration.RegisterProvider();
             UnitOfWork uOW = new UnitOfWork();
             UserManagementServices userManager = new UserManagementServices(uOW);
 
@@ -477,7 +481,7 @@ namespace ManagerLayerTests.Tests
                 bool test = Authorization.HasHigherPrivilege(null, Krystal);
                 actual = false;
             }
-            catch (NullReferenceException)
+            catch (ArgumentException  )
             {
                 actual = true;
             }
@@ -501,7 +505,7 @@ namespace ManagerLayerTests.Tests
                 bool test = Authorization.HasHigherPrivilege(null, null);
                 actual = false;
             }
-            catch (NullReferenceException)
+            catch (ArgumentNullException)
             {
                 actual = true;
             }
