@@ -119,7 +119,7 @@ namespace DemoProject
         /// <param name="list"></param>
         public  static void PrintAllUser(List<User> list)
         {
-            Console.WriteLine(String.Format("{0, 15} {1, 10}, {2, 15}", "Name", "Level", "Claim"));
+            Console.WriteLine(String.Format("{0, -15} {1, -10} {2, -15}", "Name", "Level", "Claim"));
             foreach(User user in list)
             {
                 AuthorizationManager authorization = new AuthorizationManager();
@@ -131,7 +131,7 @@ namespace DemoProject
                     claimList+= claim.Value + ", ";
                 }
              
-                Console.WriteLine(String.Format("{0, 15} {1, 10} {2, 15}", user.UserName, level, claimList));
+                Console.WriteLine(String.Format("{0, -15} {1, -10} {2, -15}", user.UserName, level, claimList));
 
             }
         }
