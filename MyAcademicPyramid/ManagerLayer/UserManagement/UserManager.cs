@@ -12,13 +12,17 @@ namespace ManagerLayer.UserManagement
          * Class that demonstrates how authorization class might be used in
          * a controller.
          * */
-        private UserManagementServices userManagement = null;
+        private UserManagementServices userManagementServices = null;
         private User _requestingUser;
         private User _targetedUser;
         private UnitOfWork uOW = new UnitOfWork();
 
-        // Constructor that accept a username of account and initiaize the UserManagementServices
-        // User Account has to exist in database 
+
+        /// <summary>
+        /// Constructor that accept a username of account and initiaize the UserManagementServices
+        /// User Account has to exist in database 
+        /// </summary>
+        /// <param name="requestingUserName"></param>
         public UserManager(String requestingUserName )
         {
             if (requestingUserName == null)
@@ -26,11 +30,11 @@ namespace ManagerLayer.UserManagement
                 throw new ArgumentNullException("requestingUserName");
             }
             // Call UserManagementServices 
-            userManagement = new UserManagementServices(uOW);
+            userManagementServices = new UserManagementServices(uOW);
 
             // Find the user account in database and assign it to data member _requestingUser
             // _requestingUser  will be used to compare with targeted User parameter for Delete method  
-            _requestingUser = userManagement.FindUserbyUserName(requestingUserName);
+            _requestingUser = userManagementServices.FindUserbyUserName(requestingUserName);
             if (_requestingUser == null)
             {
                 throw new ArgumentNullException("_requestingUser", "User has to exist in database.");
@@ -38,8 +42,12 @@ namespace ManagerLayer.UserManagement
            
         }
 
-        // Special overload constructor which is only used to create System Admin for testing
-        // The constructor will take a new username and a boolean true  to create a very first System Admin (Like the root of the tree)
+        /// <summary>
+        /// Special overload constructor which is only used to create System Admin for testing
+        /// The constructor will take a new username and a boolean true  to create a very first System Admin (Like the root of the tree)
+        /// </summary>
+        /// <param name="newSystemAdminUserName"></param>
+        /// <param name="asSystemAdmin"></param>
         public UserManager(String newSystemAdminUserName, bool asSystemAdmin)
         {
             if(newSystemAdminUserName == null)
@@ -49,10 +57,10 @@ namespace ManagerLayer.UserManagement
             if(asSystemAdmin ==true)
             {
                 // Call UserManagementServices 
-                userManagement = new UserManagementServices(uOW);
-                userManagement.CreateUser(new User (newSystemAdminUserName));
-                _requestingUser = userManagement.FindUserbyUserName(newSystemAdminUserName);
-                userManagement.AddClaim(_requestingUser,new Claim ("UserManager"));
+                userManagementServices = new UserManagementServices(uOW);
+                userManagementServices.CreateUser(new User (newSystemAdminUserName));
+                _requestingUser = userManagementServices.FindUserbyUserName(newSystemAdminUserName);
+                userManagementServices.AddClaim(_requestingUser,new Claim ("UserManager"));
                 
 
             }
@@ -65,7 +73,11 @@ namespace ManagerLayer.UserManagement
             }
         }
 
-        // Method to delete self user account or other account
+      
+        /// <summary>
+        /// Method to delete self user account or other account
+        /// </summary>
+        /// <param name="targetedUserName"></param>
         public void DeleteAction(String targetedUserName)
         {
             if (targetedUserName == null)
@@ -76,7 +88,7 @@ namespace ManagerLayer.UserManagement
             // Call AuthorizationManager and pass the requesting user object in
             IAuthorizationManager authManager = new AuthorizationManager(_requestingUser);
             // Retrieve the target user object from database which delete action applies on 
-            _targetedUser = userManagement.FindUserbyUserName(targetedUserName);
+            _targetedUser = userManagementServices.FindUserbyUserName(targetedUserName);
             if (_targetedUser == null)
             {
                 throw new ArgumentNullException(
@@ -97,7 +109,7 @@ namespace ManagerLayer.UserManagement
                     // Check if the requesting user is  at least same level  as  the targeted user   
                     if (authManager.HasHigherPrivilege(_requestingUser, _targetedUser))
                     { 
-                        userManagement.DeleteUser(_targetedUser);
+                        userManagementServices.DeleteUser(_targetedUser);
                     }
                     else
                     {
@@ -114,7 +126,10 @@ namespace ManagerLayer.UserManagement
             }
         }
 
-        // Method to create user account
+        /// <summary>
+        /// Method to create user account
+        /// </summary>
+        /// <param name="targetedUserName"></param>
         public void CreateUserAction(String targetedUserName)
         {
             if (targetedUserName == null)
@@ -142,7 +157,7 @@ namespace ManagerLayer.UserManagement
                 
 
                 // Tell userManagement services to create user in database 
-                userManagement.CreateUser(_targetedUser);
+                userManagementServices.CreateUser(_targetedUser);
                 
             }
             else
@@ -153,7 +168,11 @@ namespace ManagerLayer.UserManagement
             }
         }
 
-        // Method to return an user object by lookup the user name
+        /// <summary>
+        /// Method to return an user object by lookup the user name
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <returns></returns>
         public User FindUserAction(String userName)
         {
             // Call AuthorizationManager and pass the requesting user object in
@@ -165,24 +184,27 @@ namespace ManagerLayer.UserManagement
             {
                 throw;
             }
-            return userManagement.FindUserbyUserName(userName);
+            return userManagementServices.FindUserbyUserName(userName);
         
         }
 
-        // Method to print all users in database 
-        public void  PrintAllUser()
+        /// <summary>
+        /// Method to get all users in database 
+        /// </summary>
+        /// <returns></returns>
+        public List<User> GetAllUser()
         {
             // Call GetAllUser method in userManagementServices 
-            List<User> userList = userManagement.GetAllUser();
-
-            foreach(User user in userList)
-            {
-                Console.WriteLine(user.UserName);
-            }
+            List<User> userList = userManagementServices.GetAllUser();
+            return userList;
         }
 
-        // Method to add claim to user account
-        // The method will take username of the account whom give the claim to and a claim onje
+        /// <summary>
+        /// Method to add claim to user account
+        /// The method will take username of the account whom give the claim to and a claim 
+        /// </summary>
+        /// <param name="targetedUserName"></param>
+        /// <param name="claim"></param>
         public void AddClaimAction(string targetedUserName, Claim claim)
         {
             if (targetedUserName == null)
@@ -207,7 +229,7 @@ namespace ManagerLayer.UserManagement
             if (authManager.CheckClaims(createUserRequiredClaimTypes))
             {
                 // Retrive targeted user exists from database
-                _targetedUser = userManagement.FindUserbyUserName(targetedUserName);
+                _targetedUser = userManagementServices.FindUserbyUserName(targetedUserName);
                 if (_targetedUser == null)
                 {
                     throw new ArgumentException("There was no targeted user in database.");
@@ -215,7 +237,7 @@ namespace ManagerLayer.UserManagement
                 // Check if the requesting user is  at least same level as  the targeted user
                 if (authManager.HasHigherPrivilege(_requestingUser, _targetedUser))
                 {
-                    userManagement.AddClaim(_targetedUser, claim);
+                    userManagementServices.AddClaim(_targetedUser, claim);
                 }
             }
 
@@ -228,43 +250,90 @@ namespace ManagerLayer.UserManagement
 
         }
 
+        /// <summary>
+        /// Method to remove claim from user
+        /// </summary>
+        /// <param name="targetedUserName"></param>
+        /// <param name="claim"></param>
+        public void RemoveClaimAction(string targetedUserName, Claim claim)
+        {
+            if (targetedUserName == null)
+            {
+                throw new ArgumentNullException("targetedUserName");
+            }
+            else if (claim == null)
+            {
+                throw new ArgumentNullException("claim");
+            }
+            // Call AuthorizationManager and pass the requesting user object in
+            IAuthorizationManager authManager = new AuthorizationManager(_requestingUser);
 
+            // List of required claims needed for AddClaimAction Method
+            List<Claim> createUserRequiredClaimTypes = new List<Claim>
+            {
 
-        
+                new Claim("UserManager")
+            };
 
+            // Check if the requesting user has the require claims
+            if (authManager.CheckClaims(createUserRequiredClaimTypes))
+            {
+                // Retrive targeted user exists from database
+                _targetedUser = userManagementServices.FindUserbyUserName(targetedUserName);
+                if (_targetedUser == null)
+                {
+                    throw new ArgumentException("There was no targeted user in database.");
+                }
+                // Check if the requesting user is  at least same level as  the targeted user
+                if (authManager.HasHigherPrivilege(_requestingUser, _targetedUser))
+                {
+                    userManagementServices.RemoveClaim(_targetedUser, claim);
+                }
+            }
 
-            //public void DisableUserAction(User targetedUser)
-            //{
-            //    IAuthorizationManager authManager = new AuthorizationManager(targetedUser);
-            //    List<Claim> disableUserRequiredClaimTypes = new List<Claim>
-            //    {
-            //        new Claim("CanDisableUser")
-            //    };
-            //    if (authManager.CheckClaims(disableUserRequiredClaimTypes))
-            //    {
-            //        userManagement.DisableUser();
-            //    }
-            //    else
-            //    {
-            //        Console.WriteLine("DisableUser is BLOCKED");
-            //    }
-            //}
-
-            //public void EnableUserAction(User targetedUser)
-            //{
-            //    IAuthorizationManager authManager = new AuthorizationManager(targetedUser);
-            //    List<Claim> enableUserRequiredClaimTypes = new List<Claim>
-            //    {
-            //        new Claim("CanEnableUser"),
-            //    };
-            //    if (authManager.CheckClaims(enableUserRequiredClaimTypes))
-            //    {
-            //        userManagement.EnableUser();
-            //    }
-            //    else
-            //    {
-            //        Console.WriteLine("EnableUser is BLOCKED");
-            //    }
-            //}
+            else
+            {
+                throw new ArgumentException(
+                    "ERROR--Add Claim action is BLOCKED because the required claims are not meet"
+                );
+            }
         }
+
+
+
+
+        //public void DisableUserAction(User targetedUser)
+        //{
+        //    IAuthorizationManager authManager = new AuthorizationManager(targetedUser);
+        //    List<Claim> disableUserRequiredClaimTypes = new List<Claim>
+        //    {
+        //        new Claim("CanDisableUser")
+        //    };
+        //    if (authManager.CheckClaims(disableUserRequiredClaimTypes))
+        //    {
+        //        userManagement.DisableUser();
+        //    }
+        //    else
+        //    {
+        //        Console.WriteLine("DisableUser is BLOCKED");
+        //    }
+        //}
+
+        //public void EnableUserAction(User targetedUser)
+        //{
+        //    IAuthorizationManager authManager = new AuthorizationManager(targetedUser);
+        //    List<Claim> enableUserRequiredClaimTypes = new List<Claim>
+        //    {
+        //        new Claim("CanEnableUser"),
+        //    };
+        //    if (authManager.CheckClaims(enableUserRequiredClaimTypes))
+        //    {
+        //        userManagement.EnableUser();
+        //    }
+        //    else
+        //    {
+        //        Console.WriteLine("EnableUser is BLOCKED");
+        //    }
+        //}
+    }
 }
