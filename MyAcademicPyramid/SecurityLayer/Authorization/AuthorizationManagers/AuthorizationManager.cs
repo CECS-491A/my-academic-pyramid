@@ -16,6 +16,13 @@ namespace SecurityLayer.Authorization.AuthorizationManagers
     {
         
         private User authorizedUser;
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        public AuthorizationManager()
+        {
+
+        }
 
         /// <summary>
         /// Constructor of AuthorizationManager.

@@ -3,6 +3,7 @@ using System;
 using SecurityLayer.Authorization.AuthorizationManagers;
 using ServiceLayer.UserManagement.UserAccountServices;
 using ManagerLayer.UserManagement;
+using System.Collections.Generic;
 
 namespace DemoProject
 {
@@ -25,7 +26,8 @@ namespace DemoProject
 
             // Print all users in database
             Console.WriteLine("\n***Print all users in database***");
-            SystemAdminManager.PrintAllUser();
+            List<User> list = SystemAdminManager.GetAllUser();
+            PrintAllUser(list);
 
             // Let SubAdmin1 initialize his user manager 
             UserManager SubAdminManager1 = new UserManager("SubAdmin1");
@@ -49,6 +51,8 @@ namespace DemoProject
             // Let System Admin grant SubAdmin1 the claim "UserManager" 
             Console.WriteLine("\n---Let System Admin give SubAdmin1 the claim UserManager to delete other account--- ");
             SystemAdminManager.AddClaimAction("SubAdmin1", new Claim("UserManager"));
+            List<User> list4 = SystemAdminManager.GetAllUser();
+            PrintAllUser(list4);
 
             // Try using  SubAdmin1 to delete SubAdmin2 account agiain. 
             // Should show error be
@@ -89,76 +93,47 @@ namespace DemoProject
             Console.WriteLine("\n---Let SubAdmin1 create an account call User--- ");
             SubAdminManager1.CreateUserAction("User");
             Console.WriteLine("\n***Print all users in database again***");
-            SystemAdminManager.PrintAllUser();
+            List<User> list2 = SystemAdminManager.GetAllUser();
+            PrintAllUser(list2);
 
             // Let System Admin Delete User
             Console.WriteLine("\n---Let System Admin delete User. Should be ok---");
             SystemAdminManager.DeleteAction("User");
             Console.WriteLine("\n***Print all users in database again***");
-            SystemAdminManager.PrintAllUser();
+            List<User> list3 = SystemAdminManager.GetAllUser();
+            PrintAllUser(list3);
 
             // Let System Admin delete SubAdmin 1. Should be ok 
             Console.WriteLine("\n---Let System Admin delete SubAdmin 1 . Should be ok ---");
             SystemAdminManager.DeleteAction("SubAdmin1");
             Console.WriteLine("\n***Print all users in database again***");
-
-// For AuthorizationManager FindHeight(User) testing purposes 
-            UnitOfWork uOW = new UnitOfWork();
-            UserManagementServices userManager = new UserManagementServices(uOW);
-
-            // Arrange 
-            // Highes lv
-            User Krystal = new User("Krystal");
-            userManager.CreateUser(Krystal);
-            // Level 2
-            User Arturo = new User("Arturo")
-            {
-                ParentUser_Id = Krystal.Id
-            };
-            userManager.CreateUser(Arturo);
-            // Level 3
-            User Kevin = new User("Kevin")
-            {
-                ParentUser_Id = Arturo.Id
-            };
-            userManager.CreateUser(Kevin);
-            User Victor = new User("Victor")
-            {
-                ParentUser_Id = Arturo.Id
-            };
-            userManager.CreateUser(Victor);
-            // Level 4
-            User Luis = new User("Luis")
-            {
-                ParentUser_Id = Kevin.Id
-            };
-            userManager.CreateUser(Luis);
-            User Trong = new User("Trong")
-            {
-                ParentUser_Id = Victor.Id
-            };
-            userManager.CreateUser(Trong);
-
-            Console.WriteLine("\n\n\n\n\nPrint levels");
-
-            AuthorizationManager KrystalAuthorization = new AuthorizationManager(Krystal);
-
-            int level0 = KrystalAuthorization.FindHeight(Krystal);
-            int level1 = KrystalAuthorization.FindHeight(Arturo);
-            int level2 = KrystalAuthorization.FindHeight(Kevin);
-            int level3 = KrystalAuthorization.FindHeight(Victor);
-            int level4 = KrystalAuthorization.FindHeight(Luis);
-            int level5 = KrystalAuthorization.FindHeight(Trong);
-
-            Console.WriteLine("Krystal's lv: " + level0 + " Arturo's lv: " + level1 + " Kevin's lv: " + level2 +
-                " Victor's lv: " + level3 + " Luis' lv: " + level4 + " Trong's lv: " +  level5);
-// End of Find Height test
-
-
-
-            SystemAdminManager.PrintAllUser();
+            List<User> list6 = SystemAdminManager.GetAllUser();
+            PrintAllUser(list6);
 
             Console.ReadLine();
+        }
+
+        /// <summary>
+        /// Method to print all user in database
+        /// </summary>
+        /// <param name="list"></param>
+        public  static void PrintAllUser(List<User> list)
+        {
+            Console.WriteLine(String.Format("{0, -15} {1, -10} {2, -15}", "Name", "Level", "Claim"));
+            foreach(User user in list)
+            {
+                AuthorizationManager authorization = new AuthorizationManager();
+                int level = authorization.FindHeight(user);
+
+                String claimList = "";
+                foreach (Claim claim in user.Claims)
+                {
+                    claimList+= claim.Value + ", ";
+                }
+             
+                Console.WriteLine(String.Format("{0, -15} {1, -10} {2, -15}", user.UserName, level, claimList));
+
+            }
         }
     }
 }
