@@ -12,14 +12,15 @@ namespace Service_Layer.UserManagement.UserTree
         public Node()
         {
             Children = new List<Node>();
-            User = new User("");
+            User = new User();
             Parent = null;
         }
 
         public Node(string userName)
         {
             Children = new List<Node> ();
-            User = new User(userName);
+            User = new User();
+            User.UserName = userName;
             Parent = null;
         }
 

@@ -10,6 +10,9 @@ namespace SecurityLayer.Authorization.AuthorizationManagers
     /// </summary>
     public interface IAuthorizationManager
     {
+       
         bool CheckClaims(List<Claim> requiredClaimTypes);
+        bool HasHigherPrivilege(User callingUser, User targetedUser);
+
     }
 }

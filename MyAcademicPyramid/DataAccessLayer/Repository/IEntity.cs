@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Repository
 {
-    // Common interface which allow repository access the Id attribute in every entity class
+    /// <summary>
+    /// Interface which allow repository class access the commn Id attribute in every entity class
+    /// </summary>
     public interface IEntity
     {
         int Id { get; }

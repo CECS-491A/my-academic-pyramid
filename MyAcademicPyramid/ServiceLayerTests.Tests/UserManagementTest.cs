@@ -3,6 +3,7 @@ using DataAccessLayer;
 using ServiceLayer.UserManagement.UserAccountServices;
 using DemoProject;
 using System;
+using System.Collections.Generic;
 
 namespace ServiceLayerTests.Tests
 {
@@ -17,9 +18,9 @@ namespace ServiceLayerTests.Tests
             Effort.Provider.EffortProviderConfiguration.RegisterProvider();
             EffortFactory.ResetDb();
             User user = new User("Victor");
-            UserManagement userManagement = new UserManagement();
-            userManagement.CreateUser(user);
-            User expectedUser = userManagement.FindUserbyUserName("Victor");
+            UserManagementServices userManagementServ = new UserManagementServices(new UnitOfWork());
+            userManagementServ.CreateUser(user);
+            User expectedUser = userManagementServ.FindUserbyUserName("Victor");
 
             //Act
             User actualUser = new User("Victor");
@@ -29,33 +30,32 @@ namespace ServiceLayerTests.Tests
         }
 
         [Fact]
-        public void UserManagement_CreateUserWithDupplicateUsername_ShouldThrowException()
+        public void UserManagement_CreateUserWithDupplicateUsername_ShouldReturnOnlyOneUserObjectWhenFinding()
         {
             //Arrange
             Effort.Provider.EffortProviderConfiguration.RegisterProvider();
             EffortFactory.ResetDb();
             User user1 = new User("Victor");
-            UserManagement userManagement = new UserManagement();
-            userManagement.CreateUser(user1);
+            UserManagementServices userManagementServ = new UserManagementServices(new UnitOfWork());
+            userManagementServ.CreateUser(user1);
             User user2 = new User("Victor");
-            bool expect = true;
+
+            bool expected = true;
             bool actual;
-
-
             //Act
             try
             {
-                userManagement.CreateUser(user2);
+                userManagementServ.CreateUser(user2);
                 actual = false;
             }
-
-            catch(ArgumentException )
+            catch(ArgumentException)
             {
-                 actual = true;
+                actual = true;
             }
+     
 
             //Assert
-            Assert.Equal(expect, actual);
+            Assert.Equal(expected, actual);
         }
 
         [Fact]
@@ -65,10 +65,10 @@ namespace ServiceLayerTests.Tests
             Effort.Provider.EffortProviderConfiguration.RegisterProvider();
             EffortFactory.ResetDb();
             User user = new User("Trong");
-            UserManagement userManagement = new UserManagement();
-            userManagement.CreateUser(user);
-            userManagement.DeleteUser(user);
-            User expectedUser = userManagement.FindUserbyUserName("Trong");
+            UserManagementServices userManagementServ = new UserManagementServices(new UnitOfWork());
+            userManagementServ.CreateUser(user);
+            userManagementServ.DeleteUser(user);
+            User expectedUser = userManagementServ.FindUserbyUserName("Trong");
 
             //Act
             User actualUser = null;
@@ -85,12 +85,12 @@ namespace ServiceLayerTests.Tests
             Effort.Provider.EffortProviderConfiguration.RegisterProvider();
             EffortFactory.ResetDb();
             User user = new User("Trong");
-            UserManagement userManagement = new UserManagement();
-            userManagement.CreateUser(user);
+            UserManagementServices userManagementServ = new UserManagementServices(new UnitOfWork());
+            userManagementServ.CreateUser(user);
             user.UserName = "Arturo";
-            userManagement.UpdateUser(user);
+            userManagementServ.UpdateUser(user);
 
-            String ExpectedUserName = userManagement.FindUserbyUserName("Arturo").UserName;
+            String ExpectedUserName = userManagementServ.FindUserbyUserName("Arturo").UserName;
 
             //Act
             String actualUserName = "Arturo";
@@ -107,10 +107,11 @@ namespace ServiceLayerTests.Tests
             Effort.Provider.EffortProviderConfiguration.RegisterProvider();
             EffortFactory.ResetDb();
             User user = new User("Luis");
-            UserManagement userManagement = new UserManagement();
-            userManagement.CreateUser(user);
-            userManagement.AddClaim(user, new Claim("Over 18"));
-            bool expected = userManagement.FindUserbyUserName("Luis").Claims.Exists(u => u.Value.Equals("Over 18"));
+            UserManagementServices userManagementServ = new UserManagementServices(new UnitOfWork());
+            userManagementServ.CreateUser(user);
+            Claim claim = new Claim("Over 18");
+            userManagementServ.AddClaim(user, claim);
+            bool expected = userManagementServ.FindUserbyUserName("Luis").Claims.Contains(claim);
 
             //Act
             bool actual = true;
@@ -130,14 +131,16 @@ namespace ServiceLayerTests.Tests
             Effort.Provider.EffortProviderConfiguration.RegisterProvider();
             EffortFactory.ResetDb();
             User user = new User("Luis");
-            UserManagement userManagement = new UserManagement();
-            userManagement.CreateUser(user);
-            userManagement.AddClaim(user, new Claim("Over 18"));
-            userManagement.RemoveClaim(user, new Claim("Over 18"));
-            bool expected = userManagement.FindUserbyUserName("Luis").Claims.Exists(u => u.Value.Equals("Over 18"));
+            UserManagementServices userManagementServ = new UserManagementServices(new UnitOfWork());
+            userManagementServ.CreateUser(user);
+            Claim claim = new Claim("Over 18");
+
+            userManagementServ.AddClaim(user,claim);
+            userManagementServ.RemoveClaim(user, claim);
+            bool expected = userManagementServ.FindUserbyUserName("Luis").Claims.Contains(claim);
 
             //Act
-            bool actual = true;
+            bool actual = false;
 
             //Assert
             Assert.Equal(expected, actual);
