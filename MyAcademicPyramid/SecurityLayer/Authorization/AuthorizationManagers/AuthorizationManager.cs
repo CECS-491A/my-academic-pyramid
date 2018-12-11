@@ -26,7 +26,10 @@ namespace SecurityLayer.Authorization.AuthorizationManagers
         public AuthorizationManager(User user)
         { 
             if (user == null)
+            {
                 throw new ArgumentNullException("user", "User cannot be null.");
+            }
+                
             authorizedUser = user;
         }
 
@@ -41,20 +44,70 @@ namespace SecurityLayer.Authorization.AuthorizationManagers
         public bool CheckClaims(List<Claim> requiredClaims)
         {
             if (requiredClaims == null)
+            {
                 throw new ArgumentNullException(
                     "requiredClaims", "List of required claims can't be null."
                 );
+            }
+                
             // Checks if each required claim exists in user's claim list
             return requiredClaims.All(rc =>
             {
                 // body of lambda function
                 // looks for a uc (user claim) that matches rc (required claim)
-                Claim foundClaim = authorizedUser.Claims.Find(
+                Claim foundClaim = authorizedUser.Claims.ToList().Find(
                     uc => uc.Value.Equals(rc.Value)
                 );
                 // If claim not found, then foundClaim will be null.
                 return (foundClaim != null);
             });
         }
+
+        // Method to check if the user who made the request is at a higher level than the targeted user 
+        public bool HasHigherPrivilege(User callingUser, User targetedUser)
+        {
+            if (callingUser == null)
+            {
+                throw new ArgumentNullException("callingUser", "Parameter can't be null.");
+            }
+            else if (targetedUser == null)
+            {
+                throw new ArgumentNullException("targetedUser", "Parameter can't be null.");
+            }
+            if (callingUser.Id == targetedUser.Id)
+            {
+                return true;
+            }
+
+            else if(FindHeight(callingUser) < FindHeight(targetedUser))
+            {
+                return true;
+            }
+
+            return false;
+
+        }
+
+        // Method to find level of user by trarvese back to the root using referenced parent Id. 
+        public int FindHeight(User user)
+        {
+            if(user == null)
+            {
+                throw new ArgumentNullException("user", "user can't be null.");
+            }
+
+            UnitOfWork uOw = new UnitOfWork();
+            int level = 0;
+            while (user.ParentUser_Id != null)
+            {
+                int parentId = (int)user.ParentUser_Id;
+                user = uOw.UserRepository.GetByID(parentId);
+                level += 1;
+            }
+
+            return level;
+        }
+
     }
 }
+

@@ -8,68 +8,105 @@ using System.Data.Entity;
 
 namespace DataAccessLayer.Repository
 {
+    /// <summary>
+    /// Generic repository class which provide CRUD method
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class Repository<T> : IRepository<T> where T : class,  IEntity
     {
-        // Use a list to simulate a database. We can replace it with a real SQL database later 
+      
         protected DbContext context;
         protected DbSet<T> Dbset;
 
         // Allow property ID in domain entities  which  can be accessed in this repository class
         public int Id { get; set; }
 
-        // Constructor which accept list of any data type and initialize the context. 
+        /// <summary>
+        /// Repository Constructor that accept Dbcontext object 
+        /// </summary>
+        /// <param name="context"></param>
         public Repository(DbContext context)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
             this.context = context;
             Dbset = context.Set<T>();
         }
 
-        // Insert an element of generic entity 
+        /// <summary>
+        /// Insert method with generic type
+        /// </summary>
+        /// <param name="entity"></param>
         public void Insert(T entity)
         {
             //Insert Exception
             if (entity == null)
             {
-                throw new ArgumentNullException("Required input. Input is empty.");
+                throw new ArgumentNullException("entity");
             }
+
             context.Entry(entity).State = System.Data.Entity.EntityState.Added;
         }
 
-        // Delete an element of generic entity 
+        /// <summary>
+        /// Delete method with generic type
+        /// </summary>
+        /// <param name="entity"></param>
         public void Delete(T entity)
         {
             //Delete Exception
             if (entity == null)
             {
-                throw new ArgumentNullException("Required input. Input is empty.");
+                throw new ArgumentNullException("entity");
             }
             // Search by ID, then remove the element
             context.Entry(entity).State = System.Data.Entity.EntityState.Deleted;
             
         }
 
-        // Update an element of generic entity 
+        /// <summary>
+        /// Update method with generic type
+        /// </summary>
+        /// <param name="entity"></param>
         public void Update(T entity)
         {
             //Update Exception
             if (entity == null)
             {
-                throw new ArgumentNullException("Required I.D. I.D. is not found.");
+                throw new ArgumentNullException("entity.");
             }
-            // Find the index of the element by search for the Id 
+    
             context.Entry(entity).State = System.Data.Entity.EntityState.Modified;
-
 
         }
 
+        /// <summary>
+        /// Get all a elements  in a Dbset method with generic type
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<T> GetAll()
+        {
+            return context.Set<T>().ToList();
+        }
 
-        // Return an element by id
+        /// <summary>
+        /// Return an element of generic entity - Look up by Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        // Return entity object by id
         public T GetByID(int id)
         {
             return context.Set<T>().Find(id);
         }
 
-        //Return all elements of generic entity
+        /// <summary>
+        /// Return all elements of generic entity by giving a search condition
+        /// </summary>
+        /// <param name="predicate"></param>
+        /// <returns></returns>
         public IQueryable<T> SearchFor(Expression<Func<T, bool>> predicate)
         {
             return Dbset.Where(predicate);
