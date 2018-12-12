@@ -33,18 +33,32 @@ namespace DataAccessLayer
         public string UserName { get; set; }
         public Nullable<int> ParentUser_Id { get; set; }
     
-
+        /// <summary>
+        /// Children users below user.
+        /// </summary>
         public virtual ICollection<User> ChildUsers { get; set; }
+        /// <summary>
+        /// Parent user above user.
+        /// </summary>
         public virtual User ParentUser { get; set; }
 
         public virtual ICollection<Claim> Claims { get; set; }
 
+        /// <summary>
+        /// Override Equals method.  The UserName of each User is unique.
+        /// </summary>
+        /// <param name="obj">Another User</param>
+        /// <returns>Whether Users are equal or not</returns>
         public override bool Equals(object obj)
         {
             var user = obj as User;
             return UserName.Equals(user.UserName);
         }
 
+        /// <summary>
+        /// Override HashCode.  The UserName of each User is unique.
+        /// </summary>
+        /// <returns>UserName hashcode</returns>
         public override int GetHashCode()
         {
             return UserName.GetHashCode();
