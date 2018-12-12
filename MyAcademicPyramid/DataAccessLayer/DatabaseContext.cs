@@ -1,23 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 
 namespace DataAccessLayer
 {
     public class DatabaseContext : DbContext
     {
+        // Set of users
         public DbSet<User> Users { get; set; }
+        // Set of Claims
         public DbSet<Claim> Claims { get; set; }
 
         public DatabaseContext () :base ()
         {
 
         }
-
-
+        
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             
