@@ -246,8 +246,8 @@ namespace ManagerLayerTests.Tests
         {
             // Arrange
             Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            stopwatch.Start();
 
             // Act
             pv.Validate("password");

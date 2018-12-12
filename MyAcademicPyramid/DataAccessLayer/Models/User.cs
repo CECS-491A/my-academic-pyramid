@@ -38,5 +38,16 @@ namespace DataAccessLayer
         public virtual User ParentUser { get; set; }
 
         public virtual ICollection<Claim> Claims { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            var user = obj as User;
+            return UserName.Equals(user.UserName);
+        }
+
+        public override int GetHashCode()
+        {
+            return UserName.GetHashCode();
+        }
     }
 }
