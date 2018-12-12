@@ -33,7 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>DemoProject.ProgramPassword</StartupObject>
+    <StartupObject>DemoProject.ProgramUMTree</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Effort, Version=2.0.3.0, Culture=neutral, PublicKeyToken=6a46696d54971e6d, processorArchitecture=MSIL">
