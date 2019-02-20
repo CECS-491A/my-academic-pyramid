@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using DataAccessLayer;
 using System.Linq;
 using ServiceLayer.UserManagement.UserClaimServices;
-using DataAccessLayer.Models;
+using System.Data.Entity;
 
 namespace ServiceLayer.UserManagement.UserAccountServices
 {
@@ -14,26 +14,30 @@ namespace ServiceLayer.UserManagement.UserAccountServices
     /// Support create user, delete user, update user, find user by id, find user by username,  get all user
     /// Support add claim, remove claim
     /// </summary>
-    public class UserManagementServices: IUserAccountServices, IUserClaimServices
+    public class UserManagementServices : IUserAccountServices, IUserClaimServices
     {
 
-        protected IUnitOfWork _unitOfWork;
+        protected DatabaseContext _DbContext;
 
-        
+
         /// <summary>
         /// Constructor which initialize the userRepository 
         /// </summary>
         /// <param name="unitOfWork"></param>
-        public UserManagementServices(IUnitOfWork unitOfWork)
+        public UserManagementServices(DatabaseContext DbContext)
         {
-            if (unitOfWork == null)
+            if (DbContext == null)
             {
-                throw new ArgumentNullException("unitOfWork");
+                throw new ArgumentNullException("DbContext");
             }
-            this._unitOfWork = unitOfWork;
+            else
+            {
+                _DbContext = DbContext;
+            }
+
         }
 
-        
+
         /// <summary>
         /// Create user account method
         /// </summary>
@@ -48,8 +52,7 @@ namespace ServiceLayer.UserManagement.UserAccountServices
             User searchResult = FindUserbyUserName(user.UserName);
             if (searchResult == null)
             {
-                _unitOfWork.UserRepository.Insert(user);
-                Console.WriteLine("Create user sucessfully");
+                _DbContext.Entry(user).State = System.Data.Entity.EntityState.Added;
             }
             else
             {
@@ -58,7 +61,7 @@ namespace ServiceLayer.UserManagement.UserAccountServices
 
         }
 
-        
+
         /// <summary>
         /// Delete user account  
         /// </summary>
@@ -72,7 +75,7 @@ namespace ServiceLayer.UserManagement.UserAccountServices
             if (FindUserbyUserName(user.UserName) != null)
             {
 
-                _unitOfWork.UserRepository.Delete(user);
+                _DbContext.Entry(user).State = System.Data.Entity.EntityState.Deleted;
             }
             else
             {
@@ -90,9 +93,9 @@ namespace ServiceLayer.UserManagement.UserAccountServices
             {
                 throw new ArgumentNullException("user");
             }
-            if (FindUserbyUserName(user.UserName) != null)
+            if (FindById(user.Id) != null)
             {
-                _unitOfWork.UserRepository.Update(user);
+                _DbContext.Entry(user).State = System.Data.Entity.EntityState.Modified;
             }
             else
             {
@@ -107,8 +110,8 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         /// <returns></returns>
         public User FindUserbyUserName(string userName)
         {
-            IQueryable<User> users = _unitOfWork.UserRepository.SearchFor(u => u.UserName.Equals(userName));
-            return users.FirstOrDefault();
+            User user = _DbContext.Set<User>().FirstOrDefault(u => u.UserName == userName);
+            return user;
 
         }
 
@@ -119,9 +122,9 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         /// <returns></returns>
         public User FindById(int id)
         {
-            IQueryable<User> users = _unitOfWork.UserRepository.SearchFor(u => u.Id == id);
-            return users.FirstOrDefault();
- 
+            User user = _DbContext.Set<User>().Find(id);
+            return user;
+
         }
 
         /// <summary>
@@ -130,7 +133,7 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         /// <returns></returns>
         public List<User> GetAllUser()
         {
-            IEnumerable<User> list = _unitOfWork.UserRepository.GetAll();
+            IEnumerable<User> list = _DbContext.Set<User>().ToList();
             return list.ToList();
         }
 
@@ -142,18 +145,18 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         public void RemoveClaim(User user, Claim claim)
         {
             User searchedUser = FindUserbyUserName(user.UserName);
-            Claim searchedClaim = searchedUser.Claims.FirstOrDefault(c=>c.Value==claim.Value);
+            bool searchedClaim = searchedUser.Claims.Contains(claim);
 
-            if (searchedUser != null && searchedClaim != null)
+            if (searchedUser != null && searchedClaim != false)
             {
-                searchedUser.Claims.Remove(searchedClaim);
-                _unitOfWork.UserRepository.Update(searchedUser);
+                searchedUser.Claims.Remove(claim);
+                _DbContext.Entry(searchedUser).State = System.Data.Entity.EntityState.Modified;
             }
             else if (searchedUser == null)
             {
                 throw new ArgumentException("Couldn't find user to remove claim");
             }
-            else if(searchedClaim == null)
+            else if (searchedClaim == false)
             {
                 throw new ArgumentException(("Couldn't find claim to remove "));
             }
@@ -170,10 +173,10 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         {
             User searchedUser = FindUserbyUserName(user.UserName);
 
-            if (searchedUser != null )
+            if (searchedUser != null)
             {
                 searchedUser.Claims.Add(claim);
-                _unitOfWork.UserRepository.Update(searchedUser);
+                _DbContext.Entry(searchedUser).State = System.Data.Entity.EntityState.Modified;
             }
             else if (searchedUser == null)
             {
@@ -182,21 +185,5 @@ namespace ServiceLayer.UserManagement.UserAccountServices
 
         }
 
-        public PasswordQA FindSecurityQAs(String userName)
-        {
-            User searchedUser = FindUserbyUserName(userName);
-            if (searchedUser != null)
-            {
-                return searchedUser.passwordQA;
-            }
-            else
-            {
-                return null;
-            }
-
-
-            
-        }
-
-     }
+    }
 }

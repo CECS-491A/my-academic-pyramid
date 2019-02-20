@@ -5,6 +5,7 @@ using SecurityLayer.Authorization.AuthorizationManagers;
 using ServiceLayer.UserManagement.UserAccountServices;
 using ServiceLayer.PasswordChecking.HashFunctions;
 using DataAccessLayer.Models;
+using System.Data.Entity;
 
 namespace ManagerLayer.UserManagement
 {
@@ -15,7 +16,7 @@ namespace ManagerLayer.UserManagement
          * a controller.
          * */
         private UserManagementServices userManagementServices;
-        protected IUnitOfWork _uOW;
+        protected DatabaseContext _DbContext;
 
 
         /// <summary>
@@ -23,11 +24,11 @@ namespace ManagerLayer.UserManagement
         /// User Account has to exist in database 
         /// </summary>
         /// <param name="requestingUserName"></param>
-        public UserManager(IUnitOfWork uOw)
+        public UserManager(DatabaseContext DbContext)
         {
-            _uOW = uOw;
+            _DbContext = DbContext;
             // Call UserManagementServices 
-            userManagementServices = new UserManagementServices(_uOW);
+            userManagementServices = new UserManagementServices(_DbContext);
     
         }
 

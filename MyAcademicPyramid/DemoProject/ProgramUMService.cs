@@ -1,4 +1,5 @@
 using System;
+using System.Data.Entity;
 using DataAccessLayer;
 using DataAccessLayer.Models;
 using ManagerLayer.UserManagement;
@@ -14,20 +15,24 @@ namespace DemoProject
         static void Main(string[] args)
         {
 
-            UnitOfWork uOw = new UnitOfWork();
-            var UserManager = new UserManager(uOw);
+            DatabaseContext _DbContext = new DatabaseContext();
+            var UserManager = new UserManager(_DbContext);
             //Create a new user account
-            Console.WriteLine("Create new user account - Trong");
+            //Console.WriteLine("Create new user account - Trong");
 
-            SHA256HashFunction HashFunction = new SHA256HashFunction();
-            String userPassword = "Trong@90";
-            String hashedPassword = HashFunction.GetHashValue(userPassword);
-            PasswordQA passwordQA = new PasswordQA("What's your name", "Me", "What is your dog name", "Fox", "what is your heihgt", "5.09");
-            User newUser1 = new User("Trong", passwordQA);
-            UserManager.CreateUserAction(newUser1, hashedPassword);
-            UserManager.AddClaimAction("Trong", new Claim("Admin"));
+            //SHA256HashFunction HashFunction = new SHA256HashFunction();
+            //String userPassword = "Trong@90";
+            //String hashedPassword = HashFunction.GetHashValue(userPassword);
+            //PasswordQA passwordQA = new PasswordQA("What's your name", "Me", "What is your dog name", "Fox", "what is your heihgt", "5.09");
+            //User newUser1 = new User("Trong", passwordQA);
+            //UserManager.CreateUserAction(newUser1, hashedPassword);
 
-            uOw.Commit();
+            UserManager.DeleteUserAction("Trong");
+            UserManager.DeleteUserAction("Trang");
+
+
+
+            _DbContext.SaveChanges();
 
 
 
@@ -36,10 +41,6 @@ namespace DemoProject
             //User newUser2 = new User("Cindy");
             //UserManager.CreateUserAction(new User("Cindy"), hashedPassword2);
             //UserManager.AssignUserToUser(newUser2, newUser1);
-
-
-
-
 
 
             Console.ReadKey();
