@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using DataAccessLayer;
 using System.Linq;
 using ServiceLayer.UserManagement.UserClaimServices;
+using DataAccessLayer.Models;
 
 namespace ServiceLayer.UserManagement.UserAccountServices
 {
@@ -16,20 +17,20 @@ namespace ServiceLayer.UserManagement.UserAccountServices
     public class UserManagementServices: IUserAccountServices, IUserClaimServices
     {
 
-        protected UnitOfWork unitOfWork;
+        protected IUnitOfWork _unitOfWork;
 
         
         /// <summary>
         /// Constructor which initialize the userRepository 
         /// </summary>
         /// <param name="unitOfWork"></param>
-        public UserManagementServices(UnitOfWork unitOfWork)
+        public UserManagementServices(IUnitOfWork unitOfWork)
         {
             if (unitOfWork == null)
             {
                 throw new ArgumentNullException("unitOfWork");
             }
-            this.unitOfWork = unitOfWork;
+            this._unitOfWork = unitOfWork;
         }
 
         
@@ -47,8 +48,8 @@ namespace ServiceLayer.UserManagement.UserAccountServices
             User searchResult = FindUserbyUserName(user.UserName);
             if (searchResult == null)
             {
-                unitOfWork.UserRepository.Insert(user);
-                unitOfWork.Save();
+                _unitOfWork.UserRepository.Insert(user);
+                Console.WriteLine("Create user sucessfully");
             }
             else
             {
@@ -71,8 +72,7 @@ namespace ServiceLayer.UserManagement.UserAccountServices
             if (FindUserbyUserName(user.UserName) != null)
             {
 
-                unitOfWork.UserRepository.Delete(user);
-                unitOfWork.Save();
+                _unitOfWork.UserRepository.Delete(user);
             }
             else
             {
@@ -90,10 +90,9 @@ namespace ServiceLayer.UserManagement.UserAccountServices
             {
                 throw new ArgumentNullException("user");
             }
-            if (FindById(user.Id) != null)
+            if (FindUserbyUserName(user.UserName) != null)
             {
-                unitOfWork.UserRepository.Update(user);
-                unitOfWork.Save();
+                _unitOfWork.UserRepository.Update(user);
             }
             else
             {
@@ -108,7 +107,7 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         /// <returns></returns>
         public User FindUserbyUserName(string userName)
         {
-            IQueryable<User> users = unitOfWork.UserRepository.SearchFor(u => u.UserName.Equals(userName));
+            IQueryable<User> users = _unitOfWork.UserRepository.SearchFor(u => u.UserName.Equals(userName));
             return users.FirstOrDefault();
 
         }
@@ -120,7 +119,7 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         /// <returns></returns>
         public User FindById(int id)
         {
-            IQueryable<User> users = unitOfWork.UserRepository.SearchFor(u => u.Id == id);
+            IQueryable<User> users = _unitOfWork.UserRepository.SearchFor(u => u.Id == id);
             return users.FirstOrDefault();
  
         }
@@ -131,7 +130,7 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         /// <returns></returns>
         public List<User> GetAllUser()
         {
-            IEnumerable<User> list = unitOfWork.UserRepository.GetAll();
+            IEnumerable<User> list = _unitOfWork.UserRepository.GetAll();
             return list.ToList();
         }
 
@@ -143,19 +142,18 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         public void RemoveClaim(User user, Claim claim)
         {
             User searchedUser = FindUserbyUserName(user.UserName);
-            bool searchedClaim = searchedUser.Claims.Contains(claim);
+            Claim searchedClaim = searchedUser.Claims.FirstOrDefault(c=>c.Value==claim.Value);
 
-            if (searchedUser != null && searchedClaim != false)
+            if (searchedUser != null && searchedClaim != null)
             {
-                searchedUser.Claims.Remove(claim);
-                unitOfWork.UserRepository.Update(searchedUser);
-                unitOfWork.Save();
+                searchedUser.Claims.Remove(searchedClaim);
+                _unitOfWork.UserRepository.Update(searchedUser);
             }
             else if (searchedUser == null)
             {
                 throw new ArgumentException("Couldn't find user to remove claim");
             }
-            else if(searchedClaim == false)
+            else if(searchedClaim == null)
             {
                 throw new ArgumentException(("Couldn't find claim to remove "));
             }
@@ -175,14 +173,29 @@ namespace ServiceLayer.UserManagement.UserAccountServices
             if (searchedUser != null )
             {
                 searchedUser.Claims.Add(claim);
-                unitOfWork.UserRepository.Update(searchedUser);
-                unitOfWork.Save();
+                _unitOfWork.UserRepository.Update(searchedUser);
             }
             else if (searchedUser == null)
             {
                 throw new ArgumentException("Couldn't  find user to add claim");
             }
 
+        }
+
+        public PasswordQA FindSecurityQAs(String userName)
+        {
+            User searchedUser = FindUserbyUserName(userName);
+            if (searchedUser != null)
+            {
+                return searchedUser.passwordQA;
+            }
+            else
+            {
+                return null;
+            }
+
+
+            
         }
 
      }

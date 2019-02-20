@@ -1,5 +1,8 @@
 using System;
 using DataAccessLayer;
+using DataAccessLayer.Models;
+using ManagerLayer.UserManagement;
+using ServiceLayer.PasswordChecking.HashFunctions;
 using  ServiceLayer.UserManagement.UserAccountServices;
 
 
@@ -11,35 +14,34 @@ namespace DemoProject
         static void Main(string[] args)
         {
 
-            Effort.Provider.EffortProviderConfiguration.RegisterProvider();
-            var userManagement = new UserManagementServices(new UnitOfWork());
-            // Create a new user account
+            UnitOfWork uOw = new UnitOfWork();
+            var UserManager = new UserManager(uOw);
+            //Create a new user account
             Console.WriteLine("Create new user account - Trong");
-           
-            userManagement.CreateUser(new User("Trong"));
 
-            // Search for the user account which is just created 
-            User user = userManagement.FindUserbyUserName("Trong");
+            SHA256HashFunction HashFunction = new SHA256HashFunction();
+            String userPassword = "Trong@90";
+            String hashedPassword = HashFunction.GetHashValue(userPassword);
+            PasswordQA passwordQA = new PasswordQA("What's your name", "Me", "What is your dog name", "Fox", "what is your heihgt", "5.09");
+            User newUser1 = new User("Trong", passwordQA);
+            UserManager.CreateUserAction(newUser1, hashedPassword);
+            UserManager.AddClaimAction("Trong", new Claim("Admin"));
 
-            // Add new claim to the account 
-            Console.WriteLine("Add new claim to Trong ");
-            //Claim claim = new Claim("ManageAccount");
-            //userManagement.AddClaim(user, claim);
+            uOw.Commit();
 
-            Console.WriteLine("Remove the claim from Trong ");
-            user = userManagement.FindUserbyUserName("Trong");
 
-            // Remove claim from the account
-            Console.WriteLine("Trying to remove a claim from account");
-            //userManagement.RemoveClaim(user, claim);
 
-            //Try to retrive the user again
-            user = userManagement.FindUserbyUserName("Trong");
+            //String userPassword2 = "Trong@93";
+            //String hashedPassword2 = HashFunction.GetHashValue(userPassword2);
+            //User newUser2 = new User("Cindy");
+            //UserManager.CreateUserAction(new User("Cindy"), hashedPassword2);
+            //UserManager.AssignUserToUser(newUser2, newUser1);
 
-            //Try to delete user account
 
-            Console.WriteLine("Trying to delete user");
-            userManagement.DeleteUser(user);
+
+
+
+
             Console.ReadKey();
         }
     }

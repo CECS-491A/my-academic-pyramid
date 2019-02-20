@@ -9,6 +9,7 @@
 
 namespace DataAccessLayer
 {
+    using DataAccessLayer.Models;
     using DataAccessLayer.Repository;
     using System;
     using System.Collections.Generic;
@@ -28,10 +29,24 @@ namespace DataAccessLayer
             UserName = userName;
             this.Claims = new HashSet<Claim>();
         }
-    
+
+        public User(string userName, PasswordQA passwordQA)
+
+        {
+            UserName = userName;
+            this.Claims = new HashSet<Claim>();
+            this.passwordQA = passwordQA;
+        }
         public int Id { get; set; }
         public string UserName { get; set; }
+        public string Firstname { get; set; }
+        public string LastName { get; set; }
+        public string Email { get; set; }
+        public String CreatedDate { get; set; }
+        public String HashPassword { get; set; }
         public Nullable<int> ParentUser_Id { get; set; }
+
+        public PasswordQA passwordQA { get; set; }
     
         /// <summary>
         /// Children users below user.

@@ -9,7 +9,7 @@ namespace DataAccessLayer
         // Set of Claims
         public DbSet<Claim> Claims { get; set; }
 
-        public DatabaseContext () :base ()
+        public DatabaseContext () :base ("name=MYAPConnectionString")
         {
 
         }
@@ -22,6 +22,7 @@ namespace DataAccessLayer
                 .HasOptional(p => p.ParentUser)
                 .WithMany(p => p.ChildUsers)
                 .HasForeignKey(p => p.ParentUser_Id);
+   
 
             modelBuilder.Entity<User>().
                 HasMany(c => c.Claims);

@@ -136,7 +136,7 @@ namespace ManagerLayer.Tests
             // Act
             try
             {
-                AdminUserManager.DeleteAction(targetedUserName);
+                AdminUserManager.DeleteUserAction(targetedUserName);
                 actual = false;
             }
 
@@ -163,7 +163,7 @@ namespace ManagerLayer.Tests
             // Act
             try
             {
-                AdminUserManager.DeleteAction(targetedUserName);
+                AdminUserManager.DeleteUserAction(targetedUserName);
                 actual = false;
             }
 
@@ -192,7 +192,7 @@ namespace ManagerLayer.Tests
             // Act
             try
             {
-                SubAdminUserManager.DeleteAction("Admin");
+                SubAdminUserManager.DeleteUserAction("Admin");
                 actual = false;
             }
 
@@ -221,7 +221,7 @@ namespace ManagerLayer.Tests
             // Act
             try
             {
-                SubAdminUserManager.DeleteAction("Admin");
+                SubAdminUserManager.DeleteUserAction("Admin");
                 actual = false;
             }
 
@@ -248,7 +248,7 @@ namespace ManagerLayer.Tests
             // Act
             try
             {
-                AdminUserManager.DeleteAction("SubAdmin");
+                AdminUserManager.DeleteUserAction("SubAdmin");
                 actual = true;
             }
 
