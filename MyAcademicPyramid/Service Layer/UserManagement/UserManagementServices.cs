@@ -133,8 +133,8 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         /// <returns></returns>
         public List<User> GetAllUser()
         {
-            IEnumerable<User> list = _DbContext.Set<User>().ToList();
-            return list.ToList();
+            List<User> list = _DbContext.Set<User>().ToList();
+            return list;
         }
 
         /// <summary>

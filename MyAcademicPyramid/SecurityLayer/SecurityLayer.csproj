@@ -72,6 +72,10 @@
       <Project>{6a61e75b-b35b-4f17-b7f4-da1af5806b23}</Project>
       <Name>DataAccessLayer</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Service Layer\ServiceLayer.csproj">
+      <Project>{2A875510-9D8C-482F-99FD-19001548F681}</Project>
+      <Name>ServiceLayer</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

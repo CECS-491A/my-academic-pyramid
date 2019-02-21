@@ -6,6 +6,7 @@ using ServiceLayer.UserManagement.UserAccountServices;
 using ServiceLayer.PasswordChecking.HashFunctions;
 using DataAccessLayer.Models;
 using System.Data.Entity;
+using System.Linq;
 
 namespace ManagerLayer.UserManagement
 {

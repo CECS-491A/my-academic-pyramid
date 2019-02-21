@@ -1,5 +1,6 @@
 ﻿
 using DataAccessLayer;
+using ServiceLayer.UserManagement.UserAccountServices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -116,12 +117,12 @@ namespace SecurityLayer.Authorization.AuthorizationManagers
                 throw new ArgumentNullException("user", "user can't be null.");
             }
 
-            UnitOfWork uOw = new UnitOfWork();
+            UserManagementServices uMS = new UserManagementServices(new DatabaseContext());
             int level = 0;
             while (user.ParentUser_Id != null)
             {
                 int parentId = (int)user.ParentUser_Id;
-                user = uOw.UserRepository.GetByID(parentId);
+                user = uMS.FindById(parentId);
                 level += 1;
             }
 
