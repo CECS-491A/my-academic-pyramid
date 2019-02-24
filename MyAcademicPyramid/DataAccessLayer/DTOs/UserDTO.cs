@@ -13,6 +13,6 @@ namespace DataAccessLayer.DTOs
         public string Firstname { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
-        public String Password { get; set; }
+        public string Password { get; set; }
     }
 }
