@@ -1,16 +1,26 @@
 <template>
   <div class="hello">
-    <h1>{{ msg }}</h1>
+    <h1>{{ info }}</h1>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
-  name: 'HelloWorld',
   data () {
     return {
-      msg: 'Hello World'
+      info: null
     }
+  },
+  mounted () {
+    axios
+      .get('https://api.myacademicpyramid.com/api/home', {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(response => (this.info = response))
   }
 }
 </script>
