@@ -20,7 +20,7 @@ export default {
           'Content-Type': 'application/json'
         }
       })
-      .then(response => (this.info = response))
+      .then(response => (this.info = response.data))
   }
 }
 </script>
