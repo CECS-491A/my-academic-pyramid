@@ -9,9 +9,11 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace ManagerLayer.Controllers
 {
+    [EnableCors(origins: "https://myacademicpyramid.com", headers: "*", methods: "*")]
     public class UserManagerController : ApiController
     {
         // GET api/<controller>
@@ -54,6 +56,7 @@ namespace ManagerLayer.Controllers
                 UserName = userDto.UserName,
                 Firstname = userDto.Firstname,
                 LastName = userDto.LastName,
+                HashPassword= _passwordHash,
 
             };
 
