@@ -8,7 +8,7 @@ using System.Web.Http.Cors;
 
 namespace ManagerLayer.Controllers
 {
-    [EnableCors(origins: "https://myacademicpyramid.com", headers: "*", methods: "*")]
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class HomeController : ApiController
     {
         [HttpGet]
