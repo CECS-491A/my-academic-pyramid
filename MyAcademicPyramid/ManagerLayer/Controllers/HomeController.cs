@@ -14,7 +14,7 @@ namespace ManagerLayer.Controllers
         [HttpGet]
         public String Hello()
         {
-            return "Hello World From Backend API";
+            return "Hello World From Backend API " + DateTime.Now ;
         }
     }
 }
