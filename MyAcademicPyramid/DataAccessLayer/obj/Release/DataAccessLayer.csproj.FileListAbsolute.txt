@@ -1,0 +1,14 @@
+C:\Users\khk40_\Desktop\New folder\my-academic-pyramid\MyAcademicPyramid\DataAccessLayer\bin\Release\DataAccessLayer.exe.config
+C:\Users\khk40_\Desktop\New folder\my-academic-pyramid\MyAcademicPyramid\DataAccessLayer\bin\Release\DataAccessLayer.exe
+C:\Users\khk40_\Desktop\New folder\my-academic-pyramid\MyAcademicPyramid\DataAccessLayer\bin\Release\DataAccessLayer.pdb
+C:\Users\khk40_\Desktop\New folder\my-academic-pyramid\MyAcademicPyramid\DataAccessLayer\bin\Release\EntityFramework.dll
+C:\Users\khk40_\Desktop\New folder\my-academic-pyramid\MyAcademicPyramid\DataAccessLayer\bin\Release\EntityFramework.SqlServer.dll
+C:\Users\khk40_\Desktop\New folder\my-academic-pyramid\MyAcademicPyramid\DataAccessLayer\bin\Release\NMemory.dll
+C:\Users\khk40_\Desktop\New folder\my-academic-pyramid\MyAcademicPyramid\DataAccessLayer\bin\Release\EntityFramework.xml
+C:\Users\khk40_\Desktop\New folder\my-academic-pyramid\MyAcademicPyramid\DataAccessLayer\bin\Release\EntityFramework.SqlServer.xml
+C:\Users\khk40_\Desktop\New folder\my-academic-pyramid\MyAcademicPyramid\DataAccessLayer\bin\Release\NMemory.xml
+C:\Users\khk40_\Desktop\New folder\my-academic-pyramid\MyAcademicPyramid\DataAccessLayer\obj\Release\DataAccessLayer.csprojAssemblyReference.cache
+C:\Users\khk40_\Desktop\New folder\my-academic-pyramid\MyAcademicPyramid\DataAccessLayer\obj\Release\DataAccessLayer.csproj.CoreCompileInputs.cache
+C:\Users\khk40_\Desktop\New folder\my-academic-pyramid\MyAcademicPyramid\DataAccessLayer\obj\Release\DataAccessLayer.csproj.CopyComplete
+C:\Users\khk40_\Desktop\New folder\my-academic-pyramid\MyAcademicPyramid\DataAccessLayer\obj\Release\DataAccessLayer.exe
+C:\Users\khk40_\Desktop\New folder\my-academic-pyramid\MyAcademicPyramid\DataAccessLayer\obj\Release\DataAccessLayer.pdb
