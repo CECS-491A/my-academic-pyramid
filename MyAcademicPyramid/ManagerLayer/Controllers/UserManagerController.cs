@@ -16,12 +16,17 @@ namespace ManagerLayer.Controllers
     [EnableCors(origins: "https://myacademicpyramid.com", headers: "*", methods: "*")]
     public class UserManagerController : ApiController
     {
+        private readonly DatabaseContext _dbContext; 
+        public UserManagerController(DatabaseContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
+
         // GET api/<controller>
         [HttpGet]
         public IQueryable<UserDTO> Get()
         {
-            DatabaseContext DbContext = new DatabaseContext();
-            UserManager uM = new UserManager(DbContext);
+            UserManager uM = new UserManager(_dbContext);
             List<User> userList = uM.GetAllUser();
 
             List<UserDTO> list = new List<UserDTO>();
@@ -50,19 +55,18 @@ namespace ManagerLayer.Controllers
         public IHttpActionResult Post([FromBody] UserDTO userDto)
         {
             SHA256HashFunction HashFunction = new SHA256HashFunction();
-            String _passwordHash = HashFunction.GetHashValue(userDto.Password);
+            String passwordHash = HashFunction.GetHashValue(userDto.RawPassword);
             User user = new User
             {
                 UserName = userDto.UserName,
                 Firstname = userDto.Firstname,
                 LastName = userDto.LastName,
-                HashPassword= _passwordHash,
 
             };
 
             DatabaseContext DbContext = new DatabaseContext();
             UserManager uM = new UserManager(DbContext);
-             uM.CreateUserAction(user, _passwordHash);
+             uM.CreateUserAccount(user, passwordHash);
             DbContext.SaveChanges();
 
             return Ok(user);

@@ -105,9 +105,8 @@
     <Compile Include="Logic\PasswordChecking\PasswordValidations\PwnedPasswordsValidation.cs" />
     <Compile Include="Logic\PasswordStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UserManagement\IUserManagement.cs" />
-    <Compile Include="UserManagement\MockUserManagement.cs" />
-    <Compile Include="UserManagement\UserManager.cs" />
+    <Compile Include="Gateways\UserManagement\IUserManagement.cs" />
+    <Compile Include="Gateways\UserManagement\UserManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

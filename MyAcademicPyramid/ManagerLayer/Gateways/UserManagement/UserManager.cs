@@ -16,7 +16,7 @@ namespace ManagerLayer.UserManagement
          * Class that demonstrates how authorization class might be used in
          * a controller.
          * */
-        private UserManagementServices userManagementServices;
+        private UserManagementServices _userManagementServices;
         protected DatabaseContext _DbContext;
 
 
@@ -27,9 +27,11 @@ namespace ManagerLayer.UserManagement
         /// <param name="requestingUserName"></param>
         public UserManager(DatabaseContext DbContext)
         {
+
             _DbContext = DbContext;
+
             // Call UserManagementServices 
-            userManagementServices = new UserManagementServices(_DbContext);
+            _userManagementServices = new UserManagementServices(_DbContext);
     
         }
 
@@ -38,13 +40,13 @@ namespace ManagerLayer.UserManagement
         /// Method to delete self user account or other account
         /// </summary>
         /// <param name="targetedUserName"></param>
-        public void DeleteUserAction(String targetedUserName)
+        public void DeleteUserAccount(String targetedUserName)
         {
             if (targetedUserName == null)
             {
                 throw new ArgumentNullException("targetedUserName");
             }
-            User targetUser = userManagementServices.FindUserbyUserName(targetedUserName);
+            User targetUser = _userManagementServices.FindUserbyUserName(targetedUserName);
             if (targetUser == null)
             {
                 throw new ArgumentNullException(
@@ -52,7 +54,7 @@ namespace ManagerLayer.UserManagement
             }
             else
             {
-                userManagementServices.DeleteUser(targetUser);
+                _userManagementServices.DeleteUser(targetUser);
             }
 
         }
@@ -61,19 +63,19 @@ namespace ManagerLayer.UserManagement
         /// Method to create user account
         /// </summary>
         /// <param name="targetedUserName"></param>
-        public void CreateUserAction(User user, String hashedPassword)
+        public void CreateUserAccount(User user, String hashedPassword)
         {
             if (user == null)
             {
                 throw new ArgumentNullException("targetedUserName");
             }
             // Call AuthorizationManager and pass the requesting user object in
-            if(userManagementServices.FindUserbyUserName(user.UserName) == null)
+            if(_userManagementServices.FindUserbyUserName(user.UserName) == null)
             {
 
                 // Tell userManagement services to create user in database 
-                user.HashPassword = hashedPassword;
-                userManagementServices.CreateUser(user);
+                user.PasswordHash = hashedPassword;
+                _userManagementServices.CreateUser(user);
                 
             }
             else
@@ -85,12 +87,51 @@ namespace ManagerLayer.UserManagement
             }
         }
 
-        public void AssignUserToUser(User childUser, User parentUser )
+        public void UpdateUserAccount(User user)
         {
-            childUser = userManagementServices.FindUserbyUserName(childUser.UserName);
-            parentUser = userManagementServices.FindUserbyUserName(parentUser.UserName);
-            childUser.ParentUser = parentUser;
-            userManagementServices.UpdateUser(childUser);
+            if (user == null)
+            {
+                throw new ArgumentNullException("targetedUserName");
+            }
+            // Call AuthorizationManager and pass the requesting user object in
+            if (_userManagementServices.FindUserbyUserName(user.UserName) == null)
+            {
+
+                // Tell userManagement services to create user in database 
+
+                _userManagementServices.UpdateUser(user);
+
+            }
+            else
+            {
+                throw new ArgumentException(
+                    "ERROR--User account does not exist"
+                    );
+
+            }
+        }
+
+        public void AssignUserToUser(String linkFromUser, String linkToUser )
+        {
+
+            User linkFromUser_Searched = _userManagementServices.FindUserbyUserName(linkFromUser);
+            User linkToUser_Searched = _userManagementServices.FindUserbyUserName(linkToUser);
+
+            if (linkFromUser_Searched == null)
+            {
+                throw new ArgumentNullException("ERROR - child user NOT FOUND");
+            }
+            else if (linkToUser_Searched == null)
+            {
+                throw new ArgumentNullException("ERROR - parent User NOT FOUND");
+            }
+
+            else
+            {
+                linkFromUser_Searched.ParentUser = linkToUser_Searched;
+                _userManagementServices.UpdateUser(linkFromUser_Searched);
+            }
+
 
         }
 
@@ -102,7 +143,7 @@ namespace ManagerLayer.UserManagement
         public List<User> GetAllUser()
         {
             // Call GetAllUser method in userManagementServices 
-            List<User> userList = userManagementServices.GetAllUser();
+            List<User> userList = _userManagementServices.GetAllUser();
             return userList;
         }
 
@@ -136,7 +177,7 @@ namespace ManagerLayer.UserManagement
  
             
                 // Retrive targeted user exists from database
-               User targetedUser = userManagementServices.FindUserbyUserName(targetedUserName);
+               User targetedUser = _userManagementServices.FindUserbyUserName(targetedUserName);
             if (targetedUser == null)
             {
                 throw new ArgumentException("There was no targeted user in database.");
@@ -145,7 +186,7 @@ namespace ManagerLayer.UserManagement
 
             else
             {
-                userManagementServices.AddClaim(targetedUser, claim);
+                _userManagementServices.AddClaim(targetedUser, claim);
             }
         }
 
@@ -175,7 +216,7 @@ namespace ManagerLayer.UserManagement
             // Check if the requesting user has the require claims
 
                 // Retrive targeted user exists from database
-                User targetedUser = userManagementServices.FindUserbyUserName(targetedUserName);
+                User targetedUser = _userManagementServices.FindUserbyUserName(targetedUserName);
             if (targetedUser == null)
              {
                throw new ArgumentException("There was no targeted user in database.");
@@ -183,16 +224,16 @@ namespace ManagerLayer.UserManagement
                 // Check if the requesting user is  at least same level as  the targeted user
             else
             {
-                userManagementServices.RemoveClaim(targetedUser, claim);
+                _userManagementServices.RemoveClaim(targetedUser, claim);
             }
                    
         }
 
         public void ChangePassword(String userName, String newPassword)
         {
-            User user = userManagementServices.FindUserbyUserName(userName);
-            user.HashPassword = newPassword;
-            userManagementServices.UpdateUser(user);
+            User user = _userManagementServices.FindUserbyUserName(userName);
+            user.PasswordHash = newPassword;
+            _userManagementServices.UpdateUser(user);
         }
 
         //public void ChangeSecurityPasswordQuestion(String userName, int questionNumber, String questionContext)

@@ -83,6 +83,7 @@
     <Compile Include="PasswordChecking\HashFunctions\SHA1HashFunction.cs" />
     <Compile Include="HttpClients\HttpClientString.cs" />
     <Compile Include="PasswordChecking\HashFunctions\SHA256HashFunction.cs" />
+    <Compile Include="PasswordChecking\SaltFunction\CustomSaltFunction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserManagement\UserManagementServices.cs" />
     <Compile Include="UserManagement\UserTree\Node.cs" />

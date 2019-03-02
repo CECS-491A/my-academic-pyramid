@@ -9,7 +9,7 @@ namespace DataAccessLayer
         // Set of Claims
         public DbSet<Claim> Claims { get; set; }
 
-        public DatabaseContext () :base ("name=MYAPConnectionString")
+        public DatabaseContext () :base ("name=LocalTest")
         {
 
         }

@@ -27,8 +27,8 @@ namespace DemoProject
             //User newUser1 = new User("Trong", passwordQA);
             //UserManager.CreateUserAction(newUser1, hashedPassword);
 
-            UserManager.DeleteUserAction("Trong");
-            UserManager.DeleteUserAction("Trang");
+            UserManager.DeleteUserAccount("Trong");
+            UserManager.DeleteUserAccount("Trang");
 
 
 

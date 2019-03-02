@@ -48,15 +48,9 @@ namespace ServiceLayer.UserManagement.UserAccountServices
             {
                 throw new ArgumentNullException("user");
             }
-            // Check if the username exist. Then add the user
-            User searchResult = FindUserbyUserName(user.UserName);
-            if (searchResult == null)
-            {
-                _DbContext.Entry(user).State = System.Data.Entity.EntityState.Added;
-            }
             else
-            {
-                throw new ArgumentException(("Error--Username already exists"));
+            { 
+                 _DbContext.Entry(user).State = System.Data.Entity.EntityState.Added;
             }
 
         }
@@ -93,14 +87,11 @@ namespace ServiceLayer.UserManagement.UserAccountServices
             {
                 throw new ArgumentNullException("user");
             }
-            if (FindById(user.Id) != null)
+            else
             {
                 _DbContext.Entry(user).State = System.Data.Entity.EntityState.Modified;
             }
-            else
-            {
-                throw new ArgumentException(("Error--Cannot find user to update"));
-            }
+
         }
 
         /// <summary>
@@ -144,22 +135,17 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         /// <param name="claim"></param>
         public void RemoveClaim(User user, Claim claim)
         {
-            User searchedUser = FindUserbyUserName(user.UserName);
-            bool searchedClaim = searchedUser.Claims.Contains(claim);
 
-            if (searchedUser != null && searchedClaim != false)
+            if (user != null && claim != null)
             {
-                searchedUser.Claims.Remove(claim);
-                _DbContext.Entry(searchedUser).State = System.Data.Entity.EntityState.Modified;
+                user.Claims.Remove(claim);
+                _DbContext.Entry(user).State = System.Data.Entity.EntityState.Modified;
             }
-            else if (searchedUser == null)
+            else if (user == null)
             {
-                throw new ArgumentException("Couldn't find user to remove claim");
+                throw new ArgumentException("User or claim object is empty");
             }
-            else if (searchedClaim == false)
-            {
-                throw new ArgumentException(("Couldn't find claim to remove "));
-            }
+
 
 
         }
@@ -171,14 +157,13 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         /// <param name="claim"></param>
         public void AddClaim(User user, Claim claim)
         {
-            User searchedUser = FindUserbyUserName(user.UserName);
 
-            if (searchedUser != null)
+            if (user != null && claim != null)
             {
-                searchedUser.Claims.Add(claim);
-                _DbContext.Entry(searchedUser).State = System.Data.Entity.EntityState.Modified;
+                user.Claims.Add(claim);
+                _DbContext.Entry(user).State = System.Data.Entity.EntityState.Modified;
             }
-            else if (searchedUser == null)
+            else if (user == null)
             {
                 throw new ArgumentException("Couldn't  find user to add claim");
             }
