@@ -28,7 +28,7 @@ namespace ManagerLayer.UserManagement
         public UserManager(DatabaseContext DbContext)
         {
 
-            _DbContext = DbContext;
+            _DbContext = DbContext ;
 
             // Call UserManagementServices 
             _userManagementServices = new UserManagementServices(_DbContext);
@@ -63,7 +63,7 @@ namespace ManagerLayer.UserManagement
         /// Method to create user account
         /// </summary>
         /// <param name="targetedUserName"></param>
-        public void CreateUserAccount(User user, String hashedPassword)
+        public void CreateUserAccount(User user)
         {
             if (user == null)
             {
@@ -74,7 +74,6 @@ namespace ManagerLayer.UserManagement
             {
 
                 // Tell userManagement services to create user in database 
-                user.PasswordHash = hashedPassword;
                 _userManagementServices.CreateUser(user);
                 
             }

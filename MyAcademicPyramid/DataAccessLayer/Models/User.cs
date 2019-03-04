@@ -24,7 +24,7 @@ namespace DataAccessLayer
         }
 
 
-        public User(string userName, string firstname, string lastName, string role, DateTime birthDate, string location, string email, DateTime createdDate, string passwordHashed, int? parentUser_Id, string passwordQuestion1, string passwordQuestion2, string passwordQuestion3, string passwordAnswer1, string passwordAnswer2, string passwordAnswer3, ICollection<User> childUsers, User parentUser, ICollection<Claim> claims)
+        public User(string userName, DateTime birthDate, DateTime createdDate, string firstname, string lastName, string role, string location, string email, string passwordHashed, int? parentUser_Id, string passwordQuestion1, string passwordQuestion2, string passwordQuestion3, string passwordAnswer1, string passwordAnswer2, string passwordAnswer3)
         {
             UserName = userName;
             Firstname = firstname;
@@ -35,16 +35,16 @@ namespace DataAccessLayer
             Email = email;
             CreatedDate = createdDate;
             PasswordHash = passwordHashed;
-            ParentUser_Id = parentUser_Id;
             PasswordQuestion1 = passwordQuestion1;
             PasswordQuestion2 = passwordQuestion2;
             PasswordQuestion3 = passwordQuestion3;
             PasswordAnswer1 = passwordAnswer1;
             PasswordAnswer2 = passwordAnswer2;
             PasswordAnswer3 = passwordAnswer3;
-            ChildUsers = childUsers;
-            ParentUser = parentUser;
-            Claims = claims;
+
+            this.ChildUsers = new HashSet<User>();
+            this.Claims = new HashSet<Claim>();
+
         }
 
         public int Id { get; set; }
@@ -55,8 +55,8 @@ namespace DataAccessLayer
         public DateTime BirthDate { get; set; }
         public String Location { get; set; }
         public string Email { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public DateTime ModifiedDate { get; set; }
+       public DateTime CreatedDate { get; set; }
+       //public DateTime ModifiedDate { get; set; }
         public String PasswordHash { get; set; }
         public Nullable<int> ParentUser_Id { get; set; }
 
@@ -86,6 +86,10 @@ namespace DataAccessLayer
         public override bool Equals(object obj)
         {
             var user = obj as User;
+            if(user == null)
+            {
+                return false;
+            }
             return UserName.Equals(user.UserName);
         }
 

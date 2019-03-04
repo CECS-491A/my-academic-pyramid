@@ -26,6 +26,7 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         /// <param name="unitOfWork"></param>
         public UserManagementServices(DatabaseContext DbContext)
         {
+            _DbContext = DbContext;
             if (DbContext == null)
             {
                 throw new ArgumentNullException("DbContext");

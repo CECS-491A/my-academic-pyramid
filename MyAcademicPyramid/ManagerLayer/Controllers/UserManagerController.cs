@@ -4,6 +4,7 @@ using ManagerLayer.UserManagement;
 using ServiceLayer.PasswordChecking.HashFunctions;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -17,9 +18,9 @@ namespace ManagerLayer.Controllers
     public class UserManagerController : ApiController
     {
         private readonly DatabaseContext _dbContext; 
-        public UserManagerController(DatabaseContext dbContext)
+        public UserManagerController()
         {
-            _dbContext = dbContext;
+            _dbContext = new DatabaseContext();
         }
 
         // GET api/<controller>
@@ -61,13 +62,23 @@ namespace ManagerLayer.Controllers
                 UserName = userDto.UserName,
                 Firstname = userDto.Firstname,
                 LastName = userDto.LastName,
-
+                PasswordHash = passwordHash,
+                Role = userDto.Role,
+                CreatedDate = DateTime.Now,
+                BirthDate = userDto.BirthDate,
+                Location = userDto.Location,
+                Email = userDto.Email,
+                PasswordQuestion1 = userDto.PasswordQuestion1,
+                PasswordQuestion2 = userDto.PasswordQuestion2,
+                PasswordQuestion3 = userDto.PasswordQuestion3,
+                PasswordAnswer1 = userDto.PasswordAnswer1,
+                PasswordAnswer2 = userDto.PasswordAnswer2,
+                PasswordAnswer3 = userDto.PasswordAnswer3,
             };
 
-            DatabaseContext DbContext = new DatabaseContext();
-            UserManager uM = new UserManager(DbContext);
-             uM.CreateUserAccount(user, passwordHash);
-            DbContext.SaveChanges();
+            UserManager uM = new UserManager(_dbContext);
+             uM.CreateUserAccount(user);
+            _dbContext.SaveChanges();
 
             return Ok(user);
 
