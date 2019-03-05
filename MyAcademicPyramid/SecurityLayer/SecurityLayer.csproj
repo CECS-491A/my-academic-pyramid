@@ -56,8 +56,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Authorization\AuthorizationChain.cs" />
     <Compile Include="Authorization\AuthorizationManagers\AuthorizationManager.cs" />
     <Compile Include="Authorization\AuthorizationManagers\IAuthorizationManager.cs" />
+    <Compile Include="Authorization\ClaimChecker.cs" />
+    <Compile Include="Authorization\IChecker.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

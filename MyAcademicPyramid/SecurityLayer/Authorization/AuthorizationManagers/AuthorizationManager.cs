@@ -17,6 +17,7 @@ namespace SecurityLayer.Authorization.AuthorizationManagers
     {
         
         private User authorizedUser;
+        private AuthorizationChain authorizationChain;
         /// <summary>
         /// Default constructor
         /// </summary>
@@ -27,49 +28,21 @@ namespace SecurityLayer.Authorization.AuthorizationManagers
 
         /// <summary>
         /// Constructor of AuthorizationManager.
-        /// Takes in user as a parameter and save the value.
-        /// It would throw an exception, if the user is null
+        /// Takes in user and an already built chain as parameters.
+        /// It would throw an exception, if the user or passedChain is null.
         /// </summary>
         /// <param name="user"></param>
-        public AuthorizationManager(User user)
+        public AuthorizationManager(User user, AuthorizationChain passedChain)
         { 
-            if (user == null)
+            if (user == null || passedChain == null)
             {
                 throw new ArgumentNullException("user", "User cannot be null.");
             }
                 
             authorizedUser = user;
+            authorizationChain = passedChain;
         }
 
-
-        /// <summary>
-        /// checks that user has the required claim in the requiredClaims. It would throw the exception, if the requireClaims is null.
-        /// If the required claim is in the requiredClaims, it would return true and user would be able to use the feature that user requested to use.
-        /// If the required claim is not in the requiredClaims, it would return false and user wouldn't be able to use the feature.
-        /// </summary>
-        /// <param name="requiredClaims"></param> required claim(s) to get a permission to use the feature
-        /// <returns> true/false </returns>
-        public bool CheckClaims(List<Claim> requiredClaims)
-        {
-            if (requiredClaims == null)
-            {
-                throw new ArgumentNullException(
-                    "requiredClaims", "List of required claims can't be null."
-                );
-            }
-                
-            // Checks if each required claim exists in user's claim list
-            return requiredClaims.All(rc =>
-            {
-                // body of lambda function
-                // looks for a uc (user claim) that matches rc (required claim)
-                Claim foundClaim = authorizedUser.Claims.ToList().Find(
-                    uc => uc.Value.Equals(rc.Value)
-                );
-                // If claim not found, then foundClaim will be null.
-                return (foundClaim != null);
-            });
-        }
 
         /// <summary>
         /// Checks if the user who made the request is at a higher level than the targeted user 
