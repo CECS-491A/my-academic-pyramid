@@ -79,8 +79,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HttpClients\IHttpClient.cs" />
+    <Compile Include="Messenger\MessengerServices.cs" />
     <Compile Include="PasswordChecking\HashFunctions\IHashFunction.cs" />
-    <Compile Include="PasswordChecking\HashFunctions\SHA1HashFunction.cs" />
     <Compile Include="HttpClients\HttpClientString.cs" />
     <Compile Include="PasswordChecking\HashFunctions\SHA256HashFunction.cs" />
     <Compile Include="PasswordChecking\SaltFunction\CustomSaltFunction.cs" />

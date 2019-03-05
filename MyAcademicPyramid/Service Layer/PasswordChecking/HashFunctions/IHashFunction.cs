@@ -1,5 +1,7 @@
 ﻿
 
+using DataAccessLayer.Models;
+
 namespace ServiceLayer.PasswordChecking.HashFunctions
 {
     /// <summary>
@@ -12,6 +14,6 @@ namespace ServiceLayer.PasswordChecking.HashFunctions
         /// </summary>
         /// <param name="input">Value to be hashed.</param>
         /// <returns>Hash value result as string.</returns>
-        string GetHashValue(string input);
+        HashSalt GetHashValue(string input);
     }
 }

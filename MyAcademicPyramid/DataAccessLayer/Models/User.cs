@@ -58,6 +58,7 @@ namespace DataAccessLayer
        public DateTime CreatedDate { get; set; }
        //public DateTime ModifiedDate { get; set; }
         public String PasswordHash { get; set; }
+        public String PasswordSalt { get; set; }
         public Nullable<int> ParentUser_Id { get; set; }
 
         public String PasswordQuestion1 { get; set; }

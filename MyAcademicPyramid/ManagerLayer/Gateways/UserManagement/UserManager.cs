@@ -7,6 +7,9 @@ using ServiceLayer.PasswordChecking.HashFunctions;
 using DataAccessLayer.Models;
 using System.Data.Entity;
 using System.Linq;
+using ServiceLayer.PasswordChecking.SaltFunction;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace ManagerLayer.UserManagement
 {
@@ -134,6 +137,12 @@ namespace ManagerLayer.UserManagement
 
         }
 
+        public User findUserByUsername(String userName)
+        {
+            User user = _userManagementServices.FindUserbyUserName(userName);
+            return user;
+        }
+
 
         /// <summary>
         /// Method to get all users in database 
@@ -234,6 +243,27 @@ namespace ManagerLayer.UserManagement
             user.PasswordHash = newPassword;
             _userManagementServices.UpdateUser(user);
         }
+
+        public static bool VerifyPassword(string enteredPassword, string storedHash, string storedSalt)
+        {
+ 
+            byte[] bytes = System.Text.Encoding.UTF8.GetBytes(enteredPassword + storedSalt);
+
+            SHA256 sha = new SHA256Cng(); // Hash function
+            byte[] hash = sha.ComputeHash(bytes); // Generate hash in bytes
+
+            // Store the hash value as string with uppercase letters.
+            StringBuilder hashPassword = new StringBuilder(); // To store the hash value
+            foreach (byte b in hash)
+            {
+                hashPassword.Append(b.ToString("X2"));
+            }
+            String hashSaltPassword = hashPassword.ToString();
+
+            return (hashSaltPassword.Equals(storedHash));
+
+        }
+
 
         //public void ChangeSecurityPasswordQuestion(String userName, int questionNumber, String questionContext)
         //{
