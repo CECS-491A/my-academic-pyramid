@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <img src="./assets/bts.gif" height="180" width="360">
+    <img src="./assets/SITLogo.jpg" height="180" width="360">
     <router-view/>
   </div>
 </template>
