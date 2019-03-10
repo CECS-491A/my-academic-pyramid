@@ -18,8 +18,10 @@ namespace DemoProject
                 { "c", "3" }
             };
 
-            String jsonDict = JWToken.GenerateToken(test, "");
-
+            String token = JWTokenManager.GenerateToken(test, "");
+            Console.Out.WriteLine(token);
+            Console.Out.WriteLine("Attempting to validate token");
+            JWTokenManager.validateToken(token);
             Console.In.Read();
             Console.Out.WriteLine("Ending program.");
 
