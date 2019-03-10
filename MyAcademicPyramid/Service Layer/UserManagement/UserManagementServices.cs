@@ -5,6 +5,8 @@ using DataAccessLayer;
 using System.Linq;
 using ServiceLayer.UserManagement.UserClaimServices;
 using System.Data.Entity;
+using DataAccessLayer.Repository;
+using DataAccessLayer.Models;
 
 namespace ServiceLayer.UserManagement.UserAccountServices
 {
@@ -16,125 +18,61 @@ namespace ServiceLayer.UserManagement.UserAccountServices
     /// </summary>
     public class UserManagementServices : IUserAccountServices, IUserClaimServices
     {
+        private UserManagementRepository _UserManagementRepo;
 
-        protected DatabaseContext _DbContext;
-
-
-        /// <summary>
-        /// Constructor which initialize the userRepository 
-        /// </summary>
-        /// <param name="unitOfWork"></param>
-        public UserManagementServices(DatabaseContext DbContext)
+        public UserManagementServices()
         {
-            if (DbContext == null)
-            {
-                throw new ArgumentNullException("DbContext");
-            }
-            else
-            {
-                _DbContext = DbContext;
-            }
-
+            _UserManagementRepo = new UserManagementRepository();
         }
 
-
-        /// <summary>
-        /// Create user account method
-        /// </summary>
-        /// <param name="user"></param>
-        public void CreateUser(User user)
+        public User CreateUser(DatabaseContext _db, User user)
         {
-            if (user == null)
+            if (_UserManagementRepo.ExistingUser(_db, user))
             {
-                throw new ArgumentNullException("user");
+                Console.WriteLine("User exists");
+                return null;
             }
-            // Check if the username exist. Then add the user
-            User searchResult = FindUserbyUserName(user.UserName);
-            if (searchResult == null)
-            {
-                _DbContext.Entry(user).State = System.Data.Entity.EntityState.Added;
-            }
-            else
-            {
-                throw new ArgumentException(("Error--Username already exists"));
-            }
-
+            return _UserManagementRepo.CreateNewUser(_db, user);
         }
 
-
-        /// <summary>
-        /// Delete user account  
-        /// </summary>
-        /// <param name="user"></param>
-        public void DeleteUser(User user)
+        public User DeleteUser(DatabaseContext _db, Guid Id)
         {
-            if (user == null)
-            {
-                throw new ArgumentNullException("user");
-            }
-            if (FindUserbyUserName(user.UserName) != null)
-            {
-
-                _DbContext.Entry(user).State = System.Data.Entity.EntityState.Deleted;
-            }
-            else
-            {
-                throw new ArgumentException(("Error--Cannot find user to delete"));
-            }
+            return _UserManagementRepo.DeleteUser(_db, Id);
         }
 
-        /// <summary>
-        /// Update user account method 
-        /// </summary>
-        /// <param name="user"></param>
-        public void UpdateUser(User user)
+        public User GetUser(DatabaseContext _db, string email)
         {
-            if (user == null)
-            {
-                throw new ArgumentNullException("user");
-            }
-            if (FindById(user.Id) != null)
-            {
-                _DbContext.Entry(user).State = System.Data.Entity.EntityState.Modified;
-            }
-            else
-            {
-                throw new ArgumentException(("Error--Cannot find user to update"));
-            }
+            return _UserManagementRepo.GetUser(_db, email);
         }
 
-        /// <summary>
-        /// Find user by providing a user name
-        /// </summary>
-        /// <param name="userName"></param>
-        /// <returns></returns>
-        public User FindUserbyUserName(string userName)
+        public User GetUser(DatabaseContext _db, Guid Id)
         {
-            User user = _DbContext.Set<User>().FirstOrDefault(u => u.UserName == userName);
-            return user;
-
+            return _UserManagementRepo.GetUser(_db, Id);
         }
 
-        /// <summary>
-        /// Find user by Id
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public User FindById(int id)
+        public User UpdateUser(DatabaseContext _db, User user)
         {
-            User user = _DbContext.Set<User>().Find(id);
-            return user;
-
+            return _UserManagementRepo.UpdateUser(_db, user);
         }
 
-        /// <summary>
-        /// Return list of users in database
-        /// </summary>
-        /// <returns></returns>
-        public List<User> GetAllUser()
+        public User Login(DatabaseContext _db, string email, string password)
         {
-            List<User> list = _DbContext.Set<User>().ToList();
-            return list;
+            UserRepository userRepo = new UserRepository();
+            PasswordService _passwordService = new PasswordService();
+            var user = _UserManagementRepo.GetUser(_db, email);
+            if (user != null)
+            {
+                string hashedPassword = _passwordService.HashPassword(password, user.PasswordSalt);
+                if (userRepo.ValidatePassword(user, hashedPassword))
+                {
+                    Console.WriteLine("Password Correct");
+                    return user;
+                }
+                Console.WriteLine("Password Incorrect");
+                return null;
+            }
+            Console.WriteLine("User does not exist");
+            return null;
         }
 
         /// <summary>

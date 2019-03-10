@@ -11,6 +11,6 @@ namespace DataAccessLayer.Repository
     /// </summary>
     public interface IEntity
     {
-        int Id { get; }
+        Guid Id { get; }
     }
 }

@@ -106,7 +106,7 @@
     <Compile Include="Logic\PasswordStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserManagement\IUserManagement.cs" />
-    <Compile Include="UserManagement\MockUserManagement.cs" />
+    <Compile Include="UserManagement\UserManagementManager.cs" />
     <Compile Include="UserManagement\UserManager.cs" />
   </ItemGroup>
   <ItemGroup>

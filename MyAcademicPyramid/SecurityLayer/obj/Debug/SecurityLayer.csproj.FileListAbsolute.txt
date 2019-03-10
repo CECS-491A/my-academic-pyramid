@@ -20,3 +20,7 @@ C:\Users\khk40_\Desktop\New folder\my-academic-pyramid\MyAcademicPyramid\Securit
 C:\Users\khk40_\Desktop\New folder\my-academic-pyramid\MyAcademicPyramid\SecurityLayer\obj\Debug\SecurityLayer.csproj.CopyComplete
 C:\Users\khk40_\Desktop\New folder\my-academic-pyramid\MyAcademicPyramid\SecurityLayer\obj\Debug\SecurityLayer.exe
 C:\Users\khk40_\Desktop\New folder\my-academic-pyramid\MyAcademicPyramid\SecurityLayer\obj\Debug\SecurityLayer.pdb
+C:\Users\khk40_\Desktop\Secret Room\github\my-academic-pyramid\MyAcademicPyramid\SecurityLayer\obj\Debug\SecurityLayer.csprojAssemblyReference.cache
+C:\Users\khk40_\Desktop\Secret Room\github\my-academic-pyramid\MyAcademicPyramid\SecurityLayer\obj\Debug\SecurityLayer.csproj.CoreCompileInputs.cache
+C:\Users\khk40_\Desktop\Secret Room\github\my-academic-pyramid\MyAcademicPyramid\SecurityLayer\obj\Debug\SecurityLayer.exe
+C:\Users\khk40_\Desktop\Secret Room\github\my-academic-pyramid\MyAcademicPyramid\SecurityLayer\obj\Debug\SecurityLayer.pdb

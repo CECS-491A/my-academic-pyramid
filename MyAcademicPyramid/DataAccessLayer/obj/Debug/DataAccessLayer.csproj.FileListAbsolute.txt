@@ -12,3 +12,7 @@ C:\Users\khk40_\Desktop\New folder\my-academic-pyramid\MyAcademicPyramid\DataAcc
 C:\Users\khk40_\Desktop\New folder\my-academic-pyramid\MyAcademicPyramid\DataAccessLayer\obj\Debug\DataAccessLayer.csproj.CopyComplete
 C:\Users\khk40_\Desktop\New folder\my-academic-pyramid\MyAcademicPyramid\DataAccessLayer\obj\Debug\DataAccessLayer.exe
 C:\Users\khk40_\Desktop\New folder\my-academic-pyramid\MyAcademicPyramid\DataAccessLayer\obj\Debug\DataAccessLayer.pdb
+C:\Users\khk40_\Desktop\Secret Room\github\my-academic-pyramid\MyAcademicPyramid\DataAccessLayer\obj\Debug\DataAccessLayer.csprojAssemblyReference.cache
+C:\Users\khk40_\Desktop\Secret Room\github\my-academic-pyramid\MyAcademicPyramid\DataAccessLayer\obj\Debug\DataAccessLayer.csproj.CoreCompileInputs.cache
+C:\Users\khk40_\Desktop\Secret Room\github\my-academic-pyramid\MyAcademicPyramid\DataAccessLayer\obj\Debug\DataAccessLayer.exe
+C:\Users\khk40_\Desktop\Secret Room\github\my-academic-pyramid\MyAcademicPyramid\DataAccessLayer\obj\Debug\DataAccessLayer.pdb
