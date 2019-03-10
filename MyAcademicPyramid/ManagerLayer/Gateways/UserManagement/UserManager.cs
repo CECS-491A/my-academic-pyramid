@@ -75,7 +75,6 @@ namespace ManagerLayer.UserManagement
             // Call AuthorizationManager and pass the requesting user object in
             if(_userManagementServices.FindUserbyUserName(user.UserName) == null)
             {
-
                 // Tell userManagement services to create user in database 
                 _userManagementServices.CreateUser(user);
                 

@@ -6,6 +6,8 @@
 //     Manual changes to this file will be overwritten if the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataAccessLayer
 {
@@ -23,42 +25,26 @@ namespace DataAccessLayer
             this.Claims = new HashSet<Claim>();
         }
 
-
-        public User(string userName, DateTime birthDate, DateTime createdDate, string firstname, string lastName, string role, string location, string email, string passwordHashed, int? parentUser_Id, string passwordQuestion1, string passwordQuestion2, string passwordQuestion3, string passwordAnswer1, string passwordAnswer2, string passwordAnswer3)
-        {
-            UserName = userName;
-            Firstname = firstname;
-            LastName = lastName;
-            Role = role;
-            BirthDate = birthDate;
-            Location = location;
-            Email = email;
-            CreatedDate = createdDate;
-            PasswordHash = passwordHashed;
-            PasswordQuestion1 = passwordQuestion1;
-            PasswordQuestion2 = passwordQuestion2;
-            PasswordQuestion3 = passwordQuestion3;
-            PasswordAnswer1 = passwordAnswer1;
-            PasswordAnswer2 = passwordAnswer2;
-            PasswordAnswer3 = passwordAnswer3;
-
-            this.ChildUsers = new HashSet<User>();
-            this.Claims = new HashSet<Claim>();
-
-        }
-
-        public int Id { get; set; }
+        [Key]
+        public Guid Id { get; set; }
         public string UserName { get; set; }
         public string Firstname { get; set; }
         public string LastName { get; set; }
         public string Role { get; set; }
-        public DateTime BirthDate { get; set; }
-        public String Location { get; set; }
+        [Required, DataType(DataType.Date)]
+        public DateTime DateOfBirth { get; set; }
+        [Required]
         public string Email { get; set; }
-       public DateTime CreatedDate { get; set; }
-       //public DateTime ModifiedDate { get; set; }
-        public String PasswordHash { get; set; }
-        public String PasswordSalt { get; set; }
+        [Required, Column(TypeName = "datetime2"), DataType(DataType.DateTime)]
+        public DateTime UpdatedAt { get; set; }
+        [Column(TypeName = "datetime2"), DataType(DataType.DateTime)]
+        public DateTime CreatedAt { get; set; }
+        //public DateTime ModifiedDate { get; set; }
+        public string Location { get; set; }
+        [Required]
+        public string PasswordHash { get; set; }
+        [Required]
+        public byte[] PasswordSalt { get; set; }
         public Nullable<int> ParentUser_Id { get; set; }
 
         public String PasswordQuestion1 { get; set; }
