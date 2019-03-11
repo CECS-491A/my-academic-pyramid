@@ -31,7 +31,7 @@ export default {
   methods: {
     publish: function () {
       // TODO: replace with SSO backend url
-      const url = 'http://localhost:50803/api/applications/publish'
+      const url = 'http://localhost:60461/api/applications/publish'
       axios.post(url, {
         key: document.getElementById('key').value,
         title: document.getElementById('title').value,
