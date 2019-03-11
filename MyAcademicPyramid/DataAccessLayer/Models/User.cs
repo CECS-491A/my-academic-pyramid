@@ -44,7 +44,7 @@ namespace DataAccessLayer
         [Required]
         public string PasswordHash { get; set; }
         [Required]
-        public byte[] PasswordSalt { get; set; }
+        public string PasswordSalt { get; set; }
         public Nullable<int> ParentUser_Id { get; set; }
 
         public String PasswordQuestion1 { get; set; }

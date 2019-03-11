@@ -24,8 +24,8 @@ namespace ManagerLayer.Controllers
         [HttpGet]
         public IQueryable<UserDTO> Get()
         {
-            UserManager uM = new UserManager();
-            List<User> userList = uM.GetAllUser();
+            UserManager umManager = new UserManager();
+            List<User> userList = umManager.GetAllUser();
 
             List<UserDTO> list = new List<UserDTO>();
             foreach(var user in userList)
@@ -52,36 +52,8 @@ namespace ManagerLayer.Controllers
         [HttpPost]
         public IHttpActionResult Post([FromBody] UserDTO userDto)
         {
-            SHA256HashFunction HashFunction = new SHA256HashFunction();
-            HashSalt hashSaltPassword = HashFunction.GetHashValue(userDto.RawPassword);
-            User user = new User
-            {
-                UserName = userDto.UserName,
-                Firstname = userDto.Firstname,
-                LastName = userDto.LastName,
-                PasswordHash = hashSaltPassword.Hash,
-                PasswordSalt = hashSaltPassword.Salt,
-                Role = userDto.Role,
-                CreatedDate = DateTime.Now,
-                BirthDate = userDto.BirthDate,
-                Location = userDto.Location,
-                Email = userDto.Email,
-                PasswordQuestion1 = userDto.PasswordQuestion1,
-                PasswordQuestion2 = userDto.PasswordQuestion2,
-                PasswordQuestion3 = userDto.PasswordQuestion3,
-                PasswordAnswer1 = userDto.PasswordAnswer1,
-                PasswordAnswer2 = userDto.PasswordAnswer2,
-                PasswordAnswer3 = userDto.PasswordAnswer3,
-            };
-
-            UserManager uM = new UserManager(_dbContext);
-             uM.CreateUserAccount(user);
-            _dbContext.SaveChanges();
-
-            return Ok(user);
-
-
-
+            UserManager umManager = new UserManager();
+            return Ok(umManager.CreateUserAccount(userDto));
         }
 
         // PUT api/<controller>/5
@@ -92,6 +64,8 @@ namespace ManagerLayer.Controllers
         // DELETE api/<controller>/5
         public void Delete(int id)
         {
+            UserManager umManager = new UserManager();
+            umManager.DeleteUserAccount(umManager.findUserByID(id));
         }
     }
 }

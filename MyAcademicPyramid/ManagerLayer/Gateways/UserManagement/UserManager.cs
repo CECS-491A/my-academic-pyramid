@@ -5,11 +5,13 @@ using SecurityLayer.Authorization.AuthorizationManagers;
 using ServiceLayer.UserManagement.UserAccountServices;
 using ServiceLayer.PasswordChecking.HashFunctions;
 using DataAccessLayer.Models;
+using DataAccessLayer.DTOs;
 using System.Data.Entity;
 using System.Linq;
 using ServiceLayer.PasswordChecking.SaltFunction;
 using System.Security.Cryptography;
 using System.Text;
+using System.Data.Entity.Validation;
 
 namespace ManagerLayer.UserManagement
 {
@@ -22,93 +24,93 @@ namespace ManagerLayer.UserManagement
         private UserManagementServices _userManagementServices;
         protected DatabaseContext _DbContext;
 
-
         /// <summary>
         /// Constructor that accept a username of account and initiaize the UserManagementServices
         /// User Account has to exist in database 
         /// </summary>
         /// <param name="requestingUserName"></param>
-        public UserManager(DatabaseContext DbContext)
+        public UserManager()
         {
-
-            _DbContext = DbContext ;
-
-            // Call UserManagementServices 
+            _DbContext = new DatabaseContext();
             _userManagementServices = new UserManagementServices(_DbContext);
-    
-        }
-
-
-        /// <summary>
-        /// Method to delete self user account or other account
-        /// </summary>
-        /// <param name="targetedUserName"></param>
-        public void DeleteUserAccount(String targetedUserName)
-        {
-            if (targetedUserName == null)
-            {
-                throw new ArgumentNullException("targetedUserName");
-            }
-            User targetUser = _userManagementServices.FindUserbyUserName(targetedUserName);
-            if (targetUser == null)
-            {
-                throw new ArgumentNullException(
-                    "_targetedUser", "The user to be deleted doesn't exist.");
-            }
-            else
-            {
-                _userManagementServices.DeleteUser(targetUser);
-            }
-
         }
 
         /// <summary>
         /// Method to create user account
         /// </summary>
         /// <param name="targetedUserName"></param>
-        public void CreateUserAccount(User user)
+        public User CreateUserAccount(UserDTO userDto)
         {
-            if (user == null)
+            try
             {
-                throw new ArgumentNullException("targetedUserName");
+                var valid = new System.Net.Mail.MailAddress(userDto.Email); // checks that email is valid
             }
-            // Call AuthorizationManager and pass the requesting user object in
-            if(_userManagementServices.FindUserbyUserName(user.UserName) == null)
+            catch (Exception)
             {
-                // Tell userManagement services to create user in database 
-                _userManagementServices.CreateUser(user);
-                
+                return null;
             }
-            else
+
+            SHA256HashFunction HashFunction = new SHA256HashFunction();
+            HashSalt hashSaltPassword = HashFunction.GetHashValue(userDto.RawPassword);
+            User user = new User
             {
-                throw new ArgumentException(
-                    "ERROR--Username is already used"
-                    );
-               
+                UserName = userDto.UserName,
+                Firstname = userDto.Firstname,
+                LastName = userDto.LastName,
+                PasswordHash = hashSaltPassword.Hash,
+                PasswordSalt = hashSaltPassword.Salt,
+                Role = userDto.Role,
+                // date and time as it would be in Coordinated Universal Time
+                CreatedAt = DateTime.UtcNow, // https://stackoverflow.com/questions/62151/datetime-now-vs-datetime-utcnow 
+                DateOfBirth = userDto.BirthDate,
+                Location = userDto.Location,
+                Email = userDto.Email,
+                PasswordQuestion1 = userDto.PasswordQuestion1,
+                PasswordQuestion2 = userDto.PasswordQuestion2,
+                PasswordQuestion3 = userDto.PasswordQuestion3,
+                PasswordAnswer1 = userDto.PasswordAnswer1,
+                PasswordAnswer2 = userDto.PasswordAnswer2,
+                PasswordAnswer3 = userDto.PasswordAnswer3,
+            };
+
+            var response = _userManagementServices.CreateUser(user);
+            try
+            {
+                _DbContext.SaveChanges();
+                return user;
             }
+            catch (DbEntityValidationException ex)
+            {
+                // detach user attempted to be created from the db context - rollback
+                _DbContext.Entry(response).State = System.Data.Entity.EntityState.Detached;
+            }
+            return null;
         }
 
-        public void UpdateUserAccount(User user)
+        /// <summary>
+        /// Method to delete self user account or other account
+        /// </summary>
+        /// <param name="targetedUserName"></param>
+        public void DeleteUserAccount(User user)
         {
-            if (user == null)
+            _userManagementServices.DeleteUser(user);
+            _DbContext.SaveChanges();
+        }
+
+        public int UpdateUserAccount(User user)
+        {
+            var response = _userManagementServices.UpdateUser(user);
+            try
             {
-                throw new ArgumentNullException("targetedUserName");
+                return _DbContext.SaveChanges();
             }
-            // Call AuthorizationManager and pass the requesting user object in
-            if (_userManagementServices.FindUserbyUserName(user.UserName) == null)
+            catch (DbEntityValidationException ex)
             {
-
-                // Tell userManagement services to create user in database 
-
-                _userManagementServices.UpdateUser(user);
-
-            }
-            else
-            {
-                throw new ArgumentException(
-                    "ERROR--User account does not exist"
-                    );
-
+                // catch error
+                // rollback changes
+                _DbContext.Entry(response).CurrentValues.SetValues(_DbContext.Entry(response).OriginalValues);
+                _DbContext.Entry(response).State = System.Data.Entity.EntityState.Unchanged;
+                return 0;
             }
         }
 
@@ -139,6 +141,12 @@ namespace ManagerLayer.UserManagement
         public User findUserByUsername(String userName)
         {
             User user = _userManagementServices.FindUserbyUserName(userName);
+            return user;
+        }
+
+        public User findUserByID(int id)
+        {
+            User user = _userManagementServices.FindById(id);
             return user;
         }
 
