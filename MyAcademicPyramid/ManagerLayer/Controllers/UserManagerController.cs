@@ -43,7 +43,7 @@ namespace ManagerLayer.Controllers
         }
 
         // GET api/<controller>/5
-        public string Get(int id)
+        public string Get(Guid id)
         {
             return "value";
         }
@@ -57,15 +57,15 @@ namespace ManagerLayer.Controllers
         }
 
         // PUT api/<controller>/5
-        public void Put(int id, [FromBody]string value)
+        public void Put(Guid id, [FromBody]string value)
         {
         }
 
         // DELETE api/<controller>/5
-        public void Delete(int id)
+        public void Delete(Guid id)
         {
             UserManager umManager = new UserManager();
-            umManager.DeleteUserAccount(umManager.findUserByID(id));
+            umManager.DeleteUserAccount(umManager.FindUser(id));
         }
     }
 }

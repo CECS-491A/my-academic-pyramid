@@ -91,10 +91,10 @@ namespace ManagerLayer.UserManagement
         /// Method to delete self user account or other account
         /// </summary>
         /// <param name="targetedUserName"></param>
-        public void DeleteUserAccount(User user)
+        public int DeleteUserAccount(User user)
         {
             _userManagementServices.DeleteUser(user);
-            _DbContext.SaveChanges();
+            return _DbContext.SaveChanges();
         }
 
         public int UpdateUserAccount(User user)
@@ -114,37 +114,33 @@ namespace ManagerLayer.UserManagement
             }
         }
 
-        public void AssignUserToUser(String linkFromUser, String linkToUser )
+        public User AssignUserToUser(Guid linkFromUser, Guid linkToUser )
         {
-
-            User linkFromUser_Searched = _userManagementServices.FindUserbyUserName(linkFromUser);
-            User linkToUser_Searched = _userManagementServices.FindUserbyUserName(linkToUser);
+            User linkFromUser_Searched = FindUser(linkFromUser);
+            User linkToUser_Searched = FindUser(linkToUser);
 
             if (linkFromUser_Searched == null)
             {
-                throw new ArgumentNullException("ERROR - child user NOT FOUND");
+                return null;
             }
             else if (linkToUser_Searched == null)
             {
-                throw new ArgumentNullException("ERROR - parent User NOT FOUND");
+                return null;
             }
-
             else
             {
                 linkFromUser_Searched.ParentUser = linkToUser_Searched;
-                _userManagementServices.UpdateUser(linkFromUser_Searched);
+                return _userManagementServices.UpdateUser(linkFromUser_Searched);
             }
-
-
         }
 
-        public User findUserByUsername(String userName)
+        public User FindUser(String userEmail)
         {
-            User user = _userManagementServices.FindUserbyUserName(userName);
+            User user = _userManagementServices.FindUserbyUserEmail(userEmail);
             return user;
         }
 
-        public User findUserByID(int id)
+        public User FindUser(Guid id)
         {
             User user = _userManagementServices.FindById(id);
             return user;
@@ -169,18 +165,8 @@ namespace ManagerLayer.UserManagement
         /// <param name="targetedUserName"></param>
         /// <param name="claim"></param>
         /// 
-        public void AddClaimAction(string targetedUserName, Claim claim)
+        public User AddClaimAction(Guid targetedUserID, Claim claim)
         {
-            if (targetedUserName == null)
-            {
-                throw new ArgumentNullException("targetedUserName");
-            }
-            else if (claim == null)
-            {
-                throw new ArgumentNullException("claim");
-            }
-            // Call AuthorizationManager and pass the requesting user object in
-
             // List of required claims needed for AddClaimAction Method
             List<Claim> createUserRequiredClaimTypes = new List<Claim>
             {
@@ -190,18 +176,18 @@ namespace ManagerLayer.UserManagement
 
             // Check if the requesting user has the require claims
  
-            
                 // Retrive targeted user exists from database
-               User targetedUser = _userManagementServices.FindUserbyUserName(targetedUserName);
+            User targetedUser = FindUser(targetedUserID);
             if (targetedUser == null)
             {
-                throw new ArgumentException("There was no targeted user in database.");
+                return null;
             }
             // Check if the requesting user is  at least same level as  the targeted user
 
             else
             {
                 _userManagementServices.AddClaim(targetedUser, claim);
+                return targetedUser;
             }
         }
 
@@ -210,45 +196,45 @@ namespace ManagerLayer.UserManagement
         /// </summary>
         /// <param name="targetedUserName"></param>
         /// <param name="claim"></param>
-        public void RemoveClaimAction(string targetedUserName, Claim claim)
+        public User RemoveClaimAction(Guid targetedUserId, Claim claim)
         {
-            if (targetedUserName == null)
-            {
-                throw new ArgumentNullException("targetedUserName");
-            }
-            else if (claim == null)
-            {
-                throw new ArgumentNullException("claim");
-            }
-
             // List of required claims needed for AddClaimAction Method
             List<Claim> createUserRequiredClaimTypes = new List<Claim>
             {
-
                 new Claim("UserManager")
             };
 
             // Check if the requesting user has the require claims
 
                 // Retrive targeted user exists from database
-                User targetedUser = _userManagementServices.FindUserbyUserName(targetedUserName);
+                User targetedUser = FindUser(targetedUserId);
             if (targetedUser == null)
              {
-               throw new ArgumentException("There was no targeted user in database.");
+                return null;
+               
              }
                 // Check if the requesting user is  at least same level as  the targeted user
             else
             {
                 _userManagementServices.RemoveClaim(targetedUser, claim);
+                return targetedUser;
             }
                    
         }
 
-        public void ChangePassword(String userName, String newPassword)
+        public User ChangePassword(Guid userId, String newPassword)
         {
-            User user = _userManagementServices.FindUserbyUserName(userName);
-            user.PasswordHash = newPassword;
-            _userManagementServices.UpdateUser(user);
+            User user = FindUser(userId);
+            if (user == null)
+            {
+                return null;
+            }
+            else
+            {
+                user.PasswordHash = newPassword;
+                _userManagementServices.UpdateUser(user);
+                return user;
+            }
         }
 
         public static bool VerifyPassword(string enteredPassword, string storedHash, string storedSalt)

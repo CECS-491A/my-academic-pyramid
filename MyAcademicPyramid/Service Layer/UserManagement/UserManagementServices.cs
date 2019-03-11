@@ -84,9 +84,9 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         /// </summary>
         /// <param name="userName"></param>
         /// <returns></returns>
-        public User FindUserbyUserName(string userName)
+        public User FindUserbyUserEmail(string userEmail)
         {
-            User user = _DbContext.Set<User>().FirstOrDefault(u => u.UserName == userName);
+            User user = _DbContext.Set<User>().FirstOrDefault(u => u.Email == userEmail);
             return user;
         }
 
@@ -95,7 +95,7 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public User FindById(int id)
+        public User FindById(Guid id)
         {
             User user = _DbContext.Set<User>().Find(id);
             return user;

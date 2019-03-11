@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer;
+using System;
 
 namespace ServiceLayer.UserManagement.UserAccountServices
 {
@@ -11,7 +12,7 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         User CreateUser(User user);
         User DeleteUser(User user);
         User UpdateUser(User user);
-        User FindUserbyUserName(string userName);
-        User FindById(int id);
+        User FindUserbyUserEmail(string userEmail);
+        User FindById(Guid id);
     }
 }
