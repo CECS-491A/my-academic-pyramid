@@ -93,8 +93,30 @@ namespace ManagerLayer.UserManagement
         /// <param name="targetedUserName"></param>
         public int DeleteUserAccount(User user)
         {
+<<<<<<< HEAD
             _userManagementServices.DeleteUser(user);
             return _DbContext.SaveChanges();
+=======
+            if (user == null)
+            {
+                throw new ArgumentNullException("targetedUserName");
+            }
+            // Call AuthorizationManager and pass the requesting user object in
+            if(_userManagementServices.FindUserbyUserName(user.UserName) == null)
+            {
+
+                // Tell userManagement services to create user in database 
+                _userManagementServices.CreateUser(user);
+                
+            }
+            else
+            {
+                throw new ArgumentException(
+                    "ERROR--Username is already used"
+                    );
+               
+            }
+>>>>>>> parent of 767c2e5... um
         }
 
         public int UpdateUserAccount(User user)
