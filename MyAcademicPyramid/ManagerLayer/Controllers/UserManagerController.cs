@@ -18,23 +18,14 @@ namespace ManagerLayer.Controllers
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class UserManagerController : ApiController
     {
-        private readonly DatabaseContext _dbContext; 
-        public UserManagerController()
-        {
-            _dbContext = new DatabaseContext();
-        }
+
 
         // GET api/<controller>
         [HttpGet]
         public IQueryable<UserDTO> Get()
         {
-<<<<<<< HEAD
             UserManager umManager = new UserManager();
             List<User> userList = umManager.GetAllUser();
-=======
-            UserManager uM = new UserManager(_dbContext);
-            List<User> userList = uM.GetAllUser();
->>>>>>> parent of 767c2e5... um
 
             List<UserDTO> list = new List<UserDTO>();
             foreach(var user in userList)
