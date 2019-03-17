@@ -11,16 +11,18 @@ namespace SecurityLayer
 {
     public static class JWTokenManager
     {
-        public static string GenerateToken(Dictionary<string, string> payload, 
-                                           string algorithm)
+        private static string key = "JOIENFUPBFJESFOIEJGNEOPFENPPFENFBPPNFIEPUBRGHFCMK";
+
+        public static string GenerateToken(Dictionary<string, string> payload)
         {
+            // TODO: Possibly add a random string to improve security.
+            // Link: https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/JSON_Web_Token_Cheat_Sheet_for_Java.md
             string token = "";
             string tokenType = "JWT";
             // TODO: get key from flat file, so make key a paramater of function.
-            string key = "JOIENFUPBFJESFOIEJGNEOPFENPPFENFBPPNFIEPUBRGHFCMK";
             // Created header
             Dictionary<string, string> header = new Dictionary<string, string>();
-            header.Add("alg", algorithm);
+            header.Add("alg", "SHA256");
             header.Add("typ", tokenType);
             string headerEncode = UrlBase64DictEncoding(header);
             string payloadEncode = UrlBase64DictEncoding(payload);
@@ -36,7 +38,6 @@ namespace SecurityLayer
         public static bool validateToken(string token)
         {
             bool isValidated = false;
-            string key = "JOIENFUPBFJESFOIEJGNEOPFENPPFENFBPPNFIEPUBRGHFCMK";
             string[] tokenParts = token.Split('.');
             if (tokenParts.Length != 3)
             {
@@ -54,9 +55,18 @@ namespace SecurityLayer
             return isValidated;
         }
 
-        private static Dictionary<string, string> GetPayload(string encodedToken)
+        public static Dictionary<string, string> GetPayload(string encodedToken)
         {
             //TODO finish this.
+            string[] tokenParts = encodedToken.Split('.');
+            if (tokenParts.Length != 3)
+            {
+                throw new ArgumentException("Invalid JWToken.");
+            }
+            string encodedPayload = tokenParts[1];
+            byte[] bytePayload = HttpServerUtility.UrlTokenDecode(encodedPayload);
+            string jsonPayload = Encoding.UTF8.GetString(bytePayload);
+            return JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonPayload);
         }
 
         private static string UrlBase64DictEncoding(Dictionary<string, string> dict)

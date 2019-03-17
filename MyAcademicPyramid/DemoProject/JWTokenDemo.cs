@@ -18,10 +18,15 @@ namespace DemoProject
                 { "c", "3" }
             };
 
-            String token = JWTokenManager.GenerateToken(test, "");
+            String token = JWTokenManager.GenerateToken(test);
             Console.Out.WriteLine(token);
             Console.Out.WriteLine("Attempting to validate token");
-            JWTokenManager.validateToken(token);
+            if (JWTokenManager.validateToken(token))
+            {
+                Console.Out.WriteLine("Getting payload");
+                Dictionary<string, string> payload = JWTokenManager.GetPayload(token);
+                Console.Out.WriteLine(payload.ToString());
+            }
             Console.In.Read();
             Console.Out.WriteLine("Ending program.");
 

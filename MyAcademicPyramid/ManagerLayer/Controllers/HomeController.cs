@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Cors;
+using SecurityLayer;
 
 namespace ManagerLayer.Controllers
 {
@@ -15,6 +16,19 @@ namespace ManagerLayer.Controllers
         public String Hello()
         {
             return "Hello World From Backend API " + DateTime.Now;
+        }
+
+        [HttpGet]
+        [Route("Home/TestJWT")]
+        public string TestJWT()
+        {
+            Dictionary<string, string> testDict = new Dictionary<string, string>()
+            {
+                {"User", "ljulian2190@gmail.com" },
+                {"Claims", "[Student, Tutor]" }
+            };
+
+            return JWTokenManager.GenerateToken(testDict);
         }
     }
 }
