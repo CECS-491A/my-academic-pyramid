@@ -88,6 +88,7 @@
   <ItemGroup>
     <Compile Include="DTOs\UserDTO.cs" />
     <Compile Include="IEntity.cs" />
+    <Compile Include="Models\Category.cs" />
     <Compile Include="Models\Claim.cs" />
     <Compile Include="DatabaseContext.cs" />
     <Compile Include="Models\HashSalt.cs" />
