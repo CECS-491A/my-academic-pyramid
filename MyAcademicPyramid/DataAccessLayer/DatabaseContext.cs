@@ -1,4 +1,5 @@
 ﻿using System.Data.Entity;
+using DataAccessLayer.Models;
 
 namespace DataAccessLayer
 {
@@ -8,6 +9,8 @@ namespace DataAccessLayer
         public DbSet<User> Users { get; set; }
         // Set of Claims
         public DbSet<Claim> Claims { get; set; }
+
+        public DbSet<UserSession> Sessions { get; set; }
 
         public DatabaseContext () :base ("name=MYAPConnectionString")
         {

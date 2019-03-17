@@ -77,6 +77,7 @@
     <Compile Include="DatabaseContext.cs" />
     <Compile Include="Models\PasswordQA.cs" />
     <Compile Include="Models\User.cs" />
+    <Compile Include="Models\UserSession.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
