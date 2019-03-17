@@ -62,7 +62,7 @@ namespace ManagerLayer.Controllers
         }
 
         // DELETE api/<controller>/5
-        public void Delete(Guid id)
+        public void Delete(int id)
         {
             UserManager umManager = new UserManager();
             umManager.DeleteUserAccount(umManager.FindUser(id));

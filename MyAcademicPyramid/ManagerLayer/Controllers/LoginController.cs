@@ -17,9 +17,9 @@ namespace ManagerLayer.Controllers
         public HttpResponseMessage Login(UserDTO userDto)
         {
             DatabaseContext db = new DatabaseContext();
-            UserManager um = new UserManager(db);
+            UserManager um = new UserManager();
 
-            User user = um.findUserByUsername(userDto.UserName);
+            User user = um.FindUserName(userDto.UserName);
             if (user == null)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.NotFound, "The user was not found");

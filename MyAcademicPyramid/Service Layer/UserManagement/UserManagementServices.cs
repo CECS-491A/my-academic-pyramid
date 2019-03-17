@@ -95,9 +95,15 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public User FindById(Guid id)
+        public User FindById(int id)
         {
             User user = _DbContext.Set<User>().Find(id);
+            return user;
+        }
+
+        public User FindByUsername(String username)
+        {
+            User user = _DbContext.Set<User>().Find(username);
             return user;
         }
 

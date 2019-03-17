@@ -114,7 +114,7 @@ namespace ManagerLayer.UserManagement
             }
         }
 
-        public User AssignUserToUser(Guid linkFromUser, Guid linkToUser )
+        public User AssignUserToUser(int linkFromUser, int linkToUser )
         {
             User linkFromUser_Searched = FindUser(linkFromUser);
             User linkToUser_Searched = FindUser(linkToUser);
@@ -140,12 +140,17 @@ namespace ManagerLayer.UserManagement
             return user;
         }
 
-        public User FindUser(Guid id)
+        public User FindUser(int id)
         {
             User user = _userManagementServices.FindById(id);
             return user;
         }
 
+        public User FindUserName(string UserName)
+        {
+            User user = _userManagementServices.FindByUsername(UserName);
+            return user;
+        }
 
         /// <summary>
         /// Method to get all users in database 
@@ -165,7 +170,7 @@ namespace ManagerLayer.UserManagement
         /// <param name="targetedUserName"></param>
         /// <param name="claim"></param>
         /// 
-        public User AddClaimAction(Guid targetedUserID, Claim claim)
+        public User AddClaimAction(int targetedUserID, Claim claim)
         {
             // List of required claims needed for AddClaimAction Method
             List<Claim> createUserRequiredClaimTypes = new List<Claim>
@@ -196,7 +201,7 @@ namespace ManagerLayer.UserManagement
         /// </summary>
         /// <param name="targetedUserName"></param>
         /// <param name="claim"></param>
-        public User RemoveClaimAction(Guid targetedUserId, Claim claim)
+        public User RemoveClaimAction(int targetedUserId, Claim claim)
         {
             // List of required claims needed for AddClaimAction Method
             List<Claim> createUserRequiredClaimTypes = new List<Claim>
@@ -222,7 +227,7 @@ namespace ManagerLayer.UserManagement
                    
         }
 
-        public User ChangePassword(Guid userId, String newPassword)
+        public User ChangePassword(int userId, String newPassword)
         {
             User user = FindUser(userId);
             if (user == null)

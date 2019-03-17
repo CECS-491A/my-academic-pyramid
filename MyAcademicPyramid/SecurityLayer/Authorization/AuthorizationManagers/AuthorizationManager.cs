@@ -122,7 +122,7 @@ namespace SecurityLayer.Authorization.AuthorizationManagers
             while (user.ParentUser_Id != null)
             {
                 int parentId = (int)user.ParentUser_Id;
-                user = uMS.FindById(parentId);
+                //user = uMS.FindById(parentId);
                 level += 1;
             }
 

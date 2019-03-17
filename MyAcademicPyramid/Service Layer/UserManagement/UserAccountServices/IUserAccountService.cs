@@ -13,6 +13,6 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         User DeleteUser(User user);
         User UpdateUser(User user);
         User FindUserbyUserEmail(string userEmail);
-        User FindById(Guid id);
+        User FindById(int id);
     }
 }

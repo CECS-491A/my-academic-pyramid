@@ -1,7 +1,9 @@
 ﻿using DataAccessLayer;
 using DataAccessLayer.Models.Messenger;
 using ManagerLayer.Gateways.Messenger;
+using ManagerLayer.SignalRHub;
 using ManagerLayer.UserManagement;
+using Microsoft.AspNet.SignalR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,7 +47,10 @@ namespace ManagerLayer.Controllers
             conservation.SenderUserName = username;
             conservation.CreatedDate = DateTime.Now;
             mg.SendMessage(conservation);
+            var myHub = GlobalHost.ConnectionManager.GetHubContext<MessengerHub>();
+            var result = myHub.Clients.All.FetchMessages();
             return HttpStatusCode.OK;
+
 
         }
     }

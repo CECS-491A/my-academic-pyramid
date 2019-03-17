@@ -21,8 +21,10 @@
 </template>
 
 <script>
+/* eslint-disable */
 import CreateMessage from '@/components/CreateMessage'
 import axios from 'axios'
+const signalR = require('signalr');
 export default {
   name: 'Chat',
   components: {
@@ -31,10 +33,25 @@ export default {
   props: ['name'],
   data () {
     return {
-      messages: null
+      messages: null,
+      connection: ''
     }
   },
-  mounted () {
+    created: function()
+  {
+      this.connection = new signalR.HubConnectionBuilder()
+        .withUrl('http://localhost:60500/MessengerHub')
+        .configureLogging(signalR.LogLevel.Information)
+        .build();
+      
+        
+  },
+  mounted: function () {
+    var thisVue = this;
+    this.connection.start().catch(function(err) {
+        return console.error(err.toString());
+      });
+    thisVue.connection.on('FetchNewMessage', function () {
     axios
       .get('http://localhost:60500/api/Messenger/username', {
         headers: {
@@ -46,6 +63,13 @@ export default {
         }
       })
       .then(response => (this.messages = response.data))
-  }
+    })
+
+  },
+
+
+
+
+  
 }
 </script>
