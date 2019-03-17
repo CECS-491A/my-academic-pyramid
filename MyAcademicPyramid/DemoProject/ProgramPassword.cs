@@ -8,7 +8,7 @@ namespace DemoProject
 {
     class ProgramPassword
     {
-        private static SHA1HashFunction sha = new SHA1HashFunction();
+        private static SHA256HashFunction sha = new SHA256HashFunction();
         private static string url = "https://api.pwnedpasswords.com/range/";
         private static PwnedPasswordsValidation pv = new PwnedPasswordsValidation(sha, url);
 

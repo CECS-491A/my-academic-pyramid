@@ -1,4 +1,2 @@
-C:\Users\khk40_\Desktop\New folder\my-academic-pyramid\MyAcademicPyramid\ManagerLayerTests.Tests\obj\Debug\ManagerLayerTests.Tests.csprojAssemblyReference.cache
-C:\Users\khk40_\Desktop\New folder\my-academic-pyramid\MyAcademicPyramid\ManagerLayerTests.Tests\obj\Debug\ManagerLayerTests.Tests.csproj.CoreCompileInputs.cache
 C:\Users\khk40_\Desktop\Secret Room\github\my-academic-pyramid\MyAcademicPyramid\ManagerLayerTests.Tests\obj\Debug\ManagerLayerTests.Tests.csprojAssemblyReference.cache
 C:\Users\khk40_\Desktop\Secret Room\github\my-academic-pyramid\MyAcademicPyramid\ManagerLayerTests.Tests\obj\Debug\ManagerLayerTests.Tests.csproj.CoreCompileInputs.cache

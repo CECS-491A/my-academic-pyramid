@@ -5,8 +5,6 @@ using DataAccessLayer;
 using System.Linq;
 using ServiceLayer.UserManagement.UserClaimServices;
 using System.Data.Entity;
-using DataAccessLayer.Repository;
-using DataAccessLayer.Models;
 
 namespace ServiceLayer.UserManagement.UserAccountServices
 {
@@ -18,61 +16,99 @@ namespace ServiceLayer.UserManagement.UserAccountServices
     /// </summary>
     public class UserManagementServices : IUserAccountServices, IUserClaimServices
     {
-        private UserManagementRepository _UserManagementRepo;
 
-        public UserManagementServices()
+        protected DatabaseContext _DbContext;
+
+        /// <summary>
+        /// Constructor which initialize the userRepository 
+        /// </summary>
+        /// <param name="unitOfWork"></param>
+        public UserManagementServices(DatabaseContext DbContext)
         {
-            _UserManagementRepo = new UserManagementRepository();
+            _DbContext = DbContext;
         }
 
-        public User CreateUser(DatabaseContext _db, User user)
+        /// <summary>
+        /// Create user account method
+        /// </summary>
+        /// <param name="user"></param>
+        public User CreateUser(User user)
         {
-            if (_UserManagementRepo.ExistingUser(_db, user))
+            if (user == null)
             {
-                Console.WriteLine("User exists");
                 return null;
             }
-            return _UserManagementRepo.CreateNewUser(_db, user);
+            else
+            { 
+                _DbContext.Entry(user).State = System.Data.Entity.EntityState.Added;
+                return user;
+            }
         }
 
-        public User DeleteUser(DatabaseContext _db, Guid Id)
+        /// <summary>
+        /// Delete user account  
+        /// </summary>
+        /// <param name="user"></param>
+        public User DeleteUser(User user)
         {
-            return _UserManagementRepo.DeleteUser(_db, Id);
-        }
-
-        public User GetUser(DatabaseContext _db, string email)
-        {
-            return _UserManagementRepo.GetUser(_db, email);
-        }
-
-        public User GetUser(DatabaseContext _db, Guid Id)
-        {
-            return _UserManagementRepo.GetUser(_db, Id);
-        }
-
-        public User UpdateUser(DatabaseContext _db, User user)
-        {
-            return _UserManagementRepo.UpdateUser(_db, user);
-        }
-
-        public User Login(DatabaseContext _db, string email, string password)
-        {
-            UserRepository userRepo = new UserRepository();
-            PasswordService _passwordService = new PasswordService();
-            var user = _UserManagementRepo.GetUser(_db, email);
-            if (user != null)
+            if (user == null)
             {
-                string hashedPassword = _passwordService.HashPassword(password, user.PasswordSalt);
-                if (userRepo.ValidatePassword(user, hashedPassword))
-                {
-                    Console.WriteLine("Password Correct");
-                    return user;
-                }
-                Console.WriteLine("Password Incorrect");
                 return null;
             }
-            Console.WriteLine("User does not exist");
-            return null;
+            else
+            {
+                _DbContext.Entry(user).State = System.Data.Entity.EntityState.Deleted;
+                return user;
+            }
+        }
+
+        /// <summary>
+        /// Update user account method 
+        /// </summary>
+        /// <param name="user"></param>
+        public User UpdateUser(User user)
+        {
+            if (user == null)
+            {
+                return null;
+            }
+            else
+            {
+                _DbContext.Entry(user).State = System.Data.Entity.EntityState.Modified;
+                return user;
+            }
+        }
+
+        /// <summary>
+        /// Find user by providing a user name
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <returns></returns>
+        public User FindUserbyUserEmail(string userEmail)
+        {
+            User user = _DbContext.Set<User>().FirstOrDefault(u => u.Email == userEmail);
+            return user;
+        }
+
+        /// <summary>
+        /// Find user by Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public User FindById(Guid id)
+        {
+            User user = _DbContext.Set<User>().Find(id);
+            return user;
+        }
+
+        /// <summary>
+        /// Return list of users in database
+        /// </summary>
+        /// <returns></returns>
+        public List<User> GetAllUser()
+        {
+            List<User> list = _DbContext.Set<User>().ToList();
+            return list;
         }
 
         /// <summary>
@@ -80,26 +116,22 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         /// </summary>
         /// <param name="user"></param>
         /// <param name="claim"></param>
-        public void RemoveClaim(User user, Claim claim)
+        public User RemoveClaim(User user, Claim claim)
         {
-            User searchedUser = FindUserbyUserName(user.UserName);
-            bool searchedClaim = searchedUser.Claims.Contains(claim);
-
-            if (searchedUser != null && searchedClaim != false)
+            if (claim == null)
             {
-                searchedUser.Claims.Remove(claim);
-                _DbContext.Entry(searchedUser).State = System.Data.Entity.EntityState.Modified;
+                return null;
             }
-            else if (searchedUser == null)
+            else if (user == null)
             {
-                throw new ArgumentException("Couldn't find user to remove claim");
+                return null;
             }
-            else if (searchedClaim == false)
+            else
             {
-                throw new ArgumentException(("Couldn't find claim to remove "));
+                user.Claims.Remove(claim);
+                _DbContext.Entry(user).State = System.Data.Entity.EntityState.Modified;
+                return user;
             }
-
-
         }
 
         /// <summary>
@@ -107,21 +139,23 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         /// </summary>
         /// <param name="user"></param>
         /// <param name="claim"></param>
-        public void AddClaim(User user, Claim claim)
+        public User AddClaim(User user, Claim claim)
         {
-            User searchedUser = FindUserbyUserName(user.UserName);
-
-            if (searchedUser != null)
+            if (claim == null)
             {
-                searchedUser.Claims.Add(claim);
-                _DbContext.Entry(searchedUser).State = System.Data.Entity.EntityState.Modified;
+                return null;
             }
-            else if (searchedUser == null)
+            else if (user == null)
             {
-                throw new ArgumentException("Couldn't  find user to add claim");
+                return null;
             }
-
+            else
+            {
+                user.Claims.Add(claim);
+                _DbContext.Entry(user).State = System.Data.Entity.EntityState.Modified;
+                return user;
+            }
         }
 
-    }
+    } // end of class
 }

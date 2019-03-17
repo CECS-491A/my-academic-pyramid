@@ -1,6 +1,5 @@
-﻿using DataAccessLayer.Models;
+﻿using DataAccessLayer;
 using System;
-using DataAccessLayer;
 
 namespace ServiceLayer.UserManagement.UserAccountServices
 {
@@ -10,8 +9,10 @@ namespace ServiceLayer.UserManagement.UserAccountServices
     /// </summary>
     public interface IUserAccountServices
     {
-        User CreateUser(DatabaseContext _db, User user);
-        User DeleteUser(DatabaseContext _db, Guid Id);
-        User UpdateUser(DatabaseContext _db, User user);
+        User CreateUser(User user);
+        User DeleteUser(User user);
+        User UpdateUser(User user);
+        User FindUserbyUserEmail(string userEmail);
+        User FindById(Guid id);
     }
 }

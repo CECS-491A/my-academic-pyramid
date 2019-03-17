@@ -60,11 +60,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EffortFactory.cs" />
-    <Compile Include="ProgramAuthorization.cs" />
     <Compile Include="ProgramPassword.cs" />
-    <Compile Include="ProgramUMService.cs" />
-    <Compile Include="ProgramUMTree.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

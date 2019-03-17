@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using DataAccessLayer.Models;
 using DataAccessLayer;
 
 
@@ -13,8 +12,8 @@ namespace ServiceLayer.UserManagement.UserClaimServices
     public interface IUserClaimServices
     {
         
-        void AddClaim(User user, Claim claim );
-        void RemoveClaim(User user, Claim claim);
+        User AddClaim(User user, Claim claim );
+        User RemoveClaim(User user, Claim claim);
         
     }
 }

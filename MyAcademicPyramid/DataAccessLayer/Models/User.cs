@@ -8,10 +8,8 @@
 //------------------------------------------------------------------------------
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System;
 
-
-namespace DataAccessLayer.Models
+namespace DataAccessLayer
 {
     using DataAccessLayer.Models;
     using DataAccessLayer.Repository;
@@ -25,62 +23,36 @@ namespace DataAccessLayer.Models
         {
             this.ChildUsers = new HashSet<User>();
             this.Claims = new HashSet<Claim>();
-            CreatedAt = DateTime.UtcNow;
-            Id = Guid.NewGuid();
-            Disabled = false;
-        }
-
-        public User(string userName)
-
-        {
-            UserName = userName;
-            this.Claims = new HashSet<Claim>();
-            CreatedAt = DateTime.UtcNow;
-            Id = Guid.NewGuid();
-            Disabled = false;
         }
 
         [Key]
         public Guid Id { get; set; }
-
-        [Required]
-        public string Email { get; set; }
-            
         public string UserName { get; set; }
         public string Firstname { get; set; }
         public string LastName { get; set; }
-        public String CreatedDate { get; set; }
-        public String HashPassword { get; set; }
-        public Nullable<int> ParentUser_Id { get; set; }
-
-        public string City { get; set; }
-        public string State { get; set; }
-        public string Country { get; set; }
-
+        public string Role { get; set; }
         [Required, DataType(DataType.Date)]
-        public DateTime? DateOfBirth { get; set; }
+        public DateTime DateOfBirth { get; set; }
+        [Required]
+        public string Email { get; set; }
+        [Required, Column(TypeName = "datetime2"), DataType(DataType.DateTime)]
+        public DateTime UpdatedAt { get; set; }
+        [Column(TypeName = "datetime2"), DataType(DataType.DateTime)]
+        public DateTime CreatedAt { get; set; }
+        //public DateTime ModifiedDate { get; set; }
+        public string Location { get; set; }
         [Required]
         public string PasswordHash { get; set; }
         [Required]
-        public byte[] PasswordSalt { get; set; }
+        public string PasswordSalt { get; set; }
+        public Nullable<int> ParentUser_Id { get; set; }
 
-        [Required]
-        public bool Disabled { get; set; }
-
-        [Required, Column(TypeName = "datetime2"), DataType(DataType.DateTime)]
-        public DateTime UpdatedAt { get; set; }
-
-        [Column(TypeName = "datetime2"), DataType(DataType.DateTime)]
-        public DateTime CreatedAt { get; set; }
-
-        public string SecurityQ1 { get; set; }
-        public string SecurityQ1Answer { get; set; }
-        public string SecurityQ2 { get; set; }
-        public string SecurityQ2Answer { get; set; }
-        public string SecurityQ3 { get; set; }
-        public string SecurityQ3Answer { get; set; }
-
-
+        public String PasswordQuestion1 { get; set; }
+        public String PasswordQuestion2 { get; set; }
+        public String PasswordQuestion3 { get; set; }
+        public String PasswordAnswer1 { get; set; }
+        public String PasswordAnswer2 { get; set; }
+        public String PasswordAnswer3 { get; set; }
 
         /// <summary>
         /// Children users below user.
@@ -101,6 +73,10 @@ namespace DataAccessLayer.Models
         public override bool Equals(object obj)
         {
             var user = obj as User;
+            if(user == null)
+            {
+                return false;
+            }
             return UserName.Equals(user.UserName);
         }
 

@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using DataAccessLayer.Models.Messenger;
+using System.Data.Entity;
 
 namespace DataAccessLayer
 {
@@ -9,7 +10,10 @@ namespace DataAccessLayer
         // Set of Claims
         public DbSet<Claim> Claims { get; set; }
 
-        public DatabaseContext () :base ("name=MYAPConnectionString")
+        //Set of Conservations
+        public DbSet<Conversation> Conservations { get; set; }
+
+        public DatabaseContext () :base ("name=LocalTest")
         {
 
         }

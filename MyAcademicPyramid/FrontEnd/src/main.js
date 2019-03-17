@@ -13,3 +13,14 @@ new Vue({
   components: { App },
   template: '<App/>'
 })
+
+new Vue({
+  el: '#list',
+  router,
+  data: {
+    todos: [
+      {text: 'just test'},
+      {text: 'other'}
+    ]
+  }
+})
