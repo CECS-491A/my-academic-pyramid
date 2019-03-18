@@ -9,45 +9,51 @@
 
 namespace DataAccessLayer
 {
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
     using DataAccessLayer.Models;
     using DataAccessLayer.Repository;
     using System;
     using System.Collections.Generic;
     
-    public partial class User : IEntity
+    public partial class User : IEntity 
     {
- 
+
         public User()
         {
             this.ChildUsers = new HashSet<User>();
             this.Claims = new HashSet<Claim>();
         }
 
-        public User(string userName)
-
-        {
-            UserName = userName;
-            this.Claims = new HashSet<Claim>();
-        }
-
-        public User(string userName, PasswordQA passwordQA)
-
-        {
-            UserName = userName;
-            this.Claims = new HashSet<Claim>();
-            this.passwordQA = passwordQA;
-        }
+        [Key]
         public int Id { get; set; }
         public string UserName { get; set; }
         public string Firstname { get; set; }
         public string LastName { get; set; }
+        public string Role { get; set; }
+        [Required, DataType(DataType.Date)]
+        public DateTime DateOfBirth { get; set; }
+        [Required]
         public string Email { get; set; }
-        public String CreatedDate { get; set; }
-        public String HashPassword { get; set; }
+        [Required, Column(TypeName = "datetime2"), DataType(DataType.DateTime)]
+        public DateTime UpdatedAt { get; set; }
+        [Column(TypeName = "datetime2"), DataType(DataType.DateTime)]
+        public DateTime CreatedAt { get; set; }
+        //public DateTime ModifiedDate { get; set; }
+        public string Location { get; set; }
+        [Required]
+        public string PasswordHash { get; set; }
+        [Required]
+        public string PasswordSalt { get; set; }
         public Nullable<int> ParentUser_Id { get; set; }
 
-        public PasswordQA passwordQA { get; set; }
-    
+        public String PasswordQuestion1 { get; set; }
+        public String PasswordQuestion2 { get; set; }
+        public String PasswordQuestion3 { get; set; }
+        public String PasswordAnswer1 { get; set; }
+        public String PasswordAnswer2 { get; set; }
+        public String PasswordAnswer3 { get; set; }
+
         /// <summary>
         /// Children users below user.
         /// </summary>

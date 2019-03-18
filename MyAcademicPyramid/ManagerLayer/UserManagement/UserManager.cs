@@ -5,8 +5,13 @@ using SecurityLayer.Authorization.AuthorizationManagers;
 using ServiceLayer.UserManagement.UserAccountServices;
 using ServiceLayer.PasswordChecking.HashFunctions;
 using DataAccessLayer.Models;
+using DataAccessLayer.DTOs;
 using System.Data.Entity;
 using System.Linq;
+using ServiceLayer.PasswordChecking.SaltFunction;
+using System.Security.Cryptography;
+using System.Text;
+using System.Data.Entity.Validation;
 
 namespace ManagerLayer.UserManagement
 {
@@ -16,82 +21,123 @@ namespace ManagerLayer.UserManagement
          * Class that demonstrates how authorization class might be used in
          * a controller.
          * */
-        private UserManagementServices userManagementServices;
+        private UserManagementServices _userManagementServices;
         protected DatabaseContext _DbContext;
-
 
         /// <summary>
         /// Constructor that accept a username of account and initiaize the UserManagementServices
         /// User Account has to exist in database 
         /// </summary>
         /// <param name="requestingUserName"></param>
-        public UserManager(DatabaseContext DbContext)
+        public UserManager()
         {
-            _DbContext = DbContext;
-            // Call UserManagementServices 
-            userManagementServices = new UserManagementServices(_DbContext);
-    
-        }
-
-
-        /// <summary>
-        /// Method to delete self user account or other account
-        /// </summary>
-        /// <param name="targetedUserName"></param>
-        public void DeleteUserAction(String targetedUserName)
-        {
-            if (targetedUserName == null)
-            {
-                throw new ArgumentNullException("targetedUserName");
-            }
-            User targetUser = userManagementServices.FindUserbyUserName(targetedUserName);
-            if (targetUser == null)
-            {
-                throw new ArgumentNullException(
-                    "_targetedUser", "The user to be deleted doesn't exist.");
-            }
-            else
-            {
-                userManagementServices.DeleteUser(targetUser);
-            }
-
+            _DbContext = new DatabaseContext();
+            _userManagementServices = new UserManagementServices(_DbContext);
         }
 
         /// <summary>
         /// Method to create user account
         /// </summary>
         /// <param name="targetedUserName"></param>
-        public void CreateUserAction(User user, String hashedPassword)
+        public User CreateUserAccount(UserDTO userDto)
         {
-            if (user == null)
+            try
             {
-                throw new ArgumentNullException("targetedUserName");
+                var valid = new System.Net.Mail.MailAddress(userDto.Email); // checks that email is valid
             }
-            // Call AuthorizationManager and pass the requesting user object in
-            if(userManagementServices.FindUserbyUserName(user.UserName) == null)
+            catch (Exception)
             {
+                return null;
+            }
 
-                // Tell userManagement services to create user in database 
-                user.HashPassword = hashedPassword;
-                userManagementServices.CreateUser(user);
-                
-            }
-            else
+            SHA256HashFunction HashFunction = new SHA256HashFunction();
+            HashSalt hashSaltPassword = HashFunction.GetHashValue(userDto.RawPassword);
+            User user = new User
             {
-                throw new ArgumentException(
-                    "ERROR--Username is already used"
-                    );
-               
+                UserName = userDto.UserName,
+                Firstname = userDto.Firstname,
+                LastName = userDto.LastName,
+                PasswordHash = hashSaltPassword.Hash,
+                PasswordSalt = hashSaltPassword.Salt,
+                Role = userDto.Role,
+                // date and time as it would be in Coordinated Universal Time
+                CreatedAt = DateTime.UtcNow, // https://stackoverflow.com/questions/62151/datetime-now-vs-datetime-utcnow 
+                DateOfBirth = userDto.BirthDate,
+                Location = userDto.Location,
+                Email = userDto.Email,
+            };
+
+            var response = _userManagementServices.CreateUser(user);
+            try
+            {
+                _DbContext.SaveChanges();
+                return user;
+            }
+            catch (DbEntityValidationException ex)
+            {
+                // detach user attempted to be created from the db context - rollback
+                _DbContext.Entry(response).State = System.Data.Entity.EntityState.Detached;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Method to delete self user account or other account
+        /// </summary>
+        /// <param name="targetedUserName"></param>
+        public int DeleteUserAccount(User user)
+        {
+            _userManagementServices.DeleteUser(user);
+            return _DbContext.SaveChanges();
+        }
+
+        public int UpdateUserAccount(User user)
+        {
+            var response = _userManagementServices.UpdateUser(user);
+            try
+            {
+                return _DbContext.SaveChanges();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                // catch error
+                // rollback changes
+                _DbContext.Entry(response).CurrentValues.SetValues(_DbContext.Entry(response).OriginalValues);
+                _DbContext.Entry(response).State = System.Data.Entity.EntityState.Unchanged;
+                return 0;
             }
         }
 
-        public void AssignUserToUser(User childUser, User parentUser )
+        public User AssignUserToUser(int linkFromUser, int linkToUser)
         {
-            childUser = userManagementServices.FindUserbyUserName(childUser.UserName);
-            parentUser = userManagementServices.FindUserbyUserName(parentUser.UserName);
-            childUser.ParentUser = parentUser;
-            userManagementServices.UpdateUser(childUser);
+            User linkFromUser_Searched = FindUser(linkFromUser);
+            User linkToUser_Searched = FindUser(linkToUser);
 
+            if (linkFromUser_Searched == null)
+            {
+                return null;
+            }
+            else if (linkToUser_Searched == null)
+            {
+                return null;
+            }
+            else
+            {
+                linkFromUser_Searched.ParentUser = linkToUser_Searched;
+                return _userManagementServices.UpdateUser(linkFromUser_Searched);
+            }
+        }
+
+        public User FindUser(String userEmail)
+        {
+            User user = _userManagementServices.FindUserbyUserEmail(userEmail);
+            return user;
+        }
+
+        public User FindUser(int id)
+        {
+            User user = _userManagementServices.FindById(id);
+            return user;
         }
 
 
@@ -102,7 +148,7 @@ namespace ManagerLayer.UserManagement
         public List<User> GetAllUser()
         {
             // Call GetAllUser method in userManagementServices 
-            List<User> userList = userManagementServices.GetAllUser();
+            List<User> userList = _userManagementServices.GetAllUser();
             return userList;
         }
 
@@ -113,18 +159,8 @@ namespace ManagerLayer.UserManagement
         /// <param name="targetedUserName"></param>
         /// <param name="claim"></param>
         /// 
-        public void AddClaimAction(string targetedUserName, Claim claim)
+        public User AddClaimAction(int targetedUserID, Claim claim)
         {
-            if (targetedUserName == null)
-            {
-                throw new ArgumentNullException("targetedUserName");
-            }
-            else if (claim == null)
-            {
-                throw new ArgumentNullException("claim");
-            }
-            // Call AuthorizationManager and pass the requesting user object in
-
             // List of required claims needed for AddClaimAction Method
             List<Claim> createUserRequiredClaimTypes = new List<Claim>
             {
@@ -133,19 +169,19 @@ namespace ManagerLayer.UserManagement
             };
 
             // Check if the requesting user has the require claims
- 
-            
-                // Retrive targeted user exists from database
-               User targetedUser = userManagementServices.FindUserbyUserName(targetedUserName);
+
+            // Retrive targeted user exists from database
+            User targetedUser = FindUser(targetedUserID);
             if (targetedUser == null)
             {
-                throw new ArgumentException("There was no targeted user in database.");
+                return null;
             }
             // Check if the requesting user is  at least same level as  the targeted user
 
             else
             {
-                userManagementServices.AddClaim(targetedUser, claim);
+                _userManagementServices.AddClaim(targetedUser, claim);
+                return targetedUser;
             }
         }
 
@@ -154,46 +190,67 @@ namespace ManagerLayer.UserManagement
         /// </summary>
         /// <param name="targetedUserName"></param>
         /// <param name="claim"></param>
-        public void RemoveClaimAction(string targetedUserName, Claim claim)
+        public User RemoveClaimAction(int targetedUserId, Claim claim)
         {
-            if (targetedUserName == null)
-            {
-                throw new ArgumentNullException("targetedUserName");
-            }
-            else if (claim == null)
-            {
-                throw new ArgumentNullException("claim");
-            }
-
             // List of required claims needed for AddClaimAction Method
             List<Claim> createUserRequiredClaimTypes = new List<Claim>
             {
-
                 new Claim("UserManager")
             };
 
             // Check if the requesting user has the require claims
 
-                // Retrive targeted user exists from database
-                User targetedUser = userManagementServices.FindUserbyUserName(targetedUserName);
+            // Retrive targeted user exists from database
+            User targetedUser = FindUser(targetedUserId);
             if (targetedUser == null)
-             {
-               throw new ArgumentException("There was no targeted user in database.");
-             }
-                // Check if the requesting user is  at least same level as  the targeted user
+            {
+                return null;
+
+            }
+            // Check if the requesting user is  at least same level as  the targeted user
             else
             {
-                userManagementServices.RemoveClaim(targetedUser, claim);
+                _userManagementServices.RemoveClaim(targetedUser, claim);
+                return targetedUser;
             }
-                   
+
         }
 
-        public void ChangePassword(String userName, String newPassword)
+        public User ChangePassword(int userId, String newPassword)
         {
-            User user = userManagementServices.FindUserbyUserName(userName);
-            user.HashPassword = newPassword;
-            userManagementServices.UpdateUser(user);
+            User user = FindUser(userId);
+            if (user == null)
+            {
+                return null;
+            }
+            else
+            {
+                user.PasswordHash = newPassword;
+                _userManagementServices.UpdateUser(user);
+                return user;
+            }
         }
+
+        public static bool VerifyPassword(string enteredPassword, string storedHash, string storedSalt)
+        {
+
+            byte[] bytes = System.Text.Encoding.UTF8.GetBytes(enteredPassword + storedSalt);
+
+            SHA256 sha = new SHA256Cng(); // Hash function
+            byte[] hash = sha.ComputeHash(bytes); // Generate hash in bytes
+
+            // Store the hash value as string with uppercase letters.
+            StringBuilder hashPassword = new StringBuilder(); // To store the hash value
+            foreach (byte b in hash)
+            {
+                hashPassword.Append(b.ToString("X2"));
+            }
+            String hashSaltPassword = hashPassword.ToString();
+
+            return (hashSaltPassword.Equals(storedHash));
+
+        }
+
 
         //public void ChangeSecurityPasswordQuestion(String userName, int questionNumber, String questionContext)
         //{
