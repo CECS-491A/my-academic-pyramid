@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using SecurityLayer.Authorization.AuthorizationManagers;
 using ServiceLayer.UserManagement.UserAccountServices;
 using ServiceLayer.PasswordChecking.HashFunctions;
-using DataAccessLayer.Models;
 using System.Data.Entity;
 using System.Linq;
 

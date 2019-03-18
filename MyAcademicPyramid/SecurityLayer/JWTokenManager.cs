@@ -6,14 +6,29 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.Security.Cryptography;
 using System.Web;
+using DataAccessLayer;
 
 namespace SecurityLayer
 {
-    public static class JWTokenManager
+    public class JWTokenManager
     {
         private static string key = "JOIENFUPBFJESFOIEJGNEOPFENPPFENFBPPNFIEPUBRGHFCMK";
+        private DatabaseContext _db;
+        private SessionServices _sessionServices;
 
-        public static string GenerateToken(Dictionary<string, string> payload)
+        public JWTokenManager(DatabaseContext db)
+        {
+            _db = db;
+            _sessionServices = new SessionServices(_db);
+        }
+        
+        /*TODO:
+         * Invalidate token.
+         * Update token time, I need a refreshedTime
+         * Seperate remove expired tokens process.
+         */
+
+        public string GenerateToken(User user, Dictionary<string, string> payload)
         {
             // TODO: Possibly add a random string to improve security.
             // Link: https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/JSON_Web_Token_Cheat_Sheet_for_Java.md
@@ -24,18 +39,33 @@ namespace SecurityLayer
             Dictionary<string, string> header = new Dictionary<string, string>();
             header.Add("alg", "SHA256");
             header.Add("typ", tokenType);
+            DateTimeOffset currentTime = DateTimeOffset.UtcNow;
+            DateTimeOffset expTime = currentTime.AddMinutes(30);
+            long currentTimeSec = currentTime.ToUnixTimeSeconds();
+            long expTimeSec = expTime.ToUnixTimeSeconds();
+            payload.Add("iat", currentTimeSec.ToString());
+            payload.Add("exp", expTimeSec.ToString());
             string headerEncode = UrlBase64DictEncoding(header);
             string payloadEncode = UrlBase64DictEncoding(payload);
             string signEncode = GenerateTokenSignature(headerEncode, payloadEncode, key);
-            
-
             Console.Out.WriteLine($"Header: {headerEncode} Payload: {payloadEncode}\n");
             token = $"{headerEncode}.{payloadEncode}.{signEncode}";
+            UserSession newSession = new UserSession()
+            {
+                Token = token,
+                IsValid = true,
+                CreationTime = currentTime,
+                ExpirationTime = expTime,
+                UserOfSession = user
+            };
+            _sessionServices.CreateSession(newSession);
+
+            _db.SaveChanges();
 
             return token;
         }
 
-        public static bool validateToken(string token)
+        public bool ValidateSignature(string token)
         {
             bool isValidated = false;
             string[] tokenParts = token.Split('.');
@@ -55,7 +85,29 @@ namespace SecurityLayer
             return isValidated;
         }
 
-        public static Dictionary<string, string> GetPayload(string encodedToken)
+        public bool ValidateToken(string token)
+        {
+            /*
+             * Get session entry from database
+             * If it doesn't exist, return false.
+             * Check if valid. If not, return false.
+             * 
+             * Validate signature
+             * if not valid, return false.
+             * 
+             * TODO Check if it already expired.
+             * 
+             * */
+            return (ValidateSignature(token) 
+                    && !_sessionServices.IsInvalidated(token));
+        }
+
+        public void SaveChanges()
+        {
+            _db.SaveChanges();
+        }
+
+        public Dictionary<string, string> GetPayload(string encodedToken)
         {
             //TODO finish this.
             string[] tokenParts = encodedToken.Split('.');
@@ -69,7 +121,7 @@ namespace SecurityLayer
             return JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonPayload);
         }
 
-        private static string UrlBase64DictEncoding(Dictionary<string, string> dict)
+        private string UrlBase64DictEncoding(Dictionary<string, string> dict)
         {
             string jsonDict = JsonConvert.SerializeObject(dict);
             byte[] byteJsonDict = Encoding.UTF8.GetBytes(jsonDict);
@@ -77,7 +129,7 @@ namespace SecurityLayer
             return base64EncodedDict;
         }
 
-        private static string GenerateTokenSignature(string encodedHeader, 
+        private string GenerateTokenSignature(string encodedHeader, 
                                                      string encodedPayload,
                                                      string key)
         {

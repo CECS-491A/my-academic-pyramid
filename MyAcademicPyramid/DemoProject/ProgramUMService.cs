@@ -1,7 +1,6 @@
 using System;
 using System.Data.Entity;
 using DataAccessLayer;
-using DataAccessLayer.Models;
 using ManagerLayer.UserManagement;
 using ServiceLayer.PasswordChecking.HashFunctions;
 using  ServiceLayer.UserManagement.UserAccountServices;

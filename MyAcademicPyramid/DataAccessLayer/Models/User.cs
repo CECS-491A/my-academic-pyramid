@@ -9,7 +9,6 @@
 
 namespace DataAccessLayer
 {
-    using DataAccessLayer.Models;
     using DataAccessLayer.Repository;
     using System;
     using System.Collections.Generic;
@@ -58,6 +57,8 @@ namespace DataAccessLayer
         public virtual User ParentUser { get; set; }
 
         public virtual ICollection<Claim> Claims { get; set; }
+
+        public virtual ICollection<UserSession> userSessions { get; set; }
 
         /// <summary>
         /// Override Equals method.  The UserName of each User is unique.

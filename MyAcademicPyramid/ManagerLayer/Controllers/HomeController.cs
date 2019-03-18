@@ -27,8 +27,9 @@ namespace ManagerLayer.Controllers
                 {"User", "ljulian2190@gmail.com" },
                 {"Claims", "[Student, Tutor]" }
             };
+            return "test";
 
-            return JWTokenManager.GenerateToken(testDict);
+            //return JWTokenManager.GenerateToken(testDict);
         }
     }
 }
