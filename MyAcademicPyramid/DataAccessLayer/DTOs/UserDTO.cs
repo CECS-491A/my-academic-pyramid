@@ -23,6 +23,5 @@ namespace DataAccessLayer.DTOs
         public String PasswordAnswer1 { get; set; }
         public String PasswordAnswer2 { get; set; }
         public String PasswordAnswer3 { get; set; }
-
     }
 }

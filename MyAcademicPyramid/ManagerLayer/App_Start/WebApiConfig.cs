@@ -23,9 +23,6 @@ namespace ManagerLayer
                 defaults: new { id = RouteParameter.Optional }
             );
 
-           
-
-
         }
     }
 }

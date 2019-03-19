@@ -12,6 +12,8 @@ namespace ServiceLayerTests.Tests
         [Fact]
         public void UserManagementServices_Constructor_ShouldReturnArgumentNullException()
         {
+            DatabaseContext temp = new DataBaseContext();
+            UserManagementServices temp2 = new UserManagementServices(temp);
             //Arrange
             bool exceptionRaised = false;
             bool expected = true;

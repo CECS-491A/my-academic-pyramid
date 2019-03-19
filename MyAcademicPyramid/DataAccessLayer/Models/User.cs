@@ -11,14 +11,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataAccessLayer
 {
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
     using DataAccessLayer.Models;
     using DataAccessLayer.Repository;
     using System;
     using System.Collections.Generic;
     
-    public partial class User : IEntity
+    public partial class User : IEntity 
     {
- 
+
         public User()
         {
             this.ChildUsers = new HashSet<User>();
