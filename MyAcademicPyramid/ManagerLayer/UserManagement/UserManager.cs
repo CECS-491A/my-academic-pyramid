@@ -8,7 +8,7 @@ using DataAccessLayer.Models;
 using DataAccessLayer.DTOs;
 using System.Data.Entity;
 using System.Linq;
-using ServiceLayer.PasswordChecking.SaltFunction;
+//using ServiceLayer.PasswordChecking.SaltFunction;
 using System.Security.Cryptography;
 using System.Text;
 using System.Data.Entity.Validation;
@@ -51,14 +51,14 @@ namespace ManagerLayer.UserManagement
             }
 
             SHA256HashFunction HashFunction = new SHA256HashFunction();
-            HashSalt hashSaltPassword = HashFunction.GetHashValue(userDto.RawPassword);
+            //HashSalt hashSaltPassword = HashFunction.GetHashValue(userDto.RawPassword);
             User user = new User
             {
                 UserName = userDto.UserName,
                 Firstname = userDto.Firstname,
                 LastName = userDto.LastName,
-                PasswordHash = hashSaltPassword.Hash,
-                PasswordSalt = hashSaltPassword.Salt,
+                //PasswordHash = hashSaltPassword.Hash,
+                //PasswordSalt = hashSaltPassword.Salt,
                 Role = userDto.Role,
                 // date and time as it would be in Coordinated Universal Time
                 CreatedAt = DateTime.UtcNow, // https://stackoverflow.com/questions/62151/datetime-now-vs-datetime-utcnow 
