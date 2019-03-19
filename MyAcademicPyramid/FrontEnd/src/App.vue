@@ -2,8 +2,7 @@
   <v-app>
     <v-toolbar app>
       <v-toolbar-title class="headline text-uppercase">
-        <span>Vuetify</span>
-        <span class="font-weight-light">MyAcademicPyramid</span>
+        <span class="font-weight-light">My Academic Pyramid</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn
@@ -22,7 +21,9 @@
       </v-btn>
     </v-toolbar>
     
- <router-view></router-view>
+	<v-content>
+		<router-view />
+	</v-content>
   </v-app>
 </template>
 
