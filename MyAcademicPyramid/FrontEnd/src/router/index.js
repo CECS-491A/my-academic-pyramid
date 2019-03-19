@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import Hello from '@/components/HelloWorld'
 import Router from 'vue-router'
 import Home from '@/components/Home'
 import Publish from '@/components/Publish'
@@ -6,14 +7,23 @@ import Login from '@/View/Login'
 import Chat from '@/View/Chat'
 import VueChatScroll from 'vue-chat-scroll'
 import Vuetify from 'vuetify'
+import Login from '@/components/Login'
+import UserList from '@/components/UserList'
 
 Vue.use(VueChatScroll)
 
+
 Vue.use(Router)
-Vue.use(Vuetify)
 
 export default new Router({
+  mode: 'history',
+  base: process.env.BASE_URL,
   routes: [
+	{
+		path: '/',
+		name: 'Hello',
+		component: Hello
+	},
     {
       path: '/',
       name: 'Home',
@@ -41,6 +51,11 @@ export default new Router({
           next({name: 'Login'})
         }
       }
+    },
+    {
+      path: '/UserManagement',
+      name: 'UserManagement',
+      component: UserList
     }
   ]
 })

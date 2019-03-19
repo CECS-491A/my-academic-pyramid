@@ -15,7 +15,7 @@ namespace DataAccessLayer
 
         public DatabaseContext () :base ("name=LocalTest")
         {
-            Database.SetInitializer(new MigrateDatabaseToLatestVersion<DatabaseContext, DataAccessLayer.Migrations.Configuration>());
+            Database.SetInitializer(new DropCreateDatabaseAlways<DatabaseContext>());
 
         }
 

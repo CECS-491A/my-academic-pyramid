@@ -59,7 +59,7 @@ namespace ManagerLayer.UserManagement
                 LastName = userDto.LastName,
                 PasswordHash = hashSaltPassword.Hash,
                 PasswordSalt = hashSaltPassword.Salt,
-                Role = userDto.Role,
+                Catergory = userDto.Catergory,
                 // date and time as it would be in Coordinated Universal Time
                 CreatedAt = DateTime.UtcNow, // https://stackoverflow.com/questions/62151/datetime-now-vs-datetime-utcnow 
                 DateOfBirth = userDto.BirthDate,
@@ -97,6 +97,12 @@ namespace ManagerLayer.UserManagement
             return _DbContext.SaveChanges();
         }
 
+
+        /// <summary>
+        /// Method to update user account in database after making changes 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         public int UpdateUserAccount(User user)
         {
             var response = _userManagementServices.UpdateUser(user);
@@ -114,39 +120,72 @@ namespace ManagerLayer.UserManagement
             }
         }
 
-        public User AssignUserToUser(int linkFromUser, int linkToUser )
-        {
-            User linkFromUser_Searched = FindUser(linkFromUser);
-            User linkToUser_Searched = FindUser(linkToUser);
 
-            if (linkFromUser_Searched == null)
+        /// <summary>
+        /// Method to assign a user to be a child of another user. The purpose is to achive a hierachy structure of users 
+        /// </summary>
+        /// <param name="sourceUserName"></param>
+        /// <param name="targetUserName"></param>
+        /// <returns></returns>
+        public User AssignUserToUser(string sourceUserName, string targetUserName )
+        {
+            User sourceUser = FindByUserName(sourceUserName);
+            User targetUser = FindByUserName(targetUserName);
+
+            if (sourceUser == null)
             {
                 return null;
             }
-            else if (linkToUser_Searched == null)
+            else if (targetUser == null)
             {
                 return null;
             }
-            else
+            else 
             {
-                linkFromUser_Searched.ParentUser = linkToUser_Searched;
-                return _userManagementServices.UpdateUser(linkFromUser_Searched);
+                if (sourceUser.Id== targetUser.ParentUser_Id)
+                {
+                    targetUser.ParentUser_Id = null;
+                }
+                sourceUser.ParentUser_Id = targetUser.Id;
+              
+                UpdateUserAccount(sourceUser);
+
+                UpdateUserAccount(targetUser);
+                return _userManagementServices.UpdateUser(sourceUser);
             }
         }
 
-        public User FindUser(String userEmail)
+
+        /// <summary>
+        /// Method to find user object using email
+        /// </summary>
+        /// <param name="userEmail"></param>
+        /// <returns></returns>
+        public User FindUserbyEmail(String userEmail)
         {
             User user = _userManagementServices.FindUserbyUserEmail(userEmail);
             return user;
         }
 
-        public User FindUser(int id)
+
+        /// <summary>
+        /// Method to find userobject using id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public User FindUserbyId(int id)
         {
             User user = _userManagementServices.FindById(id);
             return user;
         }
 
-        public User FindUserName(string UserName)
+
+        /// <summary>
+        /// Method to find user object by UserName
+        /// </summary>
+        /// <param name="UserName"></param>
+        /// <returns></returns>
+        public User FindByUserName(string UserName)
         {
             User user = _userManagementServices.FindByUsername(UserName);
             return user;
@@ -182,7 +221,7 @@ namespace ManagerLayer.UserManagement
             // Check if the requesting user has the require claims
  
                 // Retrive targeted user exists from database
-            User targetedUser = FindUser(targetedUserID);
+            User targetedUser = FindUserbyId(targetedUserID);
             if (targetedUser == null)
             {
                 return null;
@@ -212,7 +251,7 @@ namespace ManagerLayer.UserManagement
             // Check if the requesting user has the require claims
 
                 // Retrive targeted user exists from database
-                User targetedUser = FindUser(targetedUserId);
+                User targetedUser = FindUserbyId(targetedUserId);
             if (targetedUser == null)
              {
                 return null;
@@ -227,21 +266,41 @@ namespace ManagerLayer.UserManagement
                    
         }
 
-        public User ChangePassword(int userId, String newPassword)
+        
+        /// <summary>
+        /// Method to change password in database
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="newPassword"></param>
+        /// <returns></returns>
+        public User ChangePassword(String username, String newPassword)
         {
-            User user = FindUser(userId);
+            SHA256HashFunction HashFunction = new SHA256HashFunction();
+            
+            User user = FindByUserName(username);
             if (user == null)
             {
                 return null;
             }
             else
             {
-                user.PasswordHash = newPassword;
+                HashSalt hashSaltPassword = HashFunction.GetHashValue(newPassword);
+                user.PasswordHash = hashSaltPassword.Hash;
+                user.PasswordSalt = hashSaltPassword.Salt;
                 _userManagementServices.UpdateUser(user);
                 return user;
             }
         }
 
+        //
+        /// <summary>
+        /// Method to verify password when user login. Entered password will be hashed using input from user plus the salt value
+        /// The hashed password then will be compared with the value in database for validation.
+        /// </summary>
+        /// <param name="enteredPassword"></param>
+        /// <param name="storedHash"></param>
+        /// <param name="storedSalt"></param>
+        /// <returns></returns>
         public static bool VerifyPassword(string enteredPassword, string storedHash, string storedSalt)
         {
  

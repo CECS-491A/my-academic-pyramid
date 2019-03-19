@@ -32,7 +32,7 @@ namespace DataAccessLayer
         public string UserName { get; set; }
         public string Firstname { get; set; }
         public string LastName { get; set; }
-        public string Role { get; set; }
+        public string Catergory { get; set; }
         [Required, DataType(DataType.Date)]
         public DateTime DateOfBirth { get; set; }
         [Required]

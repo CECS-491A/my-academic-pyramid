@@ -19,7 +19,7 @@ namespace ManagerLayer.Controllers
             DatabaseContext db = new DatabaseContext();
             UserManager um = new UserManager();
 
-            User user = um.FindUserName(userDto.UserName);
+            User user = um.FindByUserName(userDto.UserName);
             if (user == null)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.NotFound, "The user was not found");
