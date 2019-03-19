@@ -15,9 +15,10 @@ namespace DataAccessLayer
 
         public DatabaseContext () :base ("name=LocalTest")
         {
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<DatabaseContext, DataAccessLayer.Migrations.Configuration>());
 
         }
-        
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             

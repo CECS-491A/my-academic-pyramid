@@ -9,7 +9,7 @@ using System.Data.Entity;
 namespace ServiceLayer.UserManagement.UserAccountServices
 {
 
-    /// <summary>
+    /// <summary>21
     /// The class contain User Management's features:
     /// Support create user, delete user, update user, find user by id, find user by username,  get all user
     /// Support add claim, remove claim
