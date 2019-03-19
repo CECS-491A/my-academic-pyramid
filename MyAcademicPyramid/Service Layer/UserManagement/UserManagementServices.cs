@@ -51,6 +51,7 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         /// <param name="user"></param>
         public User DeleteUser(User user)
         {
+    
             if (user == null)
             {
                 return null;
@@ -103,7 +104,7 @@ namespace ServiceLayer.UserManagement.UserAccountServices
 
         public User FindByUsername(String username)
         {
-            User user = _DbContext.Set<User>().Find(username);
+            User user = _DbContext.Set<User>().FirstOrDefault( u => u.UserName.Equals(username));
             return user;
         }
 

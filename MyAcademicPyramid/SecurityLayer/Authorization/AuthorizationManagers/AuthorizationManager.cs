@@ -13,7 +13,7 @@ namespace SecurityLayer.Authorization.AuthorizationManagers
     /// Checks the existence of the user and privileges of the user.  
     /// An instance of AuthorizationManager will be created for every request from the user by Controller.
     /// </summary>
-    public class AuthorizationManager:IAuthorizationManager
+    public class AuthorizationManager : IAuthorizationManager
     {
         
         private User authorizedUser;
@@ -122,7 +122,7 @@ namespace SecurityLayer.Authorization.AuthorizationManagers
             while (user.ParentUser_Id != null)
             {
                 int parentId = (int)user.ParentUser_Id;
-                //user = uMS.FindById(parentId);
+                user = uMS.FindById(parentId);
                 level += 1;
             }
 

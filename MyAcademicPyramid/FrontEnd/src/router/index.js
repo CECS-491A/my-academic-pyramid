@@ -1,21 +1,29 @@
 import Vue from 'vue'
+import Hello from '@/components/HelloWorld'
 import Router from 'vue-router'
-import Home from '@/components/Home'
-import Publish from '@/components/Publish'
+import Login from '@/components/Login'
+import UserList from '@/components/UserList'
 
 Vue.use(Router)
 
 export default new Router({
+  mode: 'history',
+  base: process.env.BASE_URL,
   routes: [
+	{
+		path: '/',
+		name: 'Hello',
+		component: Hello
+	},
     {
-      path: '/',
-      name: 'Home',
-      component: Home
+      path: '/login',
+      name: 'Login',
+      component: Login
     },
     {
-      path: '/Publish',
-      name: 'Publish',
-      component: Publish
+      path: '/UserManagement',
+      name: 'UserManagement',
+      component: UserList
     }
   ]
 })

@@ -1,48 +1,174 @@
 using System;
-using System.Data.Entity;
 using DataAccessLayer;
+using DataAccessLayer.DTOs;
 using DataAccessLayer.Models;
+using DemoProject.Helper;
 using ManagerLayer.UserManagement;
+using SecurityLayer.Authorization.AuthorizationManagers;
 using ServiceLayer.PasswordChecking.HashFunctions;
-using  ServiceLayer.UserManagement.UserAccountServices;
-
 
 
 namespace DemoProject
 {
-     class ProgramUMService
+    class ProgramUMService
     {
         static void Main(string[] args)
         {
 
-            DatabaseContext _DbContext = new DatabaseContext();
-            var UserManager = new UserManager(_DbContext);
-            //Create a new user account
-            //Console.WriteLine("Create new user account - Trong");
+           
+            //TestingHelper.ClearDatabase();
+           
+            var UserManager = new UserManager();
+            SHA256HashFunction HashFunction = new SHA256HashFunction();
+            HashSalt hashSaltPassword = HashFunction.GetHashValue("Luis");
 
-            //SHA256HashFunction HashFunction = new SHA256HashFunction();
-            //String userPassword = "Trong@90";
-            //String hashedPassword = HashFunction.GetHashValue(userPassword);
-            //PasswordQA passwordQA = new PasswordQA("What's your name", "Me", "What is your dog name", "Fox", "what is your heihgt", "5.09");
-            //User newUser1 = new User("Trong", passwordQA);
-            //UserManager.CreateUserAction(newUser1, hashedPassword);
+            Console.WriteLine("Create Admin Account");
+            UserManager.CreateUserAccount(new UserDTO {
+                UserName = "Admin",
+                Firstname = "Luis",
+                LastName = "Luin",
+                Catergory = "Admin",
+                BirthDate = DateTime.Today,
+                RawPassword = "PasswordLuis",
+                Location = "Long Beach",
+                Email = "Luis@gmail.com",
+                PasswordQuestion1 = "What is our favourite food ?",
+                PasswordQuestion2 = "Where is your school?",
+                PasswordQuestion3 = "What is your major",
+                PasswordAnswer1 = "Burger",
+                PasswordAnswer2 = "CSULB",
+                PasswordAnswer3 = "CS",
+            } );
 
-            UserManager.DeleteUserAccount("Trong");
-            UserManager.DeleteUserAccount("Trang");
+            Console.WriteLine("Create SubAdmin Account");
+            UserManager.CreateUserAccount(new UserDTO
+            {
+                UserName = "SubAdmin",
+                Firstname = "Trong",
+                LastName = "Luin",
+                Catergory = "SubAdmin",
+                BirthDate = DateTime.Today,
+                RawPassword = "PasswordTrong",
+                Location = "Long Beach",
+                Email = "nguyentrong56@gmail.com",
+                PasswordQuestion1 = "What is our favourite food ?",
+                PasswordQuestion2 = "Where is your school?",
+                PasswordQuestion3 = "What is your major",
+                PasswordAnswer1 = "Burger",
+                PasswordAnswer2 = "CSULB",
+                PasswordAnswer3 = "CS",
+            });
+
+            Console.WriteLine("Assigning SubAdmin to Admin");
+            UserManager.AssignUserToUser("SubAdmin", "Admin");
+
+            UserManager.CreateUserAccount(new UserDTO
+            {
+                UserName = "User1",
+                Firstname = "Kevin",
+                LastName = "NA",
+                Catergory = "User",
+                BirthDate = DateTime.Today,
+                RawPassword = "PasswordKevin",
+                Location = "Long Beach",
+                Email = "Kevin@gmail.com",
+                PasswordQuestion1 = "What is our favourite food ?",
+                PasswordQuestion2 = "Where is your school?",
+                PasswordQuestion3 = "What is your major",
+                PasswordAnswer1 = "Burger",
+                PasswordAnswer2 = "CSULB",
+                PasswordAnswer3 = "CS",
+            });
+
+            Console.WriteLine("Assigning user to SubAdmin");
+            UserManager.AssignUserToUser("User1", "Admin");
+
+            Console.WriteLine("Testing if User1 has right to delete admin");
+            AuthorizationManager aM = new AuthorizationManager();
+
+            User user1 = UserManager.FindByUserName("User1");
+            User admin = UserManager.FindByUserName("Admin");
+            
+            if(aM.HasHigherPrivilege(user1, admin))
+            {
+                UserManager.DeleteUserAccount(admin);
+            }
+
+            else
+            {
+                Console.WriteLine("User1 does not have enought privilge to delete Admin");
+            }
+
+
+            Console.WriteLine("Testing if Admin has right to delete User1");
+
+            if (aM.HasHigherPrivilege(admin, user1))
+            {
+                UserManager.DeleteUserAccount(user1);
+                Console.WriteLine("Delete Sucessfully");
+            }
+
+            else
+            {
+                Console.WriteLine("User1 does not have enought privilge to delete Admin");
+            }
+
+            Console.WriteLine("Create another User called User2 and assigns it to SubAdmin");
+            UserManager.CreateUserAccount(new UserDTO
+            {
+                UserName = "User2",
+                Firstname = "Arturo",
+                LastName = "NA",
+                Catergory = "User",
+                BirthDate = DateTime.Today,
+                RawPassword = "PasswordArturo",
+                Location = "Long Beach",
+                Email = "Arturo@gmail.com",
+                PasswordQuestion1 = "What is our favourite food ?",
+                PasswordQuestion2 = "Where is your school?",
+                PasswordQuestion3 = "What is your major",
+                PasswordAnswer1 = "Burger",
+                PasswordAnswer2 = "CSULB",
+                PasswordAnswer3 = "CS",
+            });
+            UserManager.AssignUserToUser("User2", "SubAdmin");
+
+            Console.WriteLine("Testing if User2 has right to delete SubAdmin");
+            User subAdmin = UserManager.FindByUserName("SubAdmin");
+            User user2 = UserManager.FindByUserName("User2");
+
+
+            if (aM.HasHigherPrivilege(user2, subAdmin))
+            {
+                UserManager.DeleteUserAccount(subAdmin);
+                Console.WriteLine("Delete Sucessfully");
+            }
+
+            else
+            {
+                Console.WriteLine("User2 does not have enought privilge to delete Subdmin");
+            }
+
+            Console.WriteLine("Make SubAdmin to be a child of User2 ");
+            UserManager.AssignUserToUser("SubAdmin", "User2");
+            subAdmin = UserManager.FindByUserName("SubAdmin");
+            Console.WriteLine("Testing if User2 has right to delete SubAdmin");
 
 
 
-            _DbContext.SaveChanges();
+            if (aM.HasHigherPrivilege(user2, subAdmin))
+            {
+                UserManager.DeleteUserAccount(subAdmin);
+                Console.WriteLine("Delete Sucessfully");
+            }
+
+            else
+            {
+                Console.WriteLine("User2 does not have enought privilge to delete Subdmin");
+            }
 
 
-
-            //String userPassword2 = "Trong@93";
-            //String hashedPassword2 = HashFunction.GetHashValue(userPassword2);
-            //User newUser2 = new User("Cindy");
-            //UserManager.CreateUserAction(new User("Cindy"), hashedPassword2);
-            //UserManager.AssignUserToUser(newUser2, newUser1);
-
-
+            Console.WriteLine("Testing if ");
             Console.ReadKey();
         }
     }

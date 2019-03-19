@@ -65,7 +65,7 @@ namespace ManagerLayer.Controllers
         public void Delete(int id)
         {
             UserManager umManager = new UserManager();
-            umManager.DeleteUserAccount(umManager.FindUser(id));
+            umManager.DeleteUserAccount(umManager.FindUserbyId(id));
         }
     }
 }
