@@ -10,7 +10,7 @@ using ServiceLayer.PasswordChecking.HashFunctions;
 
 namespace DemoProject
 {
-    class ProgramUMService
+    class ProgramUserManager
     {
         static void Main(string[] args)
         {
@@ -167,8 +167,6 @@ namespace DemoProject
                 Console.WriteLine("User2 does not have enought privilge to delete Subdmin");
             }
 
-
-            Console.WriteLine("Testing if ");
             Console.ReadKey();
         }
     }
