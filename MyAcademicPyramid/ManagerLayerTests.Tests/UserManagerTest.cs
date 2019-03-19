@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer;
+using DataAccessLayer.DTOs;
 using DemoProject;
 using ManagerLayer.UserManagement;
 using System;
@@ -13,19 +14,33 @@ namespace ManagerLayer.Tests
     public class UserManagerTest
     {
         [Fact]
-        public void UserManager_CreateSystemAdminUsingOverloadConstructor_ShouldReturnTrue()
+        public void UserManager_CreateUserAccount_ShouldCreateUser()
         {
             // Arrange
-            UserManager temp = new UserManager();
-            Effort.Provider.EffortProviderConfiguration.RegisterProvider();
-            EffortFactory.ResetDb();
+            UserManager UM = new UserManager();
             bool expected = true;
             bool actual;
 
             // Act
             try
             {
-                UserManager AdminUserManager = new UserManager("Admin", true);
+                UM.CreateUserAccount(new UserDTO
+                {
+                    UserName = "SystemAdmin",
+                    Firstname = "Arturo",
+                    LastName = "NA",
+                    Catergory = "User",
+                    BirthDate = DateTime.UtcNow,
+                    RawPassword = "PasswordArturo",
+                    Location = "Long Beach",
+                    Email = "Arturo@gmail.com",
+                    PasswordQuestion1 = "What is our favourite food ?",
+                    PasswordQuestion2 = "Where is your school?",
+                    PasswordQuestion3 = "What is your major",
+                    PasswordAnswer1 = "Burger",
+                    PasswordAnswer2 = "CSULB",
+                    PasswordAnswer3 = "CS",
+                });
                 actual = true;
             }
 
@@ -39,20 +54,34 @@ namespace ManagerLayer.Tests
         }
 
         [Fact]
-        public void UserManager_CreateUserAction_TargetUserNameNullShouldThrowException()
+        public void UserManager_CreateUserAccount_InvalidEmail_ShouldThrowException()
         {
             // Arrange
-            Effort.Provider.EffortProviderConfiguration.RegisterProvider();
-            EffortFactory.ResetDb();
-            String targetUserName = null;
-            UserManager userManager = new UserManager("Admin", true);
+            UserManager UM = new UserManager();
+            string invalidEmail = "hello";
             bool expected = true;
             bool actual;
 
             // Act
             try
             {
-                userManager.CreateUserAction(targetUserName);
+                UM.CreateUserAccount(new UserDTO
+                {
+                    UserName = "SystemAdmin",
+                    Firstname = "Arturo",
+                    LastName = "NA",
+                    Catergory = "User",
+                    BirthDate = DateTime.UtcNow,
+                    RawPassword = "PasswordArturo",
+                    Location = "Long Beach",
+                    Email = invalidEmail,
+                    PasswordQuestion1 = "What is our favourite food ?",
+                    PasswordQuestion2 = "Where is your school?",
+                    PasswordQuestion3 = "What is your major",
+                    PasswordAnswer1 = "Burger",
+                    PasswordAnswer2 = "CSULB",
+                    PasswordAnswer3 = "CS",
+                });
                 actual = false;
             }
 
@@ -66,61 +95,45 @@ namespace ManagerLayer.Tests
         }
 
         [Fact]
-        public void UserManager_CreateUserAction_RequiredClaimsNotMeet_ShouldThrowException()
+        public void UserManager_DeleteUserAccount_ShouldDeleteUser()
         {
             // Arrange
-            Effort.Provider.EffortProviderConfiguration.RegisterProvider();
-            EffortFactory.ResetDb();
-            UserManager userManager = new UserManager("Admin", true);
-            String targetUserName = "SubAdmin";      
-            userManager.CreateUserAction(targetUserName);
+            UserManager UM = new UserManager();
+            User createdUser = UM.CreateUserAccount(new UserDTO
+            {
+                UserName = "SystemAdmin",
+                Firstname = "Arturo",
+                LastName = "NA",
+                Catergory = "User",
+                BirthDate = DateTime.UtcNow,
+                RawPassword = "PasswordArturo",
+                Location = "Long Beach",
+                Email = "Arturo@gmail.com",
+                PasswordQuestion1 = "What is our favourite food ?",
+                PasswordQuestion2 = "Where is your school?",
+                PasswordQuestion3 = "What is your major",
+                PasswordAnswer1 = "Burger",
+                PasswordAnswer2 = "CSULB",
+                PasswordAnswer3 = "CS",
+            });
             bool expected = true;
             bool actual;
 
             // Act
             try
             {
-                UserManager SubAdmin_UserManager = new UserManager("SubAdmin");
-                SubAdmin_UserManager.CreateUserAction("Normal User");
-                actual = false;
-            }
-
-            catch (ArgumentException)
-            {
+                UM.DeleteUserAccount(createdUser);
                 actual = true;
             }
 
-            // Assert
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
-        public void UserManager_CreateUserAction_ShouldCreateAccount()
-        {
-            // Arrange
-            Effort.Provider.EffortProviderConfiguration.RegisterProvider();
-            EffortFactory.ResetDb();
-            UserManager AdminUserManager = new UserManager("Admin", true);
-            AdminUserManager.CreateUserAction("SubAdmin");
-            AdminUserManager.AddClaimAction("SubAdmin", new Claim("UserManager")); 
-            bool expected = true;
-            bool actual;
-
-            // Act
-            try
-            {
-                UserManager SubAdmin_UserManager = new UserManager("SubAdmin");
-                SubAdmin_UserManager.CreateUserAction("Normal User");
-                actual = true;
-            }
-
-            catch (ArgumentException)
+            catch (ArgumentNullException)
             {
                 actual = false;
             }
 
             // Assert
             Assert.Equal(expected, actual);
+
         }
 
         [Fact]
