@@ -10,6 +10,7 @@ namespace ManagerLayerTests.Tests
 {
     public class AuthorizationManagerTests
     {
+        /*
         public AuthorizationManagerTests()
         {
             EffortFactory.ResetDb();
@@ -457,5 +458,6 @@ namespace ManagerLayerTests.Tests
             // Assert
             Assert.Equal(expected, actual);
         }
+        */
     }
 }

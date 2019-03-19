@@ -8,6 +8,7 @@ namespace ServiceLayerTests.Tests
 {
     public class UserTreeTest
     {
+        /*
         Node root = new Node("Root");
         User krystal = new User("Krystal");
         User luis = new User("Luis");
@@ -543,5 +544,6 @@ namespace ServiceLayerTests.Tests
             // Assert
             Assert.Equal(expected, actual);
         }
+        */
     }
 }
