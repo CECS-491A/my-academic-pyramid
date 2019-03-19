@@ -9,7 +9,7 @@ using System.Data.Entity;
 namespace ServiceLayer.UserManagement.UserAccountServices
 {
 
-    /// <summary>
+    /// <summary>21
     /// The class contain User Management's features:
     /// Support create user, delete user, update user, find user by id, find user by username,  get all user
     /// Support add claim, remove claim
@@ -39,7 +39,7 @@ namespace ServiceLayer.UserManagement.UserAccountServices
                 return null;
             }
             else
-            {
+            { 
                 _DbContext.Entry(user).State = System.Data.Entity.EntityState.Added;
                 return user;
             }
@@ -98,6 +98,12 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         public User FindById(int id)
         {
             User user = _DbContext.Set<User>().Find(id);
+            return user;
+        }
+
+        public User FindByUsername(String username)
+        {
+            User user = _DbContext.Set<User>().Find(username);
             return user;
         }
 

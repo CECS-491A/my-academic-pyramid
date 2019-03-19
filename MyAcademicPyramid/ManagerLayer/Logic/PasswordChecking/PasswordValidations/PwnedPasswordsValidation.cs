@@ -36,7 +36,7 @@ namespace ManagerLayer.Logic.PasswordChecking.PasswordValidations
         public PasswordStatus Validate(string password)
         {
             // Use the hash function to get the hash value of the password.
-            _hashValue = _hashFunction.GetHashValue(password);
+            _hashValue = _hashFunction.GetHashValue(password).Hash + _hashFunction.GetHashValue(password).Salt;
             Console.WriteLine("Hash Value: " + _hashValue); // Demo
 
             // First 5 characters of the hash value

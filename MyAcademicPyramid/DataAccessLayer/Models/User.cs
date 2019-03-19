@@ -6,6 +6,8 @@
 //     Manual changes to this file will be overwritten if the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataAccessLayer
 {
@@ -73,6 +75,10 @@ namespace DataAccessLayer
         public override bool Equals(object obj)
         {
             var user = obj as User;
+            if(user == null)
+            {
+                return false;
+            }
             return UserName.Equals(user.UserName);
         }
 

@@ -12,9 +12,9 @@ namespace ServiceLayer.UserManagement.UserClaimServices
     /// </summary>
     public interface IUserClaimServices
     {
-
-        User AddClaim(User user, Claim claim);
+        
+        User AddClaim(User user, Claim claim );
         User RemoveClaim(User user, Claim claim);
-
+        
     }
 }
