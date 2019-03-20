@@ -9,7 +9,7 @@ using System.Data.Entity;
 namespace ServiceLayer.UserManagement.UserAccountServices
 {
 
-    /// <summary>
+    /// <summary>21
     /// The class contain User Management's features:
     /// Support create user, delete user, update user, find user by id, find user by username,  get all user
     /// Support add claim, remove claim
@@ -19,67 +19,47 @@ namespace ServiceLayer.UserManagement.UserAccountServices
 
         protected DatabaseContext _DbContext;
 
-
         /// <summary>
         /// Constructor which initialize the userRepository 
         /// </summary>
         /// <param name="unitOfWork"></param>
         public UserManagementServices(DatabaseContext DbContext)
         {
-            if (DbContext == null)
-            {
-                throw new ArgumentNullException("DbContext");
-            }
-            else
-            {
-                _DbContext = DbContext;
-            }
-
+            _DbContext = DbContext;
         }
-
 
         /// <summary>
         /// Create user account method
         /// </summary>
         /// <param name="user"></param>
-        public void CreateUser(User user)
+        public User CreateUser(User user)
         {
             if (user == null)
             {
-                throw new ArgumentNullException("user");
-            }
-            // Check if the username exist. Then add the user
-            User searchResult = FindUserbyUserName(user.UserName);
-            if (searchResult == null)
-            {
-                _DbContext.Entry(user).State = System.Data.Entity.EntityState.Added;
+                return null;
             }
             else
-            {
-                throw new ArgumentException(("Error--Username already exists"));
+            { 
+                _DbContext.Entry(user).State = System.Data.Entity.EntityState.Added;
+                return user;
             }
-
         }
-
 
         /// <summary>
         /// Delete user account  
         /// </summary>
         /// <param name="user"></param>
-        public void DeleteUser(User user)
+        public User DeleteUser(User user)
         {
+    
             if (user == null)
             {
-                throw new ArgumentNullException("user");
-            }
-            if (FindUserbyUserName(user.UserName) != null)
-            {
-
-                _DbContext.Entry(user).State = System.Data.Entity.EntityState.Deleted;
+                return null;
             }
             else
             {
-                throw new ArgumentException(("Error--Cannot find user to delete"));
+                _DbContext.Entry(user).State = System.Data.Entity.EntityState.Deleted;
+                return user;
             }
         }
 
@@ -87,19 +67,16 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         /// Update user account method 
         /// </summary>
         /// <param name="user"></param>
-        public void UpdateUser(User user)
+        public User UpdateUser(User user)
         {
             if (user == null)
             {
-                throw new ArgumentNullException("user");
-            }
-            if (FindById(user.Id) != null)
-            {
-                _DbContext.Entry(user).State = System.Data.Entity.EntityState.Modified;
+                return null;
             }
             else
             {
-                throw new ArgumentException(("Error--Cannot find user to update"));
+                _DbContext.Entry(user).State = System.Data.Entity.EntityState.Modified;
+                return user;
             }
         }
 
@@ -108,11 +85,10 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         /// </summary>
         /// <param name="userName"></param>
         /// <returns></returns>
-        public User FindUserbyUserName(string userName)
+        public User FindUserbyUserEmail(string userEmail)
         {
-            User user = _DbContext.Set<User>().FirstOrDefault(u => u.UserName == userName);
+            User user = _DbContext.Set<User>().FirstOrDefault(u => u.Email == userEmail);
             return user;
-
         }
 
         /// <summary>
@@ -124,7 +100,12 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         {
             User user = _DbContext.Set<User>().Find(id);
             return user;
+        }
 
+        public User FindByUsername(String username)
+        {
+            User user = _DbContext.Set<User>().FirstOrDefault( u => u.UserName.Equals(username));
+            return user;
         }
 
         /// <summary>
@@ -142,26 +123,22 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         /// </summary>
         /// <param name="user"></param>
         /// <param name="claim"></param>
-        public void RemoveClaim(User user, Claim claim)
+        public User RemoveClaim(User user, Claim claim)
         {
-            User searchedUser = FindUserbyUserName(user.UserName);
-            bool searchedClaim = searchedUser.Claims.Contains(claim);
-
-            if (searchedUser != null && searchedClaim != false)
+            if (claim == null)
             {
-                searchedUser.Claims.Remove(claim);
-                _DbContext.Entry(searchedUser).State = System.Data.Entity.EntityState.Modified;
+                return null;
             }
-            else if (searchedUser == null)
+            else if (user == null)
             {
-                throw new ArgumentException("Couldn't find user to remove claim");
+                return null;
             }
-            else if (searchedClaim == false)
+            else
             {
-                throw new ArgumentException(("Couldn't find claim to remove "));
+                user.Claims.Remove(claim);
+                _DbContext.Entry(user).State = System.Data.Entity.EntityState.Modified;
+                return user;
             }
-
-
         }
 
         /// <summary>
@@ -169,21 +146,23 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         /// </summary>
         /// <param name="user"></param>
         /// <param name="claim"></param>
-        public void AddClaim(User user, Claim claim)
+        public User AddClaim(User user, Claim claim)
         {
-            User searchedUser = FindUserbyUserName(user.UserName);
-
-            if (searchedUser != null)
+            if (claim == null)
             {
-                searchedUser.Claims.Add(claim);
-                _DbContext.Entry(searchedUser).State = System.Data.Entity.EntityState.Modified;
+                return null;
             }
-            else if (searchedUser == null)
+            else if (user == null)
             {
-                throw new ArgumentException("Couldn't  find user to add claim");
+                return null;
             }
-
+            else
+            {
+                user.Claims.Add(claim);
+                _DbContext.Entry(user).State = System.Data.Entity.EntityState.Modified;
+                return user;
+            }
         }
 
-    }
+    } // end of class
 }

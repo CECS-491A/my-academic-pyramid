@@ -1,7 +1,10 @@
-﻿using System;
+﻿using DataAccessLayer;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using System.Web.Http.Cors;
+using System.Web.Routing;
 
 namespace ManagerLayer
 {
@@ -10,19 +13,15 @@ namespace ManagerLayer
         public static void Register(HttpConfiguration config)
         {
             // Web API configuration and services
-            config.EnableCors();
-            // Web API routes
+            var cors = new EnableCorsAttribute("*", "*", "*");
+            config.EnableCors(cors);
             config.MapHttpAttributeRoutes();
-
+            // Web API routes
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
-
-
-           
-
 
         }
     }

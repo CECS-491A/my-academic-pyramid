@@ -34,6 +34,9 @@ namespace DataAccessLayer
             Value = value;
             this.Users = new HashSet<User>();
         }
+
+       
+        
     
         // Claim Id
         public int Id { get; set; }

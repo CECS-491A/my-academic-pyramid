@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using DataAccessLayer.Models.Messenger;
+using System.Data.Entity;
 
 namespace DataAccessLayer
 {
@@ -11,12 +12,15 @@ namespace DataAccessLayer
 
         public DbSet<UserSession> Sessions { get; set; }
 
-        public DatabaseContext () :base ("name=MYAPConnectionString")
+        //Set of Conservations
+        public DbSet<Conversation> Conservations { get; set; }
+
+        public DatabaseContext() : base("name=MYAPConnectionString")
         {
             //Database.SetInitializer<DatabaseContext>(new DropCreateDatabaseIfModelChanges<DatabaseContext>());
             Database.SetInitializer<DatabaseContext>(new DropCreateDatabaseAlways<DatabaseContext>());
         }
-        
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             

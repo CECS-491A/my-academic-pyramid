@@ -16,6 +16,7 @@ namespace ManagerLayer.Tests
         public void UserManager_CreateSystemAdminUsingOverloadConstructor_ShouldReturnTrue()
         {
             // Arrange
+            UserManager temp = new UserManager();
             Effort.Provider.EffortProviderConfiguration.RegisterProvider();
             EffortFactory.ResetDb();
             bool expected = true;

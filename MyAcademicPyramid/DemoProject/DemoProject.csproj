@@ -64,9 +64,9 @@
     <Compile Include="JWTokenDemo.cs" />
     <Compile Include="ProgramAuthorization.cs" />
     <Compile Include="ProgramPassword.cs" />
-    <Compile Include="ProgramUMService.cs" />
-    <Compile Include="ProgramUMTree.cs" />
+    <Compile Include="ProgramUserManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Helper\TestingHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

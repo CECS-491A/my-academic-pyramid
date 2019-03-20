@@ -1,9 +1,11 @@
 ﻿using DataAccessLayer;
 using DataAccessLayer.DTOs;
+using DataAccessLayer.Models;
 using ManagerLayer.UserManagement;
 using ServiceLayer.PasswordChecking.HashFunctions;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -13,16 +15,17 @@ using System.Web.Http.Cors;
 
 namespace ManagerLayer.Controllers
 {
-    [EnableCors(origins: "https://myacademicpyramid.com", headers: "*", methods: "*")]
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class UserManagerController : ApiController
     {
+
+
         // GET api/<controller>
         [HttpGet]
         public IQueryable<UserDTO> Get()
         {
-            DatabaseContext DbContext = new DatabaseContext();
-            UserManager uM = new UserManager(DbContext);
-            List<User> userList = uM.GetAllUser();
+            UserManager umManager = new UserManager();
+            List<User> userList = umManager.GetAllUser();
 
             List<UserDTO> list = new List<UserDTO>();
             foreach(var user in userList)
@@ -40,7 +43,7 @@ namespace ManagerLayer.Controllers
         }
 
         // GET api/<controller>/5
-        public string Get(int id)
+        public string Get(Guid id)
         {
             return "value";
         }
@@ -49,36 +52,20 @@ namespace ManagerLayer.Controllers
         [HttpPost]
         public IHttpActionResult Post([FromBody] UserDTO userDto)
         {
-            SHA256HashFunction HashFunction = new SHA256HashFunction();
-            String _passwordHash = HashFunction.GetHashValue(userDto.Password);
-            User user = new User
-            {
-                UserName = userDto.UserName,
-                Firstname = userDto.Firstname,
-                LastName = userDto.LastName,
-                HashPassword= _passwordHash,
-
-            };
-
-            DatabaseContext DbContext = new DatabaseContext();
-            UserManager uM = new UserManager(DbContext);
-             uM.CreateUserAction(user, _passwordHash);
-            DbContext.SaveChanges();
-
-            return Ok(user);
-
-
-
+            UserManager umManager = new UserManager();
+            return Ok(umManager.CreateUserAccount(userDto));
         }
 
         // PUT api/<controller>/5
-        public void Put(int id, [FromBody]string value)
+        public void Put(Guid id, [FromBody]string value)
         {
         }
 
         // DELETE api/<controller>/5
         public void Delete(int id)
         {
+            UserManager umManager = new UserManager();
+            umManager.DeleteUserAccount(umManager.FindUserbyId(id));
         }
     }
 }
