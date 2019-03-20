@@ -1,6 +1,5 @@
 ﻿using DataAccessLayer;
 using DataAccessLayer.DTOs;
-using DemoProject;
 using ManagerLayer.UserManagement;
 using System;
 using System.Collections.Generic;
