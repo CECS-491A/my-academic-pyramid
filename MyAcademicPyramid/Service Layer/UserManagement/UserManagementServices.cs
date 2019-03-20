@@ -85,7 +85,7 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         /// </summary>
         /// <param name="userName"></param>
         /// <returns></returns>
-        public User FindUserbyUserEmail(string userEmail)
+        public User FindUserByUserEmail(string userEmail)
         {
             User user = _DbContext.Set<User>().FirstOrDefault(u => u.Email == userEmail);
             return user;
@@ -136,7 +136,6 @@ namespace ServiceLayer.UserManagement.UserAccountServices
             else
             {
                 user.Claims.Remove(claim);
-                _DbContext.Entry(user).State = System.Data.Entity.EntityState.Modified;
                 return user;
             }
         }
@@ -159,7 +158,6 @@ namespace ServiceLayer.UserManagement.UserAccountServices
             else
             {
                 user.Claims.Add(claim);
-                _DbContext.Entry(user).State = System.Data.Entity.EntityState.Modified;
                 return user;
             }
         }

@@ -32,6 +32,7 @@ namespace ManagerLayer.Controllers
             {
                 list.Add(new UserDTO
                 {
+                    Id = user.Id,
                     UserName = user.UserName,
                     Firstname = user.Firstname,
                     LastName = user.LastName,
@@ -62,10 +63,11 @@ namespace ManagerLayer.Controllers
         }
 
         // DELETE api/<controller>/5
+        [HttpDelete]
         public void Delete(int id)
         {
             UserManager umManager = new UserManager();
-            umManager.DeleteUserAccount(umManager.FindUserbyId(id));
+            umManager.DeleteUserAccount(umManager.FindUserById(id));
         }
     }
 }

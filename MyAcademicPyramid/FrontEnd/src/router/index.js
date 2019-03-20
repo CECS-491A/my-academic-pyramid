@@ -5,12 +5,13 @@ import Publish from '@/components/Publish'
 import VueChatScroll from 'vue-chat-scroll'
 import Login from '@/components/Login'
 import UserList from '@/components/UserList'
+import UserForm from '@/components/UserInfoForm'
 
 Vue.use(VueChatScroll)
 
 
 Vue.use(Router)
-
+export const bus = new Vue();
 export default new Router({
   mode: 'history',
   base: process.env.BASE_URL,
@@ -47,6 +48,16 @@ export default new Router({
     path: '/UserManagement',
     name: 'UserManagement',
     component: UserList
-  }
+  },
+    {
+      path: '/login',
+      name: 'Login',
+      component: Login
+    },
+    {
+      path: '/UserManagement',
+      name: 'UserManagement',
+      component: UserList, UserForm
+    }
   ]
 })
