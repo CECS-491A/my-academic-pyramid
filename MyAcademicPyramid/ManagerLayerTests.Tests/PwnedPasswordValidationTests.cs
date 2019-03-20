@@ -13,8 +13,10 @@ using System.Diagnostics;
 
 namespace ManagerLayerTests.Tests
 {
+    
     public class PwnedPasswordValidationTests
     {
+        /*
         // Arrange
         static SHA1HashFunction sha = new SHA1HashFunction();
         static string url = "https://api.pwnedpasswords.com/range/";
@@ -256,5 +258,6 @@ namespace ManagerLayerTests.Tests
             // Assert
             Assert.True(stopwatch.ElapsedMilliseconds < 1000);
         }
+        */
     }
 }

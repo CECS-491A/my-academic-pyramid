@@ -9,6 +9,7 @@ namespace ServiceLayerTests.Tests
 {
     public class UserManagementServicesTest
     {
+        /*
         [Fact]
         public void UserManagementServices_Constructor_ShouldReturnArgumentNullException()
         {
@@ -335,7 +336,7 @@ namespace ServiceLayerTests.Tests
 
         }
 
-
+    */
 
     }
 
