@@ -35,7 +35,6 @@ namespace DataAccessLayer
         public string Catergory { get; set; }
         [Column(TypeName = "datetime2"), DataType(DataType.DateTime)]
         public DateTime DateOfBirth { get; set; }
-        [Required]
         public string Email { get; set; }
         [Column(TypeName = "datetime2"), DataType(DataType.DateTime)]
         public DateTime UpdatedAt { get; set; }
