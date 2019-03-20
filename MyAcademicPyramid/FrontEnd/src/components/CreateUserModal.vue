@@ -1,21 +1,33 @@
 <script>
+/*global console*/ /* eslint no-console: "off" */
   export default {
 	name: 'CreateModal',
 	data() {
 		return{
 			formData: {
-				username:'',
-				firstName:'',
-				lastName:'',
-				email:''
-			}
+				UserName:'',
+				FirstName:'',
+				LastName:'',
+			},
+			response:''
 		}
 	},
     methods: {
       close() {
-        this.$emit('close');
-      },
-    },
+		this.$emit('close')
+		},
+		submitData(){
+			this.axios({ method: "POST", "url": "http://localhost:60500/api/usermanager", "data": this.formData, "headers": { "content-type": "application/json" } }).then(result => {
+                    this.response = result.data;
+                }, error => {
+                    console.error(error);
+				});
+				
+				this.$eventBus.$emit('UpdateTable');
+				this.$emit('close');
+		},
+		
+    }
   };
 </script>
 
@@ -39,37 +51,23 @@
       <section class="modal-body">
         <slot name="body">
 
-          <v-text-field
-            
-            id="username"
+          <v-text-field       
+            id="UserName"
             label="UserName" 
-			v-model="formData.username"
+			v-model="formData.UserName"
             
             /><br />
-
-			<v-text-field
-           
+			<v-text-field     
             id="firstName"
             label="First Name" 
-			v-model="formData.firstName"
+			v-model="formData.FirstName"
             /><br />
 
 			<v-text-field
-            
             id="lastName"
             label="Last Name" 
-			v-model="formData.lastName"
+			v-model="formData.LastName"
             /><br />
-
-			<v-text-field
-        
-            id="email"
-            label="Email" 
-			v-model="formData.email"
-            /><br />
-
-			
-			
         </slot>
        </section>
        <footer class="modal-footer">
@@ -79,7 +77,7 @@
             <button
               type="button"
               class="btn-green"
-              @click="close"
+              @click="submitData"
             >
               Save changes
           </button>

@@ -34,7 +34,7 @@ namespace ManagerLayer.Controllers
                 {
                     Id = user.Id,
                     UserName = user.UserName,
-                    Firstname = user.Firstname,
+                    FirstName = user.FirstName,
                     LastName = user.LastName,
                     Email = user.Email
                 });

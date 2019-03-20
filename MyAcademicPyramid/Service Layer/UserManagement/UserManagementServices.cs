@@ -1,10 +1,9 @@
 ﻿
 using System;
 using System.Collections.Generic;
-using DataAccessLayer;
 using System.Linq;
+using DataAccessLayer;
 using ServiceLayer.UserManagement.UserClaimServices;
-using System.Data.Entity;
 
 namespace ServiceLayer.UserManagement.UserAccountServices
 {

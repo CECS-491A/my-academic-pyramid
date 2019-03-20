@@ -12,7 +12,9 @@
     </v-toolbar>
     
 	<v-content>
+    <keep-alive>
 		<router-view />
+    </keep-alive> 
 	</v-content>
   </v-app>
 </template>
