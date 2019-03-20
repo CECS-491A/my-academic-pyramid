@@ -3,6 +3,7 @@ import Hello from '@/components/HelloWorld'
 import Router from 'vue-router'
 import Login from '@/components/Login'
 import UserList from '@/components/UserList'
+import UserForm from '@/components/UserInfoForm'
 
 Vue.use(Router)
 
