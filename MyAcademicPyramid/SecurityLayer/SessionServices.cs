@@ -20,6 +20,22 @@ namespace SecurityLayer
             _db.SaveChanges();
             // TODO add a catch in case operation failed.
         }
+
+        public void RefreshSession(string oldToken, string updatedToken, 
+                                   DateTimeOffset currentDateTime, 
+                                   DateTimeOffset expirationDateTime)
+        {
+            
+            UserSession sessionToUpdate = _db.Sessions.Where(s => s.Token == oldToken)
+                                                      .FirstOrDefault();
+            //DateTimeOffset currentTime = DateTimeOffset.UtcNow;
+            //sessionToUpdate.RefreshedTime = currentTime.ToUnixTimeSeconds();
+            sessionToUpdate.Token = updatedToken;
+            sessionToUpdate.RefreshedTime = currentDateTime;
+            sessionToUpdate.ExpirationTime = expirationDateTime;
+            _db.SaveChanges();
+        }
+
         public bool IsInvalidated(string token)
         {
             /* Get the isValid attribute of the token

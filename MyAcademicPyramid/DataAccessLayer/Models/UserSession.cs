@@ -14,6 +14,7 @@ namespace DataAccessLayer
         public int Id { get; set; }
         public bool IsValid { get; set; }
         public DateTimeOffset CreationTime { get; set; }
+        public DateTimeOffset RefreshedTime { get; set; }
         public DateTimeOffset ExpirationTime { get; set; }
         [ForeignKey("UserOfSession")]
         public int UserId { get; set; }

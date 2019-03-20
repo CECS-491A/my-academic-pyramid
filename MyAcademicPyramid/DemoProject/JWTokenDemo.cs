@@ -21,6 +21,8 @@ namespace DemoProject
                 { "c", "3" }
             };
 
+            test["c"] = "New 3";
+
             DatabaseContext _DbContext = new DatabaseContext();
             var um = new UserManager(_DbContext);
 
@@ -35,13 +37,14 @@ namespace DemoProject
 
             JWTokenManager tm = new JWTokenManager(_DbContext);
             
-            String token = tm.GenerateToken(newUser1, test);
+            String token = tm.GenerateToken(newUser1.Id, test);
             Console.Out.WriteLine(token);
             Console.Out.WriteLine("Attempting to validate token");
+            Dictionary<string, string> payload = null;
             if (tm.ValidateToken(token))
             {
                 Console.Out.WriteLine("Getting payload");
-                Dictionary<string, string> payload = tm.GetPayload(token);
+                payload = tm.GetPayload(token);
                 Console.Out.WriteLine(payload.ToString());
             }
 
@@ -55,6 +58,24 @@ namespace DemoProject
                 Console.Out.WriteLine("Correct: FakeToken wasn't valid.");
             }
 
+            System.Threading.Thread.Sleep(50000);
+            if (!tm.ValidateToken(token))
+            {
+                Console.Out.WriteLine("Token is now invalid. Good.");
+            }
+            else
+            {
+                Console.Out.WriteLine("Error: Token should be invalid.");
+            }
+            string newToken = tm.RefreshToken(token, payload);
+            if (tm.ValidateToken(newToken))
+            {
+                Console.Out.WriteLine("Good! The refresh worked!");
+            }
+            else
+            {
+                Console.Out.WriteLine("Something is wrong with refresh.");
+            }
             Console.In.Read();
             Console.Out.WriteLine("Ending program.");
 

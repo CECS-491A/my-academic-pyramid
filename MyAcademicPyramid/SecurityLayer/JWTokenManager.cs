@@ -23,45 +23,141 @@ namespace SecurityLayer
         }
         
         /*TODO:
-         * Invalidate token.
-         * Update token time, I need a refreshedTime
          * Seperate remove expired tokens process.
+         * Random string for security
+         * Headers for cross scripts.
+         * Action to get token, Validate, Refresh
+         * UI.
          */
 
-        public string GenerateToken(User user, Dictionary<string, string> payload)
+        public string GenerateToken(int userid, Dictionary<string, string> payload)
         {
             // TODO: Possibly add a random string to improve security.
             // Link: https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/JSON_Web_Token_Cheat_Sheet_for_Java.md
-            string token = "";
-            string tokenType = "JWT";
+            string token;
             // TODO: get key from flat file, so make key a paramater of function.
             // Created header
-            Dictionary<string, string> header = new Dictionary<string, string>();
-            header.Add("alg", "SHA256");
-            header.Add("typ", tokenType);
             DateTimeOffset currentTime = DateTimeOffset.UtcNow;
-            DateTimeOffset expTime = currentTime.AddMinutes(30);
+            DateTimeOffset expTime = currentTime.AddMinutes(0.5);
             long currentTimeSec = currentTime.ToUnixTimeSeconds();
             long expTimeSec = expTime.ToUnixTimeSeconds();
             payload.Add("iat", currentTimeSec.ToString());
+            payload.Add("refresh", payload["iat"]);
             payload.Add("exp", expTimeSec.ToString());
-            string headerEncode = UrlBase64DictEncoding(header);
-            string payloadEncode = UrlBase64DictEncoding(payload);
-            string signEncode = GenerateTokenSignature(headerEncode, payloadEncode, key);
-            Console.Out.WriteLine($"Header: {headerEncode} Payload: {payloadEncode}\n");
-            token = $"{headerEncode}.{payloadEncode}.{signEncode}";
+
+            token = _createToken(payload);
+
             UserSession newSession = new UserSession()
             {
                 Token = token,
                 IsValid = true,
                 CreationTime = currentTime,
+                RefreshedTime = currentTime,
                 ExpirationTime = expTime,
-                UserOfSession = user
+                UserId = userid
             };
             _sessionServices.CreateSession(newSession);
 
             _db.SaveChanges();
 
+            return token;
+        }
+
+
+        public bool ValidateToken(string token)
+        {
+            /*
+             * Get session entry from database
+             * If it doesn't exist, return false.
+             * Check if valid. If not, return false.
+             * 
+             * Validate signature
+             * if not valid, return false.
+             * 
+             * 
+             * */
+            bool isValid = (ValidateSignature(token) 
+                            && !_sessionServices.IsInvalidated(token));
+            if (isValid)
+            {
+                // Check if current time is less than expiredTime
+                var payload = GetPayload(token);
+                long expireTime;
+                if (payload.ContainsKey("exp"))
+                {
+                    try
+                    {
+                        expireTime = long.Parse(payload["exp"]);
+                        isValid = DateTimeOffset.UtcNow
+                                                .ToUnixTimeSeconds() < expireTime;
+                    } catch(FormatException)
+                    {
+                        // log it
+                    }
+                   
+                }
+                else
+                {
+                    isValid = false;
+                }
+
+            }
+            return isValid;
+        }
+
+        public void SaveChanges()
+        {
+            _db.SaveChanges();
+        }
+
+        public string RefreshToken(string encodedToken, Dictionary<string, string> payload)
+        {
+            // call SSO token
+            DateTimeOffset currentDateTime = DateTimeOffset.UtcNow;
+            DateTimeOffset expDateTime = currentDateTime.AddMinutes(30);
+            /*
+             * Update refresh
+             * Update expiration
+             * GenerateNewToken
+             * UpdateToken
+             */
+            //TODO add error checking.
+            // If payload doesn't have this, then it's not represented by a token.
+            payload["refresh"] = currentDateTime.ToUnixTimeSeconds().ToString();
+            payload["exp"] = expDateTime.ToUnixTimeMilliseconds()
+                                        .ToString();
+            string newToken = _createToken(payload);
+            _sessionServices.RefreshSession(encodedToken, newToken, 
+                                            currentDateTime, expDateTime);
+            return newToken;
+        }
+
+        public Dictionary<string, string> GetPayload(string encodedToken)
+        {
+            //TODO finish this.
+            string[] tokenParts = encodedToken.Split('.');
+            if (tokenParts.Length != 3)
+            {
+                throw new ArgumentException("Invalid JWToken.");
+            }
+            string encodedPayload = tokenParts[1];
+            byte[] bytePayload = HttpServerUtility.UrlTokenDecode(encodedPayload);
+            string jsonPayload = Encoding.UTF8.GetString(bytePayload);
+            return JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonPayload);
+        }
+
+        private string _createToken(Dictionary<string, string> payload)
+        {
+            string token = "";
+            string tokenType = "JWT";
+            Dictionary<string, string> header = new Dictionary<string, string>();
+            header.Add("alg", "SHA256");
+            header.Add("typ", tokenType);
+            string headerEncode = UrlBase64DictEncoding(header);
+            string payloadEncode = UrlBase64DictEncoding(payload);
+            string signEncode = GenerateTokenSignature(headerEncode, payloadEncode, key);
+            Console.Out.WriteLine($"Header: {headerEncode} Payload: {payloadEncode}\n");
+            token = $"{headerEncode}.{payloadEncode}.{signEncode}";
             return token;
         }
 
@@ -83,42 +179,6 @@ namespace SecurityLayer
             isValidated = signToCheck.Equals(encodedSign);
 
             return isValidated;
-        }
-
-        public bool ValidateToken(string token)
-        {
-            /*
-             * Get session entry from database
-             * If it doesn't exist, return false.
-             * Check if valid. If not, return false.
-             * 
-             * Validate signature
-             * if not valid, return false.
-             * 
-             * TODO Check if it already expired.
-             * 
-             * */
-            return (ValidateSignature(token) 
-                    && !_sessionServices.IsInvalidated(token));
-        }
-
-        public void SaveChanges()
-        {
-            _db.SaveChanges();
-        }
-
-        public Dictionary<string, string> GetPayload(string encodedToken)
-        {
-            //TODO finish this.
-            string[] tokenParts = encodedToken.Split('.');
-            if (tokenParts.Length != 3)
-            {
-                throw new ArgumentException("Invalid JWToken.");
-            }
-            string encodedPayload = tokenParts[1];
-            byte[] bytePayload = HttpServerUtility.UrlTokenDecode(encodedPayload);
-            string jsonPayload = Encoding.UTF8.GetString(bytePayload);
-            return JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonPayload);
         }
 
         private string UrlBase64DictEncoding(Dictionary<string, string> dict)
