@@ -15,5 +15,7 @@
     </noscript>
     <div id="app"></div>
     <!-- built files will be auto injected -->
+    <component :feedback='feedback' :is="currentComponent"
+    @register-form='handleForm' @signin-form='handleForm'></component>
   </body>
 </html>
