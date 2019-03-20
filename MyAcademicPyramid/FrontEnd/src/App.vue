@@ -5,10 +5,20 @@
         <span class="font-weight-light">My Academic Pyramid</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn to="/" flat>Home</v-btn>
-      <v-btn to="Login" flat>Login</v-btn>
-      <v-btn to="Publish" flat>Publish</v-btn>
-      <v-btn to="UserManagement" flat>UM</v-btn>
+      <v-btn
+        flat
+        href="https://github.com/vuetifyjs/vuetify/releases/latest"
+        target="_blank"
+      >
+        <span class="mr-2">Latest Release</span>
+      </v-btn>
+            <v-btn
+        flat
+        href="/login"
+        target="_blank"
+      >
+        <span class="mr-2">Login</span>
+      </v-btn>
     </v-toolbar>
     
 	<v-content>

@@ -41,6 +41,16 @@ export default new Router({
   //     }
   //   }
   // },
+  {
+    path: '/UserManagement',
+    name: 'UserManagement',
+    component: UserList
+  },
+    {
+      path: '/login',
+      name: 'Login',
+      component: Login
+    },
     {
       path: '/UserManagement',
       name: 'UserManagement',
