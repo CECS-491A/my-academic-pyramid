@@ -17,7 +17,7 @@
       <td class="text-xs-right">{{ props.item.Email }}</td>
       <td class="text-xs-right">{{ props.item.BirthDate }}</td>
       <v-btn v-on:click="deleteUser(props.item.Id)" color="Add">Delete</v-btn>
-      <v-btn v-on:click="UserForm" color="Add">Edit</v-btn>
+      <v-btn v-on:click="switchComponent('UserForm')" color="Add">Edit</v-btn>
     </template>
   </v-data-table>
          </v-flex>
@@ -25,6 +25,7 @@
     <v-btn color="Add">Add</v-btn>
          </v-flex>
        </v-layout>
+
      </v-container>
    </v-app>
 </div>
@@ -38,7 +39,7 @@
 
 <script>
 /*global console*/ /* eslint no-console: "off" */
-import UserForm from '@/components/UserInfoForm'
+import { bus } from '../router/index.js';
   export default {
     data () {
       return {
@@ -66,11 +67,10 @@ import UserForm from '@/components/UserInfoForm'
           }
        
         ],
+        currentComponent: 'UserList',
         response:"",
         }},
-        components: {
-          UserForm
-        },
+        
         created ()
         {
           this.fetchUsers();
@@ -100,7 +100,10 @@ import UserForm from '@/components/UserInfoForm'
         deleteUser(id){
           this.axios.delete('http://localhost:60500/api/usermanager/'+ id)
           .then((response) => {this.response = response;})
-          }   
+          },
+        switchComponent(comp){
+          bus.$emit('switchComp', comp);
+        }   
         }
       }
     
