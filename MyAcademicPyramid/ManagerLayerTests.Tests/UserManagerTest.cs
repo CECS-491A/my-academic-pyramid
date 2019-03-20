@@ -56,7 +56,7 @@ namespace ManagerLayer.Tests
         }
 
         [Fact]
-        public void UserManager_CreateUserAccount_InvalidEmail_ShouldThrowException()
+        public void UserManager_CreateUserAccount_InvalidEmail_ShouldReturnNull()
         {
             // Arrange
             UserManager UM = new UserManager();
@@ -90,7 +90,7 @@ namespace ManagerLayer.Tests
 
             catch(ArgumentNullException)
             {
-                actual = true;
+                actual = false;
             }
 
             // Assert
@@ -105,7 +105,7 @@ namespace ManagerLayer.Tests
             User createdUser = UM.CreateUserAccount(new UserDTO
             {
                 UserName = "User",
-                Firstname = "Kevin",
+                FirstName = "Kevin",
                 LastName = "NA",
                 Catergory = "User",
                 BirthDate = DateTime.UtcNow,
@@ -149,7 +149,7 @@ namespace ManagerLayer.Tests
             User createdUser = UM.CreateUserAccount(new UserDTO
             {
                 UserName = "SystemAdmin5",
-                Firstname = "Arturo",
+                FirstName = "Arturo",
                 LastName = "NA",
                 Catergory = "User",
                 BirthDate = DateTime.UtcNow,
@@ -184,7 +184,7 @@ namespace ManagerLayer.Tests
             User createdUser = UM.CreateUserAccount(new UserDTO
             {
                 UserName = "Prof",
-                Firstname = "Luis",
+                FirstName = "Luis",
                 LastName = "IDK",
                 Catergory = "User",
                 BirthDate = DateTime.UtcNow,
@@ -228,7 +228,7 @@ namespace ManagerLayer.Tests
             User createdUser = UM.CreateUserAccount(new UserDTO
             {
                 UserName = "User",
-                Firstname = "Kry",
+                FirstName = "Kry",
                 LastName = "Leon",
                 Catergory = "User",
                 BirthDate = DateTime.UtcNow,
@@ -262,7 +262,7 @@ namespace ManagerLayer.Tests
             User createdChildUser = UM.CreateUserAccount(new UserDTO
             {
                 UserName = "User",
-                Firstname = "Arturo",
+                FirstName = "Arturo",
                 LastName = "NA",
                 Catergory = "User",
                 BirthDate = DateTime.UtcNow,
@@ -273,7 +273,7 @@ namespace ManagerLayer.Tests
             User createdParentUser = UM.CreateUserAccount(new UserDTO
             {
                 UserName = "SystemAdmin",
-                Firstname = "ArturoSon",
+                FirstName = "ArturoSon",
                 LastName = "NA",
                 Catergory = "User",
                 BirthDate = DateTime.UtcNow,
@@ -314,7 +314,7 @@ namespace ManagerLayer.Tests
             User createdChildUser = UM.CreateUserAccount(new UserDTO
             {
                 UserName = "User",
-                Firstname = "Arturo",
+                FirstName = "Arturo",
                 LastName = "NA",
                 Catergory = "User",
                 BirthDate = DateTime.UtcNow,
@@ -325,7 +325,7 @@ namespace ManagerLayer.Tests
             User createdParentUser = UM.CreateUserAccount(new UserDTO
             {
                 UserName = "SystemAdmin",
-                Firstname = "ArturoSon",
+                FirstName = "ArturoSon",
                 LastName = "NA",
                 Catergory = "User",
                 BirthDate = DateTime.UtcNow,
@@ -367,7 +367,7 @@ namespace ManagerLayer.Tests
             User createdChildUser = UM.CreateUserAccount(new UserDTO
             {
                 UserName = "User",
-                Firstname = "Arturo",
+                FirstName = "Arturo",
                 LastName = "NA",
                 Catergory = "User",
                 BirthDate = DateTime.UtcNow,
@@ -378,7 +378,7 @@ namespace ManagerLayer.Tests
             User createdParentUser = UM.CreateUserAccount(new UserDTO
             {
                 UserName = "SystemAdmin",
-                Firstname = "ArturoSon",
+                FirstName = "ArturoSon",
                 LastName = "NA",
                 Catergory = "User",
                 BirthDate = DateTime.UtcNow,
@@ -420,7 +420,7 @@ namespace ManagerLayer.Tests
             User createdUser = UM.CreateUserAccount(new UserDTO
             {
                 UserName = "Admin",
-                Firstname = "Kevin",
+                FirstName = "Kevin",
                 LastName = "Kim",
                 Catergory = "User",
                 BirthDate = DateTime.UtcNow,
@@ -460,7 +460,7 @@ namespace ManagerLayer.Tests
             User createdUser = UM.CreateUserAccount(new UserDTO
             {
                 UserName = "SystemAdmin",
-                Firstname = "Arturo",
+                FirstName = "Arturo",
                 LastName = "NA",
                 Catergory = "User",
                 BirthDate = DateTime.UtcNow,
@@ -501,7 +501,7 @@ namespace ManagerLayer.Tests
             User createdUser = UM.CreateUserAccount(new UserDTO
             {
                 UserName = "SystemAdmin",
-                Firstname = "Arturo",
+                FirstName = "Arturo",
                 LastName = "NA",
                 Catergory = "User",
                 BirthDate = DateTime.UtcNow,
@@ -544,7 +544,7 @@ namespace ManagerLayer.Tests
             {
                 Id = 100,
                 UserName = "SystemAdmin",
-                Firstname = "Arturo",
+                FirstName = "Arturo",
                 LastName = "NA",
                 Catergory = "User",
                 BirthDate = DateTime.UtcNow,
@@ -586,7 +586,7 @@ namespace ManagerLayer.Tests
             {
                 Id = 100,
                 UserName = "SystemAdmin",
-                Firstname = "Arturo",
+                FirstName = "Arturo",
                 LastName = "NA",
                 Catergory = "User",
                 BirthDate = DateTime.UtcNow,
@@ -629,7 +629,7 @@ namespace ManagerLayer.Tests
             {
                 Id = 100,
                 UserName = "SystemAdmin2",
-                Firstname = "Arturo",
+                FirstName = "Arturo",
                 LastName = "NA",
                 Catergory = "User",
                 BirthDate = DateTime.UtcNow,
@@ -671,7 +671,7 @@ namespace ManagerLayer.Tests
             {
                 Id = 100,
                 UserName = "User",
-                Firstname = "Arturo",
+                FirstName = "Arturo",
                 LastName = "NA",
                 Catergory = "User",
                 BirthDate = DateTime.UtcNow,
@@ -714,7 +714,7 @@ namespace ManagerLayer.Tests
             {
                 Id = 100,
                 UserName = "User",
-                Firstname = "Hyunwoo",
+                FirstName = "Hyunwoo",
                 LastName = "Kim",
                 Catergory = "User",
                 BirthDate = DateTime.UtcNow,
@@ -726,7 +726,7 @@ namespace ManagerLayer.Tests
             {
                 Id = 101,
                 UserName = "User",
-                Firstname = "Hyunwoo2",
+                FirstName = "Hyunwoo2",
                 LastName = "Kim2",
                 Catergory = "User",
                 BirthDate = DateTime.UtcNow,
