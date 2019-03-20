@@ -13,7 +13,7 @@
                 <td class="text-xs-left">{{ props.item.LastName }}</td>
                 <td class="text-xs-;fef">{{ props.item.BirthDate }}</td>
                 <v-btn v-on:click="deleteUser(props.item.Id)">Delete</v-btn>
-                <v-btn v-on:click="showEditModal(item)">Edit</v-btn>
+                <v-btn v-on:click="showEditModal(props.item)">Edit</v-btn>
               </template>
             </v-data-table>
           </v-flex>
@@ -78,7 +78,7 @@ export default {
     },
     showEditModal(item) {
       this.isEditModalVisible = true;
-      this.$eventBus.$emit("EditUser", item);
+      this.$eventBus.$emit('EditUser', item);
 
     },
     closeEditModal() {

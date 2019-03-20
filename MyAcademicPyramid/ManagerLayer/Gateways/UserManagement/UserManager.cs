@@ -37,14 +37,14 @@ namespace ManagerLayer.UserManagement
         /// <param name="targetedUserName"></param>
         public User CreateUserAccount(UserDTO userDto)
         {
-            try
-            {
-                var valid = new System.Net.Mail.MailAddress(userDto.Email); // checks that email is valid
-            }
-            catch (Exception)
-            {
-                return null;
-            }
+            //try
+            //{
+            //    var valid = new System.Net.Mail.MailAddress(userDto.Email); // checks that email is valid
+            //}
+            //catch (Exception)
+            //{
+            //    return null;
+            //}
 
             SHA256HashFunction HashFunction = new SHA256HashFunction();
             //HashSalt hashSaltPassword = HashFunction.GetHashValue(userDto.RawPassword);
