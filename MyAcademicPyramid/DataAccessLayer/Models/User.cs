@@ -29,28 +29,28 @@ namespace DataAccessLayer
         public string Firstname { get; set; }
         public string LastName { get; set; }
         public string Catergory { get; set; }
-        [Required, DataType(DataType.Date)]
-        public DateTime DateOfBirth { get; set; }
+        //[Required, DataType(DataType.Date)]
+        //public DateTime DateOfBirth { get; set; }
         [Required]
         public string Email { get; set; }
-        [Required, Column(TypeName = "datetime2"), DataType(DataType.DateTime)]
-        public DateTime UpdatedAt { get; set; }
-        [Column(TypeName = "datetime2"), DataType(DataType.DateTime)]
-        public DateTime CreatedAt { get; set; }
-        //public DateTime ModifiedDate { get; set; }
-        public string Location { get; set; }
-        [Required]
+        //[Required, Column(TypeName = "datetime2"), DataType(DataType.DateTime)]
+        //public DateTime UpdatedAt { get; set; }
+        ////[Column(TypeName = "datetime2"), DataType(DataType.DateTime)]
+        //public DateTime CreatedAt { get; set; }
+        ////public DateTime ModifiedDate { get; set; }
+        //public string Location { get; set; }
+        ////[Required]
         public string PasswordHash { get; set; }
-        [Required]
+        ////[Required]
         public string PasswordSalt { get; set; }
         public Nullable<int> ParentUser_Id { get; set; }
 
-        public String PasswordQuestion1 { get; set; }
-        public String PasswordQuestion2 { get; set; }
-        public String PasswordQuestion3 { get; set; }
-        public String PasswordAnswer1 { get; set; }
-        public String PasswordAnswer2 { get; set; }
-        public String PasswordAnswer3 { get; set; }
+        //public String PasswordQuestion1 { get; set; }
+        //public String PasswordQuestion2 { get; set; }
+        //public String PasswordQuestion3 { get; set; }
+        //public String PasswordAnswer1 { get; set; }
+        //public String PasswordAnswer2 { get; set; }
+        //public String PasswordAnswer3 { get; set; }
 
         /// <summary>
         /// Children users below user.

@@ -7,6 +7,7 @@ using DataAccessLayer;
 using ManagerLayer.UserManagement;
 using SecurityLayer;
 using ServiceLayer.PasswordChecking.HashFunctions;
+using DataAccessLayer.DTOs;
 
 namespace DemoProject
 {
@@ -23,21 +24,16 @@ namespace DemoProject
 
             test["c"] = "New 3";
 
+            CreateUsers();
+
+
             DatabaseContext _DbContext = new DatabaseContext();
-            var um = new UserManager(_DbContext);
+            var um = new UserManager();
 
-            SHA256HashFunction HashFunction = new SHA256HashFunction();
-            String userPassword = "Trong@90";
-            String hashedPassword = HashFunction.GetHashValue(userPassword);
-            PasswordQA passwordQA = new PasswordQA("What's your name", "Me", "What is your dog name", "Fox", "what is your heihgt", "5.09");
-            User newUser1 = new User("Trong", passwordQA);
-            um.CreateUserAction(newUser1, hashedPassword);
-            _DbContext.SaveChanges();
-
-
+            User user = um.FindByUserName("Abc@gmail.com");
             JWTokenManager tm = new JWTokenManager(_DbContext);
-            
-            String token = tm.GenerateToken(newUser1.Id, test);
+
+            String token = tm.GenerateToken(user.Id, test);
             Console.Out.WriteLine(token);
             Console.Out.WriteLine("Attempting to validate token");
             Dictionary<string, string> payload = null;
@@ -76,12 +72,45 @@ namespace DemoProject
             {
                 Console.Out.WriteLine("Something is wrong with refresh.");
             }
+
             Console.In.Read();
             Console.Out.WriteLine("Ending program.");
 
         }
-        
 
+        private static void CreateUsers()
+        {
+            UserDTO user1 = new UserDTO()
+            {
+                UserName = "Abc@gmail.com",
+                Firstname = "Jackie",
+                LastName = "Chan",
+                Email = "Abc@gmail.com"
+            };
 
+            UserDTO user2 = new UserDTO()
+            {
+                UserName = "tri@yahoo.com",
+                Firstname = "David",
+                LastName = "Gonzales",
+                Email = "tri@yahoo.com"
+            };
+
+            UserDTO user3 = new UserDTO()
+            {
+                UserName = "Smith@gmail.com",
+                Firstname = "Michael",
+                LastName = "Nguyen",
+                Email = "Smith@gmail.com"
+            };
+
+            DatabaseContext db = new DatabaseContext();
+            UserManager uM = new UserManager();
+            uM.CreateUserAccount(user1);
+            uM.CreateUserAccount(user2);
+            uM.CreateUserAccount(user3);
+            db.SaveChanges();
+
+        }
     }
 }

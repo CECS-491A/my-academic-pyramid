@@ -57,20 +57,20 @@ namespace ManagerLayer.UserManagement
                 UserName = userDto.UserName,
                 Firstname = userDto.Firstname,
                 LastName = userDto.LastName,
-                PasswordHash = hashSaltPassword.Hash,
-                PasswordSalt = hashSaltPassword.Salt,
-                Catergory = userDto.Catergory,
-                // date and time as it would be in Coordinated Universal Time
-                CreatedAt = DateTime.UtcNow, // https://stackoverflow.com/questions/62151/datetime-now-vs-datetime-utcnow 
-                DateOfBirth = userDto.BirthDate,
-                Location = userDto.Location,
+                //PasswordHash = hashSaltPassword.Hash,
+                //PasswordSalt = hashSaltPassword.Salt,
+                //Catergory = userDto.Catergory,
+                //// date and time as it would be in Coordinated Universal Time
+                //CreatedAt = DateTime.UtcNow, // https://stackoverflow.com/questions/62151/datetime-now-vs-datetime-utcnow 
+                //DateOfBirth = userDto.BirthDate,
+                //Location = userDto.Location,
                 Email = userDto.Email,
-                PasswordQuestion1 = userDto.PasswordQuestion1,
-                PasswordQuestion2 = userDto.PasswordQuestion2,
-                PasswordQuestion3 = userDto.PasswordQuestion3,
-                PasswordAnswer1 = userDto.PasswordAnswer1,
-                PasswordAnswer2 = userDto.PasswordAnswer2,
-                PasswordAnswer3 = userDto.PasswordAnswer3,
+                //PasswordQuestion1 = userDto.PasswordQuestion1,
+                //PasswordQuestion2 = userDto.PasswordQuestion2,
+                //PasswordQuestion3 = userDto.PasswordQuestion3,
+                //PasswordAnswer1 = userDto.PasswordAnswer1,
+                //PasswordAnswer2 = userDto.PasswordAnswer2,
+                //PasswordAnswer3 = userDto.PasswordAnswer3,
             };
 
             var response = _userManagementServices.CreateUser(user);

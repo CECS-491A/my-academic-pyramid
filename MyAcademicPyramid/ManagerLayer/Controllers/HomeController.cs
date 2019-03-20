@@ -24,37 +24,40 @@ namespace ManagerLayer.Controllers
 
         private void CreateUsers()
         {
-            User user1 = new User()
+            UserDTO user1 = new UserDTO()
             {
                 UserName = "Abc@gmail.com",
                 Firstname = "Jackie",
-                LastName = "Chan"
+                LastName = "Chan",
+                Email = "Abc@gmail.com"
             };
 
-            User user2 = new User()
+            UserDTO user2 = new UserDTO()
             {
                 UserName = "tri@yahoo.com",
                 Firstname = "David",
-                LastName = "Gonzales"
+                LastName = "Gonzales",
+                Email = "tri@yahoo.com"
             };
 
-            User user3 = new User()
+            UserDTO user3 = new UserDTO()
             {
                 UserName = "Smith@gmail.com",
                 Firstname = "Michael",
-                LastName = "Nguyen"
+                LastName = "Nguyen",
+                Email = "Smith@gmail.com"
             };
 
             DatabaseContext db = new DatabaseContext();
-            UserManager uM = new UserManager(db);
-            uM.CreateUserAction(user1, "eoifj");
-            uM.CreateUserAction(user2, "eoifj");
-            uM.CreateUserAction(user3, "eoifj");
+            UserManager uM = new UserManager();
+            uM.CreateUserAccount(user1);
+            uM.CreateUserAccount(user2);
+            uM.CreateUserAccount(user3);
             db.SaveChanges();
         }
 
-        [HttpGet]
-        [Route("Home/TestJWT")]
+        [HttpPost]
+        //[Route("Home/TestJWT")]
         public string TestJWT([FromBody] string username)
         {
 
@@ -65,10 +68,26 @@ namespace ManagerLayer.Controllers
             CreateUsers();
             DatabaseContext db = new DatabaseContext();
             JWTokenManager tm = new JWTokenManager(db);
+            UserManager um = new UserManager();
+            User user = um.FindByUserName(username);
+            if (user == null)
+            {
+                return "User with that username not found";
+            }
+            else
+            {
+                Dictionary<string, string> testPayload = new Dictionary<string, string>()
+                {
+                    { "a", "1"},
+                    { "b", "2" },
+                    { "c", "3" }
+                };
+                return tm.GenerateToken(user.Id, testPayload);
+            }
+            
 
             //string token = tm.GenerateToken();
-            //return Ok(user);
-            return "";
+            
     //Dictionary<string, string> testDict = new Dictionary<string, string>()
     //{
     //    {"User", "ljulian2190@gmail.com" },
