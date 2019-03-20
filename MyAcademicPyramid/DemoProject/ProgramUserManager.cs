@@ -51,12 +51,6 @@ namespace DemoProject
                 RawPassword = "PasswordTrong",
                 Location = "Long Beach",
                 Email = "nguyentrong56@gmail.com",
-                PasswordQuestion1 = "What is our favourite food ?",
-                PasswordQuestion2 = "Where is your school?",
-                PasswordQuestion3 = "What is your major",
-                PasswordAnswer1 = "Burger",
-                PasswordAnswer2 = "CSULB",
-                PasswordAnswer3 = "CS",
             });
 
             Console.WriteLine("Assigning SubAdmin to Admin");
@@ -72,12 +66,7 @@ namespace DemoProject
                 RawPassword = "PasswordKevin",
                 Location = "Long Beach",
                 Email = "Kevin@gmail.com",
-                PasswordQuestion1 = "What is our favourite food ?",
-                PasswordQuestion2 = "Where is your school?",
-                PasswordQuestion3 = "What is your major",
-                PasswordAnswer1 = "Burger",
-                PasswordAnswer2 = "CSULB",
-                PasswordAnswer3 = "CS",
+
             });
 
             Console.WriteLine("Assigning user to SubAdmin");
@@ -124,12 +113,6 @@ namespace DemoProject
                 RawPassword = "PasswordArturo",
                 Location = "Long Beach",
                 Email = "Arturo@gmail.com",
-                PasswordQuestion1 = "What is our favourite food ?",
-                PasswordQuestion2 = "Where is your school?",
-                PasswordQuestion3 = "What is your major",
-                PasswordAnswer1 = "Burger",
-                PasswordAnswer2 = "CSULB",
-                PasswordAnswer3 = "CS",
             });
             UserManager.AssignUserToUser("User2", "SubAdmin");
 

@@ -31,12 +31,10 @@ namespace DataAccessLayer
 
             modelBuilder.Entity<User>().
                 HasMany(c => c.Claims);
-                
-                
-               
-
-            base.OnModelCreating(modelBuilder);
+         base.OnModelCreating(modelBuilder);
 
         }
+
+
     }
 }

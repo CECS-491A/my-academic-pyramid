@@ -11,7 +11,7 @@
                 <td class="text-xs-left">{{ props.item.UserName }}</td>
                 <td class="text-xs-left">{{ props.item.FirstName }}</td>
                 <td class="text-xs-left">{{ props.item.LastName }}</td>
-                <td class="text-xs-;fef">{{ props.item.BirthDate }}</td>
+                <td class="text-xs-;fef">{{ props.item.ParentUser }}</td>
                 <v-btn v-on:click="deleteUser(props.item.Id)">Delete</v-btn>
                 <v-btn v-on:click="showEditModal(props.item)">Edit</v-btn>
               </template>
@@ -52,7 +52,7 @@ export default {
         },
         { text: "First Name", value: "Firstname" },
         { text: "Last Name", value: "LastName" },
-        { text: "Date Of Birth", value: "BirthDate" }
+        { text: "Parent User", value: "ParentUser" }
       ],
       users: [],
       isEditModalVisible: false,
@@ -93,7 +93,7 @@ export default {
 
     fetchUsers() {
       this.axios
-        .get("http://localhost:60500/api/usermanager", {
+        .get("https://myacademicpyramid.com/api/usermanager", {
           headers: { "Content-Type": "application/Json" }
         })
         .then(response => {
@@ -106,7 +106,7 @@ export default {
     },
     deleteUser(id) {
       this.axios
-        .delete("http://localhost:60500/api/usermanager/" + id)
+        .delete("https://myacademicpyramid.com/api/usermanager/" + id)
         .then(response => {
           this.response = response;
         });

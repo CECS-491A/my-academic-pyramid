@@ -17,11 +17,6 @@ namespace DataAccessLayer.DTOs
         public String Location { get; set; }
         public string Email { get; set; }
         public String RawPassword { get; set; }
-        public String PasswordQuestion1 { get; set; }
-        public String PasswordQuestion2 { get; set; }
-        public String PasswordQuestion3 { get; set; }
-        public String PasswordAnswer1 { get; set; }
-        public String PasswordAnswer2 { get; set; }
-        public String PasswordAnswer3 { get; set; }
+        
     }
 }
