@@ -55,12 +55,12 @@ namespace ManagerLayer.UserManagement
                 LastName = userDto.LastName,
                 PasswordHash = hashSaltPassword.Hash,
                 PasswordSalt = hashSaltPassword.Salt,
-                Catergory = userDto.Catergory,
+                //Catergory = userDto.Catergory,
                 // date and time as it would be in Coordinated Universal Time
                 CreatedAt = DateTime.UtcNow, // https://stackoverflow.com/questions/62151/datetime-now-vs-datetime-utcnow 
                 //DateOfBirth = userDto.BirthDate,
                 //Location = userDto.Location,
-                Email = userDto.Email,
+                //Email = userDto.Email,
                 //PasswordQuestion1 = userDto.PasswordQuestion1,
                 //PasswordQuestion2 = userDto.PasswordQuestion2,
                 //PasswordQuestion3 = userDto.PasswordQuestion3,
