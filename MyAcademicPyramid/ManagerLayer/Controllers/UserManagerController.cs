@@ -59,7 +59,7 @@ namespace ManagerLayer.Controllers
 
         // PUT api/<controller>/5
         [HttpPut]
-        public IHttpActionResult Put(Guid id, [FromBody] UserDTO userDto)
+        public IHttpActionResult Put([FromBody] UserDTO userDto)
         {
             UserManager umManager = new UserManager();
             User foundUser = umManager.FindUserById(userDto.Id);
