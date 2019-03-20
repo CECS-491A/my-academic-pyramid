@@ -25,7 +25,7 @@ namespace DemoProject
             Console.WriteLine("Create Admin Account");
             UserManager.CreateUserAccount(new UserDTO {
                 UserName = "Admin",
-                Firstname = "Luis",
+                FirstName = "Luis",
                 LastName = "Luin",
                 Catergory = "Admin",
                 BirthDate = DateTime.Today,
@@ -44,7 +44,7 @@ namespace DemoProject
             UserManager.CreateUserAccount(new UserDTO
             {
                 UserName = "SubAdmin",
-                Firstname = "Trong",
+                FirstName = "Trong",
                 LastName = "Luin",
                 Catergory = "SubAdmin",
                 BirthDate = DateTime.Today,
@@ -65,7 +65,7 @@ namespace DemoProject
             UserManager.CreateUserAccount(new UserDTO
             {
                 UserName = "User1",
-                Firstname = "Kevin",
+                FirstName = "Kevin",
                 LastName = "NA",
                 Catergory = "User",
                 BirthDate = DateTime.Today,
@@ -117,7 +117,7 @@ namespace DemoProject
             UserManager.CreateUserAccount(new UserDTO
             {
                 UserName = "User2",
-                Firstname = "Arturo",
+                FirstName = "Arturo",
                 LastName = "NA",
                 Catergory = "User",
                 BirthDate = DateTime.Today,

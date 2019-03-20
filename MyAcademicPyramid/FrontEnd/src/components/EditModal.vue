@@ -2,19 +2,19 @@
   export default {
 	name: 'EditModal',
 	props:{
-		username:{
+		UserName:{
       type: String,
       required: true
     },
-    firstName:{
+    FirstName:{
       type: String,
       required: true
 		},
-    lastName:{
+    LastName:{
       type: String,
       required: true
     },
-    email:{
+    Email:{
       type: String,
       required: true
 		}
@@ -22,10 +22,10 @@
 	data() {
 		return{
 			formData: {
-				username:'dd',
-				firstName:'',
-				lastName:'',
-				email:''
+				UserName:'dd',
+				FirstName:'',
+				LastName:'',
+				Email:''
 			}
 		}
 	},  

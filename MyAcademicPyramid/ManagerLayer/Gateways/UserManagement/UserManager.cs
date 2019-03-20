@@ -1,14 +1,10 @@
 ﻿using DataAccessLayer;
 using System;
 using System.Collections.Generic;
-using SecurityLayer.Authorization.AuthorizationManagers;
 using ServiceLayer.UserManagement.UserAccountServices;
 using ServiceLayer.PasswordChecking.HashFunctions;
 using DataAccessLayer.Models;
 using DataAccessLayer.DTOs;
-using System.Data.Entity;
-using System.Linq;
-using ServiceLayer.PasswordChecking.SaltFunction;
 using System.Security.Cryptography;
 using System.Text;
 using System.Data.Entity.Validation;
@@ -55,22 +51,22 @@ namespace ManagerLayer.UserManagement
             User user = new User
             {
                 UserName = userDto.UserName,
-                Firstname = userDto.Firstname,
+                FirstName = userDto.FirstName,
                 LastName = userDto.LastName,
                 PasswordHash = hashSaltPassword.Hash,
                 PasswordSalt = hashSaltPassword.Salt,
                 Catergory = userDto.Catergory,
                 // date and time as it would be in Coordinated Universal Time
                 CreatedAt = DateTime.UtcNow, // https://stackoverflow.com/questions/62151/datetime-now-vs-datetime-utcnow 
-                DateOfBirth = userDto.BirthDate,
-                Location = userDto.Location,
+                //DateOfBirth = userDto.BirthDate,
+                //Location = userDto.Location,
                 Email = userDto.Email,
-                PasswordQuestion1 = userDto.PasswordQuestion1,
-                PasswordQuestion2 = userDto.PasswordQuestion2,
-                PasswordQuestion3 = userDto.PasswordQuestion3,
-                PasswordAnswer1 = userDto.PasswordAnswer1,
-                PasswordAnswer2 = userDto.PasswordAnswer2,
-                PasswordAnswer3 = userDto.PasswordAnswer3,
+                //PasswordQuestion1 = userDto.PasswordQuestion1,
+                //PasswordQuestion2 = userDto.PasswordQuestion2,
+                //PasswordQuestion3 = userDto.PasswordQuestion3,
+                //PasswordAnswer1 = userDto.PasswordAnswer1,
+                //PasswordAnswer2 = userDto.PasswordAnswer2,
+                //PasswordAnswer3 = userDto.PasswordAnswer3,
             };
 
             var response = _userManagementServices.CreateUser(user);
