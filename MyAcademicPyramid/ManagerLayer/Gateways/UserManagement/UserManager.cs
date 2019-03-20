@@ -47,7 +47,7 @@ namespace ManagerLayer.UserManagement
             //}
 
             SHA256HashFunction HashFunction = new SHA256HashFunction();
-            //HashSalt hashSaltPassword = HashFunction.GetHashValue(userDto.RawPassword);
+            HashSalt hashSaltPassword = HashFunction.GetHashValue(userDto.RawPassword);
             User user = new User
             {
                 UserName = userDto.UserName,

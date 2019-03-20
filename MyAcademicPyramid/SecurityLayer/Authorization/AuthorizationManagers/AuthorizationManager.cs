@@ -1,9 +1,9 @@
 ﻿
-using dataaccesslayer;
-using servicelayer.usermanagement.useraccountservices;
-using system;
-using system.collections.generic;
-using system.linq;
+using DataAccessLayer;
+using ServiceLayer.UserManagement.UserAccountServices;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 
 

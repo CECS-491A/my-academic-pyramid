@@ -40,8 +40,8 @@ namespace ManagerLayer.Controllers
                 });
             }
 
-//            return list.AsQueryable();
-//        }
+            return list.AsQueryable();
+        }
 
         // GET api/<controller>/5
         public string Get(Guid id)
