@@ -92,14 +92,6 @@
   <ItemGroup>
     <Compile Include="DTOs\UserDTO.cs" />
     <Compile Include="IEntity.cs" />
-    <Compile Include="Migrations\201903150704304_InitialCreate.cs" />
-    <Compile Include="Migrations\201903150704304_InitialCreate.Designer.cs">
-      <DependentUpon>201903150704304_InitialCreate.cs</DependentUpon>
-    <Compile Include="Migrations\201903200125320_InitialCreate.cs" />
-    <Compile Include="Migrations\201903200125320_InitialCreate.Designer.cs">
-      <DependentUpon>201903200125320_InitialCreate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Claim.cs" />
     <Compile Include="DatabaseContext.cs" />
     <Compile Include="Models\HashSalt.cs" />
@@ -130,11 +122,6 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201903200125320_InitialCreate.resx">
-      <DependentUpon>201903200125320_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
