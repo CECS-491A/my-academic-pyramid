@@ -9,17 +9,20 @@ import axios from 'axios'
 export default {
   data () {
     return {
-      info: null
+      info: null,
+      //jinfo: null
     }
   },
   mounted () {
     axios
-      .get('https://api.myacademicpyramid.com/api/home', {
+      .get('http://localhost:60500/api/logging/geterrors', {
         headers: {
           'Content-Type': 'application/json'
         }
       })
       .then(response => (this.info = response.data))
+      //jinfo = JSON.parse(info)
+      
   }
 }
 </script>
