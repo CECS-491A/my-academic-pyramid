@@ -13,7 +13,7 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         User CreateUser(User user);
         User DeleteUser(User user);
         User UpdateUser(User user);
-        User FindUserbyUserEmail(string userEmail);
+        User FindUserByUserEmail(string userEmail);
         User FindById(int id);
     }
 }

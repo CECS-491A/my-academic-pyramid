@@ -124,34 +124,34 @@ namespace ManagerLayer.UserManagement
         /// <summary>
         /// Method to assign a user to be a child of another user. The purpose is to achive a hierachy structure of users 
         /// </summary>
-        /// <param name="sourceUserName"></param>
-        /// <param name="targetUserName"></param>
+        /// <param name="childUserName"></param>
+        /// <param name="parentUserName"></param>
         /// <returns></returns>
-        public User AssignUserToUser(string sourceUserName, string targetUserName )
+        public User AssignUserToUser(string childUserName, string parentUserName )
         {
-            User sourceUser = FindByUserName(sourceUserName);
-            User targetUser = FindByUserName(targetUserName);
+            User childUser = FindByUserName(childUserName);
+            User parentUser = FindByUserName(parentUserName);
 
-            if (sourceUser == null)
+            if (childUser == null)
             {
                 return null;
             }
-            else if (targetUser == null)
+            else if (parentUser == null)
             {
                 return null;
             }
             else 
             {
-                if (sourceUser.Id== targetUser.ParentUser_Id)
+                if (childUser.Id == parentUser.ParentUser_Id)
                 {
-                    targetUser.ParentUser_Id = null;
+                    parentUser.ParentUser_Id = null;
                 }
-                sourceUser.ParentUser_Id = targetUser.Id;
+                childUser.ParentUser_Id = parentUser.Id;
               
-                UpdateUserAccount(sourceUser);
+                UpdateUserAccount(childUser);
+                UpdateUserAccount(parentUser);
 
-                UpdateUserAccount(targetUser);
-                return _userManagementServices.UpdateUser(sourceUser);
+                return _userManagementServices.UpdateUser(childUser);
             }
         }
 
@@ -161,9 +161,9 @@ namespace ManagerLayer.UserManagement
         /// </summary>
         /// <param name="userEmail"></param>
         /// <returns></returns>
-        public User FindUserbyEmail(String userEmail)
+        public User FindUserByEmail(String userEmail)
         {
-            User user = _userManagementServices.FindUserbyUserEmail(userEmail);
+            User user = _userManagementServices.FindUserByUserEmail(userEmail);
             return user;
         }
 
@@ -173,7 +173,7 @@ namespace ManagerLayer.UserManagement
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public User FindUserbyId(int id)
+        public User FindUserById(int id)
         {
             User user = _userManagementServices.FindById(id);
             return user;
@@ -214,14 +214,13 @@ namespace ManagerLayer.UserManagement
             // List of required claims needed for AddClaimAction Method
             List<Claim> createUserRequiredClaimTypes = new List<Claim>
             {
-
                 new Claim("UserManager")
             };
 
             // Check if the requesting user has the require claims
  
                 // Retrive targeted user exists from database
-            User targetedUser = FindUserbyId(targetedUserID);
+            User targetedUser = FindUserById(targetedUserID);
             if (targetedUser == null)
             {
                 return null;
@@ -230,8 +229,9 @@ namespace ManagerLayer.UserManagement
 
             else
             {
-                _userManagementServices.AddClaim(targetedUser, claim);
-                return targetedUser;
+                User user = _userManagementServices.AddClaim(targetedUser, claim);
+                UpdateUserAccount(user);
+                return user;
             }
         }
 
@@ -251,7 +251,7 @@ namespace ManagerLayer.UserManagement
             // Check if the requesting user has the require claims
 
                 // Retrive targeted user exists from database
-                User targetedUser = FindUserbyId(targetedUserId);
+                User targetedUser = FindUserById(targetedUserId);
             if (targetedUser == null)
              {
                 return null;
@@ -260,8 +260,9 @@ namespace ManagerLayer.UserManagement
                 // Check if the requesting user is  at least same level as  the targeted user
             else
             {
-                _userManagementServices.RemoveClaim(targetedUser, claim);
-                return targetedUser;
+                User user = _userManagementServices.RemoveClaim(targetedUser, claim);
+                UpdateUserAccount(user);
+                return user;
             }
                    
         }
@@ -287,7 +288,7 @@ namespace ManagerLayer.UserManagement
                 HashSalt hashSaltPassword = HashFunction.GetHashValue(newPassword);
                 user.PasswordHash = hashSaltPassword.Hash;
                 user.PasswordSalt = hashSaltPassword.Salt;
-                _userManagementServices.UpdateUser(user);
+                UpdateUserAccount(user);
                 return user;
             }
         }
