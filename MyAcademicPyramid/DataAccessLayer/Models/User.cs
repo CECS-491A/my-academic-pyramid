@@ -26,9 +26,10 @@ namespace DataAccessLayer
         [Key]
         public int Id { get; set; }
         public string UserName { get; set; }
-        public string Firstname { get; set; }
+        public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Catergory { get; set; }
+
         //[Required, DataType(DataType.Date)]
         //public DateTime DateOfBirth { get; set; }
         [Required]
@@ -42,6 +43,7 @@ namespace DataAccessLayer
         ////[Required]
         public string PasswordHash { get; set; }
         ////[Required]
+
         public string PasswordSalt { get; set; }
         public Nullable<int> ParentUser_Id { get; set; }
 

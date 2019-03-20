@@ -1,10 +1,9 @@
 ﻿
 using System;
 using System.Collections.Generic;
-using DataAccessLayer;
 using System.Linq;
+using DataAccessLayer;
 using ServiceLayer.UserManagement.UserClaimServices;
-using System.Data.Entity;
 
 namespace ServiceLayer.UserManagement.UserAccountServices
 {
@@ -38,6 +37,10 @@ namespace ServiceLayer.UserManagement.UserAccountServices
             {
                 return null;
             }
+            if (Contain(user))
+            {
+                return null;
+            }
             else
             { 
                 _DbContext.Entry(user).State = System.Data.Entity.EntityState.Added;
@@ -51,15 +54,18 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         /// <param name="user"></param>
         public User DeleteUser(User user)
         {
-    
             if (user == null)
             {
                 return null;
             }
-            else
+            if (Contain(user))
             {
                 _DbContext.Entry(user).State = System.Data.Entity.EntityState.Deleted;
                 return user;
+            }
+            else
+            {
+                return null;
             }
         }
 
@@ -73,10 +79,14 @@ namespace ServiceLayer.UserManagement.UserAccountServices
             {
                 return null;
             }
-            else
+            if (Contain(user))
             {
                 _DbContext.Entry(user).State = System.Data.Entity.EntityState.Modified;
                 return user;
+            }
+            else
+            {
+                return null;
             }
         }
 
@@ -116,6 +126,24 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         {
             List<User> list = _DbContext.Set<User>().ToList();
             return list;
+        }
+
+        /// <summary>
+        /// Checks that user is in the database
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        public bool Contain(User user)
+        {
+            List<User> list = GetAllUser();
+            if (list.Contains(user))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         /// <summary>

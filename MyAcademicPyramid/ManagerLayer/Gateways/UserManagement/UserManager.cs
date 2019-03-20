@@ -1,14 +1,10 @@
 ﻿using DataAccessLayer;
 using System;
 using System.Collections.Generic;
-using SecurityLayer.Authorization.AuthorizationManagers;
 using ServiceLayer.UserManagement.UserAccountServices;
 using ServiceLayer.PasswordChecking.HashFunctions;
 using DataAccessLayer.Models;
 using DataAccessLayer.DTOs;
-using System.Data.Entity;
-using System.Linq;
-using ServiceLayer.PasswordChecking.SaltFunction;
 using System.Security.Cryptography;
 using System.Text;
 using System.Data.Entity.Validation;
@@ -41,21 +37,22 @@ namespace ManagerLayer.UserManagement
         /// <param name="targetedUserName"></param>
         public User CreateUserAccount(UserDTO userDto)
         {
-            try
-            {
-                var valid = new System.Net.Mail.MailAddress(userDto.Email); // checks that email is valid
-            }
-            catch (Exception)
-            {
-                return null;
-            }
+            //try
+            //{
+            //    var valid = new System.Net.Mail.MailAddress(userDto.Email); // checks that email is valid
+            //}
+            //catch (Exception)
+            //{
+            //    return null;
+            //}
 
             SHA256HashFunction HashFunction = new SHA256HashFunction();
             HashSalt hashSaltPassword = HashFunction.GetHashValue(userDto.RawPassword);
             User user = new User
             {
+                Id = userDto.Id,
                 UserName = userDto.UserName,
-                Firstname = userDto.Firstname,
+                FirstName = userDto.FirstName,
                 LastName = userDto.LastName,
                 //PasswordHash = hashSaltPassword.Hash,
                 //PasswordSalt = hashSaltPassword.Salt,
@@ -93,6 +90,10 @@ namespace ManagerLayer.UserManagement
         /// <param name="targetedUserName"></param>
         public int DeleteUserAccount(User user)
         {
+            if (user == null)
+            {
+                return 0;
+            }
             _userManagementServices.DeleteUser(user);
             return _DbContext.SaveChanges();
         }
@@ -105,6 +106,10 @@ namespace ManagerLayer.UserManagement
         /// <returns></returns>
         public int UpdateUserAccount(User user)
         {
+            if (user == null)
+            {
+                return 0;
+            }
             var response = _userManagementServices.UpdateUser(user);
             try
             {

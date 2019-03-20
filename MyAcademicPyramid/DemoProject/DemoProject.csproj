@@ -66,6 +66,7 @@
     <Compile Include="ProgramUserManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Helper\TestingHelper.cs" />
+    <Compile Include="UMTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

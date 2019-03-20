@@ -48,7 +48,7 @@ namespace ManagerLayer.Controllers
             UserDTO user1 = new UserDTO()
             {
                 UserName = "Abc@gmail.com",
-                Firstname = "Jackie",
+                FirstName = "Jackie",
                 LastName = "Chan",
                 Email = "Abc@gmail.com"
             };
@@ -56,7 +56,7 @@ namespace ManagerLayer.Controllers
             UserDTO user2 = new UserDTO()
             {
                 UserName = "tri@yahoo.com",
-                Firstname = "David",
+                FirstName = "David",
                 LastName = "Gonzales",
                 Email = "tri@yahoo.com"
             };
@@ -64,7 +64,7 @@ namespace ManagerLayer.Controllers
             UserDTO user3 = new UserDTO()
             {
                 UserName = "Smith@gmail.com",
-                Firstname = "Michael",
+                FirstName = "Michael",
                 LastName = "Nguyen",
                 Email = "Smith@gmail.com"
             };

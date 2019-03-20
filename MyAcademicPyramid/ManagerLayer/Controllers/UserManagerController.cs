@@ -34,7 +34,7 @@ namespace ManagerLayer.Controllers
                 {
                     Id = user.Id,
                     UserName = user.UserName,
-                    Firstname = user.Firstname,
+                    FirstName = user.FirstName,
                     LastName = user.LastName,
                     Email = user.Email
                 });
@@ -58,8 +58,15 @@ namespace ManagerLayer.Controllers
         }
 
         // PUT api/<controller>/5
-        public void Put(Guid id, [FromBody]string value)
+        [HttpPut]
+        public IHttpActionResult Put([FromBody] UserDTO userDto)
         {
+            UserManager umManager = new UserManager();
+            User foundUser = umManager.FindUserById(userDto.Id);
+            foundUser.UserName = userDto.UserName;
+            foundUser.FirstName = userDto.FirstName;
+            foundUser.LastName = userDto.LastName;
+            return Ok(umManager.UpdateUserAccount(foundUser));
         }
 
         // DELETE api/<controller>/5
