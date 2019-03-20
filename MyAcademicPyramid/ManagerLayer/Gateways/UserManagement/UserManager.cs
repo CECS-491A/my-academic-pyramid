@@ -50,6 +50,7 @@ namespace ManagerLayer.UserManagement
             HashSalt hashSaltPassword = HashFunction.GetHashValue(userDto.RawPassword);
             User user = new User
             {
+                Id = userDto.Id,
                 UserName = userDto.UserName,
                 FirstName = userDto.FirstName,
                 LastName = userDto.LastName,
@@ -90,6 +91,10 @@ namespace ManagerLayer.UserManagement
         /// <param name="targetedUserName"></param>
         public int DeleteUserAccount(User user)
         {
+            if (user == null)
+            {
+                return 0;
+            }
             _userManagementServices.DeleteUser(user);
             return _DbContext.SaveChanges();
         }
@@ -102,6 +107,10 @@ namespace ManagerLayer.UserManagement
         /// <returns></returns>
         public int UpdateUserAccount(User user)
         {
+            if (user == null)
+            {
+                return 0;
+            }
             var response = _userManagementServices.UpdateUser(user);
             try
             {
