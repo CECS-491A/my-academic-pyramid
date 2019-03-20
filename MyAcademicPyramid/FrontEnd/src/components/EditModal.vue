@@ -1,4 +1,5 @@
 <script>
+/*global console*/ /* eslint no-console: "off" */
   export default {
 	name: 'EditModal',
 	// props:{
@@ -38,6 +39,25 @@
       close() {
         this.$emit('close');
       },
+
+      submitData() {
+      this.axios({
+        method: "PUT",
+        url: "http://localhost:60500/api/usermanager",
+        data: this.formData,
+        headers: { "content-type": "application/json" }
+      }).then(
+        result => {
+          this.response = result.data;
+        },
+        error => {
+          console.error(error);
+        }
+      );
+
+      this.$eventBus.$emit("UpdateTable");
+      this.$emit("close");
+    }
     },
   };
 </script>
