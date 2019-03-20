@@ -158,8 +158,11 @@ namespace DemoProject
 
             if (aM.HasHigherPrivilege(user2, subAdmin))
             {
-                UserManager.DeleteUserAccount(subAdmin);
+                int value = UserManager.DeleteUserAccount(subAdmin);
                 Console.WriteLine("Delete Sucessfully");
+                Console.WriteLine(value);
+                value = UserManager.DeleteUserAccount(subAdmin);
+                Console.WriteLine(value);
             }
 
             else

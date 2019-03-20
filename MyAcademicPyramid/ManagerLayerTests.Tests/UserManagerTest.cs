@@ -33,15 +33,17 @@ namespace ManagerLayer.Tests
                     BirthDate = DateTime.UtcNow,
                     RawPassword = "PasswordArturo",
                     Location = "Long Beach",
-                    Email = "Arturo@gmail.com",
-                    PasswordQuestion1 = "What is our favourite food ?",
-                    PasswordQuestion2 = "Where is your school?",
-                    PasswordQuestion3 = "What is your major",
-                    PasswordAnswer1 = "Burger",
-                    PasswordAnswer2 = "CSULB",
-                    PasswordAnswer3 = "CS",
+                    Email = "Arturo1@gmail.com",
                 });
-                actual = true;
+                User createdUser = UM.FindUserByEmail("Arturo1@gmail.com");
+                if (createdUser != null)
+                {
+                    actual = true;
+                }
+                else
+                {
+                    actual = false;
+                }
             }
 
             catch (ArgumentNullException)
@@ -75,12 +77,6 @@ namespace ManagerLayer.Tests
                     RawPassword = "PasswordArturo",
                     Location = "Long Beach",
                     Email = invalidEmail,
-                    PasswordQuestion1 = "What is our favourite food ?",
-                    PasswordQuestion2 = "Where is your school?",
-                    PasswordQuestion3 = "What is your major",
-                    PasswordAnswer1 = "Burger",
-                    PasswordAnswer2 = "CSULB",
-                    PasswordAnswer3 = "CS",
                 });
                 if (user == null)
                 {
@@ -108,20 +104,14 @@ namespace ManagerLayer.Tests
             UserManager UM = new UserManager();
             User createdUser = UM.CreateUserAccount(new UserDTO
             {
-                UserName = "SystemAdmin",
-                FirstName = "Arturo",
+                UserName = "User",
+                Firstname = "Kevin",
                 LastName = "NA",
                 Catergory = "User",
                 BirthDate = DateTime.UtcNow,
                 RawPassword = "PasswordArturo",
                 Location = "Long Beach",
-                Email = "Arturo@gmail.com",
-                PasswordQuestion1 = "What is our favourite food ?",
-                PasswordQuestion2 = "Where is your school?",
-                PasswordQuestion3 = "What is your major",
-                PasswordAnswer1 = "Burger",
-                PasswordAnswer2 = "CSULB",
-                PasswordAnswer3 = "CS",
+                Email = "Artur1o@gmail.com",
             });
             bool expected = true;
             bool actual;
@@ -130,7 +120,15 @@ namespace ManagerLayer.Tests
             try
             {
                 UM.DeleteUserAccount(createdUser);
-                actual = true;
+                User shouldBeNull = UM.FindUserByEmail("Artur1o@gmail.com");
+                if (shouldBeNull == null)
+                {
+                    actual = true;
+                }
+                else
+                {
+                    actual = false;
+                }
             }
 
             catch (ArgumentNullException)
@@ -144,41 +142,34 @@ namespace ManagerLayer.Tests
         }
 
         [Fact]
-        public void UserManager_DeleteUserAccount_UserNotFound_ShouldThrowException()
+        public void UserManager_DeleteUserAccount_UserNotFound_ShouldReturnZero()
         {
             // Arrange
             UserManager UM = new UserManager();
             User createdUser = UM.CreateUserAccount(new UserDTO
             {
-                UserName = "SystemAdmin",
-                FirstName = "Arturo",
+                UserName = "SystemAdmin5",
+                Firstname = "Arturo",
                 LastName = "NA",
                 Catergory = "User",
                 BirthDate = DateTime.UtcNow,
                 RawPassword = "PasswordArturo",
                 Location = "Long Beach",
                 Email = "Arturo@gmail.com",
-                PasswordQuestion1 = "What is our favourite food ?",
-                PasswordQuestion2 = "Where is your school?",
-                PasswordQuestion3 = "What is your major",
-                PasswordAnswer1 = "Burger",
-                PasswordAnswer2 = "CSULB",
-                PasswordAnswer3 = "CS",
             });
             UM.DeleteUserAccount(createdUser);
-            bool expected = true;
-            bool actual;
+            int expected = 0;
+            int actual;
 
             // Act
             try
             {
-                UM.DeleteUserAccount(createdUser);
-                actual = false;
+                actual = UM.DeleteUserAccount(createdUser);
             }
 
             catch (ArgumentNullException)
             {
-                actual = true;
+                actual = 1;
             }
 
             // Assert
@@ -192,20 +183,14 @@ namespace ManagerLayer.Tests
             UserManager UM = new UserManager();
             User createdUser = UM.CreateUserAccount(new UserDTO
             {
-                UserName = "SystemAdmin",
-                FirstName = "Arturo",
-                LastName = "NA",
+                UserName = "Prof",
+                Firstname = "Luis",
+                LastName = "IDK",
                 Catergory = "User",
                 BirthDate = DateTime.UtcNow,
                 RawPassword = "PasswordArturo",
                 Location = "Long Beach",
-                Email = "Arturo@gmail.com",
-                PasswordQuestion1 = "What is our favourite food ?",
-                PasswordQuestion2 = "Where is your school?",
-                PasswordQuestion3 = "What is your major",
-                PasswordAnswer1 = "Burger",
-                PasswordAnswer2 = "CSULB",
-                PasswordAnswer3 = "CS",
+                Email = "Luis@gmail.com",
             });
             string newEmail = "Naruto@gmail.com";
             createdUser.Email = newEmail;
@@ -242,36 +227,27 @@ namespace ManagerLayer.Tests
             UserManager UM = new UserManager();
             User createdUser = UM.CreateUserAccount(new UserDTO
             {
-                UserName = "SystemAdmin",
-                FirstName = "Arturo",
-                LastName = "NA",
+                UserName = "User",
+                Firstname = "Kry",
+                LastName = "Leon",
                 Catergory = "User",
                 BirthDate = DateTime.UtcNow,
                 RawPassword = "PasswordArturo",
                 Location = "Long Beach",
-                Email = "Arturo@gmail.com",
-                PasswordQuestion1 = "What is our favourite food ?",
-                PasswordQuestion2 = "Where is your school?",
-                PasswordQuestion3 = "What is your major",
-                PasswordAnswer1 = "Burger",
-                PasswordAnswer2 = "CSULB",
-                PasswordAnswer3 = "CS",
+                Email = "123Arturo@gmail.com",
             });
-            string newEmail = "Naruto@gmail.com";
-            createdUser.Email = newEmail;
             UM.DeleteUserAccount(createdUser);
-            bool expected = true;
-            bool actual;
+            int expected = 0;
+            int actual;
 
             // Act
             try
             {
-                UM.UpdateUserAccount(createdUser);
-                actual = false;
+                actual = UM.UpdateUserAccount(createdUser);
             }
             catch (ArgumentNullException)
             {
-                actual = true;
+                actual = 1;
             }
             // Assert
             Assert.Equal(expected, actual);
@@ -281,58 +257,507 @@ namespace ManagerLayer.Tests
         [Fact]
         public void UserManager_AssignUserAccount_ShouldAssignUsertoUser()
         {
+            // Arrange
+            UserManager UM = new UserManager();
+            User createdChildUser = UM.CreateUserAccount(new UserDTO
+            {
+                UserName = "User",
+                Firstname = "Arturo",
+                LastName = "NA",
+                Catergory = "User",
+                BirthDate = DateTime.UtcNow,
+                RawPassword = "PasswordArturo",
+                Location = "Long Beach",
+                Email = "Arturo@gmail.com",
+            });
+            User createdParentUser = UM.CreateUserAccount(new UserDTO
+            {
+                UserName = "SystemAdmin",
+                Firstname = "ArturoSon",
+                LastName = "NA",
+                Catergory = "User",
+                BirthDate = DateTime.UtcNow,
+                RawPassword = "PasswordArturo",
+                Location = "Long Beach",
+                Email = "Arturo2@gmail.com",
+            });
+            bool expected = true;
+            bool actual;
+
+            // Act
+            try
+            {
+                User returnedUser = UM.AssignUserToUser(createdChildUser.UserName, createdParentUser.UserName);
+                if (returnedUser != null)
+                {
+                    actual = true;
+                }
+                else
+                {
+                    actual = false;
+                }
+            }
+            catch (ArgumentNullException)
+            {
+                actual = false;
+            }
+            // Assert
+            Assert.Equal(expected, actual);
 
         }
 
         [Fact]
 	    public void UserManager_AssignUserAccount_ChildUserNotFound_ShouldThrowException()
         {
+            // Arrange
+            UserManager UM = new UserManager();
+            User createdChildUser = UM.CreateUserAccount(new UserDTO
+            {
+                UserName = "User",
+                Firstname = "Arturo",
+                LastName = "NA",
+                Catergory = "User",
+                BirthDate = DateTime.UtcNow,
+                RawPassword = "PasswordArturo",
+                Location = "Long Beach",
+                Email = "Arturo@gmail.com",
+            });
+            User createdParentUser = UM.CreateUserAccount(new UserDTO
+            {
+                UserName = "SystemAdmin",
+                Firstname = "ArturoSon",
+                LastName = "NA",
+                Catergory = "User",
+                BirthDate = DateTime.UtcNow,
+                RawPassword = "PasswordArturo",
+                Location = "Long Beach",
+                Email = "Arturo2@gmail.com",
+            });
+            UM.DeleteUserAccount(createdChildUser);
+            bool expected = true;
+            bool actual;
+
+            // Act
+            try
+            {
+                User shouldBeNull = UM.AssignUserToUser(createdChildUser.UserName, createdParentUser.UserName);
+                if (shouldBeNull == null)
+                {
+                    actual = true;
+                }
+                else
+                {
+                    actual = false;
+                }
+            }
+            catch (ArgumentNullException)
+            {
+                actual = false;
+            }
+            // Assert
+            Assert.Equal(expected, actual);
 
         }
 
         [Fact]
         public void UserManager_AssignUserAccount_ParentUserNotFound_ShouldThrowException()
         {
+            // Arrange
+            UserManager UM = new UserManager();
+            User createdChildUser = UM.CreateUserAccount(new UserDTO
+            {
+                UserName = "User",
+                Firstname = "Arturo",
+                LastName = "NA",
+                Catergory = "User",
+                BirthDate = DateTime.UtcNow,
+                RawPassword = "PasswordArturo",
+                Location = "Long Beach",
+                Email = "Arturo@gmail.com",
+            });
+            User createdParentUser = UM.CreateUserAccount(new UserDTO
+            {
+                UserName = "SystemAdmin",
+                Firstname = "ArturoSon",
+                LastName = "NA",
+                Catergory = "User",
+                BirthDate = DateTime.UtcNow,
+                RawPassword = "PasswordArturo",
+                Location = "Long Beach",
+                Email = "Arturo2@gmail.com",
+            });
+            UM.DeleteUserAccount(createdParentUser);
+            bool expected = true;
+            bool actual;
+
+            // Act
+            try
+            {
+                User shouldBeNull = UM.AssignUserToUser(createdChildUser.UserName, createdParentUser.UserName);
+                if (shouldBeNull == null)
+                {
+                    actual = true;
+                }
+                else
+                {
+                    actual = false;
+                }
+
+            }
+            catch (ArgumentNullException)
+            {
+                actual = false;
+            }
+            // Assert
+            Assert.Equal(expected, actual);
 
         }
         [Fact]
         public void UserManager_FindUserByEmail_ShouldReturnUser()
         {
+            // Arrange
+            UserManager UM = new UserManager();
+            User createdUser = UM.CreateUserAccount(new UserDTO
+            {
+                UserName = "Admin",
+                Firstname = "Kevin",
+                LastName = "Kim",
+                Catergory = "User",
+                BirthDate = DateTime.UtcNow,
+                RawPassword = "PasswordArturo",
+                Location = "Long Beach",
+                Email = "BTS@gmail.com",
+            });
+            bool expected = true;
+            bool actual;
+
+            // Act
+            try
+            {
+                User foundUser = UM.FindUserByEmail("BTS@gmail.com");
+                if (createdUser == foundUser)
+                {
+                    actual = true;
+                }
+                else
+                {
+                    actual = false;
+                }
+            }
+            catch (ArgumentNullException)
+            {
+                actual = false;
+            }
+
+            // Assert
+            Assert.Equal(expected, actual);
+        }
+        [Fact]
+        public void UserManager_FindUserByEmail_InvalidEmail_ShouldReturnNull()
+        {
+            // Arrange
+            UserManager UM = new UserManager();
+            User createdUser = UM.CreateUserAccount(new UserDTO
+            {
+                UserName = "SystemAdmin",
+                Firstname = "Arturo",
+                LastName = "NA",
+                Catergory = "User",
+                BirthDate = DateTime.UtcNow,
+                RawPassword = "PasswordArturo",
+                Location = "Long Beach",
+                Email = "ArturoKevin@gmail.com",
+            });
+            bool expected = true;
+            bool actual;
+
+            // Act
+            try
+            {
+                User foundUser = UM.FindUserByEmail("ArturoLuis@gmail.com");
+                if (createdUser == foundUser)
+                {
+                    actual = false;
+                }
+                else
+                {
+                    actual = true;
+                }
+            }
+            catch (ArgumentNullException)
+            {
+                actual = false;
+            }
+
+            // Assert
+            Assert.Equal(expected, actual);
 
         }
         [Fact]
-        public void UserManager_FindUserByEmail_InvalidEmail_ShouldThrowException()
+        public void UserManager_FindUserByEmail_UserNotFound_ShouldReturnNull()
         {
+            // Arrange
+            UserManager UM = new UserManager();
+            User createdUser = UM.CreateUserAccount(new UserDTO
+            {
+                UserName = "SystemAdmin",
+                Firstname = "Arturo",
+                LastName = "NA",
+                Catergory = "User",
+                BirthDate = DateTime.UtcNow,
+                RawPassword = "PasswordArturo",
+                Location = "Long Beach",
+                Email = "ArturoKevin2@gmail.com",
+            });
+            UM.DeleteUserAccount(createdUser);
+            bool expected = true;
+            bool actual;
 
-        }
-        [Fact]
-        public void UserManager_FindUserByEmail_UserNotFound_ShouldThrowException()
-        {
+            // Act
+            try
+            {
+                User foundUser = UM.FindUserByEmail("ArturoKevin2@gmail.com");
+                if (foundUser == null)
+                {
+                    actual = true;
+                }
+                else
+                {
+                    actual = false;
+                }
+            }
+            catch (ArgumentNullException)
+            {
+                actual = false;
+            }
+
+            // Assert
+            Assert.Equal(expected, actual);
 
         }
         [Fact]
         public void UserManager_FindUserById_ShouldReturnUser()
         {
+            // Arrange
+            UserManager UM = new UserManager();
+            User createdUser = UM.CreateUserAccount(new UserDTO
+            {
+                Id = 100,
+                UserName = "SystemAdmin",
+                Firstname = "Arturo",
+                LastName = "NA",
+                Catergory = "User",
+                BirthDate = DateTime.UtcNow,
+                RawPassword = "PasswordArturo",
+                Location = "Long Beach",
+                Email = "ArturoKevin@gmail.com",
+            });
+            bool expected = true;
+            bool actual;
+
+            // Act
+            try
+            {
+                User foundUser = UM.FindUserById(100);
+                if (foundUser == createdUser)
+                {
+                    actual = true;
+                }
+                else
+                {
+                    actual = false;
+                }
+            }
+            catch (ArgumentNullException)
+            {
+                actual = false;
+            }
+
+            // Assert
+            Assert.Equal(expected, actual);
 
         }
         [Fact]
-        public void UserManager_FindUserById_UserNotFound_ShouldThrowException()
+        public void UserManager_FindUserById_UserNotFound_ShouldReturnNull()
         {
+            // Arrange
+            UserManager UM = new UserManager();
+            User createdUser = UM.CreateUserAccount(new UserDTO
+            {
+                Id = 100,
+                UserName = "SystemAdmin",
+                Firstname = "Arturo",
+                LastName = "NA",
+                Catergory = "User",
+                BirthDate = DateTime.UtcNow,
+                RawPassword = "PasswordArturo",
+                Location = "Long Beach",
+                Email = "ArturoKevin@gmail.com",
+            });
+            UM.DeleteUserAccount(createdUser);
+            bool expected = true;
+            bool actual;
+
+            // Act
+            try
+            {
+                User foundUser = UM.FindUserById(100);
+                if (foundUser == null)
+                {
+                    actual = true;
+                }
+                else
+                {
+                    actual = false;
+                }
+            }
+            catch (ArgumentNullException)
+            {
+                actual = false;
+            }
+
+            // Assert
+            Assert.Equal(expected, actual);
 
         }
         [Fact]
         public void UserManager_FindByUserName_ShouldReturnUser()
         {
+            // Arrange
+            UserManager UM = new UserManager();
+            User createdUser = UM.CreateUserAccount(new UserDTO
+            {
+                Id = 100,
+                UserName = "SystemAdmin2",
+                Firstname = "Arturo",
+                LastName = "NA",
+                Catergory = "User",
+                BirthDate = DateTime.UtcNow,
+                RawPassword = "PasswordArturo",
+                Location = "Long Beach",
+                Email = "ArturoKevin@gmail.com",
+            });
+            bool expected = true;
+            bool actual;
+
+            // Act
+            try
+            {
+                User foundUser = UM.FindByUserName("SystemAdmin2");
+                if (foundUser == createdUser)
+                {
+                    actual = true;
+                }
+                else
+                {
+                    actual = false;
+                }
+            }
+            catch (ArgumentNullException)
+            {
+                actual = false;
+            }
+
+            // Assert
+            Assert.Equal(expected, actual);
 
         }
         [Fact]
-        public void UserManager_FindByUserName_UserNotFound_ShouldThrowException()
+        public void UserManager_FindByUserName_UserNotFound_ShouldReturnNull()
         {
+            // Arrange
+            UserManager UM = new UserManager();
+            User createdUser = UM.CreateUserAccount(new UserDTO
+            {
+                Id = 100,
+                UserName = "User",
+                Firstname = "Arturo",
+                LastName = "NA",
+                Catergory = "User",
+                BirthDate = DateTime.UtcNow,
+                RawPassword = "PasswordArturo",
+                Location = "Long Beach",
+                Email = "Arturo1Kevin@gmail.com",
+            });
+            UM.DeleteUserAccount(createdUser);
+            bool expected = true;
+            bool actual;
+
+            // Act
+            try
+            {
+                User foundUser = UM.FindByUserName(createdUser.UserName);
+                if (foundUser == null)
+                {
+                    actual = true;
+                }
+                else
+                {
+                    actual = false;
+                }
+            }
+            catch (ArgumentNullException)
+            {
+                actual = false;
+            }
+
+            // Assert
+            Assert.Equal(expected, actual);
 
         }
         [Fact]
         public void UserManager_GetAllUser_ShouldReturnListOfUsers()
         {
+            // Arrange
+            UserManager UM = new UserManager();
+            User createdUser = UM.CreateUserAccount(new UserDTO
+            {
+                Id = 100,
+                UserName = "User",
+                Firstname = "Hyunwoo",
+                LastName = "Kim",
+                Catergory = "User",
+                BirthDate = DateTime.UtcNow,
+                RawPassword = "PasswordArturo",
+                Location = "Long Beach",
+                Email = "11ArturoKevin@gmail.com",
+            });
+            UM.CreateUserAccount(new UserDTO
+            {
+                Id = 101,
+                UserName = "User",
+                Firstname = "Hyunwoo2",
+                LastName = "Kim2",
+                Catergory = "User",
+                BirthDate = DateTime.UtcNow,
+                RawPassword = "PasswordArturo",
+                Location = "Long Beach",
+                Email = "11ArturoKevin2@gmail.com",
+            });
+            bool expected = true;
+            bool actual;
+
+            // Act
+            try
+            {
+                List<User> userList = UM.GetAllUser();
+                if (userList.Contains(createdUser) && userList.Count == 2)
+                {
+                    actual = true;
+                }
+                else
+                {
+                    actual = false;
+                }
+
+            }
+            catch (ArgumentNullException)
+            {
+                actual = false;
+            }
+
+            // Assert
+            Assert.Equal(expected, actual);
 
         }
         [Fact]
@@ -375,304 +800,5 @@ namespace ManagerLayer.Tests
         {
 
         }
-
-
-
-
-
-        /// <summary>
-        /// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        /// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        /// </summary>
-        /**
-        [Fact]
-        public void UserManager_DeleteAction_RequestingUserHasLessPrivilege_ShouldThrowException()
-        {
-            // Arrange
-            Effort.Provider.EffortProviderConfiguration.RegisterProvider();
-            EffortFactory.ResetDb();
-            UserManager AdminUserManager = new UserManager("Admin", true);
-            AdminUserManager.CreateUserAction("SubAdmin");
-            AdminUserManager.AddClaimAction("SubAdmin", new Claim ("UserManager"));
-            UserManager SubAdminUserManager = new UserManager("SubAdmin");
-            bool expected = true;
-            bool actual;
-
-            // Act
-            try
-            {
-                SubAdminUserManager.DeleteUserAction("Admin");
-                actual = false;
-            }
-
-            catch (ArgumentException)
-            {
-                actual = true;
-            }
-
-            // Assert
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
-        public void UserManager_DeleteAction_AllConditionsMeet_ShouldAbleToDeleteUser()
-        {
-            // Arrange
-            Effort.Provider.EffortProviderConfiguration.RegisterProvider();
-            EffortFactory.ResetDb();
-            UserManager AdminUserManager = new UserManager("Admin", true);
-            AdminUserManager.CreateUserAction("SubAdmin");
-            bool expected = true;
-            bool actual;
-
-            // Act
-            try
-            {
-                AdminUserManager.DeleteUserAction("SubAdmin");
-                actual = true;
-            }
-
-            catch (ArgumentException)
-            {
-                actual = false;
-            }
-
-            // Assert
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
-        public void UserManager_PrintAllUser_ShouldReturnListOfUser()
-        {
-            // Arrange
-            Effort.Provider.EffortProviderConfiguration.RegisterProvider();
-            EffortFactory.ResetDb();
-            UserManager AdminUserManager = new UserManager("Admin", true);
-            AdminUserManager.CreateUserAction("SubAdmin1");
-            AdminUserManager.CreateUserAction("SubAdmin2");
-            AdminUserManager.CreateUserAction("SubAdmin3");
-            List<User> userList;
-
-            // Act
-                userList = AdminUserManager.GetAllUser();
-
-            // Assert
-            Assert.NotEmpty(userList);
-        }
-
-        [Fact]
-        public void UserManager_AddClaimAction_TargetUsernameNull_ShouldThrowException()
-        {
-            // Arrange
-            Effort.Provider.EffortProviderConfiguration.RegisterProvider();
-            EffortFactory.ResetDb();
-            UserManager AdminUserManager = new UserManager("Admin", true);
-            string targetedUserName = null;
-            bool expected = true;
-            bool actual;
-
-            // Act
-            try
-            {
-                AdminUserManager.AddClaimAction(targetedUserName, new Claim("Over 18"));
-                actual = false;
-            }
-
-            catch (ArgumentNullException)
-            {
-                actual = true;
-            }
-
-            // Assert
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
-        public void UserManager_AddClaimAction_UsernameNotExists_ShouldThrowException()
-        {
-            // Arrange
-            Effort.Provider.EffortProviderConfiguration.RegisterProvider();
-            EffortFactory.ResetDb();
-            UserManager AdminUserManager = new UserManager("Admin", true);
-            string targetedUserName = "User";
-            bool expected = true;
-            bool actual;
-
-            // Act
-            try
-            {
-                AdminUserManager.AddClaimAction(targetedUserName, new Claim("Over 18"));
-                actual = false;
-            }
-
-            catch (ArgumentException)
-            {
-                actual = true;
-            }
-
-            // Assert
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
-        public void UserManager_AddClaimAction_RequiredClaimsNotMeet_ShouldThrowException()
-        {
-            // Arrange
-            Effort.Provider.EffortProviderConfiguration.RegisterProvider();
-            EffortFactory.ResetDb();
-            UserManager AdminUserManager = new UserManager("Admin", true);
-            AdminUserManager.CreateUserAction("SubAdmin");
-            UserManager SubAdminUserManager = new UserManager("SubAdmin");
-            bool expected = true;
-            bool actual;
-
-            // Act
-            try
-            {
-                SubAdminUserManager.AddClaimAction("Admin", new Claim("Over 18"));
-                actual = false;
-            }
-
-            catch (ArgumentException)
-            {
-                actual = true;
-            }
-
-            // Assert
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
-        public void UserManager_AddClaimAction_AllConditionsMeet_ShouldAbleToAddClaim ()
-        {
-            // Arrange
-            Effort.Provider.EffortProviderConfiguration.RegisterProvider();
-            EffortFactory.ResetDb();
-            UserManager AdminUserManager = new UserManager("Admin", true);
-            AdminUserManager.CreateUserAction("SubAdmin");
-            Claim claim = new Claim("Over 18");
-            bool expected = true;
-            bool actual;
-
-            AdminUserManager.AddClaimAction("SubAdmin", claim);
-
-            // Act
-            User SubAdmin = AdminUserManager.FindUserAction("SubAdmin");
-            actual = SubAdmin.Claims.Contains(claim);
-
-            // Assert
-            Assert.Equal(expected, actual);
-        }
-
-
-
-        /////////////////////////////////////
-        ///
-        [Fact]
-        public void UserManager_RemoveClaimAction_TargetUsernameNull_ShouldThrowException()
-        {
-            // Arrange
-            Effort.Provider.EffortProviderConfiguration.RegisterProvider();
-            EffortFactory.ResetDb();
-            UserManager AdminUserManager = new UserManager("Admin", true);
-            string targetedUserName = null;
-            bool expected = true;
-            bool actual;
-
-            // Act
-            try
-            {
-                AdminUserManager.RemoveClaimAction(targetedUserName, new Claim("Over 18"));
-                actual = false;
-            }
-
-            catch (ArgumentNullException)
-            {
-                actual = true;
-            }
-
-            // Assert
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
-        public void UserManager_RemoveClaimAction_UsernameNotExists_ShouldThrowException()
-        {
-            // Arrange
-            Effort.Provider.EffortProviderConfiguration.RegisterProvider();
-            EffortFactory.ResetDb();
-            UserManager AdminUserManager = new UserManager("Admin", true);
-            string targetedUserName = "User";
-            bool expected = true;
-            bool actual;
-
-            // Act
-            try
-            {
-                AdminUserManager.RemoveClaimAction(targetedUserName, new Claim("Over 18"));
-                actual = false;
-            }
-
-            catch (ArgumentException)
-            {
-                actual = true;
-            }
-
-            // Assert
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
-        public void UserManager_RemoveClaimAction_RequiredClaimsNotMeet_ShouldThrowException()
-        {
-            // Arrange
-            Effort.Provider.EffortProviderConfiguration.RegisterProvider();
-            EffortFactory.ResetDb();
-            UserManager AdminUserManager = new UserManager("Admin", true);
-            AdminUserManager.CreateUserAction("SubAdmin");
-            UserManager SubAdminUserManager = new UserManager("SubAdmin");
-            bool expected = true;
-            bool actual;
-
-            // Act
-            try
-            {
-                SubAdminUserManager.RemoveClaimAction("Admin", new Claim("Over 18"));
-                actual = false;
-            }
-
-            catch (ArgumentException)
-            {
-                actual = true;
-            }
-
-            // Assert
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
-        public void UserManager_RemoveClaimAction_AllConditionsMeet_ShouldAbleToRemoveClaim ()
-        {
-            // Arrange
-            Effort.Provider.EffortProviderConfiguration.RegisterProvider();
-            EffortFactory.ResetDb();
-            UserManager AdminUserManager = new UserManager("Admin", true);
-            AdminUserManager.CreateUserAction("SubAdmin");
-            Claim claim = new Claim("Over 18");
-            bool expected = false;
-            bool actual;
-            AdminUserManager.AddClaimAction("SubAdmin", claim);
-
-            // Act
-            AdminUserManager.RemoveClaimAction("SubAdmin", claim);
-            User SubAdmin = AdminUserManager.FindUserAction("SubAdmin");
-            actual = SubAdmin.Claims.Contains(claim);
-
-            // Assert
-            Assert.Equal(expected, actual);
-        }
-    */
-
-
-    }
+    }// end of class
 }
