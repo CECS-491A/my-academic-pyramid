@@ -1,6 +1,4 @@
-﻿using DataAccessLayer;
-using DataAccessLayer.DTOs;
-using ManagerLayer.UserManagement;
+﻿
 using ServiceLayer.PasswordChecking.HashFunctions;
 using System;
 using System.Collections.Generic;
@@ -8,41 +6,75 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using SecurityLayer;
+using DataAccessLayer;
+using DataAccessLayer.DTOs;
+using ManagerLayer.UserManagement;
 
 namespace ManagerLayer.Controllers
 {
     public class LoginController : ApiController
     {
         [HttpPost]
-        public HttpResponseMessage Login(UserDTO userDto)
+        public string Login([FromBody]string username)
         {
+            CreateUsers();
             DatabaseContext db = new DatabaseContext();
+            JWTokenManager tm = new JWTokenManager(db);
             UserManager um = new UserManager();
-
-            User user = um.FindByUserName(userDto.UserName);
+            User user = um.FindByUserName(username);
             if (user == null)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "The user was not found");
+                return "User with that username not found";
             }
-
-            SHA256HashFunction HashFunction = new SHA256HashFunction();
-
-            String salt = user.PasswordSalt;
-            bool passwordValidation = UserManager.VerifyPassword(userDto.RawPassword, user.PasswordHash, user.PasswordSalt);
-
-            if (!passwordValidation)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "The username/password combination was wrong");
-
-            }
-
             else
             {
-                return Request.CreateResponse(HttpStatusCode.OK, user.UserName);
+                Dictionary<string, string> testPayload = new Dictionary<string, string>()
+                {
+                    { "a", "1"},
+                    { "b", "2" },
+                    { "c", "3" }
+                };
+                string token = tm.GenerateToken(user.Id, testPayload);
+                return token;
             }
-            
 
 
+
+        }
+
+        private void CreateUsers()
+        {
+            UserDTO user1 = new UserDTO()
+            {
+                UserName = "Abc@gmail.com",
+                Firstname = "Jackie",
+                LastName = "Chan",
+                Email = "Abc@gmail.com"
+            };
+
+            UserDTO user2 = new UserDTO()
+            {
+                UserName = "tri@yahoo.com",
+                Firstname = "David",
+                LastName = "Gonzales",
+                Email = "tri@yahoo.com"
+            };
+
+            UserDTO user3 = new UserDTO()
+            {
+                UserName = "Smith@gmail.com",
+                Firstname = "Michael",
+                LastName = "Nguyen",
+                Email = "Smith@gmail.com"
+            };
+
+            DatabaseContext db = new DatabaseContext();
+            UserManager uM = new UserManager();
+            uM.CreateUserAccount(user1);
+            uM.CreateUserAccount(user2);
+            uM.CreateUserAccount(user3);
+            db.SaveChanges();
         }
     }
 }
