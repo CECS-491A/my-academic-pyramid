@@ -27,7 +27,7 @@ namespace ManagerLayer.Tests
                 UM.CreateUserAccount(new UserDTO
                 {
                     UserName = "SystemAdmin",
-                    Firstname = "Arturo",
+                    FirstName = "Arturo",
                     LastName = "NA",
                     Catergory = "User",
                     BirthDate = DateTime.UtcNow,
@@ -68,7 +68,7 @@ namespace ManagerLayer.Tests
                 var user = UM.CreateUserAccount(new UserDTO
                 {
                     UserName = "SystemAdmin",
-                    Firstname = "Arturo",
+                    FirstName = "Arturo",
                     LastName = "NA",
                     Catergory = "User",
                     BirthDate = DateTime.UtcNow,
@@ -109,7 +109,7 @@ namespace ManagerLayer.Tests
             User createdUser = UM.CreateUserAccount(new UserDTO
             {
                 UserName = "SystemAdmin",
-                Firstname = "Arturo",
+                FirstName = "Arturo",
                 LastName = "NA",
                 Catergory = "User",
                 BirthDate = DateTime.UtcNow,
@@ -151,7 +151,7 @@ namespace ManagerLayer.Tests
             User createdUser = UM.CreateUserAccount(new UserDTO
             {
                 UserName = "SystemAdmin",
-                Firstname = "Arturo",
+                FirstName = "Arturo",
                 LastName = "NA",
                 Catergory = "User",
                 BirthDate = DateTime.UtcNow,
@@ -193,7 +193,7 @@ namespace ManagerLayer.Tests
             User createdUser = UM.CreateUserAccount(new UserDTO
             {
                 UserName = "SystemAdmin",
-                Firstname = "Arturo",
+                FirstName = "Arturo",
                 LastName = "NA",
                 Catergory = "User",
                 BirthDate = DateTime.UtcNow,
@@ -243,7 +243,7 @@ namespace ManagerLayer.Tests
             User createdUser = UM.CreateUserAccount(new UserDTO
             {
                 UserName = "SystemAdmin",
-                Firstname = "Arturo",
+                FirstName = "Arturo",
                 LastName = "NA",
                 Catergory = "User",
                 BirthDate = DateTime.UtcNow,
