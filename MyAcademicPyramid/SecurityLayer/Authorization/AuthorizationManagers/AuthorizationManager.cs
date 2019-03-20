@@ -7,14 +7,14 @@
 
 
 
-//namespace SecurityLayer.Authorization.AuthorizationManagers
-//{
-//    /// <summary>
-//    /// Checks the existence of the user and privileges of the user.  
-//    /// An instance of AuthorizationManager will be created for every request from the user by Controller.
-//    /// </summary>
-//    public class AuthorizationManager:IAuthorizationManager
-//    {
+namespace SecurityLayer.Authorization.AuthorizationManagers
+{
+    /// <summary>
+    /// Checks the existence of the user and privileges of the user.  
+    /// An instance of AuthorizationManager will be created for every request from the user by Controller.
+    /// </summary>
+    public class AuthorizationManager : IAuthorizationManager
+    {
         
 //        private User authorizedUser;
 //        /// <summary>

@@ -1,16 +1,14 @@
 ﻿
 using System;
 using System.Collections.Generic;
-using DataAccessLayer;
 using System.Linq;
+using DataAccessLayer;
 using ServiceLayer.UserManagement.UserClaimServices;
-using ServiceLayer.UserManagement.UserAccountServices;
-using System.Data.Entity;
 
 namespace ServiceLayer.UserManagement.UserAccountServices
 {
 
-    /// <summary>
+    /// <summary>21
     /// The class contain User Management's features:
     /// Support create user, delete user, update user, find user by id, find user by username,  get all user
     /// Support add claim, remove claim
@@ -40,7 +38,7 @@ namespace ServiceLayer.UserManagement.UserAccountServices
                 return null;
             }
             else
-            {
+            { 
                 _DbContext.Entry(user).State = System.Data.Entity.EntityState.Added;
                 return user;
             }
@@ -52,6 +50,7 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         /// <param name="user"></param>
         public User DeleteUser(User user)
         {
+    
             if (user == null)
             {
                 return null;
@@ -85,7 +84,7 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         /// </summary>
         /// <param name="userName"></param>
         /// <returns></returns>
-        public User FindUserbyUserEmail(string userEmail)
+        public User FindUserByUserEmail(string userEmail)
         {
             User user = _DbContext.Set<User>().FirstOrDefault(u => u.Email == userEmail);
             return user;
@@ -99,6 +98,12 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         public User FindById(int id)
         {
             User user = _DbContext.Set<User>().Find(id);
+            return user;
+        }
+
+        public User FindByUsername(String username)
+        {
+            User user = _DbContext.Set<User>().FirstOrDefault( u => u.UserName.Equals(username));
             return user;
         }
 
@@ -130,7 +135,6 @@ namespace ServiceLayer.UserManagement.UserAccountServices
             else
             {
                 user.Claims.Remove(claim);
-                _DbContext.Entry(user).State = System.Data.Entity.EntityState.Modified;
                 return user;
             }
         }
@@ -153,7 +157,6 @@ namespace ServiceLayer.UserManagement.UserAccountServices
             else
             {
                 user.Claims.Add(claim);
-                _DbContext.Entry(user).State = System.Data.Entity.EntityState.Modified;
                 return user;
             }
         }

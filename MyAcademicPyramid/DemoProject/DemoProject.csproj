@@ -33,7 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>DemoProject.ProgramLogging</StartupObject>
+    <StartupObject>DemoProject.ProgramUserManager</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DnsClient, Version=1.0.7.0, Culture=neutral, PublicKeyToken=4574bb5573c51424, processorArchitecture=MSIL">
@@ -93,13 +93,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EffortFactory.cs" />
-    <Compile Include="ProgramAuthorization.cs" />
+
     <Compile Include="ProgramLogging.cs" />
     <Compile Include="ProgramPassword.cs" />
-    <Compile Include="ProgramUMService.cs" />
-    <Compile Include="ProgramUMTree.cs" />
+    <Compile Include="ProgramUserManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Helper\TestingHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

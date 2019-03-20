@@ -6,6 +6,7 @@ namespace ServiceLayerTests.Tests
 {
     public class HashTest
     {
+        /*
         SHA1HashFunction Sha1 = new SHA1HashFunction();
         [Fact]
         public void SHA1HashFunctions_GetHashValue_ValidStringShouldReturnHashValue()
@@ -40,6 +41,7 @@ namespace ServiceLayerTests.Tests
             // Assert
             Assert.Equal(expected, actual);
         }
+        */
 
 
     }

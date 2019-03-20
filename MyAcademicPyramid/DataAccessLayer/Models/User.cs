@@ -6,6 +6,8 @@
 //     Manual changes to this file will be overwritten if the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataAccessLayer
 {
@@ -28,22 +30,22 @@ namespace DataAccessLayer
         [Key]
         public int Id { get; set; }
         public string UserName { get; set; }
-        public string Firstname { get; set; }
+        public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string Role { get; set; }
-        [Required, DataType(DataType.Date)]
+        public string Catergory { get; set; }
+        [Column(TypeName = "datetime2"), DataType(DataType.DateTime)]
         public DateTime DateOfBirth { get; set; }
         [Required]
         public string Email { get; set; }
-        [Required, Column(TypeName = "datetime2"), DataType(DataType.DateTime)]
+        [Column(TypeName = "datetime2"), DataType(DataType.DateTime)]
         public DateTime UpdatedAt { get; set; }
         [Column(TypeName = "datetime2"), DataType(DataType.DateTime)]
         public DateTime CreatedAt { get; set; }
         //public DateTime ModifiedDate { get; set; }
         public string Location { get; set; }
-        [Required]
+        
         public string PasswordHash { get; set; }
-        [Required]
+        
         public string PasswordSalt { get; set; }
         public Nullable<int> ParentUser_Id { get; set; }
 
@@ -73,6 +75,10 @@ namespace DataAccessLayer
         public override bool Equals(object obj)
         {
             var user = obj as User;
+            if(user == null)
+            {
+                return false;
+            }
             return UserName.Equals(user.UserName);
         }
 

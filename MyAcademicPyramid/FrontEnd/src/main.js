@@ -1,31 +1,15 @@
-// The Vue build version to load with the `import` command
-// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
-import App from './App'
+import './plugins/vuetify'
+import App from './App.vue'
 import router from './router'
 import axios from 'axios'
+import VueAxios from 'vue-axios'
 
+Vue.prototype.$eventBus = new Vue()
 Vue.config.productionTip = false
-
-/* eslint-disable no-new */
+Vue.use(VueAxios, axios)
 new Vue({
-  el: '#app',
-  router,
-  components: { App },
-  template: '<App/>'
-})
+  router: router,
+  render: h => h(App),
+}).$mount('#app')
 
-// Add a request interceptor
-axios.interceptors.request.use(function (config) {
-  return config
-}, function (error) {
-  return Promise.reject(error)
-})
-
-// Add a response interceptor
-axios.interceptors.response.use(function (response) {
-  return response
-}, function (error) {
-  alert(error.response.data)
-  return Promise.reject(error)
-})
