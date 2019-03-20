@@ -56,6 +56,7 @@ namespace ManagerLayer.UserManagement
                 LastName = userDto.LastName,
                 //PasswordHash = hashSaltPassword.Hash,
                 //PasswordSalt = hashSaltPassword.Salt,
+
                 //Catergory = userDto.Catergory,
                 //// date and time as it would be in Coordinated Universal Time
                 //CreatedAt = DateTime.UtcNow, // https://stackoverflow.com/questions/62151/datetime-now-vs-datetime-utcnow 
@@ -156,7 +157,7 @@ namespace ManagerLayer.UserManagement
                 UpdateUserAccount(childUser);
                 UpdateUserAccount(parentUser);
 
-                return _userManagementServices.UpdateUser(childUser);
+                return childUser;
             }
         }
 

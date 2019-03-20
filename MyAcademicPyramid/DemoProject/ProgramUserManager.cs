@@ -17,7 +17,6 @@ namespace DemoProject
 
            
             //TestingHelper.ClearDatabase();
-           
 
             //var UserManager = new UserManager();
             //SHA256HashFunction HashFunction = new SHA256HashFunction();
