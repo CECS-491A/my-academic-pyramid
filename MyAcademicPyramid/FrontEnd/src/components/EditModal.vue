@@ -1,34 +1,39 @@
 <script>
   export default {
 	name: 'EditModal',
-	props:{
-		UserName:{
-      type: String,
-      required: true
-    },
-    FirstName:{
-      type: String,
-      required: true
-		},
-    LastName:{
-      type: String,
-      required: true
-    },
-    Email:{
-      type: String,
-      required: true
-		}
-  },
+	// props:{
+	// 	UserName:{
+  //     type: String,
+  //     required: true
+  //   },
+  //   FirstName:{
+  //     type: String,
+  //     required: true
+	// 	},
+  //   LastName:{
+  //     type: String,
+  //     required: true
+  //   },
+  //   Email:{
+  //     type: String,
+  //     required: true
+	// 	}
+  // },
 	data() {
 		return{
 			formData: {
-				UserName:'dd',
-				FirstName:'',
-				LastName:'',
-				Email:''
-			}
+        UserName: "",
+        FirstName: "",
+        LastName: ""
+      },
 		}
-	},  
+  },  
+  created(){
+    this.$eventBus.$on("EditUser", (item)=>{
+      this.formData = item
+    });
+
+  },
     methods: {
       close() {
         this.$emit('close');
@@ -38,71 +43,34 @@
 </script>
 
 <template>
-<transition name="modal-fade">
-  <div class="modal-backdrop">
-    <div class="modal">
-      <header class="modal-header">
-        <slot name="header">
-          User Infomation
+  <transition name="modal-fade">
+    <div class="modal-backdrop">
+      <div class="modal">
+        <header class="modal-header">
+          <slot name="header">
+            User Infomation
+            <button type="button" class="btn-close" @click="close">x</button>
+          </slot>
+        </header>
+        <section class="modal-body">
+          <slot name="body">
+            <v-text-field id="UserName" label="UserName" v-model="formData.UserName"/>
+            <br>
+            <v-text-field id="firstName" label="First Name" v-model="formData.FirstName"/>
+            <br>
 
-          <button
-            type="button"
-            class="btn-close"
-            @click="close"
-          >
-            x
-          </button>
-        </slot>
-      </header>
-      <section class="modal-body">
-        <slot name="body">
-
-          <v-text-field
-            name="username"
-            id="username"
-            label="UserName" 
-            v-model="formData.username"
-            
-            /><br />
-
-			<v-text-field
-            name="firstName"
-            id="firstName"
-            label="First Name" 
-            /><br />
-
-			<v-text-field
-            name="lastName"
-            id="lastName"
-            label="Last Name" 
-            /><br />
-
-						<v-text-field
-            name="email"
-            id="email"
-            label="Email" 
-            /><br />
-
-			
-			
-        </slot>
-       </section>
-       <footer class="modal-footer">
+            <v-text-field id="lastName" label="Last Name" v-model="formData.LastName"/>
+            <br>
+          </slot>
+        </section>
+        <footer class="modal-footer">
           <slot name="footer">
-            
-
-            <button
-              type="button"
-              class="btn-green"
-              @click="close"
-            >
-              Save changes
-          </button>
-        </slot>
-      </footer>
+            <button type="button" class="btn-green" @click="submitData">Save changes</button>
+          </slot>
+        </footer>
+      </div>
     </div>
-  </div>
-</transition>
+  </transition>
 </template>
 
 <style>
