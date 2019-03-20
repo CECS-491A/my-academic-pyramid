@@ -13,11 +13,12 @@ namespace ManagerLayer.Controllers
 {
     //readonly MongoDatabase mongoDatabase;
 
+    [Route("api/[controller]")]
     public class LoggingController : ApiController
     {
         //mongoDatabase = RetrieveMongohqDB();
         private ErrorLogCollection _errors = new DataAccessLayer.Logging.ErrorLogCollection();
-        private ErrorLogCollection _telemetries = new DataAccessLayer.Logging.ErrorLogCollection();
+        private TelemetryLogCollection _telemetries = new DataAccessLayer.Logging.TelemetryLogCollection();
 
 
         [HttpGet]
@@ -29,7 +30,7 @@ namespace ManagerLayer.Controllers
 
         [HttpGet]
         [Route("api/logging/gettelemetries")]
-        public List<ErrorLog> ListTelemetries()
+        public List<TelemetryLog> ListTelemetries()
         {
             return _telemetries.GetAll();
         }
@@ -47,7 +48,7 @@ namespace ManagerLayer.Controllers
         [Route("api/logging/deletetelemetries")]
         public IHttpActionResult DeleteAllTelemetries()
         {
-            _errors.DeleteAll();
+            _telemetries.DeleteAll();
 
             return Ok();
         }

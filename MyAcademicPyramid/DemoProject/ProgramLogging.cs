@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-//using NLog.Fluent;
+using NLog.Fluent;
 using DataAccessLayer.Logging;
-//using NLog;
-//using NLog.Web;
+using NLog;
+using NLog.Web;
 
 
 namespace DemoProject
@@ -22,9 +22,9 @@ namespace DemoProject
 
             logger.Error("Only errors");
 
-            logger.Info("Telemetry {userAction}", "login");
+            logger.Info("Login");
 
-            logger.Fatal("100 fails ");
+            //logger.Fatal("100 fails ");
         }
     }
 }

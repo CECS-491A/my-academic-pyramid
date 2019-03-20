@@ -3,7 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace DataAccessLayer.Models
 {
-    public class ErrorLog
+    public class TelemetryLog
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
@@ -12,17 +12,14 @@ namespace DataAccessLayer.Models
         [BsonElement("Date")]
         public string Date { get; set; }
 
-        [BsonElement("Message")]
-        public string Message { get; set; }
+        [BsonElement("Action")]
+        public string Action { get; set; }
 
-        [BsonElement("Target Site")]
-        public string TargetSite { get; set; }
+        [BsonElement("User IP Address")]
+        public string UserIPAddress { get; set; }
+ 
 
-        [BsonElement("Line of Code")]
-        public string LineOfCode { get; set; }
+        [BsonElement("User Location")]
+        public string UserLocation { get; set; }
     }
 }
-
-
-
-
