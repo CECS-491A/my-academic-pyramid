@@ -93,7 +93,7 @@ export default {
 
     fetchUsers() {
       this.axios
-        .get("https://myacademicpyramid.com/api/usermanager", {
+        .get("https://api.myacademicpyramid.com/api/usermanager", {
           headers: { "Content-Type": "application/Json" }
         })
         .then(response => {
@@ -106,7 +106,7 @@ export default {
     },
     deleteUser(id) {
       this.axios
-        .delete("https://myacademicpyramid.com/api/usermanager/" + id)
+        .delete("https://api.myacademicpyramid.com/api/usermanager/" + id)
         .then(response => {
           this.response = response;
         });

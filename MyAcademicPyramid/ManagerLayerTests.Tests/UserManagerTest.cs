@@ -30,9 +30,9 @@ namespace ManagerLayer.Tests
                     FirstName = "Arturo",
                     LastName = "NA",
                     Catergory = "User",
-                    BirthDate = DateTime.UtcNow,
+                    //BirthDate = DateTime.UtcNow,
                     RawPassword = "PasswordArturo",
-                    Location = "Long Beach",
+                    //Location = "Long Beach",
                     Email = "Arturo1@gmail.com",
                 });
                 User createdUser = UM.FindUserByEmail("Arturo1@gmail.com");
@@ -73,9 +73,9 @@ namespace ManagerLayer.Tests
                     FirstName = "Arturo",
                     LastName = "NA",
                     Catergory = "User",
-                    BirthDate = DateTime.UtcNow,
+                    //BirthDate = DateTime.UtcNow,
                     RawPassword = "PasswordArturo",
-                    Location = "Long Beach",
+                    //Location = "Long Beach",
                     Email = invalidEmail,
                 });
                 if (user == null)
@@ -108,9 +108,9 @@ namespace ManagerLayer.Tests
                 FirstName = "Kevin",
                 LastName = "NA",
                 Catergory = "User",
-                BirthDate = DateTime.UtcNow,
+                //BirthDate = DateTime.UtcNow,
                 RawPassword = "PasswordArturo",
-                Location = "Long Beach",
+                //Location = "Long Beach",
                 Email = "Artur1o@gmail.com",
             });
             bool expected = true;
@@ -152,9 +152,9 @@ namespace ManagerLayer.Tests
                 FirstName = "Arturo",
                 LastName = "NA",
                 Catergory = "User",
-                BirthDate = DateTime.UtcNow,
+                //BirthDate = DateTime.UtcNow,
                 RawPassword = "PasswordArturo",
-                Location = "Long Beach",
+                //Location = "Long Beach",
                 Email = "Arturo@gmail.com",
             });
             UM.DeleteUserAccount(createdUser);
@@ -187,9 +187,9 @@ namespace ManagerLayer.Tests
                 FirstName = "Luis",
                 LastName = "IDK",
                 Catergory = "User",
-                BirthDate = DateTime.UtcNow,
+                //BirthDate = DateTime.UtcNow,
                 RawPassword = "PasswordArturo",
-                Location = "Long Beach",
+                //Location = "Long Beach",
                 Email = "Luis@gmail.com",
             });
             string newEmail = "Naruto@gmail.com";
@@ -231,9 +231,9 @@ namespace ManagerLayer.Tests
                 FirstName = "Kry",
                 LastName = "Leon",
                 Catergory = "User",
-                BirthDate = DateTime.UtcNow,
+                //BirthDate = DateTime.UtcNow,
                 RawPassword = "PasswordArturo",
-                Location = "Long Beach",
+                //Location = "Long Beach",
                 Email = "123Arturo@gmail.com",
             });
             UM.DeleteUserAccount(createdUser);
@@ -265,9 +265,9 @@ namespace ManagerLayer.Tests
                 FirstName = "Arturo",
                 LastName = "NA",
                 Catergory = "User",
-                BirthDate = DateTime.UtcNow,
+                //BirthDate = DateTime.UtcNow,
                 RawPassword = "PasswordArturo",
-                Location = "Long Beach",
+                //Location = "Long Beach",
                 Email = "Arturo@gmail.com",
             });
             User createdParentUser = UM.CreateUserAccount(new UserDTO
@@ -276,9 +276,9 @@ namespace ManagerLayer.Tests
                 FirstName = "ArturoSon",
                 LastName = "NA",
                 Catergory = "User",
-                BirthDate = DateTime.UtcNow,
+                //BirthDate = DateTime.UtcNow,
                 RawPassword = "PasswordArturo",
-                Location = "Long Beach",
+                //Location = "Long Beach",
                 Email = "Arturo2@gmail.com",
             });
             bool expected = true;
@@ -317,9 +317,9 @@ namespace ManagerLayer.Tests
                 FirstName = "Arturo",
                 LastName = "NA",
                 Catergory = "User",
-                BirthDate = DateTime.UtcNow,
+                //BirthDate = DateTime.UtcNow,
                 RawPassword = "PasswordArturo",
-                Location = "Long Beach",
+                //Location = "Long Beach",
                 Email = "Arturo@gmail.com",
             });
             User createdParentUser = UM.CreateUserAccount(new UserDTO
@@ -328,9 +328,9 @@ namespace ManagerLayer.Tests
                 FirstName = "ArturoSon",
                 LastName = "NA",
                 Catergory = "User",
-                BirthDate = DateTime.UtcNow,
+                //BirthDate = DateTime.UtcNow,
                 RawPassword = "PasswordArturo",
-                Location = "Long Beach",
+                //Location = "Long Beach",
                 Email = "Arturo2@gmail.com",
             });
             UM.DeleteUserAccount(createdChildUser);
@@ -370,9 +370,9 @@ namespace ManagerLayer.Tests
                 FirstName = "Arturo",
                 LastName = "NA",
                 Catergory = "User",
-                BirthDate = DateTime.UtcNow,
+                //BirthDate = DateTime.UtcNow,
                 RawPassword = "PasswordArturo",
-                Location = "Long Beach",
+                //Location = "Long Beach",
                 Email = "Arturo@gmail.com",
             });
             User createdParentUser = UM.CreateUserAccount(new UserDTO
@@ -381,9 +381,9 @@ namespace ManagerLayer.Tests
                 FirstName = "ArturoSon",
                 LastName = "NA",
                 Catergory = "User",
-                BirthDate = DateTime.UtcNow,
+                //BirthDate = DateTime.UtcNow,
                 RawPassword = "PasswordArturo",
-                Location = "Long Beach",
+                //Location = "Long Beach",
                 Email = "Arturo2@gmail.com",
             });
             UM.DeleteUserAccount(createdParentUser);
@@ -423,9 +423,9 @@ namespace ManagerLayer.Tests
                 FirstName = "Kevin",
                 LastName = "Kim",
                 Catergory = "User",
-                BirthDate = DateTime.UtcNow,
+                //BirthDate = DateTime.UtcNow,
                 RawPassword = "PasswordArturo",
-                Location = "Long Beach",
+                //Location = "Long Beach",
                 Email = "BTS@gmail.com",
             });
             bool expected = true;
@@ -463,9 +463,9 @@ namespace ManagerLayer.Tests
                 FirstName = "Arturo",
                 LastName = "NA",
                 Catergory = "User",
-                BirthDate = DateTime.UtcNow,
+                //BirthDate = DateTime.UtcNow,
                 RawPassword = "PasswordArturo",
-                Location = "Long Beach",
+                //Location = "Long Beach",
                 Email = "ArturoKevin@gmail.com",
             });
             bool expected = true;
@@ -504,9 +504,9 @@ namespace ManagerLayer.Tests
                 FirstName = "Arturo",
                 LastName = "NA",
                 Catergory = "User",
-                BirthDate = DateTime.UtcNow,
+                //BirthDate = DateTime.UtcNow,
                 RawPassword = "PasswordArturo",
-                Location = "Long Beach",
+                //Location = "Long Beach",
                 Email = "ArturoKevin2@gmail.com",
             });
             UM.DeleteUserAccount(createdUser);
@@ -547,9 +547,9 @@ namespace ManagerLayer.Tests
                 FirstName = "Arturo",
                 LastName = "NA",
                 Catergory = "User",
-                BirthDate = DateTime.UtcNow,
+                //BirthDate = DateTime.UtcNow,
                 RawPassword = "PasswordArturo",
-                Location = "Long Beach",
+                //Location = "Long Beach",
                 Email = "ArturoKevin@gmail.com",
             });
             bool expected = true;
@@ -589,9 +589,9 @@ namespace ManagerLayer.Tests
                 FirstName = "Arturo",
                 LastName = "NA",
                 Catergory = "User",
-                BirthDate = DateTime.UtcNow,
+                //BirthDate = DateTime.UtcNow,
                 RawPassword = "PasswordArturo",
-                Location = "Long Beach",
+                //Location = "Long Beach",
                 Email = "ArturoKevin@gmail.com",
             });
             UM.DeleteUserAccount(createdUser);
@@ -632,9 +632,9 @@ namespace ManagerLayer.Tests
                 FirstName = "Arturo",
                 LastName = "NA",
                 Catergory = "User",
-                BirthDate = DateTime.UtcNow,
+                //BirthDate = DateTime.UtcNow,
                 RawPassword = "PasswordArturo",
-                Location = "Long Beach",
+                //Location = "Long Beach",
                 Email = "ArturoKevin@gmail.com",
             });
             bool expected = true;
@@ -674,9 +674,9 @@ namespace ManagerLayer.Tests
                 FirstName = "Arturo",
                 LastName = "NA",
                 Catergory = "User",
-                BirthDate = DateTime.UtcNow,
+                //BirthDate = DateTime.UtcNow,
                 RawPassword = "PasswordArturo",
-                Location = "Long Beach",
+                //Location = "Long Beach",
                 Email = "Arturo1Kevin@gmail.com",
             });
             UM.DeleteUserAccount(createdUser);
@@ -717,9 +717,9 @@ namespace ManagerLayer.Tests
                 FirstName = "Hyunwoo",
                 LastName = "Kim",
                 Catergory = "User",
-                BirthDate = DateTime.UtcNow,
+                //BirthDate = DateTime.UtcNow,
                 RawPassword = "PasswordArturo",
-                Location = "Long Beach",
+                //Location = "Long Beach",
                 Email = "11ArturoKevin@gmail.com",
             });
             UM.CreateUserAccount(new UserDTO
@@ -729,9 +729,9 @@ namespace ManagerLayer.Tests
                 FirstName = "Hyunwoo2",
                 LastName = "Kim2",
                 Catergory = "User",
-                BirthDate = DateTime.UtcNow,
+                //BirthDate = DateTime.UtcNow,
                 RawPassword = "PasswordArturo",
-                Location = "Long Beach",
+                //Location = "Long Beach",
                 Email = "11ArturoKevin2@gmail.com",
             });
             bool expected = true;
