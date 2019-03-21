@@ -15,7 +15,7 @@ namespace SecurityLayer.Authorization.AuthorizationManagers
     /// </summary>
     public class AuthorizationManager : IAuthorizationManager
     {
-        
+
         private User authorizedUser;
         /// <summary>
         /// Default constructor
@@ -32,12 +32,12 @@ namespace SecurityLayer.Authorization.AuthorizationManagers
         /// </summary>
         /// <param name="user"></param>
         public AuthorizationManager(User user)
-        { 
+        {
             if (user == null)
             {
                 throw new ArgumentNullException("user", "User cannot be null.");
             }
-                
+
             authorizedUser = user;
         }
 
@@ -57,7 +57,7 @@ namespace SecurityLayer.Authorization.AuthorizationManagers
                     "requiredClaims", "List of required claims can't be null."
                 );
             }
-                
+
             // Checks if each required claim exists in user's claim list
             return requiredClaims.All(rc =>
             {
@@ -94,7 +94,7 @@ namespace SecurityLayer.Authorization.AuthorizationManagers
                     return true;
                 }
 
-                else if(FindHeight(callingUser) < FindHeight(targetedUser))
+                else if (FindHeight(callingUser) < FindHeight(targetedUser))
                 {
                     return true;
                 }
@@ -112,7 +112,7 @@ namespace SecurityLayer.Authorization.AuthorizationManagers
         /// <returns> level </returns>
         public int FindHeight(User user)
         {
-            if(user == null)
+            if (user == null)
             {
                 throw new ArgumentNullException("user", "user can't be null.");
             }
