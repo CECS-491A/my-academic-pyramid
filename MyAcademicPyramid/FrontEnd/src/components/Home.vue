@@ -10,7 +10,6 @@ export default {
   data () {
     return {
       info: null,
-      //jinfo: null
     }
   },
   mounted () {
@@ -21,7 +20,6 @@ export default {
         }
       })
       .then(response => (this.info = response.data))
-      //jinfo = JSON.parse(info)
       
   }
 }

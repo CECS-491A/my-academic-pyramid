@@ -5,6 +5,11 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Cors;
+using SecurityLayer;
+using DataAccessLayer;
+using DataAccessLayer.DTOs;
+using ManagerLayer.UserManagement;
+using ServiceLayer.PasswordChecking.HashFunctions;
 
 namespace ManagerLayer.Controllers
 {
@@ -16,5 +21,83 @@ namespace ManagerLayer.Controllers
         {
             return "Hello World From Backend API " + DateTime.Now;
         }
+
+        private void CreateUsers()
+        {
+            UserDTO user1 = new UserDTO()
+            {
+                UserName = "Abc@gmail.com",
+                FirstName = "Jackie",
+                LastName = "Chan",
+                Email = "Abc@gmail.com"
+            };
+
+            UserDTO user2 = new UserDTO()
+            {
+                UserName = "tri@yahoo.com",
+                FirstName = "David",
+                LastName = "Gonzales",
+                Email = "tri@yahoo.com"
+            };
+
+            UserDTO user3 = new UserDTO()
+            {
+                UserName = "Smith@gmail.com",
+                FirstName = "Michael",
+                LastName = "Nguyen",
+                Email = "Smith@gmail.com"
+            };
+
+            DatabaseContext db = new DatabaseContext();
+            UserManager uM = new UserManager();
+            uM.CreateUserAccount(user1);
+            uM.CreateUserAccount(user2);
+            uM.CreateUserAccount(user3);
+            db.SaveChanges();
+        }
+
+        [HttpPost]
+        //[Route("Home/TestJWT")]
+        public string TestJWT([FromBody] string username)
+        {
+
+            /* Create three users. 
+             * Create 
+             */
+
+            CreateUsers();
+            DatabaseContext db = new DatabaseContext();
+            JWTokenManager tm = new JWTokenManager(db);
+            UserManager um = new UserManager();
+            User user = um.FindByUserName(username);
+            if (user == null)
+            {
+                return "User with that username not found";
+            }
+            else
+            {
+                Dictionary<string, string> testPayload = new Dictionary<string, string>()
+                {
+                    { "a", "1"},
+                    { "b", "2" },
+                    { "c", "3" }
+                };
+                return tm.GenerateToken(user.Id, testPayload);
+            }
+            
+
+            //string token = tm.GenerateToken();
+            
+    //Dictionary<string, string> testDict = new Dictionary<string, string>()
+    //{
+    //    {"User", "ljulian2190@gmail.com" },
+    //    {"Claims", "[Student, Tutor]" }
+    //};
+
+
+    //return JWTokenManager.GenerateToken(testDict);
+    }
+
+
     }
 }

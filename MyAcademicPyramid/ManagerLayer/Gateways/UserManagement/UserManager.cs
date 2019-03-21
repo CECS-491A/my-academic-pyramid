@@ -37,30 +37,32 @@ namespace ManagerLayer.UserManagement
         /// <param name="targetedUserName"></param>
         public User CreateUserAccount(UserDTO userDto)
         {
-            //try
-            //{
-            //    var valid = new System.Net.Mail.MailAddress(userDto.Email); // checks that email is valid
-            //}
-            //catch (Exception)
-            //{
-            //    return null;
-            //}
+            try
+            {
+                var valid = new System.Net.Mail.MailAddress(userDto.UserName); // checks that email is valid
+            }
+            catch (Exception)
+            {
+                return null;
+            }
 
             SHA256HashFunction HashFunction = new SHA256HashFunction();
             HashSalt hashSaltPassword = HashFunction.GetHashValue(userDto.RawPassword);
             User user = new User
             {
+                Id = userDto.Id,
                 UserName = userDto.UserName,
                 FirstName = userDto.FirstName,
                 LastName = userDto.LastName,
-                PasswordHash = hashSaltPassword.Hash,
-                PasswordSalt = hashSaltPassword.Salt,
+                //PasswordHash = hashSaltPassword.Hash,
+                //PasswordSalt = hashSaltPassword.Salt,
+
                 //Catergory = userDto.Catergory,
-                // date and time as it would be in Coordinated Universal Time
-                CreatedAt = DateTime.UtcNow, // https://stackoverflow.com/questions/62151/datetime-now-vs-datetime-utcnow 
+                //// date and time as it would be in Coordinated Universal Time
+                //CreatedAt = DateTime.UtcNow, // https://stackoverflow.com/questions/62151/datetime-now-vs-datetime-utcnow 
                 //DateOfBirth = userDto.BirthDate,
                 //Location = userDto.Location,
-                //Email = userDto.Email,
+                Email = userDto.Email,
                 //PasswordQuestion1 = userDto.PasswordQuestion1,
                 //PasswordQuestion2 = userDto.PasswordQuestion2,
                 //PasswordQuestion3 = userDto.PasswordQuestion3,
@@ -89,6 +91,10 @@ namespace ManagerLayer.UserManagement
         /// <param name="targetedUserName"></param>
         public int DeleteUserAccount(User user)
         {
+            if (user == null)
+            {
+                return 0;
+            }
             _userManagementServices.DeleteUser(user);
             return _DbContext.SaveChanges();
         }
@@ -101,6 +107,10 @@ namespace ManagerLayer.UserManagement
         /// <returns></returns>
         public int UpdateUserAccount(User user)
         {
+            if (user == null)
+            {
+                return 0;
+            }
             var response = _userManagementServices.UpdateUser(user);
             try
             {
@@ -147,7 +157,7 @@ namespace ManagerLayer.UserManagement
                 UpdateUserAccount(childUser);
                 UpdateUserAccount(parentUser);
 
-                return _userManagementServices.UpdateUser(childUser);
+                return childUser;
             }
         }
 

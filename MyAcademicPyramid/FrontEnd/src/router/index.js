@@ -49,16 +49,6 @@ export default new Router({
     component: UserList
   },
     {
-      path: '/login',
-      name: 'Login',
-      component: Login
-    },
-    {
-      path: '/Publish',
-      name: 'Publish',
-      component: Publish
-    },
-    {
       path: '/Logging',
       name: 'Logging',
       component: Logging
@@ -68,5 +58,6 @@ export default new Router({
       name: 'UserManagement',
       component: UserList
     }
+  }
   ]
 })
