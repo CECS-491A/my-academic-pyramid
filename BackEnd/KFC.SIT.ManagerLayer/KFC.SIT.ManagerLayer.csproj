@@ -281,8 +281,8 @@
       <Project>{c9a70604-9c00-4586-a435-8d5254be05d4}</Project>
       <Name>KFC.SIT.SecurityLayer</Name>
     </ProjectReference>
-    <ProjectReference Include="..\KFC.SIT.Service Layer\KFC.SIT.ServiceLayer.csproj">
-      <Project>{2a875510-9d8c-482f-99fd-19001548f681}</Project>
+    <ProjectReference Include="..\KFC.SIT.ServiceLayer\KFC.SIT.ServiceLayer.csproj">
+      <Project>{2A875510-9D8C-482F-99FD-19001548F681}</Project>
       <Name>KFC.SIT.ServiceLayer</Name>
     </ProjectReference>
   </ItemGroup>

@@ -3,7 +3,6 @@ using DataAccessLayer;
 using Xunit;
 using System;
 using SecurityLayer.Authorization.AuthorizationManagers;
-using ServiceLayer.UserManagement.UserAccountServices;
 
 namespace ManagerLayerTests.Tests
 {

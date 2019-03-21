@@ -90,10 +90,6 @@
       <Project>{C9A70604-9C00-4586-A435-8D5254BE05D4}</Project>
       <Name>KFC.SIT.SecurityLayer</Name>
     </ProjectReference>
-    <ProjectReference Include="..\KFC.SIT.Service Layer\KFC.SIT.ServiceLayer.csproj">
-      <Project>{2a875510-9d8c-482f-99fd-19001548f681}</Project>
-      <Name>KFC.SIT.ServiceLayer</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
