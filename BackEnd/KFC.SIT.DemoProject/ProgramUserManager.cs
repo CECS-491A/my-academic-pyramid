@@ -15,7 +15,7 @@ namespace DemoProject
         static void Main(string[] args)
         {
 
-           
+
             //TestingHelper.ClearDatabase();
 
             //var UserManager = new UserManager();
@@ -23,7 +23,8 @@ namespace DemoProject
             //HashSalt hashSaltPassword = HashFunction.GetHashValue("Luis");
 
             //Console.WriteLine("Create Admin Account");
-            //UserManager.CreateUserAccount(new UserDTO {
+            //UserManager.CreateUserAccount(new UserDTO
+            //{
             //    UserName = "Admin",
             //    FirstName = "Luis",
             //    LastName = "Luin",
@@ -38,7 +39,7 @@ namespace DemoProject
             //    PasswordAnswer1 = "Burger",
             //    PasswordAnswer2 = "CSULB",
             //    PasswordAnswer3 = "CS",
-            //} );
+            //});
 
             //Console.WriteLine("Create SubAdmin Account");
             //UserManager.CreateUserAccount(new UserDTO
@@ -88,8 +89,8 @@ namespace DemoProject
 
             //User user1 = UserManager.FindByUserName("User1");
             //User admin = UserManager.FindByUserName("Admin");
-            
-            //if(aM.HasHigherPrivilege(user1, admin))
+
+            //if (aM.HasHigherPrivilege(user1, admin))
             //{
             //    UserManager.DeleteUserAccount(admin);
             //}

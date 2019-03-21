@@ -4,7 +4,6 @@ using Xunit;
 using System;
 using SecurityLayer.Authorization.AuthorizationManagers;
 using ServiceLayer.UserManagement.UserAccountServices;
-using DemoProject;
 
 namespace ManagerLayerTests.Tests
 {

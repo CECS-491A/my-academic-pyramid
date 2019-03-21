@@ -1,7 +1,6 @@
 ﻿using Xunit;
 using DataAccessLayer;
 using ServiceLayer.UserManagement.UserAccountServices;
-using DemoProject;
 using System;
 using System.Collections.Generic;
 
@@ -13,7 +12,7 @@ namespace ServiceLayerTests.Tests
         [Fact]
         public void UserManagementServices_Constructor_ShouldReturnArgumentNullException()
         {
-            DatabaseContext temp = new DataBaseContext();
+            DatabaseContext temp = new DatabaseContext();
             UserManagementServices temp2 = new UserManagementServices(temp);
             //Arrange
             bool exceptionRaised = false;

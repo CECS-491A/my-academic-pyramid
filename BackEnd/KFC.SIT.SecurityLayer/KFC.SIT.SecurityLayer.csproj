@@ -7,7 +7,7 @@
     <ProjectGuid>{C9A70604-9C00-4586-A435-8D5254BE05D4}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>SecurityLayer</RootNamespace>
-    <AssemblyName>SecurityLayer</AssemblyName>
+    <AssemblyName>KFC.SIT.SecurityLayer</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -74,13 +74,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DataAccessLayer\DataAccessLayer.csproj">
+    <ProjectReference Include="..\KFC.SIT.DataAccessLayer\KFC.SIT.DataAccessLayer.csproj">
       <Project>{6a61e75b-b35b-4f17-b7f4-da1af5806b23}</Project>
-      <Name>DataAccessLayer</Name>
+      <Name>KFC.SIT.DataAccessLayer</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Service Layer\ServiceLayer.csproj">
-      <Project>{2A875510-9D8C-482F-99FD-19001548F681}</Project>
-      <Name>ServiceLayer</Name>
+    <ProjectReference Include="..\KFC.SIT.Service Layer\KFC.SIT.ServiceLayer.csproj">
+      <Project>{2a875510-9d8c-482f-99fd-19001548f681}</Project>
+      <Name>KFC.SIT.ServiceLayer</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

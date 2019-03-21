@@ -7,7 +7,7 @@
     <ProjectGuid>{445D4B44-BFAA-4F57-A24E-97AB90161A2D}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>DemoProject</RootNamespace>
-    <AssemblyName>DemoProject</AssemblyName>
+    <AssemblyName>KFC.SIT.DemoProject</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -109,25 +109,25 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DataAccessLayer\DataAccessLayer.csproj">
-      <Project>{6a61e75b-b35b-4f17-b7f4-da1af5806b23}</Project>
-      <Name>DataAccessLayer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ManagerLayer\ManagerLayer.csproj">
-      <Project>{1f873dd8-8a42-411b-b217-ebe6e8eeb002}</Project>
-      <Name>ManagerLayer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SecurityLayer\SecurityLayer.csproj">
-      <Project>{c9a70604-9c00-4586-a435-8d5254be05d4}</Project>
-      <Name>SecurityLayer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Service Layer\ServiceLayer.csproj">
-      <Project>{2a875510-9d8c-482f-99fd-19001548f681}</Project>
-      <Name>ServiceLayer</Name>
-    </ProjectReference>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadata Include="Connected Services\" />
+    <ProjectReference Include="..\KFC.SIT.DataAccessLayer\KFC.SIT.DataAccessLayer.csproj">
+      <Project>{6A61E75B-B35B-4F17-B7F4-DA1AF5806B23}</Project>
+      <Name>KFC.SIT.DataAccessLayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KFC.SIT.ManagerLayer\KFC.SIT.ManagerLayer.csproj">
+      <Project>{1f873dd8-8a42-411b-b217-ebe6e8eeb002}</Project>
+      <Name>KFC.SIT.ManagerLayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KFC.SIT.SecurityLayer\KFC.SIT.SecurityLayer.csproj">
+      <Project>{c9a70604-9c00-4586-a435-8d5254be05d4}</Project>
+      <Name>KFC.SIT.SecurityLayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KFC.SIT.Service Layer\KFC.SIT.ServiceLayer.csproj">
+      <Project>{2a875510-9d8c-482f-99fd-19001548f681}</Project>
+      <Name>KFC.SIT.ServiceLayer</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
