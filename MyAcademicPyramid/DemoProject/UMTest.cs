@@ -22,9 +22,9 @@ namespace DemoProject
                 FirstName = "Arturo",
                 LastName = "NA",
                 Catergory = "User",
-                BirthDate = DateTime.UtcNow,
+                //BirthDate = DateTime.UtcNow,
                 RawPassword = "PasswordArturo",
-                Location = "Long Beach",
+                //Location = "Long Beach",
                 Email = "ArturoKevin@gmail.com",
             });
             bool expected = true;

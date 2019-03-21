@@ -60,6 +60,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="JWTokenDemo.cs" />
+    <Compile Include="ProgramAuthorization.cs" />
     <Compile Include="ProgramPassword.cs" />
     <Compile Include="ProgramUserManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -10,13 +10,15 @@ namespace DataAccessLayer
         // Set of Claims
         public DbSet<Claim> Claims { get; set; }
 
+        public DbSet<UserSession> Sessions { get; set; }
+
         //Set of Conservations
         public DbSet<Conversation> Conservations { get; set; }
 
-        public DatabaseContext () :base ("name=LocalTest")
+        public DatabaseContext() : base("name=LocalTest")
         {
-            Database.SetInitializer(new DropCreateDatabaseAlways<DatabaseContext>());
-
+            //Database.SetInitializer<DatabaseContext>(new DropCreateDatabaseIfModelChanges<DatabaseContext>());
+            Database.SetInitializer<DatabaseContext>(new DropCreateDatabaseAlways<DatabaseContext>());
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -31,12 +33,10 @@ namespace DataAccessLayer
 
             modelBuilder.Entity<User>().
                 HasMany(c => c.Claims);
-                
-                
-               
-
-            base.OnModelCreating(modelBuilder);
+         base.OnModelCreating(modelBuilder);
 
         }
+
+
     }
 }

@@ -8,16 +8,12 @@
 //------------------------------------------------------------------------------
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using DataAccessLayer.Repository;
+using System;
+using System.Collections.Generic;
 
 namespace DataAccessLayer
-{
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using DataAccessLayer.Models;
-    using DataAccessLayer.Repository;
-    using System;
-    using System.Collections.Generic;
-    
+{    
     public partial class User : IEntity 
     {
 
@@ -33,27 +29,30 @@ namespace DataAccessLayer
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Catergory { get; set; }
-        [Column(TypeName = "datetime2"), DataType(DataType.DateTime)]
-        public DateTime DateOfBirth { get; set; }
+
+        //[Required, DataType(DataType.Date)]
+        //public DateTime DateOfBirth { get; set; }
+        [Required]
         public string Email { get; set; }
-        [Column(TypeName = "datetime2"), DataType(DataType.DateTime)]
-        public DateTime UpdatedAt { get; set; }
-        [Column(TypeName = "datetime2"), DataType(DataType.DateTime)]
-        public DateTime CreatedAt { get; set; }
-        //public DateTime ModifiedDate { get; set; }
-        public string Location { get; set; }
-        
+        //[Required, Column(TypeName = "datetime2"), DataType(DataType.DateTime)]
+        //public DateTime UpdatedAt { get; set; }
+        ////[Column(TypeName = "datetime2"), DataType(DataType.DateTime)]
+        //public DateTime CreatedAt { get; set; }
+        ////public DateTime ModifiedDate { get; set; }
+        //public string Location { get; set; }
+        ////[Required]
         public string PasswordHash { get; set; }
-        
+        ////[Required]
+
         public string PasswordSalt { get; set; }
         public Nullable<int> ParentUser_Id { get; set; }
 
-        public String PasswordQuestion1 { get; set; }
-        public String PasswordQuestion2 { get; set; }
-        public String PasswordQuestion3 { get; set; }
-        public String PasswordAnswer1 { get; set; }
-        public String PasswordAnswer2 { get; set; }
-        public String PasswordAnswer3 { get; set; }
+        //public String PasswordQuestion1 { get; set; }
+        //public String PasswordQuestion2 { get; set; }
+        //public String PasswordQuestion3 { get; set; }
+        //public String PasswordAnswer1 { get; set; }
+        //public String PasswordAnswer2 { get; set; }
+        //public String PasswordAnswer3 { get; set; }
 
         /// <summary>
         /// Children users below user.
@@ -65,6 +64,8 @@ namespace DataAccessLayer
         public virtual User ParentUser { get; set; }
 
         public virtual ICollection<Claim> Claims { get; set; }
+
+        public virtual ICollection<UserSession> userSessions { get; set; }
 
         /// <summary>
         /// Override Equals method.  The UserName of each User is unique.
