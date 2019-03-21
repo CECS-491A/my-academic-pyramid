@@ -56,7 +56,7 @@ namespace ManagerLayer.Tests
         }
 
         [Fact]
-        public void UserManager_CreateUserAccount_InvalidEmail_ShouldThrowException()
+        public void UserManager_CreateUserAccount_InvalidEmail_ShouldReturnNull()
         {
             // Arrange
             UserManager UM = new UserManager();
@@ -90,7 +90,7 @@ namespace ManagerLayer.Tests
 
             catch(ArgumentNullException)
             {
-                actual = true;
+                actual = false;
             }
 
             // Assert
