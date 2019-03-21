@@ -43,7 +43,7 @@
       submitData() {
       this.axios({
         method: "PUT",
-        url: "https://myacademicpyramid.com/api/usermanager",
+        url: "https://api.myacademicpyramid.com/api/usermanager",
         data: this.formData,
         headers: { "content-type": "application/json" }
       }).then(

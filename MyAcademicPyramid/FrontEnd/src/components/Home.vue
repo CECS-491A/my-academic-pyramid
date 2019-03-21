@@ -1,5 +1,5 @@
 <template>
-  <div class="hello">
+  <div class="home">
     <h1>{{ info }}</h1>
   </div>
 </template>
@@ -9,18 +9,8 @@ import axios from 'axios'
 export default {
   data () {
     return {
-      info: null,
+      info: "My Academic Pyramid Homepage",
     }
-  },
-  mounted () {
-    axios
-      .get('http://localhost:60500/api/logging/geterrors', {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-      .then(response => (this.info = response.data))
-      
   }
 }
 </script>

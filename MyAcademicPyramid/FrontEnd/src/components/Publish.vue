@@ -84,7 +84,7 @@ export default {
 
       if (this.error) return;
 
-      const url = 'http://api.kfc-sso.com/api/applications/publish'
+      const url = 'https://api.kfc-sso.com/api/applications/publish'
       // const url = 'sso.julianjp.com/api/applications/publish'
       axios.post(url, {
         key: document.getElementById('key').value,

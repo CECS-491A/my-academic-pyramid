@@ -14,7 +14,7 @@ export default {
   },
   mounted () {
     axios
-      .get('http:///api.myacademicpyramid.com/api/logging/geterrors', {
+      .get('https://api.myacademicpyramid.com/api/logging/geterrors', {
         headers: {
           'Content-Type': 'application/json'
         }

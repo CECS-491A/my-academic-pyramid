@@ -48,16 +48,10 @@ export default new Router({
     name: 'UserManagement',
     component: UserList
   },
-    {
-      path: '/Logging',
-      name: 'Logging',
-      component: Logging
-    },
-    {  
-      path: '/UserManagement',
-      name: 'UserManagement',
-      component: UserList
-    }
+  {
+    path: '/Logging',
+    name: 'Logging',
+    component: Logging
   }
   ]
 })
