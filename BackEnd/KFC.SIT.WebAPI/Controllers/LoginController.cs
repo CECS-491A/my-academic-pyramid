@@ -11,8 +11,8 @@ using DataAccessLayer;
 using DataAccessLayer.DTOs;
 using ManagerLayer.UserManagement;
 
-namespace ManagerLayer.Controllers
-{
+namespace KFC.SIT.WebAPI
+{ 
     public class LoginController : ApiController
     {
         [HttpPost]

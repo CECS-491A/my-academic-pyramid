@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2036
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KFC.SIT.WebAPI", "KFC.SIT.WebAPI\KFC.SIT.WebAPI.csproj", "{42F6635E-E436-4484-9852-44DC82FD95AB}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KFC.SIT.DataAccessLayer", "KFC.SIT.DataAccessLayer\KFC.SIT.DataAccessLayer.csproj", "{6A61E75B-B35B-4F17-B7F4-DA1AF5806B23}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KFC.SIT.DemoProject", "KFC.SIT.DemoProject\KFC.SIT.DemoProject.csproj", "{445D4B44-BFAA-4F57-A24E-97AB90161A2D}"
@@ -21,16 +19,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KFC.SIT.ServiceLayer.Tests"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KFC.SIT.ServiceLayer", "KFC.SIT.ServiceLayer\KFC.SIT.ServiceLayer.csproj", "{2A875510-9D8C-482F-99FD-19001548F681}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KFC.SIT.WebAPI", "KFC.SIT.WebAPI\KFC.SIT.WebAPI.csproj", "{56CDAAF8-BA7E-47B5-BFCC-F1E9D9E34F40}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{42F6635E-E436-4484-9852-44DC82FD95AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{42F6635E-E436-4484-9852-44DC82FD95AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{42F6635E-E436-4484-9852-44DC82FD95AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{42F6635E-E436-4484-9852-44DC82FD95AB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6A61E75B-B35B-4F17-B7F4-DA1AF5806B23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6A61E75B-B35B-4F17-B7F4-DA1AF5806B23}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6A61E75B-B35B-4F17-B7F4-DA1AF5806B23}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -63,6 +59,10 @@ Global
 		{2A875510-9D8C-482F-99FD-19001548F681}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2A875510-9D8C-482F-99FD-19001548F681}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2A875510-9D8C-482F-99FD-19001548F681}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56CDAAF8-BA7E-47B5-BFCC-F1E9D9E34F40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56CDAAF8-BA7E-47B5-BFCC-F1E9D9E34F40}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56CDAAF8-BA7E-47B5-BFCC-F1E9D9E34F40}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56CDAAF8-BA7E-47B5-BFCC-F1E9D9E34F40}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

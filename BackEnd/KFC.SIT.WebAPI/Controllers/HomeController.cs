@@ -11,7 +11,7 @@ using DataAccessLayer.DTOs;
 using ManagerLayer.UserManagement;
 using ServiceLayer.PasswordChecking.HashFunctions;
 
-namespace ManagerLayer.Controllers
+namespace KFC.SIT.WebAPI
 {
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class HomeController : ApiController

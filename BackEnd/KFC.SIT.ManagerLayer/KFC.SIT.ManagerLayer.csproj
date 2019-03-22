@@ -217,9 +217,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="BusinessRules\PasswordCheckingBR.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoggingController.cs" />
-    <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\MessengerController.cs" />
     <Compile Include="Controllers\UserManagerController.cs" />
     <Compile Include="Gateways\Messenger\MessengerGateway.cs" />
