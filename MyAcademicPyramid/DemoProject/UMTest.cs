@@ -19,7 +19,7 @@ namespace DemoProject
             {
                 Id = 100,
                 UserName = "SystemAdmin",
-                Firstname = "Arturo",
+                FirstName = "Arturo",
                 LastName = "NA",
                 Catergory = "User",
                 BirthDate = DateTime.UtcNow,

@@ -13,7 +13,8 @@ namespace ManagerLayer
         public static void Register(HttpConfiguration config)
         {
             // Web API configuration and services
-            var cors = new EnableCorsAttribute("*", "*", "*");
+            
+            var cors = new EnableCorsAttribute("*", "*", "GET,POST,PUT,DELETE");
             config.EnableCors(cors);
             config.MapHttpAttributeRoutes();
             // Web API routes

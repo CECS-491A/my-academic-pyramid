@@ -32,12 +32,6 @@ namespace DemoProject
                 RawPassword = "PasswordLuis",
                 Location = "Long Beach",
                 Email = "Luis@gmail.com",
-                PasswordQuestion1 = "What is our favourite food ?",
-                PasswordQuestion2 = "Where is your school?",
-                PasswordQuestion3 = "What is your major",
-                PasswordAnswer1 = "Burger",
-                PasswordAnswer2 = "CSULB",
-                PasswordAnswer3 = "CS",
             } );
 
             Console.WriteLine("Create SubAdmin Account");

@@ -15,7 +15,6 @@ using System.Web.Http.Cors;
 
 namespace ManagerLayer.Controllers
 {
-    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class UserManagerController : ApiController
     {
 
