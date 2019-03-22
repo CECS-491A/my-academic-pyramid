@@ -1,2 +1,0 @@
-C:\Users\khk40_\Desktop\Secret Room\github\my-academic-pyramid\MyAcademicPyramid\ServiceLayerTests.Tests\obj\Debug\ServiceLayerTests.Tests.csprojAssemblyReference.cache
-C:\Users\khk40_\Desktop\Secret Room\github\my-academic-pyramid\MyAcademicPyramid\ServiceLayerTests.Tests\obj\Debug\ServiceLayerTests.Tests.csproj.CoreCompileInputs.cache
