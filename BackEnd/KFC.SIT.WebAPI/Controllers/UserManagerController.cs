@@ -15,6 +15,7 @@ using System.Web.Http.Cors;
 
 namespace KFC.SIT.WebAPI
 {
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     [Route("api/usermanager")]
     public class UserManagerController : ApiController
     {
@@ -51,10 +52,14 @@ namespace KFC.SIT.WebAPI
 
         // POST api/<controller>
         [HttpPost]
-        public IHttpActionResult Post([FromBody] UserDTO userDto)
+        public HttpResponseMessage Post([FromBody] UserDTO userDto)
         {
             UserManager umManager = new UserManager();
-            return Ok(umManager.CreateUserAccount(userDto));
+            var createdUser = umManager.CreateUserAccount(userDto);
+            var message = Request.CreateResponse(HttpStatusCode.OK, createdUser);
+  
+            return message;
+
         }
 
         // PUT api/<controller>/5
@@ -77,9 +82,13 @@ namespace KFC.SIT.WebAPI
             umManager.DeleteUserAccount(umManager.FindUserById(id));
         }
 
-      
+        [HttpOptions]
+        public HttpResponseMessage Options()
+        {
+            return new HttpResponseMessage { StatusCode = HttpStatusCode.OK };
+        }
 
 
-       
+
     }
 }

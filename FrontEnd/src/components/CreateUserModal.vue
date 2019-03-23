@@ -22,7 +22,11 @@ export default {
         crossDomain: true,
         url: this.$hostname,
         data: this.formData,
-        headers: { "content-type": "application/json" }
+        headers: { "content-type": "application/json",
+         "Access-Control-Allow-Origin": "*",
+         "Access-Control-Allow-Methods": "GET, POST, PATCH, PUT, DELETE, OPTIONS",
+    
+        }
       }).then(
         result => {
           this.response = result.data;
