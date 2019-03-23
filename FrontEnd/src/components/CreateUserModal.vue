@@ -19,7 +19,8 @@ export default {
     submitData() {
       this.axios({
         method: "POST",
-        url: "https://api.myacademicpyramid.com/api/usermanager",
+        crossDomain: true,
+        url: this.$hostname,
         data: this.formData,
         headers: { "content-type": "application/json" }
       }).then(

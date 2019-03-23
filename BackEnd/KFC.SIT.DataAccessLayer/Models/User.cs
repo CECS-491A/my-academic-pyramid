@@ -32,7 +32,7 @@ namespace DataAccessLayer
 
         //[Required, DataType(DataType.Date)]
         //public DateTime DateOfBirth { get; set; }
-        [Required]
+        //[Required]
         public string Email { get; set; }
         //[Required, Column(TypeName = "datetime2"), DataType(DataType.DateTime)]
         //public DateTime UpdatedAt { get; set; }

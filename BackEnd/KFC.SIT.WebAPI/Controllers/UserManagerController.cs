@@ -13,8 +13,9 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Cors;
 
-namespace ManagerLayer.Controllers
+namespace KFC.SIT.WebAPI
 {
+    [Route("api/usermanager")]
     public class UserManagerController : ApiController
     {
 
@@ -27,7 +28,7 @@ namespace ManagerLayer.Controllers
             List<User> userList = umManager.GetAllUser();
 
             List<UserDTO> list = new List<UserDTO>();
-            foreach(var user in userList)
+            foreach (var user in userList)
             {
                 list.Add(new UserDTO
                 {
@@ -35,7 +36,7 @@ namespace ManagerLayer.Controllers
                     UserName = user.UserName,
                     FirstName = user.FirstName,
                     LastName = user.LastName,
-                    
+
                 });
             }
 
@@ -75,5 +76,10 @@ namespace ManagerLayer.Controllers
             UserManager umManager = new UserManager();
             umManager.DeleteUserAccount(umManager.FindUserById(id));
         }
+
+      
+
+
+       
     }
 }
