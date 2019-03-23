@@ -16,11 +16,8 @@ using System.Web.Http.Cors;
 namespace KFC.SIT.WebAPI
 {
     [EnableCors(origins: "*", headers: "*", methods: "*")]
-    [Route("api/usermanager")]
     public class UserManagerController : ApiController
     {
-
-
         // GET api/<controller>
         [HttpGet]
         public IQueryable<UserDTO> Get()
@@ -75,7 +72,7 @@ namespace KFC.SIT.WebAPI
         }
 
         // DELETE api/<controller>/5
-        [HttpDelete]
+        [HttpDelete]    
         public void Delete(int id)
         {
             UserManager umManager = new UserManager();
