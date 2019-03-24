@@ -73,7 +73,6 @@ export default {
         },
         { text: "First Name", value: "Firstname" },
         { text: "Last Name", value: "LastName" },
-        { text: "Parent User", value: "ParentUser" }
       ],
       users: [],
       isCreateUserDiallogVisible: false,
