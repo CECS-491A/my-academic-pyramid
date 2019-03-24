@@ -1,13 +1,12 @@
 <template>
   <div class="hello">
-    <h1>{{ info }}</h1>
     <!-- <v-app id="inspire"> -->
       <v-container>
         <v-layout align-center justify-center row fill-height>
           <v-flex table>
-            <v-subheader>Logs</v-subheader>
+            <v-subheader>Errors</v-subheader>
             <v-data-table 
-              :headers="headers" 
+              :headers="errorheaders" 
               :items="errors" 
               :dark = true
               class="elevation-1"
@@ -21,13 +20,39 @@
                 <td class="text-xs-left">{{ props.item.BS }}</td>
                 <v-icon
                   small
-                  @click="deleteItem(props.item.ID)"
+                  @click="deleteError(props.item.ID)"
                 >
                   delete
                 </v-icon>
                 </td>
-                <!-- <v-btn v-on:click="deleteUser(props.item.ID)">Delete</v-btn>
-                <v-btn v-on:click="showEditModal(props.item)">Edit</v-btn> -->
+              </template>
+            </v-data-table>
+          </v-flex>
+        </v-layout>
+      </v-container>
+      <v-container>
+        <v-layout align-center justify-center row fill-height>
+          <v-flex table>
+            <v-subheader>Telemetry</v-subheader>
+            <v-data-table 
+              :headers="telemetryheaders" 
+              :items="telemetries" 
+              :dark = true
+              class="elevation-2"
+              >
+              <template slot="items" slot-scope="props">
+                <td class="text-xs-left">{{ props.item.ID }}</td>
+                <td class="text-xs-left">{{ props.item.Date }}</td>
+                <td class="text-xs-left">{{ props.item.Action }}</td>
+                <td class="text-xs-left">{{ props.item.IPAddress }}</td>
+                <td class="text-xs-left">{{ props.item.Location }}</td>
+                <v-icon
+                  small
+                  @click="deleteTelemetry(props.item.ID)"
+                >
+                  delete
+                </v-icon>
+                </td>
               </template>
             </v-data-table>
           </v-flex>
@@ -39,19 +64,12 @@
 </template>
 
 <script>
-/*global console*/ /* eslint no-console: "off" */
-// import EditModal from "@/components/EditModal.vue";
-// import NewUserModal from "@/components/CreateUserModal.vue";
 import axios from 'axios'
 
 export default {
-  // components: {
-  //   EditModal,
-  //   NewUserModal
-  // },
   data() {
     return {
-      headers: [
+      errorheaders: [
         { text: "id", value: "ID" , sortable: false},
         {
           text: "date",
@@ -65,42 +83,41 @@ export default {
         { text: "user", value: "User" },
         { text: "request", value: "Request" }
       ],
+      telemetryheaders: [
+        { text: "id", value: "ID" , sortable: false},
+        {
+          text: "date",
+          // align: "left",
+          // sortable: false,
+          value: "Date"
+        },
+        { text: "action", value: "Action" },
+        { text: "ip Adress", value: "IPAdress" },
+        { text: "location", value: "Location" }
+      ],
       errors: [],
-      //isEditModalVisible: false,
-      //isNewUserModalVisible: false,
+      telemetries: [],
       response: ""
     };
+      
   },
 
   created() {
     this.fetchErrors();
-    // this.$eventBus.$on("UpdateTable", () => {
-    //   this.fetchErrors();
-    //});
+    this.fetchTelemetry();
   },
   watch: {
     $route: "fetchErrors",
     response: "fetchErrors",
-    users: "fetchErrors"
+    //errors: "fetchErrors",
+    $route: "fetchTelemetry",
+    response: "fetchTelemetry",
+    //telemetries: "fetchTelemetry"
   },
   methods: {
     handleUpdate() {
       this.em;
     },
-    // showEditModal(item) {
-    //   this.isEditModalVisible = true;
-    //   this.$eventBus.$emit('EditUser', item);
-
-    // },
-    // closeEditModal() {
-    //   this.isEditModalVisible = false;
-    // },
-    // showNewUserModal() {
-    //   this.isNewUserModalVisible = true;
-    // },
-    // closeNewUserModal() {
-    //   this.isNewUserModalVisible = false;
-    // },
 
     fetchErrors() {
       this.axios
@@ -115,9 +132,29 @@ export default {
           console.log(error);
         });
     },
-    deleteUser(id) {
+    deleteError(id) {
       this.axios
-        .delete('http://localhost:59364/api/logging/deleteerror/' + id)
+        .delete('http://localhost:59364/api/logging/deleteerror/?id=' + id)
+        .then(response => {
+          this.response = response;
+        });
+    },
+    fetchTelemetry() {
+      this.axios
+        .get('http://localhost:59364/api/logging/gettelemetries', {
+          headers: { "Content-Type": "application/Json" }
+        })
+        .then(response => {
+          this.telemetries = response.data;
+          console.log(response.data);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    deleteTelemetry(id) {
+      this.axios
+        .delete('http://localhost:59364/api/logging/deletetelemetry/?id=' + id)
         .then(response => {
           this.response = response;
         });
