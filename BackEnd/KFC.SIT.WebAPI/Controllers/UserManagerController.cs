@@ -34,7 +34,8 @@ namespace KFC.SIT.WebAPI
                     UserName = user.UserName,
                     FirstName = user.FirstName,
                     LastName = user.LastName,
-                    CreatedAt = user.CreatedAt.ToString("dd MMMM yyyy hh:mm:ss tt")
+                    DateOfBirth = user.DateOfBirth.ToString("MMMM dd yyyy hh:mm:ss tt"),
+                    CreatedAt = user.CreatedAt.ToString("MMMM dd yyyy hh:mm:ss tt")
                     
 
                 });

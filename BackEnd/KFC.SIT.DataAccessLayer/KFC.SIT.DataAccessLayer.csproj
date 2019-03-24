@@ -158,6 +158,14 @@
     <Compile Include="Migrations\201903230623395_AddCreatedDateToUserModel.Designer.cs">
       <DependentUpon>201903230623395_AddCreatedDateToUserModel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201903242110576_AddDateOfBirth.cs" />
+    <Compile Include="Migrations\201903242110576_AddDateOfBirth.Designer.cs">
+      <DependentUpon>201903242110576_AddDateOfBirth.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201903242130233_fix birthDate.cs" />
+    <Compile Include="Migrations\201903242130233_fix birthDate.Designer.cs">
+      <DependentUpon>201903242130233_fix birthDate.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Claim.cs" />
     <Compile Include="DatabaseContext.cs" />
@@ -210,6 +218,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201903230623395_AddCreatedDateToUserModel.resx">
       <DependentUpon>201903230623395_AddCreatedDateToUserModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903242110576_AddDateOfBirth.resx">
+      <DependentUpon>201903242110576_AddDateOfBirth.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903242130233_fix birthDate.resx">
+      <DependentUpon>201903242130233_fix birthDate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

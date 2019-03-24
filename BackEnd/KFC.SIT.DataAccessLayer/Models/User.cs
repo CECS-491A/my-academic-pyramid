@@ -30,8 +30,8 @@ namespace DataAccessLayer
         public string LastName { get; set; }
         public string Catergory { get; set; }
 
-        //[Required, DataType(DataType.Date)]
-        //public DateTime DateOfBirth { get; set; }
+       
+        public DateTime DateOfBirth { get; set; }
         //[Required]
         public string Email { get; set; }
         //[Required, Column(TypeName = "datetime2"), DataType(DataType.DateTime)]

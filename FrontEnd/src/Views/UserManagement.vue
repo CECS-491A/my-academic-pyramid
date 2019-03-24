@@ -25,6 +25,7 @@
                     <td class="text-xs-left">{{ props.item.UserName }}</td>
                     <td class="text-xs-left">{{ props.item.FirstName }}</td>
                     <td class="text-xs-left">{{ props.item.LastName }}</td>
+					<td class="text-xs-left">{{ props.item.DateOfBirth }}</td>
                     <v-btn v-on:click="deleteUser(props.item.Id)">Delete</v-btn>
                     <v-btn v-on:click="showEditModal(props.item)">Edit</v-btn>
                   </tr>
@@ -72,7 +73,9 @@ export default {
           value: "UserName"
         },
         { text: "First Name", value: "Firstname" },
-        { text: "Last Name", value: "LastName" },
+		{ text: "Last Name", value: "LastName" },
+		{ text: "Date Of Birth", value: "DateOfBirth" },
+		
       ],
       users: [],
       isCreateUserDiallogVisible: false,
