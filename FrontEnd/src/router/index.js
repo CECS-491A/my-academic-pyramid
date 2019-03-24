@@ -2,17 +2,17 @@ import Vue from 'vue'
 import Vuetify from 'vuetify'
 import Router from 'vue-router'
 import 'vuetify/dist/vuetify.min.css'
-import Home from '@/components/Home'
-import Publish from '@/components/Publish'
-import Logging from '@/components/Logging'
-import Login from '@/components/Login'
-import UserList from '@/components/UserList'
+import Home from '@/Views/Home'
+import Publish from '@/Views/Publish'
+import Logging from '@/Views/Logging'
+import Login from '@/Views/Login'
+import UserList from '@/Views/UserList'
+import UserManagement from '@/Views/UserManagement'
 
 Vue.use(Router)
 Vue.use(Vuetify)
 
 export default new Router({
-  mode: 'history',
   base: process.env.BASE_URL,
   routes: [
   {
@@ -52,6 +52,12 @@ export default new Router({
     path: '/Logging',
     name: 'Logging',
     component: Logging
+  },
+
+  {
+    path: '/UserManagementTest',
+    name: 'UserManagementTest',
+    component: UserManagement
   }
   ]
 })

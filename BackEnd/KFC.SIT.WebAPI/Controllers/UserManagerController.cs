@@ -34,6 +34,8 @@ namespace KFC.SIT.WebAPI
                     UserName = user.UserName,
                     FirstName = user.FirstName,
                     LastName = user.LastName,
+                    CreatedAt = user.CreatedAt.ToString("dd MMMM yyyy hh:mm:ss tt")
+                    
 
                 });
             }
@@ -53,7 +55,7 @@ namespace KFC.SIT.WebAPI
         {
             UserManager umManager = new UserManager();
             var createdUser = umManager.CreateUserAccount(userDto);
-            var message = Request.CreateResponse(HttpStatusCode.OK, createdUser);
+            var message = Request.CreateResponse(HttpStatusCode.OK, userDto);
   
             return message;
 

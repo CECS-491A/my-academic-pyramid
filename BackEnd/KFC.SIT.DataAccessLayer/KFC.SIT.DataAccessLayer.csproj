@@ -154,6 +154,10 @@
     <Compile Include="Migrations\201903222218015_ModelChange.Designer.cs">
       <DependentUpon>201903222218015_ModelChange.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201903230623395_AddCreatedDateToUserModel.cs" />
+    <Compile Include="Migrations\201903230623395_AddCreatedDateToUserModel.Designer.cs">
+      <DependentUpon>201903230623395_AddCreatedDateToUserModel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Claim.cs" />
     <Compile Include="DatabaseContext.cs" />
@@ -203,6 +207,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201903222218015_ModelChange.resx">
       <DependentUpon>201903222218015_ModelChange.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903230623395_AddCreatedDateToUserModel.resx">
+      <DependentUpon>201903230623395_AddCreatedDateToUserModel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

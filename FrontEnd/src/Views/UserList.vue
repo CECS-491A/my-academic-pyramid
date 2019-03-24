@@ -5,16 +5,28 @@
         <v-layout align-center justify-center row fill-height>
           <v-flex table>
             <v-subheader>USER MANAGEMENT</v-subheader>
-            <v-data-table :headers="headers" :items="users" class="elevation-1">
-              <template slot="items" slot-scope="props">
+            <v-data-table 
+            :headers="headers" 
+            :items="users"
+            :expand="expand"
+            item-key="UserName"
+             class="elevation-1" loading>
+              <template v-slot:items="props">
+                <tr @click="props.expanded = !props.expanded">
                 <td class="text-xs-left">{{ props.item.Id }}</td>
                 <td class="text-xs-left">{{ props.item.UserName }}</td>
                 <td class="text-xs-left">{{ props.item.FirstName }}</td>
-                <td class="text-xs-left">{{ props.item.LastName }}</td>
-                <td class="text-xs-;fef">{{ props.item.ParentUser }}</td>
+                <td class="text-xs-left">{{ props.item.LastName }}</td> 
                 <v-btn v-on:click="deleteUser(props.item.Id)">Delete</v-btn>
                 <v-btn v-on:click="showEditModal(props.item)">Edit</v-btn>
+                </tr>
               </template>
+        <template v-slot:expand="props">
+          <v-card flat>
+            <header>Created Date</header>
+            <v-card-text>{{props.item.CreatedAt}}</v-card-text>
+          </v-card>
+        </template>
             </v-data-table>
           </v-flex>
           <v-flex>
@@ -52,12 +64,15 @@ export default {
         },
         { text: "First Name", value: "Firstname" },
         { text: "Last Name", value: "LastName" },
-        { text: "Parent User", value: "ParentUser" }
+        { text: "Parent User", value: "ParentUser" },
+        
       ],
       users: [],
       isEditModalVisible: false,
       isNewUserModalVisible: false,
-      response: ""
+      response: "",
+      expand: false,
+      
     };
   },
 

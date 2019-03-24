@@ -59,7 +59,7 @@ namespace ManagerLayer.UserManagement
 
                 //Catergory = userDto.Catergory,
                 //// date and time as it would be in Coordinated Universal Time
-                //CreatedAt = DateTime.UtcNow, // https://stackoverflow.com/questions/62151/datetime-now-vs-datetime-utcnow 
+                CreatedAt = DateTime.Now, // https://stackoverflow.com/questions/62151/datetime-now-vs-datetime-utcnow 
                 //DateOfBirth = userDto.BirthDate,
                 //Location = userDto.Location,
                 Email = userDto.Email,

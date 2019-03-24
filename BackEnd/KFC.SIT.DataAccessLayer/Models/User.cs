@@ -37,7 +37,7 @@ namespace DataAccessLayer
         //[Required, Column(TypeName = "datetime2"), DataType(DataType.DateTime)]
         //public DateTime UpdatedAt { get; set; }
         ////[Column(TypeName = "datetime2"), DataType(DataType.DateTime)]
-        //public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; }
         ////public DateTime ModifiedDate { get; set; }
         //public string Location { get; set; }
         ////[Required]

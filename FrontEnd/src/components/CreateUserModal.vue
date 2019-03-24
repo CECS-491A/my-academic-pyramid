@@ -55,7 +55,11 @@ export default {
         </header>
         <section class="modal-body">
           <slot name="body">
-            <v-text-field id="UserName" label="UserName" v-model="formData.UserName"/>
+            <v-text-field 
+            id="UserName" 
+            label="UserName" 
+            v-model="formData.UserName"
+            :error-messages="usernameErrors"/>
             <br>
             <v-text-field id="firstName" label="First Name" v-model="formData.FirstName"/>
             <br>
