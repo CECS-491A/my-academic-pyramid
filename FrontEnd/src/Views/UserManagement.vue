@@ -30,9 +30,7 @@
                   <v-card-text>{{props.item.CreatedAt}}</v-card-text>
                 </v-card>
               </template>
-			
             </v-data-table>
-			
           </v-flex>
           <v-flex>
             <v-btn v-on:click="showNewUserDiallog">Add</v-btn>
@@ -40,10 +38,9 @@
         </v-layout>
       </v-container>
     </v-app>
-	<CreateUserDiallog></CreateUserDiallog>
-	<EditUserDialog></EditUserDialog>
+    <CreateUserDiallog></CreateUserDiallog>
+    <EditUserDialog></EditUserDialog>
   </div>
-  
 </template>
 
 
@@ -51,12 +48,12 @@
 
 <script>
 /*global console*/ /* eslint no-console: "off" */
-import CreateUserDiallog from '@/components/CreateUserDiallog.vue'
-import EditUserDialog from '@/components/EditUserDialog.vue'
+import CreateUserDiallog from "@/components/CreateUserDiallog.vue";
+import EditUserDialog from "@/components/EditUserDialog.vue";
 export default {
   components: {
-	CreateUserDiallog,
-	EditUserDialog
+    CreateUserDiallog,
+    EditUserDialog
   },
   data() {
     return {

@@ -6,7 +6,6 @@ import Home from '@/Views/Home'
 import Publish from '@/Views/Publish'
 import Logging from '@/Views/Logging'
 import Login from '@/Views/Login'
-import UserList from '@/Views/UserList'
 import UserManagement from '@/Views/UserManagement'
 
 Vue.use(Router)
@@ -30,24 +29,7 @@ export default new Router({
     name: 'Login',
     component: Login
   },
-  // {
-  //   path: '/chat',
-  //   name: 'Chat',
-  //   component: Chat,
-  //   props: true,
-  //   beforeEnter: (to, from, next) => {
-  //     if (to.params.name) {
-  //       next()
-  //     } else {
-  //       next({name: 'Login'})
-  //     }
-  //   }
-  // },
-  {
-    path: '/UserManagement',
-    name: 'UserManagement',
-    component: UserList
-  },
+
   {
     path: '/Logging',
     name: 'Logging',
@@ -55,8 +37,8 @@ export default new Router({
   },
 
   {
-    path: '/UserManagementTest',
-    name: 'UserManagementTest',
+    path: '/UserManagement',
+    name: 'UserManagement',
     component: UserManagement
   }
   ]
