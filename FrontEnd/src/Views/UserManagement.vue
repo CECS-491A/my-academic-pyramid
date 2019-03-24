@@ -3,38 +3,44 @@
     <v-app id="inspire">
       <v-container>
         <v-layout align-center justify-center row>
-          <v-flex></v-flex>
-          <v-flex table>
-            <v-subheader>USER MANAGEMENT</v-subheader>
-            <v-data-table
-              :headers="headers"
-              :items="users"
-              :expand="expand"
-              item-key="UserName"
-              class="elevation-1"
-              loading
-            >
-              <template v-slot:items="props">
-                <tr @click="props.expanded = !props.expanded">
-                  <td class="text-xs-left">{{ props.item.Id }}</td>
-                  <td class="text-xs-left">{{ props.item.UserName }}</td>
-                  <td class="text-xs-left">{{ props.item.FirstName }}</td>
-                  <td class="text-xs-left">{{ props.item.LastName }}</td>
-                  <v-btn v-on:click="deleteUser(props.item.Id)">Delete</v-btn>
-                  <v-btn v-on:click="showEditModal(props.item)">Edit</v-btn>
-                </tr>
-              </template>
-              <template v-slot:expand="props">
-                <v-card flat>
-                  <header>Created Date</header>
-                  <v-card-text>{{props.item.CreatedAt}}</v-card-text>
-                </v-card>
-              </template>
-            </v-data-table>
-          </v-flex>
-          <v-flex>
-            <v-btn v-on:click="showNewUserDiallog">Add</v-btn>
-          </v-flex>
+          <v-card>
+            <v-toolbar color="cyan" dark>
+              <v-toolbar-title>USER MANAGEMENT</v-toolbar-title>
+            </v-toolbar>
+
+            <v-flex table>
+              <v-subheader></v-subheader>
+              <v-data-table
+                :headers="headers"
+                :items="users"
+                :expand="expand"
+                :pagination.sync="pagination"
+                item-key="UserName"
+                class="elevation-1"
+                loading
+              >
+                <template v-slot:items="props">
+                  <tr @click="props.expanded = !props.expanded">
+                    <td class="text-xs-left">{{ props.item.Id }}</td>
+                    <td class="text-xs-left">{{ props.item.UserName }}</td>
+                    <td class="text-xs-left">{{ props.item.FirstName }}</td>
+                    <td class="text-xs-left">{{ props.item.LastName }}</td>
+                    <v-btn v-on:click="deleteUser(props.item.Id)">Delete</v-btn>
+                    <v-btn v-on:click="showEditModal(props.item)">Edit</v-btn>
+                  </tr>
+                </template>
+                <template v-slot:expand="props">
+                  <v-card flat>
+                    <header>Created Date</header>
+                    <v-card-text>{{props.item.CreatedAt}}</v-card-text>
+                  </v-card>
+                </template>
+              </v-data-table>
+            </v-flex>
+            <v-flex>
+              <v-btn v-on:click="showNewUserDiallog">Add</v-btn>
+            </v-flex>
+          </v-card>
         </v-layout>
       </v-container>
     </v-app>
@@ -72,7 +78,10 @@ export default {
       users: [],
       isCreateUserDiallogVisible: false,
       response: "",
-      expand: false
+      expand: false,
+      pagination: {
+        rowsPerPage: 25
+      }
     };
   },
 
