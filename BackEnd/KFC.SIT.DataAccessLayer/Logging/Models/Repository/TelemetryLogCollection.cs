@@ -35,6 +35,11 @@ namespace DataAccessLayer.Logging
             return this.Collection.Find(new BsonDocument { { "_id", new ObjectId(id) } }).FirstAsync().Result;
         }
 
+        public void Delete(string id)
+        {
+            this.Collection.FindOneAndDeleteAsync(new BsonDocument { { "_id", new ObjectId(id) } });
+        }
+
         public void DeleteAll()
         {
             this.Collection.DeleteManyAsync(FilterDefinition<TelemetryLog>.Empty);

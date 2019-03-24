@@ -21,8 +21,11 @@ namespace DataAccessLayer.Models
         [BsonElement("Line of Code")]
         public string LineOfCode { get; set; }
 
-        [BsonElement("Some BS")]
-        public string BS { get; set; }
+        [BsonElement("User")]
+        public string User { get; set; }
+
+        [BsonElement("Request")]
+        public string Request { get; set; }
     }
 }
 
