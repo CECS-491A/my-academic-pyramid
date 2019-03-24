@@ -47,5 +47,16 @@ namespace SecurityLayer
             return (isValid == null || isValid == false);
               
         }
+
+        public void InvalidateSession(string token)
+        {
+            UserSession sessionToDel = _db.Sessions.Where(s => s.Token == token)
+                                                   .FirstOrDefault();
+            if (sessionToDel != null)
+            {
+                _db.Sessions.Remove(sessionToDel);
+                _db.SaveChanges();
+            }
+        }
     }
 }

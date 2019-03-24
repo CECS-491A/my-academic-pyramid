@@ -17,9 +17,9 @@ namespace DemoProject
         {
             Dictionary<string, string> test = new Dictionary<string, string>()
             {
-                { "a", "1" },
-                { "b", "2" },
-                { "c", "3" }
+                { "fed", "food" },
+                { "blue", "23" },
+                { "cred", "43" }
             };
 
             test["c"] = "New 3";
@@ -55,6 +55,7 @@ namespace DemoProject
             }
 
             System.Threading.Thread.Sleep(50000);
+
             if (!tm.ValidateToken(token))
             {
                 Console.Out.WriteLine("Token is now invalid. Good.");
@@ -71,6 +72,16 @@ namespace DemoProject
             else
             {
                 Console.Out.WriteLine("Something is wrong with refresh.");
+            }
+
+            tm.InvalidateToken(newToken);
+            if (tm.ValidateToken(newToken))
+            {
+                Console.Out.WriteLine("Something is wrong. Token should have been deleted.");
+            }
+            else
+            {
+                Console.Out.WriteLine("The token is invalid as it should be. It was deleted after all.");
             }
 
             Console.In.Read();

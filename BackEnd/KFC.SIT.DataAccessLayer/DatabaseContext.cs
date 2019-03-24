@@ -15,7 +15,7 @@ namespace DataAccessLayer
         //Set of Conservations
         public DbSet<Conversation> Conservations { get; set; }
 
-        public DatabaseContext () :base ("name=MYAPConnectionString")
+        public DatabaseContext () :base ("name=LocalTest")
         {
             //Database.SetInitializer(new DropCreateDatabaseAlways<DatabaseContext>());
 

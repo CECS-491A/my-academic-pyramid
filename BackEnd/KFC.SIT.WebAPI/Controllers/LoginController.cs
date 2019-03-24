@@ -38,9 +38,6 @@ namespace KFC.SIT.WebAPI
                 string token = tm.GenerateToken(user.Id, testPayload);
                 return token;
             }
-
-
-
         }
 
         private void CreateUsers()
