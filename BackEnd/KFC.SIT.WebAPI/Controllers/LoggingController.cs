@@ -9,7 +9,7 @@ using DataAccessLayer.Logging;
 
 
 
-namespace ManagerLayer.Controllers
+namespace KFC.SIT.WebAPI
 {
     //readonly MongoDatabase mongoDatabase;
 

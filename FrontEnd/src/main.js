@@ -5,6 +5,7 @@ import router from './router'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 
+Vue.prototype.$hostname = "http://localhost:59364/api/usermanager/"
 Vue.prototype.$eventBus = new Vue()
 Vue.config.productionTip = false
 Vue.use(VueAxios, axios)

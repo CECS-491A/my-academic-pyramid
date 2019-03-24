@@ -13,13 +13,11 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Cors;
 
-namespace ManagerLayer.Controllers
+namespace KFC.SIT.WebAPI
 {
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class UserManagerController : ApiController
     {
-
-
         // GET api/<controller>
         [HttpGet]
         public IQueryable<UserDTO> Get()
@@ -28,7 +26,7 @@ namespace ManagerLayer.Controllers
             List<User> userList = umManager.GetAllUser();
 
             List<UserDTO> list = new List<UserDTO>();
-            foreach(var user in userList)
+            foreach (var user in userList)
             {
                 list.Add(new UserDTO
                 {
@@ -36,7 +34,7 @@ namespace ManagerLayer.Controllers
                     UserName = user.UserName,
                     FirstName = user.FirstName,
                     LastName = user.LastName,
-                    
+
                 });
             }
 
@@ -51,10 +49,14 @@ namespace ManagerLayer.Controllers
 
         // POST api/<controller>
         [HttpPost]
-        public IHttpActionResult Post([FromBody] UserDTO userDto)
+        public HttpResponseMessage Post([FromBody] UserDTO userDto)
         {
             UserManager umManager = new UserManager();
-            return Ok(umManager.CreateUserAccount(userDto));
+            var createdUser = umManager.CreateUserAccount(userDto);
+            var message = Request.CreateResponse(HttpStatusCode.OK, createdUser);
+  
+            return message;
+
         }
 
         // PUT api/<controller>/5
@@ -70,11 +72,20 @@ namespace ManagerLayer.Controllers
         }
 
         // DELETE api/<controller>/5
-        [HttpDelete]
+        [HttpDelete]    
         public void Delete(int id)
         {
             UserManager umManager = new UserManager();
             umManager.DeleteUserAccount(umManager.FindUserById(id));
         }
+
+        [HttpOptions]
+        public HttpResponseMessage Options()
+        {
+            return new HttpResponseMessage { StatusCode = HttpStatusCode.OK };
+        }
+
+
+
     }
 }
