@@ -13,7 +13,7 @@ using System.Web;
 using System.Web.Http;
 using System.Web.Http.Cors;
 
-namespace ManagerLayer.Controllers
+namespace KFC.SIT.WebAPI
 {
     [AllowAnonymous]
     [EnableCors(origins: "*", headers: "*", methods: "*")]

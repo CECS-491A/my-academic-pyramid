@@ -6,13 +6,13 @@ using System.Net.Http;
 using System.Web.Http;
 using DataAccessLayer.Models;
 using DataAccessLayer.Logging;
+using System.Web.Http.Cors;
 
 
-
-namespace ManagerLayer.Controllers
+namespace KFC.SIT.WebAPI
 {
     //readonly MongoDatabase mongoDatabase;
-
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     [Route("api/[controller]")]
     public class LoggingController : ApiController
     {
@@ -33,6 +33,24 @@ namespace ManagerLayer.Controllers
         public List<TelemetryLog> ListTelemetries()
         {
             return _telemetries.GetAll();
+        }
+
+        [HttpDelete]
+        [Route("api/logging/deleteerror")]
+        public void DeleteError(string id)
+        {
+            _errors.Delete(id);
+
+            //return Ok();
+        }
+
+        [HttpDelete]
+        [Route("api/logging/deletetelemetry")]
+        public IHttpActionResult DeleteTelemetry(string id)
+        {
+            _telemetries.Delete(id);
+
+            return Ok();
         }
 
         [HttpPost]

@@ -146,6 +146,27 @@
     <Compile Include="Logging\OptimizeLogging\NLogger.cs" />
     <Compile Include="Logging\OptimizeLogging\TelemetryFormat.cs" />
     <Compile Include="Logging\Models\Repository\TelemetryLogCollection.cs" />
+    <Compile Include="Migrations\201903222114280_InitialCreate.cs" />
+    <Compile Include="Migrations\201903222114280_InitialCreate.Designer.cs">
+      <DependentUpon>201903222114280_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201903222218015_ModelChange.cs" />
+    <Compile Include="Migrations\201903222218015_ModelChange.Designer.cs">
+      <DependentUpon>201903222218015_ModelChange.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201903230623395_AddCreatedDateToUserModel.cs" />
+    <Compile Include="Migrations\201903230623395_AddCreatedDateToUserModel.Designer.cs">
+      <DependentUpon>201903230623395_AddCreatedDateToUserModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201903242110576_AddDateOfBirth.cs" />
+    <Compile Include="Migrations\201903242110576_AddDateOfBirth.Designer.cs">
+      <DependentUpon>201903242110576_AddDateOfBirth.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201903242130233_fix birthDate.cs" />
+    <Compile Include="Migrations\201903242130233_fix birthDate.Designer.cs">
+      <DependentUpon>201903242130233_fix birthDate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Claim.cs" />
     <Compile Include="DatabaseContext.cs" />
     <Compile Include="Logging\Models\ErrorLog.cs" />
@@ -187,6 +208,23 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201903222114280_InitialCreate.resx">
+      <DependentUpon>201903222114280_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903222218015_ModelChange.resx">
+      <DependentUpon>201903222218015_ModelChange.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903230623395_AddCreatedDateToUserModel.resx">
+      <DependentUpon>201903230623395_AddCreatedDateToUserModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903242110576_AddDateOfBirth.resx">
+      <DependentUpon>201903242110576_AddDateOfBirth.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903242130233_fix birthDate.resx">
+      <DependentUpon>201903242130233_fix birthDate.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

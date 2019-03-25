@@ -11,7 +11,14 @@ namespace KFC.SIT.WebAPI
     {
         protected void Application_Start()
         {
+
             GlobalConfiguration.Configure(WebApiConfig.Register);
+
+
         }
+
+       
+
+
     }
 }

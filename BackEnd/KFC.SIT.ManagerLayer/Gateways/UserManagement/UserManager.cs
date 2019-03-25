@@ -37,20 +37,20 @@ namespace ManagerLayer.UserManagement
         /// <param name="targetedUserName"></param>
         public User CreateUserAccount(UserDTO userDto)
         {
-            try
-            {
-                var valid = new System.Net.Mail.MailAddress(userDto.UserName); // checks that email is valid
-            }
-            catch (Exception)
-            {
-                return null;
-            }
+            //try
+            //{
+            //    var valid = new System.Net.Mail.MailAddress(userDto.UserName); // checks that email is valid
+            //}
+            //catch (Exception)
+            //{
+            //    return null;
+            //}
 
             SHA256HashFunction HashFunction = new SHA256HashFunction();
             HashSalt hashSaltPassword = HashFunction.GetHashValue(userDto.RawPassword);
             User user = new User
             {
-                Id = userDto.Id,
+               
                 UserName = userDto.UserName,
                 FirstName = userDto.FirstName,
                 LastName = userDto.LastName,
@@ -59,8 +59,8 @@ namespace ManagerLayer.UserManagement
 
                 //Catergory = userDto.Catergory,
                 //// date and time as it would be in Coordinated Universal Time
-                //CreatedAt = DateTime.UtcNow, // https://stackoverflow.com/questions/62151/datetime-now-vs-datetime-utcnow 
-                //DateOfBirth = userDto.BirthDate,
+                CreatedAt = DateTime.Now, // https://stackoverflow.com/questions/62151/datetime-now-vs-datetime-utcnow 
+                DateOfBirth = DateTime.Parse(userDto.DateOfBirth),
                 //Location = userDto.Location,
                 Email = userDto.Email,
                 //PasswordQuestion1 = userDto.PasswordQuestion1,
