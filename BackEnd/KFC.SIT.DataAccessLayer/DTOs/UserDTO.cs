@@ -13,10 +13,11 @@ namespace DataAccessLayer.DTOs
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Catergory { get; set; }
-        //public DateTime BirthDate { get; set; }
+        public String DateOfBirth { get; set; }
         //public String Location { get; set; }
         public string Email { get; set; }
         public String RawPassword { get; set; }
+        public String CreatedAt { get; set; }
 
         //public String PasswordQuestion1 { get; set; }
         //public String PasswordQuestion2 { get; set; }
