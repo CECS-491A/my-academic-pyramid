@@ -47,7 +47,7 @@ namespace ManagerLayer.UserManagement
             //}
 
             SHA256HashFunction HashFunction = new SHA256HashFunction();
-            HashSalt hashSaltPassword = HashFunction.GetHashValue(userDto.RawPassword);
+            //HashSalt hashSaltPassword = HashFunction.GetHashValue(userDto.RawPassword);
             User user = new User
             {
                
@@ -59,8 +59,8 @@ namespace ManagerLayer.UserManagement
 
                 //Catergory = userDto.Catergory,
                 //// date and time as it would be in Coordinated Universal Time
-                CreatedAt = DateTime.Now, // https://stackoverflow.com/questions/62151/datetime-now-vs-datetime-utcnow 
-                DateOfBirth = DateTime.Parse(userDto.DateOfBirth),
+                //CreatedAt = DateTime.Now, // https://stackoverflow.com/questions/62151/datetime-now-vs-datetime-utcnow 
+                //DateOfBirth = DateTime.Parse(userDto.DateOfBirth),
                 //Location = userDto.Location,
                 Email = userDto.Email,
                 //PasswordQuestion1 = userDto.PasswordQuestion1,

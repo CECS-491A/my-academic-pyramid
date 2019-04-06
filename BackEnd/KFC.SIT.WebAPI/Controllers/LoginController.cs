@@ -10,25 +10,29 @@ using SecurityLayer;
 using DataAccessLayer;
 using DataAccessLayer.DTOs;
 using ManagerLayer.UserManagement;
+using System.Web.Http.Cors;
 
 namespace KFC.SIT.WebAPI
 { 
     public class LoginController : ApiController
     {
         [HttpPost]
-        public string Login([FromBody]string username)
+        [EnableCors(origins: "*", headers: "*", methods: "*")]
+        public IHttpActionResult Login(SSOPayload payload)
         {
-            CreateUsers();
+            //CreateUsers();
             DatabaseContext db = new DatabaseContext();
             JWTokenManager tm = new JWTokenManager(db);
             UserManager um = new UserManager();
-            User user = um.FindByUserName(username);
+            // Assume it's there for now.
+            User user = um.FindByUserName(payload.Email);
             if (user == null)
             {
-                return "User with that username not found";
+                return NotFound();
             }
             else
             {
+                // TODO do signature validation.
                 Dictionary<string, string> testPayload = new Dictionary<string, string>()
                 {
                     { "a", "1"},
@@ -36,7 +40,7 @@ namespace KFC.SIT.WebAPI
                     { "c", "3" }
                 };
                 string token = tm.GenerateToken(user.Id, testPayload);
-                return token;
+                return Ok(token);
             }
         }
 

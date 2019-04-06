@@ -23,17 +23,19 @@ namespace DataAccessLayer
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            
 
+            Database.SetInitializer<DatabaseContext>(null);
             modelBuilder.Entity<User>()
                 .HasOptional(p => p.ParentUser)
                 .WithMany(p => p.ChildUsers)
                 .HasForeignKey(p => p.ParentUser_Id);
-   
+
 
             modelBuilder.Entity<User>().
                 HasMany(c => c.Claims);
-         base.OnModelCreating(modelBuilder);
+            base.OnModelCreating(modelBuilder);
+            
+
 
         }
 

@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using System.Security.Cryptography;
 using System.Web;
 using DataAccessLayer;
+using SecurityLayer.utility;
 
 namespace SecurityLayer
 {
@@ -15,11 +16,13 @@ namespace SecurityLayer
         private static string key = "JOIENFUPBFJESFOIEJGNEOPFENPPFENFBPPNFIEPUBRGHFCMK";
         private DatabaseContext _db;
         private SessionServices _sessionServices;
+        private UrlSafeBase64Encoder _encoder;
 
         public JWTokenManager(DatabaseContext db)
         {
             _db = db;
             _sessionServices = new SessionServices(_db);
+            _encoder = new UrlSafeBase64Encoder();
         }
         
         /*TODO:
@@ -45,7 +48,7 @@ namespace SecurityLayer
             payload.Add("refresh", payload["iat"]);
             payload.Add("exp", expTimeSec.ToString());
 
-            token = _createToken(payload);
+            token = CreateToken(payload);
 
             UserSession newSession = new UserSession()
             {
@@ -62,7 +65,6 @@ namespace SecurityLayer
 
             return token;
         }
-
 
         public bool ValidateToken(string token)
         {
@@ -104,30 +106,7 @@ namespace SecurityLayer
 
             }
             return isValid;
-        }
-
-        public bool VerifyHeader(string jwtoken)
-        {
-            string tokenTypeKeyStr = "typ";
-            string algKeyStr = "alg";
-            string validTokenType = "JWT";
-            string validAlgorithm = "SHA256";
-            string headerStr = jwtoken.Split('.')[0];
-            Dictionary<string, string> headerDict 
-                = DecodeBase64EncodedDict(headerStr);
-
-            if (headerDict == null)
-            {
-                return false;
-            }
-            if (!(headerDict.ContainsKey(tokenTypeKeyStr) 
-                && headerDict.ContainsKey(algKeyStr)))
-            {
-                return false;
-            }
-            return (headerDict[tokenTypeKeyStr] == validTokenType 
-                    && headerDict[algKeyStr] == validAlgorithm);
-        }
+        }       
 
         public void SaveChanges()
         {
@@ -150,7 +129,7 @@ namespace SecurityLayer
             payload["refresh"] = currentDateTime.ToUnixTimeSeconds().ToString();
             payload["exp"] = expDateTime.ToUnixTimeMilliseconds()
                                         .ToString();
-            string newToken = _createToken(payload);
+            string newToken = CreateToken(payload);
             _sessionServices.RefreshSession(encodedToken, newToken, 
                                             currentDateTime, expDateTime);
             return newToken;
@@ -165,46 +144,8 @@ namespace SecurityLayer
                 throw new ArgumentException("Invalid JWToken.");
             }
             string encodedPayload = tokenParts[1];
-            return DecodeBase64EncodedDict(encodedPayload);
-        }
-
-        private Dictionary<string, string> DecodeBase64EncodedDict(
-            string urlSafeBase64EncodedStr
-        )
-        {
-            // TODO make this return null if exception is raised.
-            string base64Str = FromUrlSafeBase64Str(urlSafeBase64EncodedStr);
-            byte[] byteDict = null;
-            try
-            {
-                byteDict = System.Convert.FromBase64String(base64Str);
-            }
-            catch (FormatException)
-            {
-                // base64Str is not a valid base64 encoded string.
-                return null;
-            }
-            
-            string jsonDict = Encoding.UTF8.GetString(byteDict);
-            Dictionary<string, string> resultDict 
-                = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonDict);
-            return resultDict;
-        }
-
-        private string _createToken(Dictionary<string, string> payload)
-        {
-            string token = "";
-            string tokenType = "JWT";
-            Dictionary<string, string> header = new Dictionary<string, string>();
-            header.Add("alg", "SHA256");
-            header.Add("typ", tokenType);
-            string headerEncode = UrlBase64DictEncoding(header);
-            string payloadEncode = UrlBase64DictEncoding(payload);
-            string signEncode = GenerateTokenSignature(headerEncode, payloadEncode, key);
-            Console.Out.WriteLine($"Header: {headerEncode} Payload: {payloadEncode}\n");
-            token = $"{headerEncode}.{payloadEncode}.{signEncode}";
-            return token;
-        }
+            return _encoder.Decode(encodedPayload);
+        }       
 
         public bool ValidateSignature(string token)
         {
@@ -226,64 +167,6 @@ namespace SecurityLayer
             return isValidated;
         }
 
-        private string UrlBase64DictEncoding(Dictionary<string, string> dict)
-        {
-            string jsonDict = JsonConvert.SerializeObject(dict);
-            byte[] byteJsonDict = Encoding.UTF8.GetBytes(jsonDict);
-            //string base64EncodedDict = HttpServerUtility.UrlTokenEncode(byteJsonDict);
-            string base64EncodedDict = ToUrlSafeBase64Str(byteJsonDict);
-            
-            return base64EncodedDict;
-        }
-
-        private string ToUrlSafeBase64Str(byte []byteArray)
-        {
-            string result = "";
-            string temp = System.Convert.ToBase64String(byteArray);
-            // Remove ='s at the end that were caused by padding the last
-            // group of bytes to be 24 bits long.
-            temp = temp.TrimEnd('=');
-            // Replace + with - and / with _ to make string URL safe
-            result = temp.Replace("+", "-").Replace("/", "_");
-            return result;
-        }
-
-        private string FromUrlSafeBase64Str(string urlSafeBase64EncodedStr)
-        {
-            string result = "";
-            string temp;
-            string charPad = "=";
-            int remainder = urlSafeBase64EncodedStr.Length % 4;
-            switch(remainder)
-            {
-                // Remainder of 3 should never occur because a byte group
-                // has a minimum of 8 bits which should produce two base64 chars.
-                case 2:
-                    temp = urlSafeBase64EncodedStr + charPad + charPad;
-                    break;
-                case 1:
-                    temp = urlSafeBase64EncodedStr + charPad;
-                    break;
-                default:
-                    temp = urlSafeBase64EncodedStr;
-                    break;
-            }
-            result = temp.Replace("_", "/").Replace("-", "+");
-            return result;
-        }
-
-        private string GenerateTokenSignature(string encodedHeader, 
-                                                     string encodedPayload,
-                                                     string key)
-        {
-            byte[] preSign = Encoding.UTF8.GetBytes(encodedHeader + "." + encodedPayload);
-            byte[] byteKey = Encoding.UTF8.GetBytes(key);
-            HMACSHA256 hmac = new HMACSHA256(byteKey);
-            byte[] signature = hmac.ComputeHash(preSign);
-            //return HttpServerUtility.UrlTokenEncode(signature);
-            return ToUrlSafeBase64Str(signature);
-        }
-
         public void InvalidateToken(string token)
         {
             // Invalidate token from database
@@ -298,6 +181,56 @@ namespace SecurityLayer
             string token = "";
 
             return token;
+        }
+
+        private string CreateToken(Dictionary<string, string> payload)
+        {
+            string token = "";
+            string tokenType = "JWT";
+            Dictionary<string, string> header = new Dictionary<string, string>();
+            header.Add("alg", "SHA256");
+            header.Add("typ", tokenType);
+            string headerEncode = _encoder.Encode(header);
+            string payloadEncode = _encoder.Encode(payload);
+            string signEncode = GenerateTokenSignature(headerEncode, payloadEncode, key);
+            Console.Out.WriteLine($"Header: {headerEncode} Payload: {payloadEncode}\n");
+            token = $"{headerEncode}.{payloadEncode}.{signEncode}";
+            return token;
+        }
+
+        private string GenerateTokenSignature(string encodedHeader,
+                                                     string encodedPayload,
+                                                     string key)
+        {
+            byte[] preSign = Encoding.UTF8.GetBytes(encodedHeader + "." + encodedPayload);
+            byte[] byteKey = Encoding.UTF8.GetBytes(key);
+            HMACSHA256 hmac = new HMACSHA256(byteKey);
+            byte[] signature = hmac.ComputeHash(preSign);
+            //return HttpServerUtility.UrlTokenEncode(signature);
+            return _encoder.ToUrlSafeBase64Str(signature);
+        }
+
+        private bool VerifyHeader(string jwtoken)
+        {
+            string tokenTypeKeyStr = "typ";
+            string algKeyStr = "alg";
+            string validTokenType = "JWT";
+            string validAlgorithm = "SHA256";
+            string headerStr = jwtoken.Split('.')[0];
+            Dictionary<string, string> headerDict
+                = _encoder.Decode(headerStr);
+
+            if (headerDict == null)
+            {
+                return false;
+            }
+            if (!(headerDict.ContainsKey(tokenTypeKeyStr)
+                && headerDict.ContainsKey(algKeyStr)))
+            {
+                return false;
+            }
+            return (headerDict[tokenTypeKeyStr] == validTokenType
+                    && headerDict[algKeyStr] == validAlgorithm);
         }
     }
 }
