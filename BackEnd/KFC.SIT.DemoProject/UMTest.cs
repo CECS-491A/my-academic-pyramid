@@ -21,11 +21,11 @@ namespace DemoProject
                 UserName = "SystemAdmin",
                 FirstName = "Arturo",
                 LastName = "NA",
-                Catergory = "User",
+                Catergory = new Catergory("User"),
                 //BirthDate = DateTime.UtcNow,
                 RawPassword = "PasswordArturo",
                 //Location = "Long Beach",
-                Email = "ArturoKevin@gmail.com",
+                
             });
             bool expected = true;
             bool actual;

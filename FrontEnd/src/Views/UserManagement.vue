@@ -9,10 +9,20 @@
             </v-toolbar>
 
             <v-flex table>
-              <v-subheader></v-subheader>
+              <v-subheader>
+                <v-text-field
+                  v-model="search"
+                  append-icon="search"
+                  label="Search"
+                  single-line
+                  hide-details
+                ></v-text-field>
+              </v-subheader>
+
               <v-data-table
                 :headers="headers"
                 :items="users"
+                :search="search"
                 :expand="expand"
                 :pagination.sync="pagination"
                 item-key="UserName"
@@ -25,7 +35,8 @@
                     <td class="text-xs-left">{{ props.item.UserName }}</td>
                     <td class="text-xs-left">{{ props.item.FirstName }}</td>
                     <td class="text-xs-left">{{ props.item.LastName }}</td>
-					<td class="text-xs-left">{{ props.item.DateOfBirth }}</td>
+                    <td class="text-xs-left">{{ props.item.DateOfBirth }}</td>
+                    <td class="text-xs-left">{{ props.item.Catergory }}</td>
                     <v-btn v-on:click="deleteUser(props.item.Id)">Delete</v-btn>
                     <v-btn v-on:click="showEditModal(props.item)">Edit</v-btn>
                   </tr>
@@ -36,6 +47,12 @@
                     <v-card-text>{{props.item.CreatedAt}}</v-card-text>
                   </v-card>
                 </template>
+                <v-alert
+                  v-slot:no-results
+                  :value="true"
+                  color="error"
+                  icon="warning"
+                >Your search for "{{ search }}" found no results.</v-alert>
               </v-data-table>
             </v-flex>
             <v-flex>
@@ -64,6 +81,7 @@ export default {
   },
   data() {
     return {
+      search: "",
       headers: [
         { text: "id", value: "Id" },
         {
@@ -73,9 +91,9 @@ export default {
           value: "UserName"
         },
         { text: "First Name", value: "Firstname" },
-		{ text: "Last Name", value: "LastName" },
-		{ text: "Date Of Birth", value: "DateOfBirth" },
-		
+        { text: "Last Name", value: "LastName" },
+        { text: "Date Of Birth", value: "DateOfBirth" },
+        { text: "Catergory", value: "Catergory" }
       ],
       users: [],
       isCreateUserDiallogVisible: false,

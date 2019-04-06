@@ -12,6 +12,8 @@ namespace DataAccessLayer
     using DataAccessLayer.Repository;
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations.Schema;
+
     /// <summary>
     /// The class is used for user's claim
     /// </summary>
@@ -20,11 +22,11 @@ namespace DataAccessLayer
         /// <summary>
         /// Default Constructor
         /// </summary>
+
         public Claim()
         {
             this.Users = new HashSet<User>();
         }
-
         /// <summary>
         /// Overload constructor that take value of claim
         /// </summary>
@@ -43,8 +45,8 @@ namespace DataAccessLayer
 
         //Claim Value
         public string Value { get; set; }
-    
-        //Collection of Users that used for many-many relationship with user class 
-        public virtual ICollection<User> Users { get; set; }
+        public int UserId { get; set; }
+        public virtual ICollection <User> Users{ get; set; }
+
     }
 }

@@ -20,7 +20,7 @@ namespace KFC.SIT.WebAPI
     {
         // GET api/<controller>
         [HttpGet]
-        public IQueryable<UserDTO> Get()
+        public IQueryable<UserDTO> GetAllUsers()
         {
             UserManager umManager = new UserManager();
             List<User> userList = umManager.GetAllUser();
@@ -34,6 +34,7 @@ namespace KFC.SIT.WebAPI
                     UserName = user.UserName,
                     FirstName = user.FirstName,
                     LastName = user.LastName,
+                    Catergory = user.Catergory.Value,
                     DateOfBirth = user.DateOfBirth.ToString("MMMM dd yyyy hh:mm:ss tt"),
                     CreatedAt = user.CreatedAt.ToString("MMMM dd yyyy hh:mm:ss tt")
                     
@@ -45,14 +46,14 @@ namespace KFC.SIT.WebAPI
         }
 
         // GET api/<controller>/5
-        public string Get(Guid id)
+        public string GetUserWithId(Guid id)
         {
             return "value";
         }
 
         // POST api/<controller>
         [HttpPost]
-        public HttpResponseMessage Post([FromBody] UserDTO userDto)
+        public HttpResponseMessage CreateNewUSer([FromBody] UserDTO userDto)
         {
             UserManager umManager = new UserManager();
             var createdUser = umManager.CreateUserAccount(userDto);
@@ -64,7 +65,7 @@ namespace KFC.SIT.WebAPI
 
         // PUT api/<controller>/5
         [HttpPut]
-        public IHttpActionResult Put([FromBody] UserDTO userDto)
+        public IHttpActionResult EditUser([FromBody] UserDTO userDto)
         {
             UserManager umManager = new UserManager();
             User foundUser = umManager.FindUserById(userDto.Id);
@@ -76,7 +77,7 @@ namespace KFC.SIT.WebAPI
 
         // DELETE api/<controller>/5
         [HttpDelete]    
-        public void Delete(int id)
+        public void DeleteUser(int id)
         {
             UserManager umManager = new UserManager();
             umManager.DeleteUserAccount(umManager.FindUserById(id));

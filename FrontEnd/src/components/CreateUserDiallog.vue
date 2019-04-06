@@ -40,10 +40,19 @@
               @blur="$v.formData.LastName.$touch()"
             ></v-text-field>
 
+                  <v-select
+        v-model="formData.Catergory"
+        :items="catergoryItems"
+        :error-messages="catergorySelectErrors"
+        label="Catergory"
+        required
+        @change="$v.formData.Catergory.$touch()"
+        @blur="$v.formData.Catergory.$touch()"
+      ></v-select>
+
             <v-menu
-              ref="menu"
-              v-model="DateOfBirthBox"
-              :close-on-content-click="false"
+              ref="menu"         
+              :close-on-content-click="true"
               :nudge-right="40"
               lazy
               transition="scale-transition"
@@ -54,7 +63,9 @@
             >
               <template v-slot:activator="{ on }">
                 <v-text-field
+               
                   v-model="formData.DateOfBirth"
+                  :close-on-content-click="false"
                   :error-messages="DateOfBirthErrors"
                   label="Date of Birth"
                   prepend-icon="event"
@@ -65,7 +76,9 @@
 
                 ></v-text-field>
               </template>
-              <v-date-picker v-model="formData.DateOfBirth" no-title @input="DateOfBirthBox = false"></v-date-picker>
+              <v-date-picker 
+               ref="picker"
+              v-model="formData.DateOfBirth" no-title @input="DateOfBirthBox = false"></v-date-picker>
             </v-menu>
             <v-btn @click="submitData">submit</v-btn>
             <v-alert
@@ -106,7 +119,9 @@ export default {
       LastName: { required, maxLength: maxLength(10) },
 
       UserName: { required, email },
-      DateOfBirth: {required}
+      DateOfBirth: {required},
+      Catergory: {required}
+
       
     }
   },
@@ -116,8 +131,14 @@ export default {
       UserName: "",
       FirstName: "",
       LastName: "",
-      DateOfBirth: new Date().toJSON().substr(0, 10)
+      DateOfBirth: new Date().toJSON().substr(0, 10),
+      Catergory:null,
     },
+    catergoryItems: [
+      'Admin',
+      'Student',
+      'Non-Student'
+    ],
     response: "",
     dialog: false,
     submitStatus: null,
@@ -164,6 +185,12 @@ export default {
 
       return errors;
     },
+    catergorySelectErrors () {
+      const errors = []
+      if (!this.$v.formData.Catergory.$dirty) return errors
+      !this.$v.formData.Catergory.required && errors.push('Item is required')
+      return errors
+    },
 
     DateOfBirthErrors(){
       const errors = [];
@@ -178,7 +205,11 @@ export default {
       this.dialog = true;
     });
   },
-
+  watch: {
+    DateOfBirth (val) {
+      val && setTimeout(() => (this.$refs.picker.activePicker = 'YEAR'))
+    }
+  },
   methods: {
     submitData() {
       console.log("submit");

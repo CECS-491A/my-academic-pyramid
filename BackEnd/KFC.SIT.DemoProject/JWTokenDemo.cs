@@ -85,7 +85,7 @@ namespace DemoProject
                 UserName = "Abc@gmail.com",
                 FirstName = "Jackie",
                 LastName = "Chan",
-                Email = "Abc@gmail.com"
+                
             };
 
             UserDTO user2 = new UserDTO()
@@ -93,7 +93,7 @@ namespace DemoProject
                 UserName = "tri@yahoo.com",
                 FirstName = "David",
                 LastName = "Gonzales",
-                Email = "tri@yahoo.com"
+             
             };
 
             UserDTO user3 = new UserDTO()
@@ -101,7 +101,7 @@ namespace DemoProject
                 UserName = "Smith@gmail.com",
                 FirstName = "Michael",
                 LastName = "Nguyen",
-                Email = "Smith@gmail.com"
+                
             };
 
             DatabaseContext db = new DatabaseContext();

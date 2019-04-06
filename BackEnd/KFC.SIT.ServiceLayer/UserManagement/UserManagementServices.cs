@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using DataAccessLayer;
+using DataAccessLayer.Models;
 using ServiceLayer.UserManagement.UserClaimServices;
 
 namespace ServiceLayer.UserManagement.UserAccountServices
@@ -175,19 +176,81 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         /// <param name="claim"></param>
         public User AddClaim(User user, Claim claim)
         {
-            if (claim == null)
-            {
-                return null;
-            }
-            else if (user == null)
-            {
-                return null;
-            }
-            else
+            Claim existingClaim = _DbContext.Claims.FirstOrDefault(c => c.Value == claim.Value);
+            if(existingClaim == null)
             {
                 user.Claims.Add(claim);
-                return user;
             }
+
+            else
+            {
+                existingClaim.Users.Add(user);
+            }
+
+            return user;
+        }
+
+        public User AssignCatergory(User user, Catergory catergory)
+        {
+            Catergory existingCatergory = _DbContext.Catergories.FirstOrDefault(c => c.Value == catergory.Value);
+            if (existingCatergory == null)
+            {
+                catergory.Users.Add(user);
+                
+            }
+
+            else
+            {
+                existingCatergory.Users.Add(user);
+                user.Catergory = existingCatergory;
+            }
+
+            return user;
+        }
+
+        public User AutomaticClaimAssigning(User user)
+        {
+            if(user.Catergory == new Catergory("Student"))
+            {
+                //Check if user is over 18 year old
+                if (user.DateOfBirth.AddYears(18) <= DateTime.Now)
+                {
+                    user.Claims.Add(new Claim("Over18"));
+                }
+                //Messenger Feature's claims
+                AddClaim(user,new Claim("CanSendMessage"));
+                AddClaim(user,new Claim("CanReceiveMessage"));
+
+                //Discussion Forum's claims
+                AddClaim(user, new Claim("CanPostQuestion"));
+                AddClaim(user, new Claim("CanReceiveQuestion"));
+
+                //User Management's claims
+                AddClaim(user, new Claim("CanCreateOwnStudentAccount"));
+                AddClaim(user, new Claim("CanEditOwnAccount"));
+                AddClaim(user, new Claim("CanDeleteOwnAccount"));              
+
+            }
+            if (user.Catergory.Value == "Admin" || user.Catergory.Value == "SystenAdmin")
+            {
+                AddClaim(user, new Claim("CanCreateNewStudentAccount"));
+                AddClaim(user, new Claim("CanDeleteStudentAccount"));
+                AddClaim(user, new Claim("CanEditStudentAccount"));
+                AddClaim(user, new Claim("CanEnableOrDisableStudentAccount"));
+                AddClaim(user, new Claim("CanAlterStudentAccountUAC"));
+
+            }
+
+                if (user.Catergory.Value == "SystemAdmin")
+            {
+                AddClaim(user, new Claim("EnableOrDisableAdminAccount"));
+                AddClaim(user, new Claim("CanDeleteAdminAccount"));
+                AddClaim(user, new Claim("CanDeleteOtherUser"));
+                AddClaim(user, new Claim("CanAlterAdminAccountUAC"));
+            }
+
+            return user;
+         
         }
 
     } // end of class

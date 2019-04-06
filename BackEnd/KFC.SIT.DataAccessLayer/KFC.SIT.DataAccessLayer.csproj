@@ -166,7 +166,72 @@
     <Compile Include="Migrations\201903242130233_fix birthDate.Designer.cs">
       <DependentUpon>201903242130233_fix birthDate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201903250517374_Add Catergory.cs" />
+    <Compile Include="Migrations\201903250517374_Add Catergory.Designer.cs">
+      <DependentUpon>201903250517374_Add Catergory.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201903250707207_ad UserActs.cs" />
+    <Compile Include="Migrations\201903250707207_ad UserActs.Designer.cs">
+      <DependentUpon>201903250707207_ad UserActs.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201903250721324_ModifyDbConxt.cs" />
+    <Compile Include="Migrations\201903250721324_ModifyDbConxt.Designer.cs">
+      <DependentUpon>201903250721324_ModifyDbConxt.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201903250735151_addIsActive.cs" />
+    <Compile Include="Migrations\201903250735151_addIsActive.Designer.cs">
+      <DependentUpon>201903250735151_addIsActive.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201903250746269_Removemany-manyInUseractions.cs" />
+    <Compile Include="Migrations\201903250746269_Removemany-manyInUseractions.Designer.cs">
+      <DependentUpon>201903250746269_Removemany-manyInUseractions.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201903250751371_changes.cs" />
+    <Compile Include="Migrations\201903250751371_changes.Designer.cs">
+      <DependentUpon>201903250751371_changes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904020307295_removeUserActions.cs" />
+    <Compile Include="Migrations\201904020307295_removeUserActions.Designer.cs">
+      <DependentUpon>201904020307295_removeUserActions.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904060004172_CatergoryOneToMany.cs" />
+    <Compile Include="Migrations\201904060004172_CatergoryOneToMany.Designer.cs">
+      <DependentUpon>201904060004172_CatergoryOneToMany.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904060137117_fixEmail.cs" />
+    <Compile Include="Migrations\201904060137117_fixEmail.Designer.cs">
+      <DependentUpon>201904060137117_fixEmail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904060325557_fixCatergory.cs" />
+    <Compile Include="Migrations\201904060325557_fixCatergory.Designer.cs">
+      <DependentUpon>201904060325557_fixCatergory.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904060340353_fixCatergory2.cs" />
+    <Compile Include="Migrations\201904060340353_fixCatergory2.Designer.cs">
+      <DependentUpon>201904060340353_fixCatergory2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904060344104_fixCatergory21.cs" />
+    <Compile Include="Migrations\201904060344104_fixCatergory21.Designer.cs">
+      <DependentUpon>201904060344104_fixCatergory21.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904060354438_fixCatergory22.cs" />
+    <Compile Include="Migrations\201904060354438_fixCatergory22.Designer.cs">
+      <DependentUpon>201904060354438_fixCatergory22.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904060401099_fixCatergory23.cs" />
+    <Compile Include="Migrations\201904060401099_fixCatergory23.Designer.cs">
+      <DependentUpon>201904060401099_fixCatergory23.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904060403435_fixCatergory24.cs" />
+    <Compile Include="Migrations\201904060403435_fixCatergory24.Designer.cs">
+      <DependentUpon>201904060403435_fixCatergory24.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904060405078_fixCatergory25.cs" />
+    <Compile Include="Migrations\201904060405078_fixCatergory25.Designer.cs">
+      <DependentUpon>201904060405078_fixCatergory25.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Catergory.cs" />
     <Compile Include="Models\Claim.cs" />
     <Compile Include="DatabaseContext.cs" />
     <Compile Include="Logging\Models\ErrorLog.cs" />
@@ -224,6 +289,54 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201903242130233_fix birthDate.resx">
       <DependentUpon>201903242130233_fix birthDate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903250517374_Add Catergory.resx">
+      <DependentUpon>201903250517374_Add Catergory.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903250707207_ad UserActs.resx">
+      <DependentUpon>201903250707207_ad UserActs.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903250721324_ModifyDbConxt.resx">
+      <DependentUpon>201903250721324_ModifyDbConxt.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903250735151_addIsActive.resx">
+      <DependentUpon>201903250735151_addIsActive.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903250746269_Removemany-manyInUseractions.resx">
+      <DependentUpon>201903250746269_Removemany-manyInUseractions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903250751371_changes.resx">
+      <DependentUpon>201903250751371_changes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904020307295_removeUserActions.resx">
+      <DependentUpon>201904020307295_removeUserActions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904060004172_CatergoryOneToMany.resx">
+      <DependentUpon>201904060004172_CatergoryOneToMany.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904060137117_fixEmail.resx">
+      <DependentUpon>201904060137117_fixEmail.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904060325557_fixCatergory.resx">
+      <DependentUpon>201904060325557_fixCatergory.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904060340353_fixCatergory2.resx">
+      <DependentUpon>201904060340353_fixCatergory2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904060344104_fixCatergory21.resx">
+      <DependentUpon>201904060344104_fixCatergory21.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904060354438_fixCatergory22.resx">
+      <DependentUpon>201904060354438_fixCatergory22.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904060401099_fixCatergory23.resx">
+      <DependentUpon>201904060401099_fixCatergory23.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904060403435_fixCatergory24.resx">
+      <DependentUpon>201904060403435_fixCatergory24.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904060405078_fixCatergory25.resx">
+      <DependentUpon>201904060405078_fixCatergory25.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
