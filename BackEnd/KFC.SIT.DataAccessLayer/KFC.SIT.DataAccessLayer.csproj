@@ -230,6 +230,10 @@
     <Compile Include="Migrations\201904060405078_fixCatergory25.Designer.cs">
       <DependentUpon>201904060405078_fixCatergory25.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201904060437070_fixCatergory26.cs" />
+    <Compile Include="Migrations\201904060437070_fixCatergory26.Designer.cs">
+      <DependentUpon>201904060437070_fixCatergory26.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Catergory.cs" />
     <Compile Include="Models\Claim.cs" />
@@ -337,6 +341,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201904060405078_fixCatergory25.resx">
       <DependentUpon>201904060405078_fixCatergory25.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904060437070_fixCatergory26.resx">
+      <DependentUpon>201904060437070_fixCatergory26.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

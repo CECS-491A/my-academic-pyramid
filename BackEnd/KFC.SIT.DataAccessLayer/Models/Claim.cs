@@ -45,7 +45,6 @@ namespace DataAccessLayer
 
         //Claim Value
         public string Value { get; set; }
-        public int UserId { get; set; }
         public virtual ICollection <User> Users{ get; set; }
 
     }

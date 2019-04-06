@@ -178,7 +178,7 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         {
             Claim existingClaim = _DbContext.Claims.FirstOrDefault(c => c.Value == claim.Value);
             if(existingClaim == null)
-            {
+            {            
                 user.Claims.Add(claim);
             }
 
@@ -210,7 +210,7 @@ namespace ServiceLayer.UserManagement.UserAccountServices
 
         public User AutomaticClaimAssigning(User user)
         {
-            if(user.Catergory == new Catergory("Student"))
+            if(user.Catergory.Value.Equals("Student"))
             {
                 //Check if user is over 18 year old
                 if (user.DateOfBirth.AddYears(18) <= DateTime.Now)
@@ -231,7 +231,7 @@ namespace ServiceLayer.UserManagement.UserAccountServices
                 AddClaim(user, new Claim("CanDeleteOwnAccount"));              
 
             }
-            if (user.Catergory.Value == "Admin" || user.Catergory.Value == "SystenAdmin")
+            if (user.Catergory.Value.Equals("Admin") || user.Catergory.Value.Equals("SystemAdmin"))
             {
                 AddClaim(user, new Claim("CanCreateNewStudentAccount"));
                 AddClaim(user, new Claim("CanDeleteStudentAccount"));
@@ -241,7 +241,7 @@ namespace ServiceLayer.UserManagement.UserAccountServices
 
             }
 
-                if (user.Catergory.Value == "SystemAdmin")
+                if (user.Catergory.Value.Equals("SystemAdmin"))
             {
                 AddClaim(user, new Claim("EnableOrDisableAdminAccount"));
                 AddClaim(user, new Claim("CanDeleteAdminAccount"));
