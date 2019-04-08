@@ -8,6 +8,7 @@ using ManagerLayer.UserManagement;
 using SecurityLayer;
 using ServiceLayer.PasswordChecking.HashFunctions;
 using DataAccessLayer.DTOs;
+using SecurityLayer.Sessions;
 
 namespace DemoProject
 {
@@ -26,25 +27,25 @@ namespace DemoProject
 
             CreateUsers();
 
-
-            DatabaseContext _DbContext = new DatabaseContext();
             var um = new UserManager();
 
             User user = um.FindByUserName("Abc@gmail.com");
-            JWTokenManager tm = new JWTokenManager(_DbContext);
-
-            String token = tm.GenerateToken(user.Id, test);
+            SessionManager sm = new SessionManager();
+            JWTokenManager tm = new JWTokenManager();
+            String token = sm.CreateSession(user.Id);
+            sm.InvalidateSession(token);
+            token = sm.CreateSession(user.Id);
             Console.Out.WriteLine(token);
             Console.Out.WriteLine("Attempting to validate token");
             Dictionary<string, string> payload = null;
-            if (tm.ValidateToken(token))
+            if (sm.ValidateSession(token))
             {
                 Console.Out.WriteLine("Getting payload");
-                payload = tm.GetPayload(token);
+                payload = tm.DecodePayload(token);
                 Console.Out.WriteLine(payload.ToString());
             }
 
-            if (tm.ValidateToken("FakeToken"))
+            if (sm.ValidateSession("FakeToken"))
             {
                 Console.Out.WriteLine("Error: FakeToken isn't a real token.");
 
@@ -56,7 +57,7 @@ namespace DemoProject
 
             System.Threading.Thread.Sleep(50000);
 
-            if (!tm.ValidateToken(token))
+            if (!sm.ValidateSession(token))
             {
                 Console.Out.WriteLine("Token is now invalid. Good.");
             }
@@ -64,8 +65,8 @@ namespace DemoProject
             {
                 Console.Out.WriteLine("Error: Token should be invalid.");
             }
-            string newToken = tm.RefreshToken(token, payload);
-            if (tm.ValidateToken(newToken))
+            string newToken = sm.RefreshSession(token, payload);
+            if (sm.ValidateSession(newToken))
             {
                 Console.Out.WriteLine("Good! The refresh worked!");
             }
@@ -74,8 +75,8 @@ namespace DemoProject
                 Console.Out.WriteLine("Something is wrong with refresh.");
             }
 
-            tm.InvalidateToken(newToken);
-            if (tm.ValidateToken(newToken))
+            sm.InvalidateSession(newToken);
+            if (sm.ValidateSession(newToken))
             {
                 Console.Out.WriteLine("Something is wrong. Token should have been deleted.");
             }

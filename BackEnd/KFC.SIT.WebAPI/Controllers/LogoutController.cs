@@ -8,6 +8,7 @@ using SecurityLayer;
 using DataAccessLayer;
 using DataAccessLayer.DTOs;
 using ManagerLayer.UserManagement;
+using SecurityLayer.Sessions;
 
 namespace KFC.SIT.WebAPI.Controllers
 {
@@ -18,8 +19,8 @@ namespace KFC.SIT.WebAPI.Controllers
         {
             // TODO invalidate the token.
             DatabaseContext db = new DatabaseContext();
-            JWTokenManager jm = new JWTokenManager(db);
-            jm.InvalidateToken(value);
+            SessionManager sm = new SessionManager();
+            sm.InvalidateSession(value);
         }
     }
 }

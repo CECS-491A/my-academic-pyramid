@@ -11,6 +11,7 @@ using DataAccessLayer;
 using DataAccessLayer.DTOs;
 using ManagerLayer.UserManagement;
 using System.Web.Http.Cors;
+using SecurityLayer.Sessions;
 
 namespace KFC.SIT.WebAPI
 { 
@@ -21,8 +22,9 @@ namespace KFC.SIT.WebAPI
         public IHttpActionResult Login(SSOPayload payload)
         {
             //CreateUsers();
-            DatabaseContext db = new DatabaseContext();
-            JWTokenManager tm = new JWTokenManager(db);
+            //DatabaseContext db = new DatabaseContext();
+            //JWTokenManager tm = new JWTokenManager(db);
+            SessionManager sm = new SessionManager();
             UserManager um = new UserManager();
             // Assume it's there for now.
             User user = um.FindByUserName(payload.Email);
@@ -39,7 +41,7 @@ namespace KFC.SIT.WebAPI
                     { "b", "2" },
                     { "c", "3" }
                 };
-                string token = tm.GenerateToken(user.Id, testPayload);
+                string token = sm.CreateSession(user.Id);
                 return Ok(token);
             }
         }

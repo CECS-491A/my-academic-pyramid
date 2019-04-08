@@ -5,47 +5,75 @@ using System.Text;
 using System.Threading.Tasks;
 using DataAccessLayer;
 
-namespace SecurityLayer
+namespace SecurityLayer.Sessions
 {
     public class SessionServices
     {
         private DatabaseContext _db;
         public SessionServices(DatabaseContext db)
         {
+            if (db == null)
+            {
+                throw new ArgumentNullException("db");
+            }
             _db = db;
         }
         public void CreateSession(UserSession session)
         {
+            if (session == null)
+            {
+                throw new ArgumentNullException("session");
+            }
             _db.Sessions.Add(session);
+
             _db.SaveChanges();
-            // TODO add a catch in case operation failed.
         }
 
         public void RefreshSession(string oldToken, string updatedToken, 
                                    DateTimeOffset currentDateTime, 
                                    DateTimeOffset expirationDateTime)
         {
-            
+            if (oldToken == null || currentDateTime == null 
+                    || expirationDateTime == null)
+            {
+                throw new ArgumentNullException("A null argument was passed.");
+            }
             UserSession sessionToUpdate = _db.Sessions.Where(s => s.Token == oldToken)
                                                       .FirstOrDefault();
-            //DateTimeOffset currentTime = DateTimeOffset.UtcNow;
-            //sessionToUpdate.RefreshedTime = currentTime.ToUnixTimeSeconds();
+
             sessionToUpdate.Token = updatedToken;
             sessionToUpdate.RefreshedTime = currentDateTime;
             sessionToUpdate.ExpirationTime = expirationDateTime;
             _db.SaveChanges();
         }
 
+        public UserSession GetActiveSession(int userid)
+        {
+            UserSession activeSession = _db.Sessions.Where(s => s.UserId == userid)
+                                                    .FirstOrDefault();
+            return activeSession;
+        }
+
         public bool IsInvalidated(string token)
         {
-            /* Get the isValid attribute of the token
-             * If true, return true. Else, return false.
-             */
-            bool? isValid = _db.Sessions.Where(s => s.Token == token)
-                                       .Select(s => s.IsValid)
-                                       .FirstOrDefault();
-            return (isValid == null || isValid == false);
-              
+            // Get session id to determine if session exists. Get only session id
+            // to keep the data received from database small.
+            int? storedSessionId;
+            try
+            {
+                storedSessionId = _db.Sessions.Where(s => s.Token == token)
+                                              .Select(s => s.Id)
+                                              .First();
+            }
+            catch (InvalidOperationException)
+            {
+                storedSessionId = null;
+            }
+
+
+            bool sessionNotStored = storedSessionId == null;
+
+            return sessionNotStored;
         }
 
         public void InvalidateSession(string token)

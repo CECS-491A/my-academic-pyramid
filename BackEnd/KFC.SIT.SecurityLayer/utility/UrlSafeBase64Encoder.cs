@@ -18,7 +18,6 @@ namespace SecurityLayer.utility
         {
             string jsonDict = JsonConvert.SerializeObject(dict);
             byte[] byteJsonDict = Encoding.UTF8.GetBytes(jsonDict);
-            //string base64EncodedDict = HttpServerUtility.UrlTokenEncode(byteJsonDict);
             string base64EncodedDict = ToUrlSafeBase64Str(byteJsonDict);
 
             return base64EncodedDict;
@@ -30,6 +29,11 @@ namespace SecurityLayer.utility
         {
             // TODO make this return null if exception is raised.
             string base64Str = FromUrlSafeBase64Str(urlSafeBase64EncodedStr);
+            if (base64Str == null)
+            {
+                // It wasn't a properly encoded string.
+                return null;
+            }
             byte[] byteDict = null;
             try
             {
@@ -61,22 +65,27 @@ namespace SecurityLayer.utility
 
         public string FromUrlSafeBase64Str(string urlSafeBase64EncodedStr)
         {
+            if (urlSafeBase64EncodedStr == null)
+            {
+                return null;
+            }
             string result = "";
             string temp;
             string charPad = "=";
+            int length = urlSafeBase64EncodedStr.Length;
             int remainder = urlSafeBase64EncodedStr.Length % 4;
             switch (remainder)
             {
                 case 3:
-                    throw new ArgumentException("");
-                // Remainder of 3 should never occur because a byte group
-                // has a minimum of 8 bits which should produce two base64 chars.
+                    temp = urlSafeBase64EncodedStr + charPad;
+                    break;
                 case 2:
                     temp = urlSafeBase64EncodedStr + charPad + charPad;
                     break;
                 case 1:
-                    temp = urlSafeBase64EncodedStr + charPad;
-                    break;
+                    // Remainder of 1 should never occur because a byte group
+                    // has a minimum of 8 bits or two base64 characters.
+                    return null;
                 default:
                     temp = urlSafeBase64EncodedStr;
                     break;
