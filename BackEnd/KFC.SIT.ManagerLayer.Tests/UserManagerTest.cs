@@ -744,7 +744,7 @@ namespace ManagerLayer.Tests
         /// ////////////////////////////////////////////////////////
         /// </summary>
         [Fact]
-        public void UserManager_AddClaimAction_ShouldAddClaim()
+        public void UserManager_RemoveClaimAction_ShouldRemoveClaim()
         {
             // Arrange
             UserManager UM = new UserManager();
@@ -796,40 +796,281 @@ namespace ManagerLayer.Tests
 
             // Assert
             Assert.Equal(expected, actual);
-        }
-        [Fact]
-        public void UserManager_AddClaimAction_UserNotFound_ShouldThrowException()
-        {
-
-        }
-        [Fact]
-        public void UserManager_RemoveClaimAction_ShouldRemoveClaim()
-        {
 
         }
         [Fact]
         public void UserManager_RemoveClaimAction_UserNotFound_ShouldThrowException()
         {
+            // Arrange
+            UserManager UM = new UserManager();
+            User createdUser = UM.CreateUserAccount(new UserDTO
+            {
+                Id = 100,
+                UserName = "User",
+                FirstName = "Hyunwoo",
+                LastName = "Kim",
+                Catergory = "User",
+                //BirthDate = DateTime.UtcNow,
+                RawPassword = "PasswordArturo",
+                //Location = "Long Beach",
+                Email = "11ArturoKevin@gmail.com",
+            });
+            UM.CreateUserAccount(new UserDTO
+            {
+                Id = 101,
+                UserName = "User",
+                FirstName = "Hyunwoo2",
+                LastName = "Kim2",
+                Catergory = "User",
+                //BirthDate = DateTime.UtcNow,
+                RawPassword = "PasswordArturo",
+                //Location = "Long Beach",
+                Email = "11ArturoKevin2@gmail.com",
+            });
+            bool expected = true;
+            bool actual;
+
+            // Act
+            try
+            {
+                List<User> userList = UM.GetAllUser();
+                if (userList.Contains(createdUser) && userList.Count == 2)
+                {
+                    actual = true;
+                }
+                else
+                {
+                    actual = false;
+                }
+
+            }
+            catch (ArgumentNullException)
+            {
+                actual = false;
+            }
+
+            // Assert
+            Assert.Equal(expected, actual);
 
         }
         [Fact]
         public void UserManager_ChangePassword_ShouldChangePassword()
         {
+            // Arrange
+            UserManager UM = new UserManager();
+            User createdUser = UM.CreateUserAccount(new UserDTO
+            {
+                Id = 100,
+                UserName = "User",
+                FirstName = "Hyunwoo",
+                LastName = "Kim",
+                Catergory = "User",
+                //BirthDate = DateTime.UtcNow,
+                RawPassword = "PasswordArturo",
+                //Location = "Long Beach",
+                Email = "11ArturoKevin@gmail.com",
+            });
+            UM.CreateUserAccount(new UserDTO
+            {
+                Id = 101,
+                UserName = "User",
+                FirstName = "Hyunwoo2",
+                LastName = "Kim2",
+                Catergory = "User",
+                //BirthDate = DateTime.UtcNow,
+                RawPassword = "PasswordArturo",
+                //Location = "Long Beach",
+                Email = "11ArturoKevin2@gmail.com",
+            });
+            bool expected = true;
+            bool actual;
+
+            // Act
+            try
+            {
+                List<User> userList = UM.GetAllUser();
+                if (userList.Contains(createdUser) && userList.Count == 2)
+                {
+                    actual = true;
+                }
+                else
+                {
+                    actual = false;
+                }
+
+            }
+            catch (ArgumentNullException)
+            {
+                actual = false;
+            }
+
+            // Assert
+            Assert.Equal(expected, actual);
 
         }
         [Fact]
         public void UserManager_ChangePassword_UserNotFound_ShouldThrowException()
         {
+            // Arrange
+            UserManager UM = new UserManager();
+            User createdUser = UM.CreateUserAccount(new UserDTO
+            {
+                Id = 100,
+                UserName = "User",
+                FirstName = "Hyunwoo",
+                LastName = "Kim",
+                Catergory = "User",
+                //BirthDate = DateTime.UtcNow,
+                RawPassword = "PasswordArturo",
+                //Location = "Long Beach",
+                Email = "11ArturoKevin@gmail.com",
+            });
+            UM.CreateUserAccount(new UserDTO
+            {
+                Id = 101,
+                UserName = "User",
+                FirstName = "Hyunwoo2",
+                LastName = "Kim2",
+                Catergory = "User",
+                //BirthDate = DateTime.UtcNow,
+                RawPassword = "PasswordArturo",
+                //Location = "Long Beach",
+                Email = "11ArturoKevin2@gmail.com",
+            });
+            bool expected = true;
+            bool actual;
+
+            // Act
+            try
+            {
+                List<User> userList = UM.GetAllUser();
+                if (userList.Contains(createdUser) && userList.Count == 2)
+                {
+                    actual = true;
+                }
+                else
+                {
+                    actual = false;
+                }
+
+            }
+            catch (ArgumentNullException)
+            {
+                actual = false;
+            }
+
+            // Assert
+            Assert.Equal(expected, actual);
 
         }
         [Fact]
         public void UserManager_VerifyPassword_ComparePasswordEqual_ShouldReturnTrue()
         {
+            // Arrange
+            UserManager UM = new UserManager();
+            User createdUser = UM.CreateUserAccount(new UserDTO
+            {
+                Id = 100,
+                UserName = "User",
+                FirstName = "Hyunwoo",
+                LastName = "Kim",
+                Catergory = "User",
+                //BirthDate = DateTime.UtcNow,
+                RawPassword = "PasswordArturo",
+                //Location = "Long Beach",
+                Email = "11ArturoKevin@gmail.com",
+            });
+            UM.CreateUserAccount(new UserDTO
+            {
+                Id = 101,
+                UserName = "User",
+                FirstName = "Hyunwoo2",
+                LastName = "Kim2",
+                Catergory = "User",
+                //BirthDate = DateTime.UtcNow,
+                RawPassword = "PasswordArturo",
+                //Location = "Long Beach",
+                Email = "11ArturoKevin2@gmail.com",
+            });
+            bool expected = true;
+            bool actual;
+
+            // Act
+            try
+            {
+                List<User> userList = UM.GetAllUser();
+                if (userList.Contains(createdUser) && userList.Count == 2)
+                {
+                    actual = true;
+                }
+                else
+                {
+                    actual = false;
+                }
+
+            }
+            catch (ArgumentNullException)
+            {
+                actual = false;
+            }
+
+            // Assert
+            Assert.Equal(expected, actual);
 
         }
         [Fact]
         public void UserManager_VerifyPassword_ComparePasswordNotEqual_ShouldThrowException()
         {
+            // Arrange
+            UserManager UM = new UserManager();
+            User createdUser = UM.CreateUserAccount(new UserDTO
+            {
+                Id = 100,
+                UserName = "User",
+                FirstName = "Hyunwoo",
+                LastName = "Kim",
+                Catergory = "User",
+                //BirthDate = DateTime.UtcNow,
+                RawPassword = "PasswordArturo",
+                //Location = "Long Beach",
+                Email = "11ArturoKevin@gmail.com",
+            });
+            UM.CreateUserAccount(new UserDTO
+            {
+                Id = 101,
+                UserName = "User",
+                FirstName = "Hyunwoo2",
+                LastName = "Kim2",
+                Catergory = "User",
+                //BirthDate = DateTime.UtcNow,
+                RawPassword = "PasswordArturo",
+                //Location = "Long Beach",
+                Email = "11ArturoKevin2@gmail.com",
+            });
+            bool expected = true;
+            bool actual;
+
+            // Act
+            try
+            {
+                List<User> userList = UM.GetAllUser();
+                if (userList.Contains(createdUser) && userList.Count == 2)
+                {
+                    actual = true;
+                }
+                else
+                {
+                    actual = false;
+                }
+
+            }
+            catch (ArgumentNullException)
+            {
+                actual = false;
+            }
+
+            // Assert
+            Assert.Equal(expected, actual);
 
         }
     }// end of class
