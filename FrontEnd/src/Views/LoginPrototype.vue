@@ -44,7 +44,7 @@ export default {
 
   methods: {
       sendPayload() {
-          // Make sure it's valid JSON object by attempting serialize
+          // Make sure its valid JSON object by attempting serialize
           // then send to server with axios command.
           console.log("Sending payload...");
           let tempStr = this.payloadStr.split("\n").join("");
@@ -62,10 +62,10 @@ export default {
                    .then(response => {
                        this.token = response.data
                        sessionStorage.token = response.data
-                        
+                       console.log("Session Storage.token = " + sessionStorage.token)
                    })
                    .catch(err => console.log("There was error. " + err.response.data));
-              console.log("Session Storage.token = " + sessionStorage.token)
+              
             }
             catch(e) {
                 console.log("Format Error");
