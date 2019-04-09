@@ -150,18 +150,18 @@ export default {
         this.failedAlert = true;
       } else {
         this.axios({
-        method: "PUT",
-        url: this.$hostname,
-        data: this.formData,
-        headers: { "content-type": "application/json" }
-      }).then(
-        result => {
-          this.response = result.data;
-        },
-        error => {
-          console.error(error);
-        }
-      );
+          method: "PUT",
+          url: this.$hostname + "UserManager/",
+          data: this.formData,
+          headers: { "content-type": "application/json" }
+        }).then(
+          result => {
+            this.response = result.data;
+          },
+          error => {
+            console.error(error);
+          }
+        );
 
         this.submitStatus = "PENDING";
         setTimeout(() => {

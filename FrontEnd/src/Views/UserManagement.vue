@@ -129,7 +129,7 @@ export default {
 
     fetchUsers() {
       this.axios
-        .get(this.$hostname, {
+        .get(this.$hostname + "UserManager/", {
           headers: { "Content-Type": "application/Json" }
         })
         .then(response => {
@@ -141,7 +141,7 @@ export default {
         });
     },
     deleteUser(id) {
-      this.axios.delete(this.$hostname + id).then(response => {
+      this.axios.delete(this.$hostname +"UserManager/" + id).then(response => {
         this.response = response;
       });
     }

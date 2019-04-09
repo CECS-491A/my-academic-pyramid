@@ -15,6 +15,7 @@ using System.Web.Http.Cors;
 
 namespace KFC.SIT.WebAPI
 {
+    
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class UserManagerController : ApiController
     {

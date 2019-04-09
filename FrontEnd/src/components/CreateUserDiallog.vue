@@ -221,7 +221,7 @@ export default {
         this.axios({
           method: "POST",
           crossDomain: true,
-          url: this.$hostname,
+          url: this.$hostname +"UserManager/",
           data: this.formData,
           headers: {
             "content-type": "application/json",
