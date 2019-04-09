@@ -19,31 +19,46 @@ namespace KFC.SIT.WebAPI
     {
         [HttpPost]
         [EnableCors(origins: "*", headers: "*", methods: "*")]
-        public IHttpActionResult Login(SSOPayload payload)
+        public HttpResponseMessage Login(SSOPayload payload)
         {
             //CreateUsers();
             //DatabaseContext db = new DatabaseContext();
             //JWTokenManager tm = new JWTokenManager(db);
             SessionManager sm = new SessionManager();
             UserManager um = new UserManager();
+            Dictionary<string, string> redirectResponseDictionary 
+                = new Dictionary<string, string>()
+            {
+                {"redirectURL", "https://myacademicpyramid.com/api/home" }
+            };
             // Assume it's there for now.
+            if (!sm.ValidateSSOPayload(payload))
+            {
+                return Request.CreateResponse(HttpStatusCode.Unauthorized);
+            }
+
             User user = um.FindByUserName(payload.Email);
             if (user == null)
             {
-                return NotFound();
-            }
-            else
-            {
-                // TODO do signature validation.
-                Dictionary<string, string> testPayload = new Dictionary<string, string>()
+                UserDTO userDto = new UserDTO()
                 {
-                    { "a", "1"},
-                    { "b", "2" },
-                    { "c", "3" }
+                    UserName = payload.Email,
+                    Email = payload.Email
                 };
-                string token = sm.CreateSession(user.Id);
-                return Ok(token);
+                um.CreateUserAccount(userDto);
+                user = um.FindUserByEmail(userDto.Email);
             }
+            Dictionary<string, string> testPayload = new Dictionary<string, string>()
+            {
+                { "a", "1" },
+                { "b", "2" },
+                { "c", "3" }
+            };
+            string token = sm.CreateSession(user.Id);
+            redirectResponseDictionary["redirectURL"] 
+                = redirectResponseDictionary["redirectURL"] + "?token=" + token;
+            return Request.CreateResponse(HttpStatusCode.OK, redirectResponseDictionary);
+            
         }
 
         private void CreateUsers()
@@ -72,11 +87,20 @@ namespace KFC.SIT.WebAPI
                 Email = "Smith@gmail.com"
             };
 
+            UserDTO user4 = new UserDTO()
+            {
+                UserName = "julianpoyo+22@gmail.com",
+                FirstName = "Julian",
+                LastName = "Pollo",
+                Email = "julianpoyo+22@gmail.com"
+            };
+
             DatabaseContext db = new DatabaseContext();
             UserManager uM = new UserManager();
             uM.CreateUserAccount(user1);
             uM.CreateUserAccount(user2);
             uM.CreateUserAccount(user3);
+            uM.CreateUserAccount(user4);
             db.SaveChanges();
         }
     }

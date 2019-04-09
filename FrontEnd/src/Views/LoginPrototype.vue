@@ -33,7 +33,7 @@ export default {
   name: "LoginPrototype",
   data () {
     return {
-      payloadStr: "{\"email\": \"tri@yahoo.com\"," 
+      payloadStr: "{\"email\": \"julianpoyo+22@gmail.com\"," 
                     + "\"signature\": \"4T5Csu2U9OozqN66Us+pEc5ODcBwPs1ldaq2fmBqtfo=\","
                     + "\"ssoUserId\": \"0743cd2c-fec3-4b79-a5b6-a6c52a752c71\","
                     + "\"timestamp\": \"1552766624957\"}",
