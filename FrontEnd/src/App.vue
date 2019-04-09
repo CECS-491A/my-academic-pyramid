@@ -10,6 +10,7 @@
       <v-btn to="Publish" flat>Publish</v-btn>
       <v-btn to="Logging" flat>Logging</v-btn>
       <v-btn to="UserManagement" flat>UM</v-btn>
+      <v-btn to="Chat" flat>Chat</v-btn>
     </v-toolbar>
     
 	<v-content>

@@ -30,7 +30,6 @@ namespace ManagerLayer.Tests
                     UserName = "SystemAdmin",
                     FirstName = "Arturo",
                     LastName = "NA",
-                    Catergory = new Catergory("User"),
                     //BirthDate = DateTime.UtcNow,
                     RawPassword = "PasswordArturo",
                     //Location = "Long Beach",
@@ -73,7 +72,6 @@ namespace ManagerLayer.Tests
                     UserName = "SystemAdmin",
                     FirstName = "Arturo",
                     LastName = "NA",
-                    Catergory = new Catergory("User"),
                     //BirthDate = DateTime.UtcNow,
                     RawPassword = "PasswordArturo",
                     //Location = "Long Beach",
@@ -108,7 +106,6 @@ namespace ManagerLayer.Tests
                 UserName = "User",
                 FirstName = "Kevin",
                 LastName = "NA",
-                Catergory = new Catergory("User"),
                 //BirthDate = DateTime.UtcNow,
                 RawPassword = "PasswordArturo",
                 //Location = "Long Beach",
@@ -152,7 +149,6 @@ namespace ManagerLayer.Tests
                 UserName = "SystemAdmin5",
                 FirstName = "Arturo",
                 LastName = "NA",
-                Catergory = new Catergory("User"),
                 //BirthDate = DateTime.UtcNow,
                 RawPassword = "PasswordArturo",
                 //Location = "Long Beach",
@@ -187,7 +183,6 @@ namespace ManagerLayer.Tests
                 UserName = "Prof",
                 FirstName = "Luis",
                 LastName = "IDK",
-                Catergory = new Catergory("User"),
                 //BirthDate = DateTime.UtcNow,
                 RawPassword = "PasswordArturo",
                 //Location = "Long Beach",
@@ -231,7 +226,6 @@ namespace ManagerLayer.Tests
                 UserName = "User",
                 FirstName = "Kry",
                 LastName = "Leon",
-                Catergory = new Catergory("User"),
                 //BirthDate = DateTime.UtcNow,
                 RawPassword = "PasswordArturo",
                 //Location = "Long Beach",
@@ -265,8 +259,7 @@ namespace ManagerLayer.Tests
                 UserName = "User",
                 FirstName = "Arturo",
                 LastName = "NA",
-                Catergory = new Catergory("User"),
-                //BirthDate = DateTime.UtcNow,
+                //BirthDate = DateTime.UtcNow,s
                 RawPassword = "PasswordArturo",
                 //Location = "Long Beach",
                 Email = "Arturo@gmail.com",
@@ -276,7 +269,6 @@ namespace ManagerLayer.Tests
                 UserName = "SystemAdmin",
                 FirstName = "ArturoSon",
                 LastName = "NA",
-                Catergory = new Catergory("User"),
                 //BirthDate = DateTime.UtcNow,
                 RawPassword = "PasswordArturo",
                 //Location = "Long Beach",
@@ -317,7 +309,6 @@ namespace ManagerLayer.Tests
                 UserName = "User",
                 FirstName = "Arturo",
                 LastName = "NA",
-                Catergory = new Catergory("User"),
                 //BirthDate = DateTime.UtcNow,
                 RawPassword = "PasswordArturo",
                 //Location = "Long Beach",
@@ -328,7 +319,6 @@ namespace ManagerLayer.Tests
                 UserName = "SystemAdmin",
                 FirstName = "ArturoSon",
                 LastName = "NA",
-                Catergory = new Catergory("User"),
                 //BirthDate = DateTime.UtcNow,
                 RawPassword = "PasswordArturo",
                 //Location = "Long Beach",
@@ -370,7 +360,6 @@ namespace ManagerLayer.Tests
                 UserName = "User",
                 FirstName = "Arturo",
                 LastName = "NA",
-                Catergory = new Catergory("User"),
                 //BirthDate = DateTime.UtcNow,
                 RawPassword = "PasswordArturo",
                 //Location = "Long Beach",
@@ -381,7 +370,6 @@ namespace ManagerLayer.Tests
                 UserName = "SystemAdmin",
                 FirstName = "ArturoSon",
                 LastName = "NA",
-                Catergory = new Catergory("User"),
                 //BirthDate = DateTime.UtcNow,
                 RawPassword = "PasswordArturo",
                 //Location = "Long Beach",
@@ -423,7 +411,6 @@ namespace ManagerLayer.Tests
                 UserName = "Admin",
                 FirstName = "Kevin",
                 LastName = "Kim",
-                Catergory = new Catergory("User"),
                 //BirthDate = DateTime.UtcNow,
                 RawPassword = "PasswordArturo",
                 //Location = "Long Beach",
@@ -463,7 +450,6 @@ namespace ManagerLayer.Tests
                 UserName = "SystemAdmin",
                 FirstName = "Arturo",
                 LastName = "NA",
-                Catergory = new Catergory("User"),
                 //BirthDate = DateTime.UtcNow,
                 RawPassword = "PasswordArturo",
                 //Location = "Long Beach",
@@ -504,7 +490,6 @@ namespace ManagerLayer.Tests
                 UserName = "SystemAdmin",
                 FirstName = "Arturo",
                 LastName = "NA",
-                Catergory = new Catergory("User"),
                 //BirthDate = DateTime.UtcNow,
                 RawPassword = "PasswordArturo",
                 //Location = "Long Beach",
@@ -547,7 +532,6 @@ namespace ManagerLayer.Tests
                 UserName = "SystemAdmin",
                 FirstName = "Arturo",
                 LastName = "NA",
-                Catergory = new Catergory("User"),
                 //BirthDate = DateTime.UtcNow,
                 RawPassword = "PasswordArturo",
                 //Location = "Long Beach",
@@ -589,7 +573,6 @@ namespace ManagerLayer.Tests
                 UserName = "SystemAdmin",
                 FirstName = "Arturo",
                 LastName = "NA",
-                Catergory = new Catergory("User"),
                 //BirthDate = DateTime.UtcNow,
                 RawPassword = "PasswordArturo",
                 //Location = "Long Beach",
@@ -632,7 +615,6 @@ namespace ManagerLayer.Tests
                 UserName = "SystemAdmin2",
                 FirstName = "Arturo",
                 LastName = "NA",
-                Catergory = new Catergory("User"),
                 //BirthDate = DateTime.UtcNow,
                 RawPassword = "PasswordArturo",
                 //Location = "Long Beach",
@@ -674,7 +656,6 @@ namespace ManagerLayer.Tests
                 UserName = "User",
                 FirstName = "Arturo",
                 LastName = "NA",
-                Catergory = new Catergory("User"),
                 //BirthDate = DateTime.UtcNow,
                 RawPassword = "PasswordArturo",
                 //Location = "Long Beach",
@@ -717,7 +698,6 @@ namespace ManagerLayer.Tests
                 UserName = "User",
                 FirstName = "Hyunwoo",
                 LastName = "Kim",
-                Catergory = new Catergory("User"),
                 //BirthDate = DateTime.UtcNow,
                 RawPassword = "PasswordArturo",
                 //Location = "Long Beach",
@@ -729,7 +709,64 @@ namespace ManagerLayer.Tests
                 UserName = "User",
                 FirstName = "Hyunwoo2",
                 LastName = "Kim2",
-                Catergory = new Catergory("User"),
+                //BirthDate = DateTime.UtcNow,
+                RawPassword = "PasswordArturo",
+                //Location = "Long Beach",
+                Email = "11ArturoKevin2@gmail.com",
+            });
+            bool expected = true;
+            bool actual;
+
+            // Act
+            try
+            {
+                List<User> userList = UM.GetAllUser();
+                if (userList.Contains(createdUser) && userList.Count == 2)
+                {
+                    actual = true;
+                }
+                else
+                {
+                    actual = false;
+                }
+
+            }
+            catch (ArgumentNullException)
+            {
+                actual = false;
+            }
+
+            // Assert
+            Assert.Equal(expected, actual);
+
+        }
+        /// <summary>
+        /// ////////////////////////////////////////////////////////
+        /// </summary>
+        [Fact]
+        public void UserManager_RemoveClaimAction_ShouldRemoveClaim()
+        {
+            // Arrange
+            UserManager UM = new UserManager();
+            User createdUser = UM.CreateUserAccount(new UserDTO
+            {
+                Id = 100,
+                UserName = "User",
+                FirstName = "Hyunwoo",
+                LastName = "Kim",
+                Catergory = "User",
+                //BirthDate = DateTime.UtcNow,
+                RawPassword = "PasswordArturo",
+                //Location = "Long Beach",
+                Email = "11ArturoKevin@gmail.com",
+            });
+            UM.CreateUserAccount(new UserDTO
+            {
+                Id = 101,
+                UserName = "User",
+                FirstName = "Hyunwoo2",
+                LastName = "Kim2",
+                Catergory = "User",
                 //BirthDate = DateTime.UtcNow,
                 RawPassword = "PasswordArturo",
                 //Location = "Long Beach",
@@ -762,43 +799,278 @@ namespace ManagerLayer.Tests
 
         }
         [Fact]
-        public void UserManager_AddClaimAction_ShouldAddClaim()
-        {
-
-        }
-        [Fact]
-        public void UserManager_AddClaimAction_UserNotFound_ShouldThrowException()
-        {
-
-        }
-        [Fact]
-        public void UserManager_RemoveClaimAction_ShouldRemoveClaim()
-        {
-
-        }
-        [Fact]
         public void UserManager_RemoveClaimAction_UserNotFound_ShouldThrowException()
         {
+            // Arrange
+            UserManager UM = new UserManager();
+            User createdUser = UM.CreateUserAccount(new UserDTO
+            {
+                Id = 100,
+                UserName = "User",
+                FirstName = "Hyunwoo",
+                LastName = "Kim",
+                Catergory = "User",
+                //BirthDate = DateTime.UtcNow,
+                RawPassword = "PasswordArturo",
+                //Location = "Long Beach",
+                Email = "11ArturoKevin@gmail.com",
+            });
+            UM.CreateUserAccount(new UserDTO
+            {
+                Id = 101,
+                UserName = "User",
+                FirstName = "Hyunwoo2",
+                LastName = "Kim2",
+                Catergory = "User",
+                //BirthDate = DateTime.UtcNow,
+                RawPassword = "PasswordArturo",
+                //Location = "Long Beach",
+                Email = "11ArturoKevin2@gmail.com",
+            });
+            bool expected = true;
+            bool actual;
+
+            // Act
+            try
+            {
+                List<User> userList = UM.GetAllUser();
+                if (userList.Contains(createdUser) && userList.Count == 2)
+                {
+                    actual = true;
+                }
+                else
+                {
+                    actual = false;
+                }
+
+            }
+            catch (ArgumentNullException)
+            {
+                actual = false;
+            }
+
+            // Assert
+            Assert.Equal(expected, actual);
 
         }
         [Fact]
         public void UserManager_ChangePassword_ShouldChangePassword()
         {
+            // Arrange
+            UserManager UM = new UserManager();
+            User createdUser = UM.CreateUserAccount(new UserDTO
+            {
+                Id = 100,
+                UserName = "User",
+                FirstName = "Hyunwoo",
+                LastName = "Kim",
+                Catergory = "User",
+                //BirthDate = DateTime.UtcNow,
+                RawPassword = "PasswordArturo",
+                //Location = "Long Beach",
+                Email = "11ArturoKevin@gmail.com",
+            });
+            UM.CreateUserAccount(new UserDTO
+            {
+                Id = 101,
+                UserName = "User",
+                FirstName = "Hyunwoo2",
+                LastName = "Kim2",
+                Catergory = "User",
+                //BirthDate = DateTime.UtcNow,
+                RawPassword = "PasswordArturo",
+                //Location = "Long Beach",
+                Email = "11ArturoKevin2@gmail.com",
+            });
+            bool expected = true;
+            bool actual;
+
+            // Act
+            try
+            {
+                List<User> userList = UM.GetAllUser();
+                if (userList.Contains(createdUser) && userList.Count == 2)
+                {
+                    actual = true;
+                }
+                else
+                {
+                    actual = false;
+                }
+
+            }
+            catch (ArgumentNullException)
+            {
+                actual = false;
+            }
+
+            // Assert
+            Assert.Equal(expected, actual);
 
         }
         [Fact]
         public void UserManager_ChangePassword_UserNotFound_ShouldThrowException()
         {
+            // Arrange
+            UserManager UM = new UserManager();
+            User createdUser = UM.CreateUserAccount(new UserDTO
+            {
+                Id = 100,
+                UserName = "User",
+                FirstName = "Hyunwoo",
+                LastName = "Kim",
+                Catergory = "User",
+                //BirthDate = DateTime.UtcNow,
+                RawPassword = "PasswordArturo",
+                //Location = "Long Beach",
+                Email = "11ArturoKevin@gmail.com",
+            });
+            UM.CreateUserAccount(new UserDTO
+            {
+                Id = 101,
+                UserName = "User",
+                FirstName = "Hyunwoo2",
+                LastName = "Kim2",
+                Catergory = "User",
+                //BirthDate = DateTime.UtcNow,
+                RawPassword = "PasswordArturo",
+                //Location = "Long Beach",
+                Email = "11ArturoKevin2@gmail.com",
+            });
+            bool expected = true;
+            bool actual;
+
+            // Act
+            try
+            {
+                List<User> userList = UM.GetAllUser();
+                if (userList.Contains(createdUser) && userList.Count == 2)
+                {
+                    actual = true;
+                }
+                else
+                {
+                    actual = false;
+                }
+
+            }
+            catch (ArgumentNullException)
+            {
+                actual = false;
+            }
+
+            // Assert
+            Assert.Equal(expected, actual);
 
         }
         [Fact]
         public void UserManager_VerifyPassword_ComparePasswordEqual_ShouldReturnTrue()
         {
+            // Arrange
+            UserManager UM = new UserManager();
+            User createdUser = UM.CreateUserAccount(new UserDTO
+            {
+                Id = 100,
+                UserName = "User",
+                FirstName = "Hyunwoo",
+                LastName = "Kim",
+                Catergory = "User",
+                //BirthDate = DateTime.UtcNow,
+                RawPassword = "PasswordArturo",
+                //Location = "Long Beach",
+                Email = "11ArturoKevin@gmail.com",
+            });
+            UM.CreateUserAccount(new UserDTO
+            {
+                Id = 101,
+                UserName = "User",
+                FirstName = "Hyunwoo2",
+                LastName = "Kim2",
+                Catergory = "User",
+                //BirthDate = DateTime.UtcNow,
+                RawPassword = "PasswordArturo",
+                //Location = "Long Beach",
+                Email = "11ArturoKevin2@gmail.com",
+            });
+            bool expected = true;
+            bool actual;
+
+            // Act
+            try
+            {
+                List<User> userList = UM.GetAllUser();
+                if (userList.Contains(createdUser) && userList.Count == 2)
+                {
+                    actual = true;
+                }
+                else
+                {
+                    actual = false;
+                }
+
+            }
+            catch (ArgumentNullException)
+            {
+                actual = false;
+            }
+
+            // Assert
+            Assert.Equal(expected, actual);
 
         }
         [Fact]
         public void UserManager_VerifyPassword_ComparePasswordNotEqual_ShouldThrowException()
         {
+            // Arrange
+            UserManager UM = new UserManager();
+            User createdUser = UM.CreateUserAccount(new UserDTO
+            {
+                Id = 100,
+                UserName = "User",
+                FirstName = "Hyunwoo",
+                LastName = "Kim",
+                Catergory = "User",
+                //BirthDate = DateTime.UtcNow,
+                RawPassword = "PasswordArturo",
+                //Location = "Long Beach",
+                Email = "11ArturoKevin@gmail.com",
+            });
+            UM.CreateUserAccount(new UserDTO
+            {
+                Id = 101,
+                UserName = "User",
+                FirstName = "Hyunwoo2",
+                LastName = "Kim2",
+                Catergory = "User",
+                //BirthDate = DateTime.UtcNow,
+                RawPassword = "PasswordArturo",
+                //Location = "Long Beach",
+                Email = "11ArturoKevin2@gmail.com",
+            });
+            bool expected = true;
+            bool actual;
+
+            // Act
+            try
+            {
+                List<User> userList = UM.GetAllUser();
+                if (userList.Contains(createdUser) && userList.Count == 2)
+                {
+                    actual = true;
+                }
+                else
+                {
+                    actual = false;
+                }
+
+            }
+            catch (ArgumentNullException)
+            {
+                actual = false;
+            }
+
+            // Assert
+            Assert.Equal(expected, actual);
 
         }
     }// end of class

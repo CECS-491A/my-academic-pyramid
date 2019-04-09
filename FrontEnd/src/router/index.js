@@ -7,6 +7,7 @@ import Publish from '@/Views/Publish'
 import Logging from '@/Views/Logging'
 import Login from '@/Views/Login'
 import UserManagement from '@/Views/UserManagement'
+import ChatContainer from '@/Views//ChatContainer'
 
 Vue.use(Router)
 Vue.use(Vuetify)
@@ -40,6 +41,12 @@ export default new Router({
     path: '/UserManagement',
     name: 'UserManagement',
     component: UserManagement
+  },
+
+  {
+    path: '/Chat',
+    name: 'Chat',
+    component: ChatContainer
   }
   ]
 })

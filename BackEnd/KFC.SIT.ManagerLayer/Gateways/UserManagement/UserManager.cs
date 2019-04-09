@@ -49,28 +49,19 @@ namespace ManagerLayer.UserManagement
 
             User user = new User
             {
-
                 UserName = userDto.UserName,
                 FirstName = userDto.FirstName,
                 LastName = userDto.LastName,
-
-
                 Catergory = new Catergory(userDto.Catergory),
                 //// date and time as it would be in Coordinated Universal Time
                 CreatedAt = DateTime.Now, // https://stackoverflow.com/questions/62151/datetime-now-vs-datetime-utcnow 
                 DateOfBirth = DateTime.Parse(userDto.DateOfBirth),
                 //Location = userDto.Location,
-                
-                
-
-
             };
 
             //Automatically assigning claim to user
             user = _userManagementServices.AutomaticClaimAssigning(user);
             user = _userManagementServices.AssignCatergory(user, user.Catergory);
-
-
 
             var response = _userManagementServices.CreateUser(user);
             try
@@ -219,39 +210,6 @@ namespace ManagerLayer.UserManagement
             // Call GetAllUser method in userManagementServices 
             List<User> userList = _userManagementServices.GetAllUser();
             return userList;
-        }
-
-        /// <summary>
-        /// Method to add claim to user account
-        /// The method will take username of the account whom give the claim to and a claim 
-        /// </summary>
-        /// <param name="targetedUserName"></param>
-        /// <param name="claim"></param>
-        /// 
-        public User AddClaimAction(int targetedUserID, Claim claim)
-        {
-            // List of required claims needed for AddClaimAction Method
-            List<Claim> createUserRequiredClaimTypes = new List<Claim>
-            {
-                new Claim("UserManager")
-            };
-
-            // Check if the requesting user has the require claims
- 
-                // Retrive targeted user exists from database
-            User targetedUser = FindUserById(targetedUserID);
-            if (targetedUser == null)
-            {
-                return null;
-            }
-            // Check if the requesting user is  at least same level as  the targeted user
-
-            else
-            {
-                User user = _userManagementServices.AddClaim(targetedUser, claim);
-                UpdateUserAccount(user);
-                return user;
-            }
         }
 
         /// <summary>
