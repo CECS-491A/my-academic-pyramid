@@ -95,8 +95,7 @@ export default {
       if (this.error) return;
 
       const url = 'https://api.kfc-sso.com/api/applications/publish'
-      
-      axios.put(url, {
+      axios.post(url, {
         key: document.getElementById('key').value,
         title: document.getElementById('title').value,
         description: document.getElementById('description').value,
