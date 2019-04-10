@@ -68,7 +68,7 @@ namespace KFC.SIT.WebAPI
                 UserName = "Abc@gmail.com",
                 FirstName = "Jackie",
                 LastName = "Chan",
-                Email = "Abc@gmail.com"
+                
             };
 
             UserDTO user2 = new UserDTO()
@@ -76,7 +76,7 @@ namespace KFC.SIT.WebAPI
                 UserName = "tri@yahoo.com",
                 FirstName = "David",
                 LastName = "Gonzales",
-                Email = "tri@yahoo.com"
+                
             };
 
             UserDTO user3 = new UserDTO()
@@ -84,7 +84,7 @@ namespace KFC.SIT.WebAPI
                 UserName = "Smith@gmail.com",
                 FirstName = "Michael",
                 LastName = "Nguyen",
-                Email = "Smith@gmail.com"
+               
             };
 
             UserDTO user4 = new UserDTO()

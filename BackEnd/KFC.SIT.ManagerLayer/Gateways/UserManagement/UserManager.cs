@@ -46,43 +46,47 @@ namespace ManagerLayer.UserManagement
             //    return null;
             //}
 
-            SHA256HashFunction HashFunction = new SHA256HashFunction();
-            //HashSalt hashSaltPassword = HashFunction.GetHashValue(userDto.RawPassword);
+
             User user = new User
             {
-               
                 UserName = userDto.UserName,
                 FirstName = userDto.FirstName,
                 LastName = userDto.LastName,
-                //PasswordHash = hashSaltPassword.Hash,
-                //PasswordSalt = hashSaltPassword.Salt,
-
-                //Catergory = userDto.Catergory,
+                Catergory = new Catergory(userDto.Catergory),
                 //// date and time as it would be in Coordinated Universal Time
                 //CreatedAt = DateTime.Now, // https://stackoverflow.com/questions/62151/datetime-now-vs-datetime-utcnow 
                 //DateOfBirth = DateTime.Parse(userDto.DateOfBirth),
                 //Location = userDto.Location,
-                Email = userDto.Email,
-                //PasswordQuestion1 = userDto.PasswordQuestion1,
-                //PasswordQuestion2 = userDto.PasswordQuestion2,
-                //PasswordQuestion3 = userDto.PasswordQuestion3,
-                //PasswordAnswer1 = userDto.PasswordAnswer1,
-                //PasswordAnswer2 = userDto.PasswordAnswer2,
-                //PasswordAnswer3 = userDto.PasswordAnswer3,
             };
+
+            //Automatically assigning claim to user
+            user = _userManagementServices.AutomaticClaimAssigning(user);
+            user = _userManagementServices.AssignCatergory(user, user.Catergory);
 
             var response = _userManagementServices.CreateUser(user);
             try
             {
                 _DbContext.SaveChanges();
-                return user;
+                return response;
             }
-            catch (DbEntityValidationException ex)
+            catch (System.Data.Entity.Validation.DbEntityValidationException dbEx)
             {
-                // detach user attempted to be created from the db context - rollback
-                _DbContext.Entry(response).State = System.Data.Entity.EntityState.Detached;
+                Exception raise = dbEx;
+                foreach (var validationErrors in dbEx.EntityValidationErrors)
+                {
+                    foreach (var validationError in validationErrors.ValidationErrors)
+                    {
+                        string message = string.Format("{0}:{1}",
+                            validationErrors.Entry.Entity.ToString(),
+                            validationError.ErrorMessage);
+                        // raise a new exception nesting
+                        // the current instance as InnerException
+                        raise = new InvalidOperationException(message, raise);
+                    }
+                }
+                throw raise;
             }
-            return null;
+           
         }
 
         /// <summary>
@@ -209,39 +213,6 @@ namespace ManagerLayer.UserManagement
         }
 
         /// <summary>
-        /// Method to add claim to user account
-        /// The method will take username of the account whom give the claim to and a claim 
-        /// </summary>
-        /// <param name="targetedUserName"></param>
-        /// <param name="claim"></param>
-        /// 
-        public User AddClaimAction(int targetedUserID, Claim claim)
-        {
-            // List of required claims needed for AddClaimAction Method
-            List<Claim> createUserRequiredClaimTypes = new List<Claim>
-            {
-                new Claim("UserManager")
-            };
-
-            // Check if the requesting user has the require claims
- 
-                // Retrive targeted user exists from database
-            User targetedUser = FindUserById(targetedUserID);
-            if (targetedUser == null)
-            {
-                return null;
-            }
-            // Check if the requesting user is  at least same level as  the targeted user
-
-            else
-            {
-                User user = _userManagementServices.AddClaim(targetedUser, claim);
-                UpdateUserAccount(user);
-                return user;
-            }
-        }
-
-        /// <summary>
         /// Method to remove claim from user
         /// </summary>
         /// <param name="targetedUserName"></param>
@@ -273,31 +244,6 @@ namespace ManagerLayer.UserManagement
                    
         }
 
-        
-        /// <summary>
-        /// Method to change password in database
-        /// </summary>
-        /// <param name="username"></param>
-        /// <param name="newPassword"></param>
-        /// <returns></returns>
-        public User ChangePassword(String username, String newPassword)
-        {
-            SHA256HashFunction HashFunction = new SHA256HashFunction();
-            
-            User user = FindByUserName(username);
-            if (user == null)
-            {
-                return null;
-            }
-            else
-            {
-                HashSalt hashSaltPassword = HashFunction.GetHashValue(newPassword);
-                user.PasswordHash = hashSaltPassword.Hash;
-                user.PasswordSalt = hashSaltPassword.Salt;
-                UpdateUserAccount(user);
-                return user;
-            }
-        }
 
         //
         /// <summary>
@@ -328,28 +274,6 @@ namespace ManagerLayer.UserManagement
 
         }
 
-
-        //public void ChangeSecurityPasswordQuestion(String userName, int questionNumber, String questionContext)
-        //{
-        //    PasswordQA passwordQA = userManagementServices.FindSecurityQAs(userName);
-        //    string choice;
-        //    if(questionNumber ==1)
-        //    {
-        //        choice = "Question1";
-        //    }
-        //    if (questionNumber == 2)
-        //    {
-        //        choice = "Question2";
-        //    }
-        //    if (questionNumber == 3)
-        //    {
-        //        choice = "Question3";
-        //    }
-
-        //    passwordQA.
-
-
-        //}
 
     }
 }

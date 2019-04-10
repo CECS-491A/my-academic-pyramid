@@ -8,6 +8,7 @@ import Logging from '@/Views/Logging'
 import Login from '@/Views/Login'
 import UserManagement from '@/Views/UserManagement'
 import LoginPrototype from '@/Views/LoginPrototype'
+import ChatContainer from '@/Views//ChatContainer'
 
 Vue.use(Router)
 Vue.use(Vuetify)
@@ -46,6 +47,11 @@ export default new Router({
     path: '/LoginPrototype',
     name: 'LoginPrototype',
     component: LoginPrototype
+  },
+  {
+    path: '/Chat',
+    name: 'Chat',
+    component: ChatContainer
   }
   ]
 })
