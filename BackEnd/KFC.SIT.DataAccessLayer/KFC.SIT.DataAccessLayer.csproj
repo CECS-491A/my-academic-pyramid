@@ -150,6 +150,10 @@
     <Compile Include="Migrations\201904100316557_First_Migration_Step.Designer.cs">
       <DependentUpon>201904100316557_First_Migration_Step.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201904100346482_SessionEntity.cs" />
+    <Compile Include="Migrations\201904100346482_SessionEntity.Designer.cs">
+      <DependentUpon>201904100346482_SessionEntity.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Catergory.cs" />
     <Compile Include="Models\Claim.cs" />
@@ -198,6 +202,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201904100316557_First_Migration_Step.resx">
       <DependentUpon>201904100316557_First_Migration_Step.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904100346482_SessionEntity.resx">
+      <DependentUpon>201904100346482_SessionEntity.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -9,6 +9,7 @@ import Login from '@/Views/Login'
 import UserManagement from '@/Views/UserManagement'
 import LoginPrototype from '@/Views/LoginPrototype'
 import ChatContainer from '@/Views//ChatContainer'
+import UserRegistration from '@/Views/UserRegistration'
 
 Vue.use(Router)
 Vue.use(Vuetify)
@@ -52,6 +53,11 @@ export default new Router({
     path: '/Chat',
     name: 'Chat',
     component: ChatContainer
+  },
+  {
+    path: "/UserRegistration",
+    name: "UserRegistration",
+    component:UserRegistration
   }
   ]
 })

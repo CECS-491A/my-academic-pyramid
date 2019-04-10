@@ -16,7 +16,7 @@ namespace DemoProject
     {
         static void Main(string[] args)
         {
-
+            CreateUsers();
             JWTokenManager tm = new JWTokenManager();
             Dictionary<string, string> testPayload = new Dictionary<string, string>()
             {
@@ -27,6 +27,7 @@ namespace DemoProject
             string token = tm.CreateToken(testPayload);
             Console.Out.WriteLine(token);
             Dictionary<string, string> decodedPayload = tm.DecodePayload(token);
+            // Doesn't work for dictionary
             bool equalPayloads = testPayload.Equals(decodedPayload);
             Console.Out.WriteLine(equalPayloads);
             
@@ -112,7 +113,7 @@ namespace DemoProject
                 UserName = "Abc@gmail.com",
                 FirstName = "Jackie",
                 LastName = "Chan",
-                
+                Catergory = "NewUser"
             };
 
             UserDTO user2 = new UserDTO()
@@ -120,7 +121,7 @@ namespace DemoProject
                 UserName = "tri@yahoo.com",
                 FirstName = "David",
                 LastName = "Gonzales",
-             
+                Catergory = "NewUser"
             };
 
             UserDTO user3 = new UserDTO()
@@ -128,7 +129,7 @@ namespace DemoProject
                 UserName = "Smith@gmail.com",
                 FirstName = "Michael",
                 LastName = "Nguyen",
-                
+                Catergory = "NonStudent"
             };
 
             DatabaseContext db = new DatabaseContext();

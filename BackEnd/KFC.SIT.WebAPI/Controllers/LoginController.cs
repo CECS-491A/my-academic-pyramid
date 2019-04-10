@@ -12,6 +12,7 @@ using DataAccessLayer.DTOs;
 using ManagerLayer.UserManagement;
 using System.Web.Http.Cors;
 using SecurityLayer.Sessions;
+using ManagerLayer.Constants;
 
 namespace KFC.SIT.WebAPI
 { 
@@ -24,11 +25,6 @@ namespace KFC.SIT.WebAPI
             //CreateUsers();
             SessionManager sm = new SessionManager();
             UserManager um = new UserManager();
-            Dictionary<string, string> redirectResponseDictionary 
-                = new Dictionary<string, string>()
-            {
-                {"redirectURL", "https://myacademicpyramid.com/api/home" }
-            };
             // Assume it's there for now.
             if (!sm.ValidateSSOPayload(payload))
             {
@@ -41,12 +37,20 @@ namespace KFC.SIT.WebAPI
                 UserDTO userDto = new UserDTO()
                 {
                     UserName = payload.Email,
-                    Email = payload.Email
+                    Email = payload.Email,
+                    Catergory = "NewUser"
                 };
                 um.CreateUserAccount(userDto);
-                user = um.FindUserByEmail(userDto.Email);
+                user = um.FindByUserName(payload.Email);
+                um.AddClaimAction(user.Id, new Claim("CanRegister"));
             }
             string token = sm.CreateSession(user.Id);
+
+            Dictionary<string, string> redirectResponseDictionary
+                = new Dictionary<string, string>()
+            {
+                {"redirectURL", RedirectUserUtility.GetUrlAddress(user.Catergory.Value) }
+            };
             redirectResponseDictionary["redirectURL"] 
                 = redirectResponseDictionary["redirectURL"] + "?token=" + token;
             return Request.CreateResponse(HttpStatusCode.OK, redirectResponseDictionary);

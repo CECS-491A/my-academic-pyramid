@@ -244,6 +244,30 @@ namespace ManagerLayer.UserManagement
                    
         }
 
+        public User AddClaimAction(int targetedUserId, Claim claim)
+        {
+            // TODO finish this. It assigns a list instead of adding a claim.
+            // List of required claims needed for AddClaimAction Method
+
+            // Check if the requesting user has the require claims
+
+            // Retrive targeted user exists from database
+            User targetedUser = FindUserById(targetedUserId);
+            if (targetedUser == null)
+            {
+                return null;
+
+            }
+            // Check if the requesting user is  at least same level as  the targeted user
+            else
+            {
+                User user = _userManagementServices.AddClaim(targetedUser, claim);
+                UpdateUserAccount(user);
+                return user;
+            }
+
+        }
+
 
         //
         /// <summary>

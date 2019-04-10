@@ -58,8 +58,8 @@ export default {
               const url = "http://localhost:59364/api/Login";
               axios.post(url, temp)
                    .then(response => {
-                       this.token = response.data
-                       sessionStorage.token = response.data
+                       this.token = response.data["redirectURL"]
+                       sessionStorage.token = response.data["redirectURL"]
                        console.log("Session Storage.token = " + sessionStorage.token)
                    })
                    .catch(err => console.log("There was error. " + err.response));
@@ -69,8 +69,16 @@ export default {
                 console.log("Format Error");
             }
       }
-  }
+  },
   
+  created() {
+    ;
+    if(!this.$router.query.token) {
+      return;
+    }
+    let parts = this.$router.query.token.split('.');
+    
+  }
 }
 </script>
 

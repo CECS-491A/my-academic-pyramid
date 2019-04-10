@@ -231,7 +231,7 @@ namespace ServiceLayer.UserManagement.UserAccountServices
                 AddClaim(user, new Claim("CanDeleteOwnAccount"));              
 
             }
-            if (user.Catergory.Value.Equals("Admin") || user.Catergory.Value.Equals("SystemAdmin"))
+            else if (user.Catergory.Value.Equals("Admin") || user.Catergory.Value.Equals("SystemAdmin"))
             {
                 AddClaim(user, new Claim("CanCreateNewStudentAccount"));
                 AddClaim(user, new Claim("CanDeleteStudentAccount"));
@@ -241,13 +241,14 @@ namespace ServiceLayer.UserManagement.UserAccountServices
 
             }
 
-                if (user.Catergory.Value.Equals("SystemAdmin"))
+            else if (user.Catergory.Value.Equals("SystemAdmin"))
             {
                 AddClaim(user, new Claim("EnableOrDisableAdminAccount"));
                 AddClaim(user, new Claim("CanDeleteAdminAccount"));
                 AddClaim(user, new Claim("CanDeleteOtherUser"));
                 AddClaim(user, new Claim("CanAlterAdminAccountUAC"));
             }
+            
 
             return user;
          
