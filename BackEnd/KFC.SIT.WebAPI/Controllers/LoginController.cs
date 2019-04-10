@@ -22,8 +22,6 @@ namespace KFC.SIT.WebAPI
         public HttpResponseMessage Login(SSOPayload payload)
         {
             //CreateUsers();
-            //DatabaseContext db = new DatabaseContext();
-            //JWTokenManager tm = new JWTokenManager(db);
             SessionManager sm = new SessionManager();
             UserManager um = new UserManager();
             Dictionary<string, string> redirectResponseDictionary 
@@ -48,12 +46,6 @@ namespace KFC.SIT.WebAPI
                 um.CreateUserAccount(userDto);
                 user = um.FindUserByEmail(userDto.Email);
             }
-            Dictionary<string, string> testPayload = new Dictionary<string, string>()
-            {
-                { "a", "1" },
-                { "b", "2" },
-                { "c", "3" }
-            };
             string token = sm.CreateSession(user.Id);
             redirectResponseDictionary["redirectURL"] 
                 = redirectResponseDictionary["redirectURL"] + "?token=" + token;

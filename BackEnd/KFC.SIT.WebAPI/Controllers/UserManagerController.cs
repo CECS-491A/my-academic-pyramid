@@ -78,10 +78,11 @@ namespace KFC.SIT.WebAPI
 
         // DELETE api/<controller>/5
         [HttpDelete]    
-        public void DeleteUser(int id)
+        public IHttpActionResult DeleteUser(int id)
         {
             UserManager umManager = new UserManager();
             umManager.DeleteUserAccount(umManager.FindUserById(id));
+            return Ok();
         }
 
         [HttpOptions]

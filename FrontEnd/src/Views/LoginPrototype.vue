@@ -5,7 +5,7 @@
         <v-textarea
           name="protoTextArea"
           label="Default style"
-          v-bind:value=payloadStr
+          v-model="payloadStr"
           hint="Hint text"
          
         ></v-textarea>
@@ -16,9 +16,7 @@
         <v-textarea
           name="tokenArea"
           label="Default style"
-          v-bind:value=token
-          
-          
+          v-bind:value="token"
         ></v-textarea>
       </v-flex>    
 
@@ -64,7 +62,7 @@ export default {
                        sessionStorage.token = response.data
                        console.log("Session Storage.token = " + sessionStorage.token)
                    })
-                   .catch(err => console.log("There was error. " + err.response.data));
+                   .catch(err => console.log("There was error. " + err.response));
               
             }
             catch(e) {
