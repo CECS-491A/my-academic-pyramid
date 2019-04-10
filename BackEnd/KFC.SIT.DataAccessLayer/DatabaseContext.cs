@@ -20,7 +20,7 @@ namespace DataAccessLayer
 
         public DbSet<MessengerContactHist> MessengerContactHists {get;set;}
 
-        public DatabaseContext () :base ("name=MYAPConnectionString")
+        public DatabaseContext () :base ("name=LocalTest")
         {
             //Database.SetInitializer(new DropCreateDatabaseAlways<DatabaseContext>());
 

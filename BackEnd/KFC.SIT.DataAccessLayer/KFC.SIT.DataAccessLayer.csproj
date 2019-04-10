@@ -146,9 +146,9 @@
     <Compile Include="Logging\OptimizeLogging\NLogger.cs" />
     <Compile Include="Logging\OptimizeLogging\TelemetryFormat.cs" />
     <Compile Include="Logging\Models\Repository\TelemetryLogCollection.cs" />
-    <Compile Include="Migrations\201904070840359_fix.cs" />
-    <Compile Include="Migrations\201904070840359_fix.Designer.cs">
-      <DependentUpon>201904070840359_fix.cs</DependentUpon>
+    <Compile Include="Migrations\201904100316557_First_Migration_Step.cs" />
+    <Compile Include="Migrations\201904100316557_First_Migration_Step.Designer.cs">
+      <DependentUpon>201904100316557_First_Migration_Step.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Catergory.cs" />
@@ -196,8 +196,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201904070840359_fix.resx">
-      <DependentUpon>201904070840359_fix.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201904100316557_First_Migration_Step.resx">
+      <DependentUpon>201904100316557_First_Migration_Step.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
