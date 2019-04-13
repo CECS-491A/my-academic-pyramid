@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer;
+using DataAccessLayer.DTOs;
 using DataAccessLayer.Models.Messenger;
 using ManagerLayer.Gateways.Messenger;
 using ManagerLayer.SignalRHub;
@@ -9,13 +10,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using System.Web.Http.Cors;
 
 namespace KFC.SIT.WebAPI
 {
-    [AllowAnonymous]
+    
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class MessengerController : ApiController
     {
@@ -31,20 +33,34 @@ namespace KFC.SIT.WebAPI
         }
         
         [HttpGet]
-        public IQueryable<Conversation> MessengerWithContact(String receiverUserName)
+        [Route("{receiverUsername}")]
+        public async Task<IQueryable<Conversation>> MessengerWithContact(string receiverUserName)
         {
 
-            List<Conversation> conservations = mg.GetConservationBetweenUser(username, receiverUserName);
+             var conservations = await mg.GetConservationBetweenUser("nguyentrong56@gmail.com", receiverUserName);
 
             return conservations.AsQueryable();
 
         }
 
-        [HttpPost]
+        [HttpGet]
+        [Route("/ChatHistory")]
+        public async Task<IQueryable<MessengerContactHist>> GetChatHistory(string senderUsername)
+        {
+            var chatHistory = await mg.GetAllContactHistory("nguyentrong56@gmail.com");
+            return chatHistory.AsQueryable();
+        }
 
+        [HttpGet]
+        public async Task<IQueryable<MessengerContactHist>> GetAllContactHistory()
+        {
+            var contactList = await mg.GetAllContactHistory("nguyentrong56@gmail.com");
+            return contactList;
+        }
+
+        [HttpPost]
         public HttpStatusCode SendMessage([FromBody] Conversation conservation)
         {
-            conservation.SenderUserName = username;
             conservation.CreatedDate = DateTime.Now;
             mg.SendMessage(conservation);
             var myHub = GlobalHost.ConnectionManager.GetHubContext<MessengerHub>();

@@ -4,14 +4,21 @@ using DataAccessLayer.Models.Messenger;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 
 namespace ServiceLayer.Messenger
 {
     public class MessengerServices
     {
+        protected DatabaseContext _DbContext;
+        public MessengerServices(DatabaseContext DbContext)
+        {
+            _DbContext = DbContext;
+        }
         public List<User>GetAllChatContacts(String currentUsername)
         {
+
             using (var db = new DatabaseContext())
             {
                 return db.Users.Where(u => u.UserName != currentUsername)
@@ -41,6 +48,36 @@ namespace ServiceLayer.Messenger
                 db.Conservations.Add(conversation);
                 db.SaveChanges();
             }
+        }
+
+        public void AddContactHistory(string senderUsername, string receiverUsername)
+        {
+            var newMessengerContactHist = new MessengerContactHist
+            {
+                SenderUserName = senderUsername,
+                ReceiverUserName = receiverUsername,
+                ContactTime = DateTime.Now
+            };
+
+            var existingChatRecord = _DbContext.MessengerContactHists.FirstOrDefault(e => e.ReceiverUserName.Equals(receiverUsername) && e.SenderUserName.Equals(senderUsername));
+            if (existingChatRecord == null)
+            {
+                _DbContext.MessengerContactHists.Add(newMessengerContactHist);
+
+            }
+
+            else
+            {
+                _DbContext.MessengerContactHists.Attach(existingChatRecord);
+                existingChatRecord.ContactTime = DateTime.Now;
+               
+
+            }
+        }
+
+        public Task<IQueryable<MessengerContactHist>> GetAllContactHistory(string senderUsername)
+        {
+            return  Task.FromResult(_DbContext.MessengerContactHists.Where(u => u.SenderUserName.Equals(senderUsername)).AsQueryable());
         }
     }
 }

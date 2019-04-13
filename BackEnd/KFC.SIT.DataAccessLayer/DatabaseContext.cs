@@ -1,4 +1,5 @@
-﻿using DataAccessLayer.Models.Messenger;
+﻿using DataAccessLayer.Models;
+using DataAccessLayer.Models.Messenger;
 using System.Data.Entity;
 
 namespace DataAccessLayer
@@ -12,10 +13,14 @@ namespace DataAccessLayer
 
         public DbSet<UserSession> Sessions { get; set; }
 
+        public DbSet<Catergory> Catergories { get; set; }
+
         //Set of Conservations
         public DbSet<Conversation> Conservations { get; set; }
 
-        public DatabaseContext () :base ("name=MYAPConnectionString")
+        public DbSet<MessengerContactHist> MessengerContactHists {get;set;}
+
+        public DatabaseContext () :base ("name=LocalTest")
         {
             //Database.SetInitializer(new DropCreateDatabaseAlways<DatabaseContext>());
 
@@ -31,9 +36,8 @@ namespace DataAccessLayer
                 .HasForeignKey(p => p.ParentUser_Id);
    
 
-            modelBuilder.Entity<User>().
-                HasMany(c => c.Claims);
-         base.OnModelCreating(modelBuilder);
+
+
 
         }
 

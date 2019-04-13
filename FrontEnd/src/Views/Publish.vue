@@ -29,6 +29,7 @@
             label="Description"
             auto-grow
             v-if="!validation"
+            rows="2"
             /><br />
         <v-text-field
             name="logoUrl"
@@ -38,24 +39,32 @@
             label="Logo Url" 
             v-if="!validation"
             /><br />
+        <v-switch 
+            id="underMaintenance"
+            v-model="underMaintenance"
+            :value=underMaintenance
+            label="Application Under Maintenance"
+            v-if="!validation">
+        </v-switch>
 
         
         <v-alert
             :value="error"
+            id="error"
             type="error"
             transition="scale-transition"
         >
             {{error}}
         </v-alert>
 
-        <div v-if="validation" id="hide">
+        <div v-if="validation" id="publishMessage">
             <h3>Successful Publish!</h3>
+            <p>{{ validation }}</p>
         </div>
-        <p>{{ validation }}</p>
 
         <br />
 
-        <v-btn color="success" v-if="!validation" v-on:click="publish">Publish</v-btn>
+        <v-btn id="btnPublish" color="success" v-if="!validation" v-on:click="publish">Publish</v-btn>
 
         </v-form>
     </div>
@@ -72,6 +81,7 @@ export default {
       title: '',
       description: '',
       logoUrl: '',
+      underMaintenance: false,
       error: ''
     }
   },
@@ -85,12 +95,12 @@ export default {
       if (this.error) return;
 
       const url = 'https://api.kfc-sso.com/api/applications/publish'
-      // const url = 'sso.julianjp.com/api/applications/publish'
       axios.post(url, {
         key: document.getElementById('key').value,
         title: document.getElementById('title').value,
         description: document.getElementById('description').value,
         logoUrl: document.getElementById('logoUrl').value,
+        underMaintenance: document.getElementById('underMaintenance').value,
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
