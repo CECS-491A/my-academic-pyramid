@@ -2,19 +2,6 @@
   <div>
     <v-form>
         <v-container>
-          <v-layout row wrap>
-                <v-flex>
-                    <v-text-field
-                      label="Solo"
-                      placeholder="Username"
-                      solo
-                      v-model="userName"
-                      readonly="true"
-                    ></v-text-field>
-                </v-flex>
-                <v-flex>
-                </v-flex>
-            </v-layout>
             <v-layout row wrap>
                 <v-flex>
                     <v-text-field
@@ -31,20 +18,6 @@
                       solo
                       v-model="lastName"
                     ></v-text-field>
-                </v-flex>
-            </v-layout>
-            <v-layout row wrap>
-                <v-flex>
-                    <v-text-field
-                      label="Solo"
-                      placeholder="Email"
-                      v-model="email"
-                      solo
-                      readonly="true"
-                    ></v-text-field>
-                </v-flex>
-                <v-flex>
-                    
                 </v-flex>
             </v-layout>
             <v-layout row wrap>
@@ -87,6 +60,7 @@
 </template>
 
 <script>
+import Axios from 'axios';
 //import axios from 'axios'
 export default {
   data () {
@@ -110,7 +84,21 @@ export default {
     },
 
     registerUser() {
+        // create a regieter obj 
+        let requestPayload = {
+          headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'token': this.$router.query.token
+          },
+          FirstName: firstName,
+          LastName: lasteName,
+          DateOfBirth: JSON.stringify(dateOfBirth)
+        }
 
+        Axios.post("", requestPayload)
+             .then(response => {console.log("Registration saved.")})
+             .catch(error => {console.log(error)})
     }
   }
 }
