@@ -1,7 +1,7 @@
 ﻿using DataAccessLayer;
 using DataAccessLayer.DTOs;
 using DataAccessLayer.Models;
-using ManagerLayer.UserManagement;
+using WebAPI.UserManagement;
 using ServiceLayer.PasswordChecking.HashFunctions;
 using System;
 using System.Collections.Generic;
@@ -15,8 +15,8 @@ using System.Web.Http.Cors;
 
 namespace KFC.SIT.WebAPI
 {
+
     
-    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class UserManagerController : ApiController
     {
         // GET api/<controller>

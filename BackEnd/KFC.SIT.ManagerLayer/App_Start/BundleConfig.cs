@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using System.Web.Optimization;
 
-namespace ManagerLayer
+namespace WebAPI
 {
     public class BundleConfig
     {

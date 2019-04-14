@@ -1,9 +1,8 @@
 ﻿using DataAccessLayer;
 using DataAccessLayer.DTOs;
 using DataAccessLayer.Models.Messenger;
-using ManagerLayer.Gateways.Messenger;
-using ManagerLayer.SignalRHub;
-using ManagerLayer.UserManagement;
+using WebAPI.Gateways.Messenger;
+using WebAPI.UserManagement;
 using Microsoft.AspNet.SignalR;
 using System;
 using System.Collections.Generic;
@@ -14,11 +13,12 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using System.Web.Http.Cors;
+using WebAPI.Signal;
 
 namespace KFC.SIT.WebAPI
 {
     
-    [EnableCors(origins: "*", headers: "*", methods: "*")]
+    
     public class MessengerController : ApiController
     {
         HttpContext httpContext;
@@ -64,7 +64,7 @@ namespace KFC.SIT.WebAPI
             conservation.CreatedDate = DateTime.Now;
             mg.SendMessage(conservation);
             var myHub = GlobalHost.ConnectionManager.GetHubContext<MessengerHub>();
-            var result = myHub.Clients.All.FetchMessages();
+            var result = myHub.Clients.All.FetchMessages(conservation);
             return HttpStatusCode.OK;
 
 
