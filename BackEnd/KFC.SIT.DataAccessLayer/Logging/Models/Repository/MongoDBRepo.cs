@@ -7,7 +7,7 @@ using MongoDB.Driver;
 
 namespace DataAccessLayer.Logging
 {
-    class MongoDBRepo
+    public class MongoDBRepo
     {
         public MongoClient Client;
         public IMongoDatabase Db;

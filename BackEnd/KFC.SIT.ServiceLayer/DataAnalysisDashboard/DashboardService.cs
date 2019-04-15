@@ -11,7 +11,7 @@ using MongoDB.Bson;
 
 namespace ServiceLayer.DataAnalysisDashboard
 {
-    public class DashboardService
+    public class DashboardService : IDashboardService
     {
         private readonly IMongoCollection<TelemetryLog> Collection;
 
@@ -22,6 +22,11 @@ namespace ServiceLayer.DataAnalysisDashboard
         public DashboardService()
         {
             this.Collection = _repo.Db.GetCollection<TelemetryLog>(_collectionName);
+        }
+
+        public int countUsers()
+        {
+            return 0;
         }
     }
 }
