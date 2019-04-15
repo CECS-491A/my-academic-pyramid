@@ -87,6 +87,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataAnalysisDashboard\DashboardService.cs" />
+    <Compile Include="DataAnalysisDashboard\IDashboardService.cs" />
     <Compile Include="HttpClients\IHttpClient.cs" />
     <Compile Include="Messenger\MessengerServices.cs" />
     <Compile Include="PasswordChecking\HashFunctions\IHashFunction.cs" />

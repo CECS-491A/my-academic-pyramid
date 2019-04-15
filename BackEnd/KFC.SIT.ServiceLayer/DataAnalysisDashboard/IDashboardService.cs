@@ -8,5 +8,6 @@ namespace ServiceLayer.DataAnalysisDashboard
 {
     interface IDashboardService
     {
+
     }
 }
