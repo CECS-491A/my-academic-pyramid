@@ -22,7 +22,7 @@ namespace DataAccessLayer
 
         public DatabaseContext () :base ("name=LocalTest")
         {
-            //Database.SetInitializer(new DropCreateDatabaseAlways<DatabaseContext>());
+            Database.SetInitializer(new DropCreateDatabaseAlways<DatabaseContext>());
 
         }
 

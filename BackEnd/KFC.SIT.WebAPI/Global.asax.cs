@@ -1,4 +1,8 @@
-﻿using System;
+﻿using Microsoft.AspNet.SignalR;
+using Microsoft.Owin;
+using Microsoft.Owin.Builder;
+using Owin;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -11,8 +15,8 @@ namespace KFC.SIT.WebAPI
     {
         protected void Application_Start()
         {
-
             GlobalConfiguration.Configure(WebApiConfig.Register);
+        
 
 
         }

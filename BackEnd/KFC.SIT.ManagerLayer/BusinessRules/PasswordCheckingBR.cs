@@ -1,7 +1,7 @@
-﻿using ManagerLayer.Logic;
+﻿using WebAPI.Logic;
 using System;
 
-namespace ManagerLayer.BusinessRules
+namespace WebAPI.BusinessRules
 {
     public class PasswordCheckingBR
     {

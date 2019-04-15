@@ -11,6 +11,9 @@
     "axios": "^0.18.0",
     "copy-webpack-plugin": "^5.0.1",
     "moment": "^2.24.0",
+    "ms-signalr-client": "^2.2.7",
+    "ms-signalr-client-jquery-3": "^2.2.10",
+    "signalr": "^2.4.1",
     "vee-validate": "^2.2.0",
     "vue": "^2.5.2",
     "vue-axios": "^2.1.4",
@@ -25,7 +28,7 @@
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.5.0",
     "@vue/cli-plugin-eslint": "^3.5.0",
-    "@vue/cli-service": "^3.5.0",
+    "@vue/cli-service": "^3.5.3",
     "babel-eslint": "^10.0.1",
     "cache-loader": "^2.0.1",
     "eslint": "^5.15.3",

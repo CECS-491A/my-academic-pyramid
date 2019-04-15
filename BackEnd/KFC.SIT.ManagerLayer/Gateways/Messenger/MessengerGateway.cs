@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace ManagerLayer.Gateways.Messenger
+namespace WebAPI.Gateways.Messenger
 {
     public class MessengerGateway
     {

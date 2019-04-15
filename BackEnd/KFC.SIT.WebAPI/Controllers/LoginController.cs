@@ -9,7 +9,7 @@ using System.Web.Http;
 using SecurityLayer;
 using DataAccessLayer;
 using DataAccessLayer.DTOs;
-using ManagerLayer.UserManagement;
+using WebAPI.UserManagement;
 
 namespace KFC.SIT.WebAPI
 { 
