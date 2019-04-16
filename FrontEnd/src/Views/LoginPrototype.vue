@@ -59,8 +59,8 @@ export default {
               axios.post(url, temp)
                    .then(response => {
                        this.token = response.data["redirectURL"]
-                       sessionStorage.token = response.data["redirectURL"]
-                       console.log("Session Storage.token = " + sessionStorage.token)
+                       sessionStorage.SITToken = response.data["redirectURL"]
+                       console.log("Session Storage.token = " + sessionStorage.SITToken)
                    })
                    .catch(err => console.log("There was error. " + err.response));
               
@@ -72,11 +72,11 @@ export default {
   },
   
   created() {
-    ;
-    if(!this.$router.query.token) {
-      return;
-    }
-    let parts = this.$router.query.token.split('.');
+    // ;
+    // if(!this.$router.query.token) {
+    //   return;
+    // }
+    // let parts = this.$router.query.token.split('.');
     
   }
 }

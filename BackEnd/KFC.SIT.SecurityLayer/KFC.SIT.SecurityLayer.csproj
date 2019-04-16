@@ -62,6 +62,7 @@
   <ItemGroup>
     <Compile Include="Authorization\AuthorizationManagers\AuthorizationManager.cs" />
     <Compile Include="Authorization\AuthorizationManagers\IAuthorizationManager.cs" />
+    <Compile Include="Authorization\SecurityContext.cs" />
     <Compile Include="Sessions\JWTokenManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

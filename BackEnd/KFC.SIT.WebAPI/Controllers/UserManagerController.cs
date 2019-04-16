@@ -2,6 +2,7 @@
 using DataAccessLayer.DTOs;
 using DataAccessLayer.Models;
 using ManagerLayer.UserManagement;
+using SecurityLayer.Sessions;
 using ServiceLayer.PasswordChecking.HashFunctions;
 using System;
 using System.Collections.Generic;
@@ -76,12 +77,12 @@ namespace KFC.SIT.WebAPI
             return Ok(umManager.UpdateUserAccount(foundUser));
         }
 
-        // DELETE api/<controller>/5
+        // DELETE api/<controller>
         [HttpDelete]    
-        public IHttpActionResult DeleteUser(int id)
+        public IHttpActionResult DeleteUser(SSOPayload ssoPayload)
         {
-            UserManager umManager = new UserManager();
-            umManager.DeleteUserAccount(umManager.FindUserById(id));
+            //UserManager umManager = new UserManager();
+            //umManager.DeleteUserAccount(umManager.FindUserById(id));
             return Ok();
         }
 

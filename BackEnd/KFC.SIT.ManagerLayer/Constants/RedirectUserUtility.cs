@@ -20,7 +20,7 @@ namespace ManagerLayer.Constants
                     destinationUrl = "sioj";
                     break;
                 case "NewUser":
-                    destinationUrl = "https://myacademicpyramid/#/Registration";
+                    destinationUrl = "https://myacademicpyramid/#/UserRegistration";
                     break;
             }
             return destinationUrl;

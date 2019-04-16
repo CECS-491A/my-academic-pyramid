@@ -13,32 +13,27 @@ namespace SecurityLayer.Authorization.AuthorizationManagers
     /// Checks the existence of the user and privileges of the user.  
     /// An instance of AuthorizationManager will be created for every request from the user by Controller.
     /// </summary>
-    public class AuthorizationManager : IAuthorizationManager
+    public class AuthorizationManager
     {
 
-        private User authorizedUser;
-        /// <summary>
-        /// Default constructor
-        /// </summary>
-        public AuthorizationManager()
-        {
+        SecurityContext context;
 
-        }
+        
 
         /// <summary>
         /// Constructor of AuthorizationManager.
         /// Takes in user as a parameter and save the value.
         /// It would throw an exception, if the user is null
         /// </summary>
-        /// <param name="user"></param>
-        public AuthorizationManager(User user)
+        /// <param name="context"></param>
+        public AuthorizationManager(SecurityContext context)
         {
-            if (user == null)
+            if (context == null)
             {
-                throw new ArgumentNullException("user", "User cannot be null.");
+                throw new ArgumentNullException("SecurityContext", "context cannot be null.");
             }
 
-            authorizedUser = user;
+            this.context = context;
         }
 
 
@@ -58,12 +53,14 @@ namespace SecurityLayer.Authorization.AuthorizationManagers
                 );
             }
 
+            
+
             // Checks if each required claim exists in user's claim list
             return requiredClaims.All(rc =>
             {
                 // body of lambda function
                 // looks for a uc (user claim) that matches rc (required claim)
-                Claim foundClaim = authorizedUser.Claims.ToList().Find(
+                Claim foundClaim = context.Claims.ToList().Find(
                     uc => uc.Value.Equals(rc.Value)
                 );
                 // If claim not found, then foundClaim will be null.

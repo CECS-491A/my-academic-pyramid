@@ -52,7 +52,7 @@ namespace KFC.SIT.WebAPI
                 {"redirectURL", RedirectUserUtility.GetUrlAddress(user.Catergory.Value) }
             };
             redirectResponseDictionary["redirectURL"] 
-                = redirectResponseDictionary["redirectURL"] + "?token=" + token;
+                = redirectResponseDictionary["redirectURL"] + "?SITtoken=" + token;
             return Request.CreateResponse(HttpStatusCode.OK, redirectResponseDictionary);
             
         }
