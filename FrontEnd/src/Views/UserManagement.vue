@@ -111,11 +111,11 @@ export default {
       this.fetchUsers();
     });
   },
-  watch: {
-    $route: "fetchUsers",
-    response: "fetchUsers",
-    users: "fetchUsers"
-  },
+  // watch: {
+  //   $route: "fetchUsers",
+  //   response: "fetchUsers",
+  //   users: "fetchUsers"
+  // },
   methods: {
     handleUpdate() {
       this.em;

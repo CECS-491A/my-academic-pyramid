@@ -49,9 +49,12 @@
             async createMessage () {
                 if (this.conversation.messageContent) {
                     await this.axios({
+                        headers:{
+                        'Authorization': 'test'
+                        },
 						method: "POST",
 						crossDomain: true,
-						url: this.$hostname + "messenger" ,
+						url: this.$hostname + "messenger/SendMessage" ,
 						data: this.conversation
                     })
                     

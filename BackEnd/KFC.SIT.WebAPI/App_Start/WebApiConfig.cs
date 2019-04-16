@@ -16,27 +16,15 @@ namespace KFC.SIT.WebAPI
         {
             // Web API configuration and services
 
-            var cors = new EnableCorsAttribute("*", "*", "*");
-            config.EnableCors(cors);
 
-            IAppBuilder app = new AppBuilder();
-
-            app.Map("/signalr", map =>
-            {
-                
-                var hubConfiguration = new HubConfiguration
-                {
-                    EnableDetailedErrors = true
-                };
-
-                map.RunSignalR(hubConfiguration);
-            });
-
+          
+           
+           
             // Web API routes
             //config.MapHttpAttributeRoutes();
 
             config.Routes.MapHttpRoute(
-                name: "DefaultApi",
+                name: "ActionApi",
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
@@ -49,8 +37,6 @@ namespace KFC.SIT.WebAPI
             //    routetemplate: "signalr/{hub}/{id",
             //    defaults: new { id = routeparameter.optional }
             //);
-
-
 
 
 

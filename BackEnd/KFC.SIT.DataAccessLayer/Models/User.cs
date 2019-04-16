@@ -12,6 +12,7 @@ using DataAccessLayer.Repository;
 using System;
 using System.Collections.Generic;
 using DataAccessLayer.Models;
+using DataAccessLayer.Models.Messenger;
 
 namespace DataAccessLayer
 {    
@@ -58,6 +59,8 @@ namespace DataAccessLayer
         public virtual ICollection<Claim> Claims { get; set; }
 
         public virtual ICollection<UserSession> userSessions { get; set; }
+
+        public virtual ICollection<FriendRelationship> FriendRelationship { get; set; }
 
         /// <summary>
         /// Override Equals method.  The UserName of each User is unique.

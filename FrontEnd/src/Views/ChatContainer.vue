@@ -60,6 +60,8 @@
 
 <script>
 import chat from "@/components/Messenger/Chat"
+
+    import {hubConnection} from 'signalr-no-jquery'
   export default {
     components:{
       chat
@@ -69,18 +71,31 @@ import chat from "@/components/Messenger/Chat"
         drawer: true,
         chatHistory: [],
         right: null,
-        
+        connection:"",
+        hubProxy:""
       }
     },
     created(){
       this.loadContactHistory()
+       this.connection = hubConnection("http://localhost:59364");
+          this.connection.qs = "jwt=nguyentrong56@gmail.com";
+           
+           this.hubProxy = this.connection.createHubProxy("MessengerHub");
+
+            this.hubProxy.on('FetchMessages', ()=> {
+              this.loadMessageWithContact ("Admin@gmail.com")  
+            });
+
+           this.connection.start()
+           .done(function(){ console.log('Now connected, connection ID=' + this.connection.id); })
+           .fail(function(){ console.log('Could not connect'); });
     },
     methods: {
       async loadContactHistory(){
         await this.axios({
                         method: "GET",
                         crossDomain: true,
-						url: this.$hostname + "messenger/chathistory" ,
+						url: this.$hostname + "messenger/GetContactHistory" ,
 						
                     })
                     .then(response => {
