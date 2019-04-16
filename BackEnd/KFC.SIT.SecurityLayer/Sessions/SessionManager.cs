@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using ServiceLayer.UserManagement.UserAccountServices;
 using SecurityLayer.utility;
 using System.Security.Cryptography;
+using Newtonsoft.Json;
 
 namespace SecurityLayer.Sessions
 {
@@ -171,6 +172,9 @@ namespace SecurityLayer.Sessions
                 );
             }
             payload["username"] = user.UserName;
+            List<Claim> claims = user.Claims.ToList();
+            string claimsJson = JsonConvert.SerializeObject(claims);
+            payload["claims"] = claimsJson;
             return payload;
         }
 

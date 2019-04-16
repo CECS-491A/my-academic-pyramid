@@ -53,7 +53,7 @@
             </v-flex>
           </v-layout>
 
-          <v-btn color="primary">Primary</v-btn>
+          <v-btn @click="registerUser" color="primary">Complete Registration</v-btn>
         </v-container>
     </v-form>
   </div>
@@ -63,6 +63,7 @@
 import Axios from 'axios';
 //import axios from 'axios'
 export default {
+  name: "UserRegistration",
   data () {
     return {
       firstName: "",
@@ -86,17 +87,19 @@ export default {
     registerUser() {
         // create a regieter obj 
         let requestPayload = {
+          FirstName: this.firstName,
+          LastName: this.lastName,
+          DateOfBirth: JSON.stringify(this.dateOfBirth)
+        }
+        let headersObject = {
           headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-          'token': this.$router.query.token
-          },
-          FirstName: firstName,
-          LastName: lasteName,
-          DateOfBirth: JSON.stringify(dateOfBirth)
+          'Authorization': 'Bearer ' + this.$route.query.SITtoken
+          }
         }
-
-        Axios.post("", requestPayload)
+        let urlRegistration = "http://localhost:59364/api/Registration"
+        Axios.post(urlRegistration, requestPayload, headersObject)
              .then(response => {console.log("Registration saved.")})
              .catch(error => {console.log(error)})
     }
