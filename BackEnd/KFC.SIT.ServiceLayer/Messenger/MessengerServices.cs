@@ -41,6 +41,20 @@ namespace ServiceLayer.Messenger
             }
         }
 
+        public Conversation GetLatestMessageBetweenContact(string senderUserName, string receiverUserName)
+        {
+            using (var db = new DatabaseContext())
+            {
+
+                return db.Conservations.
+                              Where(c => ((c.ReceiverUserName == receiverUserName
+                                  && c.SenderUserName == senderUserName) ||
+                                  (c.ReceiverUserName == senderUserName
+                                  && c.SenderUserName == receiverUserName))
+                                  && c.CreatedDate == db.Conservations.Max(m => m.CreatedDate)).FirstOrDefault();
+            }
+        }
+
         public void SendMessage(Conversation conversation)
         {
 
@@ -49,6 +63,11 @@ namespace ServiceLayer.Messenger
                 db.Conservations.Add(conversation);
                 db.SaveChanges();
             }
+        }
+
+        public IEnumerable<ChatConnectionMapping> GetConnectionIdWithUserName(string username)
+        {
+            return _DbContext.ChatConnectionMappings.Where(c => c.Username.Equals(username)).AsEnumerable();
         }
 
         public void AddContactHistory(string senderUsername, string receiverUsername)
@@ -76,9 +95,9 @@ namespace ServiceLayer.Messenger
             }
         }
 
-        public Task<IQueryable<MessengerContactHist>> GetAllContactHistory(string senderUsername)
+        public IQueryable<MessengerContactHist> GetAllContactHistory(string senderUsername)
         {
-            return  Task.FromResult(_DbContext.MessengerContactHists.Where(u => u.SenderUserName.Equals(senderUsername)).AsQueryable());
+            return  _DbContext.MessengerContactHists.Where(u => u.SenderUserName.Equals(senderUsername)).AsQueryable();
         }
 
         public bool IsFriend(User addingUser, User addedUser)
@@ -109,6 +128,7 @@ namespace ServiceLayer.Messenger
                     var fr = new FriendRelationship
                     {
                         friendId = addedUser.Id,
+                        friendUsername = addedUser.UserName,
                         UserOfRelationship = addingUser
                     };
                     addingUser.FriendRelationship.Add(fr);
@@ -125,11 +145,23 @@ namespace ServiceLayer.Messenger
             {
                 throw new ArgumentNullException("Added User does not exist to be add");
             }
+        }
 
-        
+        public IEnumerable<FriendRelationship> GetAllFriendRelationship(string username)
+        {
+            
+            var user = _DbContext.Users.Where(u => u.UserName.Equals(username)).Single();
 
-         
+            if (user != null)
+            {
+                return  user.FriendRelationship.AsEnumerable();
+            }
 
+            else
+            {
+                throw new ArgumentNullException("User does not exist to retrieve a friendlist");
+            }
+            
         }
     }
 }

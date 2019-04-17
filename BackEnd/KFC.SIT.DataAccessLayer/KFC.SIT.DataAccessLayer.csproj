@@ -65,6 +65,18 @@
     <Reference Include="MailKit, Version=2.1.0.0, Culture=neutral, PublicKeyToken=4e064fe7c44a8f1b, processorArchitecture=MSIL">
       <HintPath>..\packages\MailKit.2.1.4\lib\net45\MailKit.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.IdentityModel.JsonWebTokens, Version=5.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.JsonWebTokens.5.4.0\lib\net461\Microsoft.IdentityModel.JsonWebTokens.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Logging, Version=5.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Logging.5.4.0\lib\net461\Microsoft.IdentityModel.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Tokens, Version=5.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Tokens.5.4.0\lib\net461\Microsoft.IdentityModel.Tokens.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
     <Reference Include="MimeKit, Version=2.1.0.0, Culture=neutral, PublicKeyToken=bede1c8a46c66814, processorArchitecture=MSIL">
       <HintPath>..\packages\MimeKit.2.1.4\lib\net45\MimeKit.dll</HintPath>
     </Reference>
@@ -84,25 +96,13 @@
       <HintPath>..\packages\NLog.4.6.2\lib\net45\NLog.dll</HintPath>
     </Reference>
     <Reference Include="NLog.MailKit, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.MailKit.3.0.1\lib\net45\NLog.MailKit.dll</HintPath>
+      <HintPath>..\packages\NLog.MailKit.3.0.2\lib\net45\NLog.MailKit.dll</HintPath>
     </Reference>
     <Reference Include="NLog.Mongo, Version=4.6.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\NLog.Mongo.4.6.0.68\lib\net45\NLog.Mongo.dll</HintPath>
     </Reference>
     <Reference Include="NLog.Web, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\packages\NLog.Web.4.8.1\lib\net35\NLog.Web.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.IdentityModel.JsonWebTokens, Version=5.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.IdentityModel.JsonWebTokens.5.4.0\lib\net461\Microsoft.IdentityModel.JsonWebTokens.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.IdentityModel.Logging, Version=5.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.IdentityModel.Logging.5.4.0\lib\net461\Microsoft.IdentityModel.Logging.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.IdentityModel.Tokens, Version=5.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.IdentityModel.Tokens.5.4.0\lib\net461\Microsoft.IdentityModel.Tokens.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
     <Reference Include="NMemory, Version=3.0.0.0, Culture=neutral, PublicKeyToken=afc61983f100d280, processorArchitecture=MSIL">
       <HintPath>..\packages\NMemory.3.0.0\lib\net45\NMemory.dll</HintPath>
@@ -114,10 +114,10 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.IO.Compression" />
     <Reference Include="System.IdentityModel.Tokens.Jwt, Version=5.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\System.IdentityModel.Tokens.Jwt.5.4.0\lib\net461\System.IdentityModel.Tokens.Jwt.dll</HintPath>
     </Reference>
+    <Reference Include="System.IO.Compression" />
     <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Runtime.InteropServices.RuntimeInformation.4.3.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
       <Private>True</Private>
@@ -136,6 +136,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DTOs\FriendContactDTO.cs" />
     <Compile Include="DTOs\UserDTO.cs" />
     <Compile Include="IEntity.cs" />
     <Compile Include="Logging\OptimizeLogging\ErrorFormat.cs" />
@@ -180,6 +181,14 @@
     <Compile Include="Migrations\201904150633056_AddConnectionMappingfix5.Designer.cs">
       <DependentUpon>201904150633056_AddConnectionMappingfix5.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201904162054590_ChangePrimaryKeyConnnectionMappingClass.cs" />
+    <Compile Include="Migrations\201904162054590_ChangePrimaryKeyConnnectionMappingClass.Designer.cs">
+      <DependentUpon>201904162054590_ChangePrimaryKeyConnnectionMappingClass.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904170349442_changeFriendRelationshipclass.cs" />
+    <Compile Include="Migrations\201904170349442_changeFriendRelationshipclass.Designer.cs">
+      <DependentUpon>201904170349442_changeFriendRelationshipclass.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Catergory.cs" />
     <Compile Include="Models\Claim.cs" />
@@ -214,10 +223,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include=".gitignore" />
-    <None Include="api\.gitignore" />
     <None Include="api\index.md" />
     <None Include="App.config" />
+    <Content Include=".gitignore" />
+    <Content Include="api\.gitignore" />
     <Content Include="NLog.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
@@ -229,7 +238,6 @@
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="packages.config" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -259,6 +267,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201904150633056_AddConnectionMappingfix5.resx">
       <DependentUpon>201904150633056_AddConnectionMappingfix5.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904162054590_ChangePrimaryKeyConnnectionMappingClass.resx">
+      <DependentUpon>201904162054590_ChangePrimaryKeyConnnectionMappingClass.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904170349442_changeFriendRelationshipclass.resx">
+      <DependentUpon>201904170349442_changeFriendRelationshipclass.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -10,12 +10,14 @@ using System.Web.Http;
 using System.Web.Http.Cors;
 using WebAPI.Signal;
 using System.Net.Http;
+using DataAccessLayer.DTOs;
+using System.Collections.Generic;
 
 namespace KFC.SIT.WebAPI
 {
 
     [EnableCors(origins: "*", headers: "*", methods: "*")]
-    
+ 
     public class MessengerController : ApiController
     {
         HttpContext httpContext;
@@ -30,31 +32,40 @@ namespace KFC.SIT.WebAPI
         }
 
         [HttpGet]
-        [Route("/LoadMessageContact")]
-        //[ActionName("LoadMessageContact")]
-        //[Route("api/Messenger/LoadMessageContact/{receiverUserName}")]
-        public async Task<IQueryable<Conversation>> MessengerWithContact(string receiverUserName)
+        [ActionName("LoadMessageContact")]
+        public IQueryable<Conversation> MessengerWithContact(string receiverUserName)
         {
 
-            var conservations = await messengerManager.GetConservationBetweenUser("nguyentrong56@gmail.com", receiverUserName);
+            var conservations =  messengerManager.GetConservationBetweenUser("nguyentrong56@gmail.com", receiverUserName);
 
             return conservations.AsQueryable();
+
+        }
+
+        [HttpGet]
+        [ActionName("LoadLatestMessageContact")]
+        public async Task<Conversation> GetLatestMessageWithContact(string receiverUserName2)
+        {
+
+            var conservations = await messengerManager.GetLatestMessageBetweenUser("nguyentrong56@gmail.com", receiverUserName2);
+
+            return conservations;
 
         }
 
 
 
         [HttpGet]
-        [Route("/GetContactHistory")]
+        [ActionName("GetContactHistory")]
         //[ActionName("GetContactHistory")]
-        public async Task<IQueryable<MessengerContactHist>> GetAllContactHistory()
+        public IQueryable<MessengerContactHist> GetAllContactHistory()
         {
-            var contactList = await messengerManager.GetAllContactHistory("nguyentrong56@gmail.com");
+            var contactList =  messengerManager.GetAllContactHistory("nguyentrong56@gmail.com");
             return contactList;
         }
 
         [HttpPost]
-        [Route("/SendMessage")]
+        [ActionName("SendMessage")]
         //[ActionName("SendMessage")]
         public HttpStatusCode SendMessage([FromBody] Conversation conservation)
         {
@@ -62,8 +73,18 @@ namespace KFC.SIT.WebAPI
             messengerManager.SendMessage(conservation);
             var myHub = GlobalHost.ConnectionManager.GetHubContext<MessengerHub>();
             MessengerHub mHub = new MessengerHub();
-            var connectionId = mHub.GetConnectionString(conservation.SenderUserName);
-            var result = myHub.Clients.Client(connectionId).FetchMessages(conservation.SenderUserName, conservation.ReceiverUserName);
+
+
+            var connectionIDList =  messengerManager.GetConnectionIdWithUserName(conservation.SenderUserName);
+            {
+                foreach(ChatConnectionMapping cM in connectionIDList)
+                {
+                    var result = myHub.Clients.Client(cM.ConnectionId).FetchMessages(conservation.SenderUserName, conservation.ReceiverUserName);
+
+                }
+            }
+            //var result = myHub.Clients.All.FetchMessages(conservation.SenderUserName, conservation.ReceiverUserName);
+
             return HttpStatusCode.OK;
 
 
@@ -71,13 +92,14 @@ namespace KFC.SIT.WebAPI
 
         [HttpPost]
         [ActionName("AddFriend")]
-        public HttpResponseMessage AddFriendContactList(int addedUserId)
+        public HttpResponseMessage AddFriendContactList(string addedUsername)
         {
-            int addingUserId = 1;
+            int addingUserId = 2;
 
             try
             {
-                messengerManager.AddUserFriendList(addingUserId, addedUserId);
+                
+                messengerManager.AddUserFriendList(addingUserId, addedUsername);
                 return Request.CreateResponse(HttpStatusCode.OK, "The User was added to friendlist");
             }
 
@@ -97,5 +119,44 @@ namespace KFC.SIT.WebAPI
             }
             return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, "Unknow error");
         }
+
+        [HttpGet]
+        [ActionName("GetFriendList")]
+        public  HttpResponseMessage GetFriendList()
+        {
+            //This is just for test. Remove when token implemenation is finished 
+            string username = "nguyentrong56@gmail.com";
+
+            try
+            {
+                var friendList = messengerManager.GetFriendRelationships(username);
+                List <FriendContactDTO> friendListDTO = new List<FriendContactDTO>();
+
+                foreach(FriendRelationship friend in friendList)
+                {
+                    friendListDTO.Add(new FriendContactDTO
+                    {
+                        FriendUsername = friend.friendUsername
+
+                    });
+                }
+
+
+                
+                return Request.CreateResponse(HttpStatusCode.OK, friendListDTO);
+            }
+
+            catch(Exception exception)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Friendlist is not avalaible to retrieve");
+            }
+            
+
+            
+
+
+        }
+
+
     }
 }

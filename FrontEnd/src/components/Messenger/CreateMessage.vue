@@ -44,6 +44,7 @@
             this.$eventBus.$on("LoadMessageContact",receiverUsername =>{
                 this.conversation.receiverUsername = receiverUsername
             })
+           
         },
         methods: {
             async createMessage () {

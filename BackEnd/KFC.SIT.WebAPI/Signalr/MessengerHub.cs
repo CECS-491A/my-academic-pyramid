@@ -13,6 +13,7 @@ namespace WebAPI.Signal
         private readonly static ChatConnectionMapping<string> _connections =
             new ChatConnectionMapping<string>();
 
+
         
         public async Task Send(string message)
         {
@@ -29,10 +30,10 @@ namespace WebAPI.Signal
         {
             string token = Context.QueryString["jwt"];
             //_connections.Add(token, Context.ConnectionId);
-
+            
             using (var db = new DatabaseContext())
             {
-                var connection = db.ChatConnectionMappings.Find(token);
+                var connection = db.ChatConnectionMappings.Find(Context.ConnectionId);
                 if(connection == null)
                 {
                     ChatConnectionMapping newConnection = new ChatConnectionMapping
@@ -41,14 +42,6 @@ namespace WebAPI.Signal
                         ConnectionId = Context.ConnectionId
                     };
                     db.ChatConnectionMappings.Add(newConnection);
-                }
-                else
-                {
-                    if(Context.ConnectionId != connection.ConnectionId)
-                    {
-                        connection.ConnectionId = Context.ConnectionId;
-                        db.Entry(connection).State = System.Data.Entity.EntityState.Modified;
-                    }
                 }
 
                 db.SaveChanges();
@@ -63,7 +56,7 @@ namespace WebAPI.Signal
             //_connections.Remove(token, Context.ConnectionId);
             using (var db = new DatabaseContext())
             {
-                var connection = db.ChatConnectionMappings.Find(token);
+                var connection = db.ChatConnectionMappings.Find(Context.ConnectionId);
                 if (connection != null)
                 {
                     db.ChatConnectionMappings.Remove(connection);
@@ -74,32 +67,28 @@ namespace WebAPI.Signal
             return base.OnDisconnected(stopCalled);
         }
 
-        public override Task OnReconnected()
-        {
-            string token = Context.QueryString["jwt"];
+        //public override Task OnReconnected()
+        //{
+        //    string token = Context.QueryString["jwt"];
 
-            using (var db = new DatabaseContext())
-            {
-                var connection = db.ChatConnectionMappings.Find(token);
-                if (connection == null)
-                {
-                    ChatConnectionMapping newConnection = new ChatConnectionMapping
-                    {
-                        Username = token,
-                        ConnectionId = Context.ConnectionId
-                    };
-                    db.ChatConnectionMappings.Add(newConnection);
-                }
-                else
-                {
-                    connection.ConnectionId = Context.ConnectionId;
+        //    using (var db = new DatabaseContext())
+        //    {
+        //        var connection = db.ChatConnectionMappings.Find(token);
+        //        if (connection == null)
+        //        {
+        //            ChatConnectionMapping newConnection = new ChatConnectionMapping
+        //            {
+        //                Username = token,
+        //                ConnectionId = Context.ConnectionId
+        //            };
+        //            db.ChatConnectionMappings.Add(newConnection);
+        //            db.SaveChanges();
+        //        }
+                
+        //    }
 
-                }
-                db.SaveChanges();
-            }
-
-            return base.OnReconnected();
-        }
+        //    return base.OnReconnected();
+        //}
 
         public string GetConnectionString(string username)
         {

@@ -21,6 +21,17 @@
               <v-list-tile-title>Chat APP</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
+           <v-btn
+              fab
+              small
+              color="red"
+              bottom
+              left
+              absolute
+              @click="chatDialog = !chatDialog"
+            >
+              <v-icon>add</v-icon>
+            </v-btn>
         </v-list>
       </v-toolbar>
 
@@ -29,8 +40,10 @@
 
         <v-list-tile
           v-for="item in chatHistory"
+        
           :key="item.ReceiverUsername"
           @click="loadMessageWithContact(item.ReceiverUserName)"
+
         >
           <v-list-tile-action>
             <v-icon>{{ item.icon }}</v-icon>
@@ -43,13 +56,35 @@
       </v-list>
     </v-navigation-drawer>
   </v-card>
+  <friendList></friendList>
       </v-flex>
               <v-flex
           xs12
           md6
         >
-        <v-card class="elevation-12" color="primary lighten-2">
+        <v-card class="elevation-12">
           <chat> </chat>
+
+           <v-dialog v-model="chatDialog" max-width="500px">
+            <v-card>
+              <v-card-text>
+                <v-text-field 
+                label="Recipient Username"
+                v-model="conversation.receiverUsername"
+                ></v-text-field>
+                <v-text-field 
+                label="Message"
+                v-model="conversation.messageContent"
+                ></v-text-field>
+                <small class="grey--text">* This doesn't actually save.</small>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn flat color="primary" @click="sendMessageWithNewContact">Submit</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+          
         </v-card>
               </v-flex>
     </v-layout>
@@ -60,35 +95,37 @@
 
 <script>
 import chat from "@/components/Messenger/Chat"
+import friendList from"@/components/Messenger/FriendList"
 
     import {hubConnection} from 'signalr-no-jquery'
   export default {
     components:{
-      chat
+      chat,
+      friendList
     },
     data () {
       return {
         drawer: true,
         chatHistory: [],
         right: null,
-        connection:"",
-        hubProxy:""
+        chatDialog: false,
+        conversation:{
+					senderUsername: "nguyentrong56@gmail.com",
+					receiverUsername: "",
+					messageContent:""
+        },
+ 
+        errorText: null
+        
       }
     },
     created(){
-      this.loadContactHistory()
-       this.connection = hubConnection("http://localhost:59364");
-          this.connection.qs = "jwt=nguyentrong56@gmail.com";
-           
-           this.hubProxy = this.connection.createHubProxy("MessengerHub");
-
-            this.hubProxy.on('FetchMessages', ()=> {
-              this.loadMessageWithContact ("Admin@gmail.com")  
-            });
-
-           this.connection.start()
-           .done(function(){ console.log('Now connected, connection ID=' + this.connection.id); })
-           .fail(function(){ console.log('Could not connect'); });
+      this.loadContactHistory(),
+      this.$eventBus.$on("SendMessageFromFriendList",receiverUsername =>{
+        this.conversation.receiverUsername = receiverUsername,
+        this.conversation.messageContent=""
+        this.chatDialog = true
+      })
     },
     methods: {
       async loadContactHistory(){
@@ -108,7 +145,34 @@ import chat from "@/components/Messenger/Chat"
       },
     loadMessageWithContact(receiverUsername){
       this.$eventBus.$emit("LoadMessageContact", receiverUsername)
+    },
+
+    async sendMessageWithNewContact()
+    {
+      if (this.conversation.messageContent) {
+                    await this.axios({
+                       
+						method: "POST",
+						crossDomain: true,
+						url: this.$hostname + "messenger/SendMessage" ,
+						data: this.conversation
+                    })
+                    
+					.catch(err => {
+                        /* eslint no-console: "off" */
+                        console.log(err);
+                    });
+                    this.conversation.initialMessage = null;
+                    this.errorText = null;
+                    this.chatDialog = false;
+                    this.loadContactHistory();
+                    this.$eventBus.$emit("LoadMessageContact", this.conversation.receiverUsername)
+                } else {
+                    this.errorText = "A message must be entered!"
+                }
     }
+
+
     }
   
 

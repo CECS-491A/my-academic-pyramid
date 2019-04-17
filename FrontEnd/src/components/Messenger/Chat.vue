@@ -50,22 +50,25 @@
         },
         created() {
             this.loadMessage(),
+          
           this.$eventBus.$on("LoadMessageContact",receiverUsername =>{
                 this.selectedUsername = receiverUsername
                 this.loadMessage(receiverUsername)
             });
-           this.connection = hubConnection("http://localhost:59364");
-          this.connection.qs = "jwt="+sessionStorage.token;
+
+             this.connection = hubConnection("http://localhost:59364");
+          this.connection.qs = "jwt=nguyentrong56@gmail.com";
            console.log(sessionStorage.token);
            this.hubProxy = this.connection.createHubProxy("MessengerHub");
 
             this.hubProxy.on('FetchMessages', ()=> {
-              this.loadMessage (this.selectedUsername)  
+              this.loadLatestMessage (this.selectedUsername)  
             });
 
             this.connection.start()
            .done(function(){ console.log('Now connected, connection ID=' + this.connection.id); })
            .fail(function(){ console.log('Could not connect'); });
+       
 
             
         },
@@ -88,6 +91,22 @@
                     })
                     .then(response => {
                         this.messages = response.data;
+                    })
+                    .catch(err => {
+                        /* eslint no-console: "off" */
+                        console.log(err);
+                    });
+                
+
+            },
+            async loadLatestMessage(receiverUsername){
+                    await this.axios({
+                        method: "GET",
+                        crossDomain: true,
+						url: this.$hostname + "messenger/LoadLatestMessageContact?receiverUsername2=" + receiverUsername,	
+                    })
+                    .then(response => {
+                        this.messages.push(response.data);
                     })
                     .catch(err => {
                         /* eslint no-console: "off" */

@@ -11,8 +11,10 @@ namespace DataAccessLayer.Models.Messenger
     public class ChatConnectionMapping 
     {
        
-        [Key]
+        
         public string Username { set; get; }
+
+        [Key]
         public string ConnectionId { get; set; }
 
        

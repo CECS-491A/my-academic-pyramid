@@ -21,10 +21,16 @@ namespace WebAPI.Gateways.Messenger
             msServices = new MessengerServices(DbContext);
             umServices = new UserManagementServices(DbContext);
         }
-        public Task<List<Conversation>> GetConservationBetweenUser(String senderUserName, String receiverUserName)
+        public List<Conversation> GetConservationBetweenUser(String senderUserName, String receiverUserName)
         {
             
-            return Task.FromResult(msServices.GetAllConservationBetweenContact(senderUserName, receiverUserName));
+            return msServices.GetAllConservationBetweenContact(senderUserName, receiverUserName);
+        }
+
+        public Task<Conversation> GetLatestMessageBetweenUser(String senderUserName, String receiverUserName)
+        {
+
+            return Task.FromResult(msServices.GetLatestMessageBetweenContact(senderUserName, receiverUserName));
         }
 
         public void SendMessage(Conversation conversation)
@@ -35,16 +41,21 @@ namespace WebAPI.Gateways.Messenger
 
         }
 
-        public Task<IQueryable<MessengerContactHist>> GetAllContactHistory(string senderUsername)
+        public IEnumerable<ChatConnectionMapping> GetConnectionIdWithUserName(string username)
+        {
+            return msServices.GetConnectionIdWithUserName(username);
+        }
+
+        public IQueryable<MessengerContactHist> GetAllContactHistory(string senderUsername)
         {
             return msServices.GetAllContactHistory(senderUsername);
         }
 
-        public User AddUserFriendList(int addingUserId, int addedUserId)
+        public User AddUserFriendList(int addingUserId, string addedUsername)
         {
             var addingUserObj = umServices.FindById(addingUserId);
-            var addedUserObj = umServices.FindById(addedUserId);
-
+            var addedUserObj = umServices.FindByUsername(addedUsername);
+            
             try
             {
                 msServices.AddContactFriendList(addingUserObj, addedUserObj);
@@ -57,6 +68,19 @@ namespace WebAPI.Gateways.Messenger
                 throw exception;
             }
            
+        }
+
+        public IEnumerable<FriendRelationship>GetFriendRelationships(string username)
+        {
+            try
+            {
+                return msServices.GetAllFriendRelationship(username);
+            }
+
+            catch (Exception exception)
+            {
+                throw exception;
+            }
         }
     }
 }

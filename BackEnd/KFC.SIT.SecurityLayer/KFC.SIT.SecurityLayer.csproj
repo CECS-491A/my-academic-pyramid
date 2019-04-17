@@ -70,8 +70,6 @@
     <Compile Include="SessionServices.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include=".gitignore" />
-    <None Include="api\.gitignore" />
     <None Include="api\index.md" />
     <None Include="App.config">
       <SubType>Designer</SubType>
@@ -92,6 +90,10 @@
       <Project>{2A875510-9D8C-482F-99FD-19001548F681}</Project>
       <Name>KFC.SIT.ServiceLayer</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include=".gitignore" />
+    <Content Include="api\.gitignore" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\docfx.console.2.41.0\build\docfx.console.targets" Condition="Exists('..\packages\docfx.console.2.41.0\build\docfx.console.targets')" />
