@@ -38,7 +38,7 @@ namespace ServiceLayer.DataAnalysisDashboard
             DateTime startDate = new DateTime(year, month, 0);
             int numOfDays = DateTime.DaysInMonth(year, month);
             DateTime endDate = new DateTime(year, month, numOfDays);
-            long queryResult = Collection.AsQueryable<TelemetryLog>().ToList();
+            long queryResult = Collection.AsQueryable<TelemetryLog>().Count(u => user.);
             return queryResult;
         }
 
@@ -53,7 +53,7 @@ namespace ServiceLayer.DataAnalysisDashboard
             var builder = Builders<BsonDocument>.Filter;
             DateTime time = DateTime.Now;
             int value = time.Second;
-            long queryResult = Collection.CountDocuments(i => i.Date. > "30");
+            long queryResult = Collection.CountDocuments(new BsonDocument { { "Action", "something"}} );
             return queryResult;
         }
 
