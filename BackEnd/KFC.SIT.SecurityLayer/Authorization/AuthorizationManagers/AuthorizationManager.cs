@@ -44,7 +44,7 @@ namespace SecurityLayer.Authorization.AuthorizationManagers
         /// </summary>
         /// <param name="requiredClaims"></param> required claim(s) to get a permission to use the feature
         /// <returns> true/false </returns>
-        public bool CheckClaims(List<Claim> requiredClaims)
+        public bool CheckClaims(List<string> requiredClaims)
         {
             if (requiredClaims == null)
             {
@@ -60,8 +60,8 @@ namespace SecurityLayer.Authorization.AuthorizationManagers
             {
                 // body of lambda function
                 // looks for a uc (user claim) that matches rc (required claim)
-                Claim foundClaim = context.Claims.ToList().Find(
-                    uc => uc.Value.Equals(rc.Value)
+                string foundClaim = context.Claims.ToList().Find(
+                    uc => uc.Equals(rc)
                 );
                 // If claim not found, then foundClaim will be null.
                 return (foundClaim != null);

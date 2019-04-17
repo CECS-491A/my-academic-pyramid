@@ -268,6 +268,17 @@ namespace ManagerLayer.UserManagement
 
         }
 
+        public List<string> GetClaims(string username)
+        {
+            User user = _userManagementServices.FindByUsername(username);
+            List<string> claimList = new List<string>();
+            foreach(var claim in user.Claims)
+            {
+                claimList.Add(claim.Value);
+            }
+            return claimList;
+        }
+
 
         //
         /// <summary>
@@ -297,6 +308,8 @@ namespace ManagerLayer.UserManagement
             return (hashSaltPassword.Equals(storedHash));
 
         }
+
+        
 
 
     }
