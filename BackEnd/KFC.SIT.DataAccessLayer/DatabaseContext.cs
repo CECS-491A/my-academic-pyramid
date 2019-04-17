@@ -20,9 +20,13 @@ namespace DataAccessLayer
 
         public DbSet<MessengerContactHist> MessengerContactHists {get;set;}
 
+        public DbSet<FriendRelationship>FriendRelationships { get; set; }
+
+        public DbSet<ChatConnectionMapping> ChatConnectionMappings { get; set; }
+
         public DatabaseContext () :base ("name=LocalTest")
         {
-            Database.SetInitializer(new DropCreateDatabaseAlways<DatabaseContext>());
+            //Database.SetInitializer(new DropCreateDatabaseAlways<DatabaseContext>());
 
         }
 
@@ -34,7 +38,10 @@ namespace DataAccessLayer
                 .HasOptional(p => p.ParentUser)
                 .WithMany(p => p.ChildUsers)
                 .HasForeignKey(p => p.ParentUser_Id);
-   
+
+     
+                
+
 
 
 

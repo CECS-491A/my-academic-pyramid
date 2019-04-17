@@ -16,7 +16,7 @@ using System.Web.Http.Cors;
 namespace KFC.SIT.WebAPI
 {
 
-    
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class UserManagerController : ApiController
     {
         // GET api/<controller>
@@ -54,6 +54,7 @@ namespace KFC.SIT.WebAPI
 
         // POST api/<controller>
         [HttpPost]
+      
         public HttpResponseMessage CreateNewUSer([FromBody] UserDTO userDto)
         {
             UserManager umManager = new UserManager();
@@ -77,7 +78,7 @@ namespace KFC.SIT.WebAPI
         }
 
         // DELETE api/<controller>/5
-        [HttpDelete]    
+  
         public void DeleteUser(int id)
         {
             UserManager umManager = new UserManager();

@@ -27,10 +27,11 @@
 
 <script>
     import CreateMessage from '@/components/Messenger/CreateMessage';
-    import $ from 'jquery'
-    window.$ = window.jQuery = require("jquery");
-    require('ms-signalr-client');
-    
+    // import $ from 'jquery'
+    // window.$ = window.jQuery = require("jquery");
+    // require('signalr');
+    import {hubConnection} from 'signalr-no-jquery'
+
 
     export default {
         name: 'Chat',
@@ -49,20 +50,27 @@
         },
         created() {
             this.loadMessage(),
-            
-            this.connection = $.hubConnection("http://localhost:8084/signalr");
-            $.connection.logging = true;
-            this.hubProxy = this.connection.createHubProxy("MessengerHub"),
-            
-            this.hubProxy.on('FetchMessages', function(message){
-                this.messages.push(message)
-            })
+          
+          this.$eventBus.$on("LoadMessageContact",receiverUsername =>{
+                this.selectedUsername = receiverUsername
+                this.loadMessage(receiverUsername)
+            });
+
+             this.connection = hubConnection("http://localhost:59364");
+          this.connection.qs = "jwt=nguyentrong56@gmail.com";
+           console.log(sessionStorage.token);
+           this.hubProxy = this.connection.createHubProxy("MessengerHub");
+
+            this.hubProxy.on('FetchMessages', ()=> {
+              this.loadLatestMessage (this.selectedUsername)  
+            });
+
+            this.connection.start()
+           .done(function(){ console.log('Now connected, connection ID=' + this.connection.id); })
+           .fail(function(){ console.log('Could not connect'); });
+       
 
             
-            this.connection.$hostname
-            this.$eventBus.$on("LoadMessageContact",receiverUsername =>{
-                this.selectedUsername = receiverUsername
-            })
         },
         // mounted(){
         //      this.connection.start().catch(function(err){
@@ -79,10 +87,26 @@
                     await this.axios({
                         method: "GET",
                         crossDomain: true,
-						url: this.$hostname + "messenger?receiverUsername=" + receiverUsername,	
+						url: this.$hostname + "messenger/LoadMessageContact?receiverUsername=" + receiverUsername,	
                     })
                     .then(response => {
                         this.messages = response.data;
+                    })
+                    .catch(err => {
+                        /* eslint no-console: "off" */
+                        console.log(err);
+                    });
+                
+
+            },
+            async loadLatestMessage(receiverUsername){
+                    await this.axios({
+                        method: "GET",
+                        crossDomain: true,
+						url: this.$hostname + "messenger/LoadLatestMessageContact?receiverUsername2=" + receiverUsername,	
+                    })
+                    .then(response => {
+                        this.messages.push(response.data);
                     })
                     .catch(err => {
                         /* eslint no-console: "off" */
