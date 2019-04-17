@@ -47,11 +47,25 @@ namespace SecurityLayer.Sessions
             _db.SaveChanges();
         }
 
-        public UserSession GetActiveSession(int userid)
+        public string GetActiveSessionToken(int userid)
         {
-            UserSession activeSession = _db.Sessions.Where(s => s.UserId == userid)
-                                                    .FirstOrDefault();
-            return activeSession;
+            var foundSession = _db.Sessions.Where(s => s.UserId == userid)
+                                           .Select(s => new {s.Token, s.RefreshedTime, s.ExpirationTime})
+                                           .FirstOrDefault();
+            string activeSessionToken = null;
+            if (foundSession != null)
+            {
+                if (DateTimeOffset.UtcNow < foundSession.ExpirationTime)
+                {
+                    activeSessionToken = foundSession.Token;
+                }
+                else
+                {
+                    InvalidateSession(foundSession.Token);
+                }
+            }
+
+            return activeSessionToken;
         }
 
         public bool IsInvalidated(string token)

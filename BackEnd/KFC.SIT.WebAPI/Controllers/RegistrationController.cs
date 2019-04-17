@@ -50,9 +50,9 @@ namespace KFC.SIT.WebAPI.Controllers
             SecurityContext securityContext = new SecurityContext(payload);
             AuthorizationManager authorizationManager = new AuthorizationManager(securityContext);
             // TODO get this from table in database.
-            List<Claim> requiredClaims = new List<Claim>()
+            List<string> requiredClaims = new List<string>()
             {
-                new Claim("CanRegister")
+                "CanRegister"
             };
             if (!authorizationManager.CheckClaims(requiredClaims))
             {
@@ -61,7 +61,11 @@ namespace KFC.SIT.WebAPI.Controllers
             else
             {
                 UserManager um = new UserManager();
-                User user = um.FindUserByEmail(securityContext.UserName);
+                User user = um.FindByUserName(securityContext.UserName);
+                if (user == null)
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.NotFound, "User doesn't exist");
+                }
                 user.FirstName = registrationData.FirstName;
                 user.LastName = registrationData.LastName;
                 user.DateOfBirth = registrationData.DateOfBirth;

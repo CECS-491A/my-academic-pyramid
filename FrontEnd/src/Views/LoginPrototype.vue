@@ -71,14 +71,7 @@ export default {
       }
   },
   
-  created() {
-    // ;
-    // if(!this.$router.query.token) {
-    //   return;
-    // }
-    // let parts = this.$router.query.token.split('.');
-    
-  }
+
 }
 </script>
 

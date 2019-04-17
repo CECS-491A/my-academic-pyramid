@@ -8,6 +8,7 @@ using ServiceLayer.UserManagement.UserAccountServices;
 using SecurityLayer.utility;
 using System.Security.Cryptography;
 using Newtonsoft.Json;
+using ManagerLayer.UserManagement;
 
 namespace SecurityLayer.Sessions
 {
@@ -16,7 +17,7 @@ namespace SecurityLayer.Sessions
         private DatabaseContext _db;
         private JWTokenManager _jwtManager;
         private SessionServices _sessionServices;
-        private UserManagementServices _umServices;
+        private UserManager _userManager;
         private const double ACTIVE_SESSION_DURATION = 2.0;
         private const string SHARED_SSO_SECRET 
             = "D078F2AFC7E59885F3B6D5196CE9DB716ED459467182A19E04B6261BBC8E36EE";
@@ -26,17 +27,17 @@ namespace SecurityLayer.Sessions
             _db = new DatabaseContext();
             _jwtManager = new JWTokenManager();
             _sessionServices = new SessionServices(_db);
-            _umServices = new UserManagementServices(_db);
+            _userManager = new UserManager();
         }
 
         public string CreateSession(int userid)
         {
             // Check if user already has a session. If so, return it.
             string token = null;
-            UserSession session = _sessionServices.GetActiveSession(userid);
-            if (session != null)
+            string activeSessionToken = _sessionServices.GetActiveSessionToken(userid);
+            if (activeSessionToken != null)
             {
-                token = session.Token;
+                token = activeSessionToken;
                 return token;
             }
             Dictionary<string, string> payload = GeneratePayload(userid);
@@ -91,6 +92,11 @@ namespace SecurityLayer.Sessions
                         long currentTimeSec = DateTimeOffset.UtcNow
                                                             .ToUnixTimeSeconds();
                         isValid = currentTimeSec < expireTime;
+                        if(!isValid)
+                        {
+                            // Remove session
+                            _sessionServices.InvalidateSession(token);
+                        }
                     }
                     catch (FormatException)
                     {
@@ -164,7 +170,7 @@ namespace SecurityLayer.Sessions
         private Dictionary<string, string> GeneratePayload(int userid)
         {
             Dictionary<string, string> payload = new Dictionary<string, string>();
-            User user = _umServices.FindById(userid);
+            User user = _userManager.FindUserById(userid);
             if (user == null)
             {
                 throw new ArgumentException(
@@ -172,7 +178,7 @@ namespace SecurityLayer.Sessions
                 );
             }
             payload["username"] = user.UserName;
-            List<Claim> claims = user.Claims.ToList();
+            List<string> claims = _userManager.GetClaims(user.UserName);
             string claimsJson = JsonConvert.SerializeObject(claims);
             payload["claims"] = claimsJson;
             return payload;
