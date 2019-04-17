@@ -13,20 +13,22 @@ namespace ServiceLayer.DataAnalysisDashboard
 {
     public class DashboardService : IDashboardService
     {
-        private readonly IMongoCollection<TelemetryLog> Collection;
-
         private const string _collectionName = "TelemetryLogs";
 
-        MongoDBRepo _repo = new MongoDBRepo("mongodb+srv://super:superheroes@myacademicpyramidlogging-if0cx.mongodb.net/test?retryWrites=true", "test");
+        private readonly IMongoCollection<TelemetryLog> Collection;
+
+        protected MongoDBRepo _repo;
 
         public DashboardService()
         {
-            this.Collection = _repo.Db.GetCollection<TelemetryLog>(_collectionName);
+            _repo = new MongoDBRepo("mongodb+srv://super:superheroes@myacademicpyramidlogging-if0cx.mongodb.net/test?retryWrites=true", "test");
+            Collection = _repo.Db.GetCollection<TelemetryLog>(_collectionName);
         }
 
-        public int countUsers()
+        public long CountUsers()
         {
-            return 0;
+            long queryResult = Collection.CountDocuments(new BsonDocument { { "Action", "Login" } });
+            return queryResult;
         }
     }
 }

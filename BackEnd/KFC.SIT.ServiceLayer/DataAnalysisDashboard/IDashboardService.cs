@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace ServiceLayer.DataAnalysisDashboard
 {
-    interface IDashboardService
+    public interface IDashboardService
     {
-
+        long CountUsers();
     }
 }
