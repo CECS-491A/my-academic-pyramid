@@ -9,6 +9,7 @@ import Login from '@/Views/Login'
 import UserManagement from '@/Views/UserManagement'
 import ChatContainer from '@/Views//ChatContainer'
 
+
 Vue.use(Router)
 Vue.use(Vuetify)
 
