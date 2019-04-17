@@ -58,8 +58,7 @@
         </v-alert>
 
         <div v-if="validation" id="publishMessage">
-            <h3>Successful Publish!</h3>
-            <p>{{ validation }}</p>
+            <h3>{{ validation }}</h3>
         </div>
 
         <br />
@@ -67,6 +66,28 @@
         <v-btn id="btnPublish" color="success" v-if="!validation" v-on:click="publish">Publish</v-btn>
 
         </v-form>
+
+        <v-dialog
+          v-model="loading"
+          hide-overlay
+          persistent
+          width="300"
+        >
+          <v-card
+            color="primary"
+            dark
+          >
+            <v-card-text>
+              Loading
+              <v-progress-linear
+                indeterminate
+                color="white"
+                class="mb-0"
+              ></v-progress-linear>
+            </v-card-text>
+          </v-card>
+        </v-dialog>
+
     </div>
 </template>
 
@@ -82,7 +103,8 @@ export default {
       description: '',
       logoUrl: '',
       underMaintenance: false,
-      error: ''
+      error: '',
+      loading: false
     }
   },
   methods: {
@@ -95,6 +117,7 @@ export default {
       if (this.error) return;
 
       const url = 'https://api.kfc-sso.com/api/applications/publish'
+      this.loading = true;
       axios.post(url, {
         key: document.getElementById('key').value,
         title: document.getElementById('title').value,
@@ -107,10 +130,13 @@ export default {
         }
       })
         .then(response => {
-          this.validation = response.data // Retrieve validation message from response
+          this.validation = response.data.Message // Retrieve validation message from response
         })
         .catch(err => {
-          this.error = err.response.data
+          this.error = err.response.data.Message
+        })
+        .finally(() => {
+          this.loading = false;
         })
     }
   }
