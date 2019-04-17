@@ -13,9 +13,13 @@ namespace DemoProject
         public static void Main(string[] args)
         {
             TelemetryLogCollection collection = new TelemetryLogCollection();
-            List<DataAccessLayer.Logging.> list = collection.GetAll();
+            var result = collection.GetAll();
+            foreach(var re in result)
+            {
+                Console.WriteLine(re.Action + ", " + re.Date);
+            }
             IDashboardService dashboard = new DashboardService();
-            long result = dashboard.CountUsers();
+            //long result = dashboard.CountUsers();
             Console.WriteLine(result);
             Console.WriteLine("Hello");
             Console.ReadKey();
