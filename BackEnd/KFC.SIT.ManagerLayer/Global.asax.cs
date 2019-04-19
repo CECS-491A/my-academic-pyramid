@@ -6,7 +6,7 @@ using System.Web.Http;
 
 using System.Web.Routing;
 
-namespace ManagerLayer
+namespace WebAPI
 {
     public class WebApiApplication : System.Web.HttpApplication
     {

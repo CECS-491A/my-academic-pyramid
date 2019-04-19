@@ -14,7 +14,7 @@ namespace DemoProject
     {
         static void Main(String[] args)
         {
-
+            Console.WriteLine("EHl");
             Console.ReadKey();
         }
     }

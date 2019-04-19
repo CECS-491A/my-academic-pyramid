@@ -8,7 +8,7 @@ using System.Web.Http.Cors;
 using SecurityLayer;
 using DataAccessLayer;
 using DataAccessLayer.DTOs;
-using ManagerLayer.UserManagement;
+using WebAPI.UserManagement;
 using ServiceLayer.PasswordChecking.HashFunctions;
 using SecurityLayer.Sessions;
 

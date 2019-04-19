@@ -93,6 +93,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ProgramDashboard.cs" />
     <Compile Include="ProgramLogging.cs" />
     <Compile Include="JWTokenDemo.cs" />
     <Compile Include="ProgramAuthorization.cs" />

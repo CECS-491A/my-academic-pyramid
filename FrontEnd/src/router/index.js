@@ -11,6 +11,7 @@ import LoginPrototype from '@/Views/LoginPrototype'
 import ChatContainer from '@/Views//ChatContainer'
 import UserRegistration from '@/Views/UserRegistration'
 
+
 Vue.use(Router)
 Vue.use(Vuetify)
 

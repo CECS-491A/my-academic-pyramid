@@ -126,7 +126,15 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         public List<User> GetAllUser()
         {
             List<User> list = _DbContext.Set<User>().ToList();
-            return list;
+            if (list != null)
+            {
+                return list;
+            }
+            else
+            {
+                return null;
+            }
+            
         }
 
         /// <summary>

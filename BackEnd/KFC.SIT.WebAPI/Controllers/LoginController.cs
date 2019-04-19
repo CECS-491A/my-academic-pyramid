@@ -13,6 +13,7 @@ using ManagerLayer.UserManagement;
 using System.Web.Http.Cors;
 using SecurityLayer.Sessions;
 using ManagerLayer.Constants;
+using WebAPI.UserManagement;
 
 namespace KFC.SIT.WebAPI
 { 

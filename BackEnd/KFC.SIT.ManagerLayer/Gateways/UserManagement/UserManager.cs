@@ -9,7 +9,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Data.Entity.Validation;
 
-namespace ManagerLayer.UserManagement
+namespace WebAPI.UserManagement
 {
     public class UserManager
     {

@@ -30,6 +30,7 @@ namespace ServiceLayer.Messenger
         {
             using (var db = new DatabaseContext())
             {
+               
                 return db.Conservations.
                               Where(c => (c.ReceiverUserName == receiverUserName
                                   && c.SenderUserName == senderUserName) ||
@@ -37,6 +38,20 @@ namespace ServiceLayer.Messenger
                                   && c.SenderUserName == receiverUserName))
                               .OrderBy(c => c.CreatedDate)
                               .ToList();
+            }
+        }
+
+        public Conversation GetLatestMessageBetweenContact(string senderUserName, string receiverUserName)
+        {
+            using (var db = new DatabaseContext())
+            {
+
+                return db.Conservations.
+                              Where(c => ((c.ReceiverUserName == receiverUserName
+                                  && c.SenderUserName == senderUserName) ||
+                                  (c.ReceiverUserName == senderUserName
+                                  && c.SenderUserName == receiverUserName))
+                                  && c.CreatedDate == db.Conservations.Max(m => m.CreatedDate)).FirstOrDefault();
             }
         }
 
@@ -48,6 +63,11 @@ namespace ServiceLayer.Messenger
                 db.Conservations.Add(conversation);
                 db.SaveChanges();
             }
+        }
+
+        public IEnumerable<ChatConnectionMapping> GetConnectionIdWithUserName(string username)
+        {
+            return _DbContext.ChatConnectionMappings.Where(c => c.Username.Equals(username)).AsEnumerable();
         }
 
         public void AddContactHistory(string senderUsername, string receiverUsername)
@@ -75,9 +95,73 @@ namespace ServiceLayer.Messenger
             }
         }
 
-        public Task<IQueryable<MessengerContactHist>> GetAllContactHistory(string senderUsername)
+        public IQueryable<MessengerContactHist> GetAllContactHistory(string senderUsername)
         {
-            return  Task.FromResult(_DbContext.MessengerContactHists.Where(u => u.SenderUserName.Equals(senderUsername)).AsQueryable());
+            return  _DbContext.MessengerContactHists.Where(u => u.SenderUserName.Equals(senderUsername)).AsQueryable();
+        }
+
+        public bool IsFriend(User addingUser, User addedUser)
+        {
+
+            FriendRelationship fr =  _DbContext.FriendRelationships.FirstOrDefault(f => 
+            (f.friendId== addingUser.Id && f.UserId == addedUser.Id) ||
+            (f.friendId == addedUser.Id && f.UserId == addingUser.Id)
+            );
+
+            if(fr== null)
+            {
+                return false;
+            }
+            return true;
+
+
+        }
+
+        public void AddContactFriendList(User addingUser, User addedUser)
+        {
+        
+            if (addedUser != null)
+            {
+                
+                if(!IsFriend(addingUser, addedUser))
+                {
+                    var fr = new FriendRelationship
+                    {
+                        friendId = addedUser.Id,
+                        friendUsername = addedUser.UserName,
+                        UserOfRelationship = addingUser
+                    };
+                    addingUser.FriendRelationship.Add(fr);
+    
+                }
+
+                else
+                {
+                    throw new InvalidOperationException("User is already in the friendlist");
+                }
+            }
+
+            else
+            {
+                throw new ArgumentNullException("Added User does not exist to be add");
+            }
+        }
+
+        public IEnumerable<FriendRelationship> GetAllFriendRelationship(string username)
+        {
+            
+            var user = _DbContext.Users.Where(u => u.UserName.Equals(username)).Single();
+
+            if (user != null)
+            {
+                return  user.FriendRelationship.AsEnumerable();
+            }
+
+            else
+            {
+                throw new ArgumentNullException("User does not exist to retrieve a friendlist");
+            }
+            
         }
     }
 }
