@@ -221,10 +221,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-<<<<<<< HEAD
     <None Include="api\index.md" />
-=======
->>>>>>> parent of b0b8aad... docfx.console
     <None Include="App.config" />
     <Content Include=".gitignore" />
     <Content Include="api\.gitignore" />
