@@ -33,6 +33,19 @@ namespace ServiceLayer.DataAnalysisDashboard
             return queryResult;
         }
 
+        public long[] CountAverageSuccessfulLogin()
+        {
+            long[] avgLoginMonth = new long[12];
+            var query = from userInfo in Collection.AsQueryable<TelemetryLog>()
+                        where userInfo.Action == "Login" && userInfo.Month > 1
+                        orderby userInfo.Month
+                        group userInfo by userInfo.Month into userInfoMonth
+                        select userInfoMonth;
+            var query2 = Collection.AsQueryable<TelemetryLog>().Where(e => e.Action == "Login" && e.Month == 1).Select(e => e).Count();
+            var something = Collection.Find(new BsonDocument { {"Action", "Login" } });
+            return avgLoginMonth;
+        }
+
         //public long CountSuccessfulLogin(int year, int month)
         //{
         //    DateTime startDate = new DateTime(year, month, 0);

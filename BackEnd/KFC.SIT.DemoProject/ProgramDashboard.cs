@@ -10,7 +10,7 @@ namespace DemoProject
 {
     class ProgramDashboard
     {
-        public static void Main(string[] args)
+        static void Main(string[] args)
         {
             TelemetryLogCollection collection = new TelemetryLogCollection();
             var result = collection.GetAll();
