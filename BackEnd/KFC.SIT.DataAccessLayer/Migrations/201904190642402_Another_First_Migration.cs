@@ -3,7 +3,7 @@ namespace DataAccessLayer.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class First_Migration_Step : DbMigration
+    public partial class Another_First_Migration : DbMigration
     {
         public override void Up()
         {
@@ -25,9 +25,9 @@ namespace DataAccessLayer.Migrations
                         FirstName = c.String(),
                         LastName = c.String(),
                         CatergoryId = c.Int(),
-                        DateOfBirth = c.DateTime(nullable: false),
+                        DateOfBirth = c.DateTime(nullable: false, precision: 7, storeType: "datetime2"),
                         Email = c.String(),
-                        CreatedAt = c.DateTime(nullable: false),
+                        CreatedAt = c.DateTime(nullable: false, precision: 7, storeType: "datetime2"),
                         ParentUser_Id = c.Int(),
                     })
                 .PrimaryKey(t => t.Id)
@@ -46,6 +46,19 @@ namespace DataAccessLayer.Migrations
                 .PrimaryKey(t => t.Id);
             
             CreateTable(
+                "dbo.FriendRelationships",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        friendId = c.Int(nullable: false),
+                        friendUsername = c.String(),
+                        UserId = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.Users", t => t.UserId, cascadeDelete: true)
+                .Index(t => t.UserId);
+            
+            CreateTable(
                 "dbo.UserSessions",
                 c => new
                     {
@@ -60,6 +73,15 @@ namespace DataAccessLayer.Migrations
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Users", t => t.UserId, cascadeDelete: true)
                 .Index(t => t.UserId);
+            
+            CreateTable(
+                "dbo.ChatConnectionMappings",
+                c => new
+                    {
+                        ConnectionId = c.String(nullable: false, maxLength: 128),
+                        Username = c.String(),
+                    })
+                .PrimaryKey(t => t.ConnectionId);
             
             CreateTable(
                 "dbo.Conversations",
@@ -103,18 +125,22 @@ namespace DataAccessLayer.Migrations
         {
             DropForeignKey("dbo.UserSessions", "UserId", "dbo.Users");
             DropForeignKey("dbo.Users", "ParentUser_Id", "dbo.Users");
+            DropForeignKey("dbo.FriendRelationships", "UserId", "dbo.Users");
             DropForeignKey("dbo.ClaimUsers", "User_Id", "dbo.Users");
             DropForeignKey("dbo.ClaimUsers", "Claim_Id", "dbo.Claims");
             DropForeignKey("dbo.Users", "CatergoryId", "dbo.Catergories");
             DropIndex("dbo.ClaimUsers", new[] { "User_Id" });
             DropIndex("dbo.ClaimUsers", new[] { "Claim_Id" });
             DropIndex("dbo.UserSessions", new[] { "UserId" });
+            DropIndex("dbo.FriendRelationships", new[] { "UserId" });
             DropIndex("dbo.Users", new[] { "ParentUser_Id" });
             DropIndex("dbo.Users", new[] { "CatergoryId" });
             DropTable("dbo.ClaimUsers");
             DropTable("dbo.MessengerContactHists");
             DropTable("dbo.Conversations");
+            DropTable("dbo.ChatConnectionMappings");
             DropTable("dbo.UserSessions");
+            DropTable("dbo.FriendRelationships");
             DropTable("dbo.Claims");
             DropTable("dbo.Users");
             DropTable("dbo.Catergories");
