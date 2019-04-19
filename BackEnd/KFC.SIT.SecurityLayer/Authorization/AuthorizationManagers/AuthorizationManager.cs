@@ -1,5 +1,6 @@
 ﻿
 using DataAccessLayer;
+using SecurityLayer.Sessions;
 using ServiceLayer.UserManagement.UserAccountServices;
 using System;
 using System.Collections.Generic;
@@ -22,8 +23,8 @@ namespace SecurityLayer.Authorization.AuthorizationManagers
 
         /// <summary>
         /// Constructor of AuthorizationManager.
-        /// Takes in user as a parameter and save the value.
-        /// It would throw an exception, if the user is null
+        /// Takes in a SecurityContext as a parameter and save the value.
+        /// It would throw an exception, if the context is null
         /// </summary>
         /// <param name="context"></param>
         public AuthorizationManager(SecurityContext context)
@@ -36,6 +37,19 @@ namespace SecurityLayer.Authorization.AuthorizationManagers
             this.context = context;
         }
 
+        public AuthorizationManager(string token)
+        {
+            JWTokenManager jwtManager = new JWTokenManager();
+            if (token == null)
+            {
+                throw new ArgumentNullException("token");
+            }
+            else if (!jwtManager.ValidateSignature(token))
+            {
+                throw new ArgumentException("token", "Not a valid JSON Web Token.");
+            }
+            this.context = new SecurityContext(jwtManager.DecodePayload(token));
+        }
 
         /// <summary>
         /// checks that user has the required claim in the requiredClaims. It would throw the exception, if the requireClaims is null.

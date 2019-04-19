@@ -137,6 +137,16 @@ namespace SecurityLayer.Sessions
             return newToken;
         }
 
+        public string RefreshSession(string encodedToken)
+        {
+            if(!_jwtManager.ValidateSignature(encodedToken))
+            {
+                throw new ArgumentException("encodedToken", "Not a valid JSON Web Token.");
+            }
+            Dictionary<string, string> payload = _jwtManager.DecodePayload(encodedToken);
+            return this.RefreshSession(encodedToken, payload);
+        }
+
         public void InvalidateSession(string token)
         {
             // Delete session from database.

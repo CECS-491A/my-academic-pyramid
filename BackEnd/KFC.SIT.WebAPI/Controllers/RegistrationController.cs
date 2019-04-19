@@ -12,6 +12,7 @@ using SecurityLayer.Authorization;
 using DataAccessLayer;
 using ManagerLayer.UserManagement;
 using System.Web.Http.Cors;
+using DataAccessLayer.Models;
 
 namespace KFC.SIT.WebAPI.Controllers
 {
@@ -32,6 +33,10 @@ namespace KFC.SIT.WebAPI.Controllers
             {
                 // TODO add code checking for this.
                 string[] parts = Request.Headers.GetValues("Authorization").First().Split(' ');
+                if (parts.Length !=2 || parts[0] != "Bearer")
+                {
+                    return Request.CreateResponse(HttpStatusCode.Unauthorized);
+                }
                 token = parts[1];
             }
             catch(InvalidOperationException) // Catch when Token header has no value.
@@ -48,7 +53,9 @@ namespace KFC.SIT.WebAPI.Controllers
             // TODO make payload the context. Make sure the authorization chain
             // TODO doesn't require more than the payload context contains.
             SecurityContext securityContext = new SecurityContext(payload);
-            AuthorizationManager authorizationManager = new AuthorizationManager(securityContext);
+            AuthorizationManager authorizationManager = new AuthorizationManager(
+                securityContext
+            );
             // TODO get this from table in database.
             List<string> requiredClaims = new List<string>()
             {
@@ -68,13 +75,16 @@ namespace KFC.SIT.WebAPI.Controllers
                 }
                 user.FirstName = registrationData.FirstName;
                 user.LastName = registrationData.LastName;
+                // TODO test this.
                 user.DateOfBirth = registrationData.DateOfBirth;
+                user.Catergory = new Catergory("Student");
                 um.UpdateUserAccount(user);
-
+                um.RemoveClaimAction(user.Id, "CanRegister");
+                um.AutomaticClaimAssigning(user);
                 string updatedToken = sm.RefreshSession(token, payload);
                 Dictionary<string, string> responseContent = new Dictionary<string, string>()
                 {
-                    { "SITToken", updatedToken}
+                    { "SITtoken", updatedToken}
                 };
                 return Request.CreateResponse(HttpStatusCode.OK, responseContent);
             }

@@ -152,9 +152,9 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         /// </summary>
         /// <param name="user"></param>
         /// <param name="claim"></param>
-        public User RemoveClaim(User user, Claim claim)
+        public User RemoveClaim(User user, string claimStr)
         {
-            if (claim == null)
+            if (claimStr == null)
             {
                 return null;
             }
@@ -164,7 +164,16 @@ namespace ServiceLayer.UserManagement.UserAccountServices
             }
             else
             {
-                user.Claims.Remove(claim);
+                Claim claimToRemove = user.Claims.Where(c => c.Value == claimStr)
+                                          .FirstOrDefault();
+                if (claimToRemove != null)
+                {
+                    user.Claims.Remove(claimToRemove);
+                }
+                else
+                {
+                    user = null;
+                }
                 return user;
             }
         }
@@ -208,51 +217,7 @@ namespace ServiceLayer.UserManagement.UserAccountServices
             return user;
         }
 
-        public User AutomaticClaimAssigning(User user)
-        {
-            if(user.Catergory.Value.Equals("Student"))
-            {
-                //Check if user is over 18 year old
-                if (user.DateOfBirth.AddYears(18) <= DateTime.Now)
-                {
-                    user.Claims.Add(new Claim("Over18"));
-                }
-                //Messenger Feature's claims
-                AddClaim(user,new Claim("CanSendMessage"));
-                AddClaim(user,new Claim("CanReceiveMessage"));
-
-                //Discussion Forum's claims
-                AddClaim(user, new Claim("CanPostQuestion"));
-                AddClaim(user, new Claim("CanReceiveQuestion"));
-
-                //User Management's claims
-                AddClaim(user, new Claim("CanCreateOwnStudentAccount"));
-                AddClaim(user, new Claim("CanEditOwnAccount"));
-                AddClaim(user, new Claim("CanDeleteOwnAccount"));              
-
-            }
-            else if (user.Catergory.Value.Equals("Admin") || user.Catergory.Value.Equals("SystemAdmin"))
-            {
-                AddClaim(user, new Claim("CanCreateNewStudentAccount"));
-                AddClaim(user, new Claim("CanDeleteStudentAccount"));
-                AddClaim(user, new Claim("CanEditStudentAccount"));
-                AddClaim(user, new Claim("CanEnableOrDisableStudentAccount"));
-                AddClaim(user, new Claim("CanAlterStudentAccountUAC"));
-
-            }
-
-            else if (user.Catergory.Value.Equals("SystemAdmin"))
-            {
-                AddClaim(user, new Claim("EnableOrDisableAdminAccount"));
-                AddClaim(user, new Claim("CanDeleteAdminAccount"));
-                AddClaim(user, new Claim("CanDeleteOtherUser"));
-                AddClaim(user, new Claim("CanAlterAdminAccountUAC"));
-            }
-            
-
-            return user;
-         
-        }
+        
 
     } // end of class
 }

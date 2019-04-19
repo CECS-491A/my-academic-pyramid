@@ -60,7 +60,7 @@ namespace ManagerLayer.UserManagement
             };
 
             //Automatically assigning claim to user
-            user = _userManagementServices.AutomaticClaimAssigning(user);
+            user = AutomaticClaimAssigning(user);
             user = _userManagementServices.AssignCatergory(user, user.Catergory);
 
             var response = _userManagementServices.CreateUser(user);
@@ -217,7 +217,7 @@ namespace ManagerLayer.UserManagement
         /// </summary>
         /// <param name="targetedUserName"></param>
         /// <param name="claim"></param>
-        public User RemoveClaimAction(int targetedUserId, Claim claim)
+        public User RemoveClaimAction(int targetedUserId, string claimStr)
         {
             // List of required claims needed for AddClaimAction Method
             List<Claim> createUserRequiredClaimTypes = new List<Claim>
@@ -237,7 +237,7 @@ namespace ManagerLayer.UserManagement
                 // Check if the requesting user is  at least same level as  the targeted user
             else
             {
-                User user = _userManagementServices.RemoveClaim(targetedUser, claim);
+                User user = _userManagementServices.RemoveClaim(targetedUser, claimStr);
                 UpdateUserAccount(user);
                 return user;
             }
@@ -309,7 +309,51 @@ namespace ManagerLayer.UserManagement
 
         }
 
-        
+        public User AutomaticClaimAssigning(User user)
+        {
+            if (user.Catergory.Value.Equals("Student"))
+            {
+                //Check if user is over 18 year old
+                if (user.DateOfBirth.AddYears(18) <= DateTime.Now)
+                {
+                    user.Claims.Add(new Claim("Over18"));
+                }
+                //Messenger Feature's claims
+                _userManagementServices.AddClaim(user, new Claim("CanSendMessage"));
+                _userManagementServices.AddClaim(user, new Claim("CanReceiveMessage"));
+
+                //Discussion Forum's claims
+                _userManagementServices.AddClaim(user, new Claim("CanPostQuestion"));
+                _userManagementServices.AddClaim(user, new Claim("CanReceiveQuestion"));
+
+                //User Management's claims
+                _userManagementServices.AddClaim(user, new Claim("CanCreateOwnStudentAccount"));
+                _userManagementServices.AddClaim(user, new Claim("CanEditOwnAccount"));
+                _userManagementServices.AddClaim(user, new Claim("CanDeleteOwnAccount"));
+
+            }
+            else if (user.Catergory.Value.Equals("Admin") || user.Catergory.Value.Equals("SystemAdmin"))
+            {
+                _userManagementServices.AddClaim(user, new Claim("CanCreateNewStudentAccount"));
+                _userManagementServices.AddClaim(user, new Claim("CanDeleteStudentAccount"));
+                _userManagementServices.AddClaim(user, new Claim("CanEditStudentAccount"));
+                _userManagementServices.AddClaim(user, new Claim("CanEnableOrDisableStudentAccount"));
+                _userManagementServices.AddClaim(user, new Claim("CanAlterStudentAccountUAC"));
+
+            }
+
+            else if (user.Catergory.Value.Equals("SystemAdmin"))
+            {
+                _userManagementServices.AddClaim(user, new Claim("EnableOrDisableAdminAccount"));
+                _userManagementServices.AddClaim(user, new Claim("CanDeleteAdminAccount"));
+                _userManagementServices.AddClaim(user, new Claim("CanDeleteOtherUser"));
+                _userManagementServices.AddClaim(user, new Claim("CanAlterAdminAccountUAC"));
+            }
+
+
+            return user;
+
+        }
 
 
     }

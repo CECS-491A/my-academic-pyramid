@@ -59,7 +59,6 @@ export default {
               axios.post(url, temp)
                    .then(response => {
                        this.token = response.data["redirectURL"]
-                       sessionStorage.SITToken = response.data["redirectURL"]
                        console.log("Session Storage.token = " + sessionStorage.SITToken)
                    })
                    .catch(err => console.log("There was error. " + err.response));

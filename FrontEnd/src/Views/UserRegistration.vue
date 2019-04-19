@@ -85,11 +85,12 @@ export default {
     },
 
     registerUser() {
-        // create a regieter obj 
+        // create a register obj 
+        // TODO get token from query if it's there when the page is being generated
         let requestPayload = {
           FirstName: this.firstName,
           LastName: this.lastName,
-          DateOfBirth: JSON.stringify(this.dateOfBirth)
+          DateOfBirth: this.dateOfBirth
         }
         let headersObject = {
           headers: {
@@ -98,10 +99,24 @@ export default {
           'Authorization': 'Bearer ' + this.$route.query.SITtoken
           }
         }
+        // console.log(requestPayload.DateOfBirth)
         let urlRegistration = "http://localhost:59364/api/Registration"
         Axios.post(urlRegistration, requestPayload, headersObject)
-             .then(response => {console.log("Registration saved.")})
+             .then(response => {
+               console.log(response.data)
+               sessionStorage.SITtoken = response.data.SITtoken
+               this.$router.push({name: "Home"})
+               })
              .catch(error => {console.log(error)})
+    }
+  },
+
+  created() {
+    if (this.$route.query.SITtoken != undefined) {
+      sessionStorage.SITtoken = this.$route.query.SITtoken
+    }
+    else {
+      // display error message.
     }
   }
 }
