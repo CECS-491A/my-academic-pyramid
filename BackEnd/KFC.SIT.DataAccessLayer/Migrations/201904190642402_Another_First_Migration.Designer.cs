@@ -7,13 +7,13 @@ namespace DataAccessLayer.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class AddConnectionMappingfix : IMigrationMetadata
+    public sealed partial class Another_First_Migration : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(AddConnectionMappingfix));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Another_First_Migration));
         
         string IMigrationMetadata.Id
         {
-            get { return "201904150613453_AddConnectionMappingfix"; }
+            get { return "201904190642402_Another_First_Migration"; }
         }
         
         string IMigrationMetadata.Source

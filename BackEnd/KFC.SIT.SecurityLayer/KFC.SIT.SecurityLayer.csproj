@@ -62,13 +62,17 @@
   <ItemGroup>
     <Compile Include="Authorization\AuthorizationManagers\AuthorizationManager.cs" />
     <Compile Include="Authorization\AuthorizationManagers\IAuthorizationManager.cs" />
-    <Compile Include="JWTokenManager.cs" />
+    <Compile Include="Authorization\SecurityContext.cs" />
+    <Compile Include="Sessions\JWTokenManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SessionServices.cs" />
+    <Compile Include="Sessions\SessionManager.cs" />
+    <Compile Include="Sessions\SessionServices.cs" />
+    <Compile Include="Sessions\SSOPayload.cs" />
+    <Compile Include="utility\SessionTimeStamp.cs" />
+    <Compile Include="utility\UrlSafeBase64Encoder.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="api\index.md" />
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
@@ -79,14 +83,14 @@
       <Project>{6a61e75b-b35b-4f17-b7f4-da1af5806b23}</Project>
       <Name>KFC.SIT.DataAccessLayer</Name>
     </ProjectReference>
+    <ProjectReference Include="..\KFC.SIT.ManagerLayer\KFC.SIT.ManagerLayer.csproj">
+      <Project>{1f873dd8-8a42-411b-b217-ebe6e8eeb002}</Project>
+      <Name>KFC.SIT.ManagerLayer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\KFC.SIT.ServiceLayer\KFC.SIT.ServiceLayer.csproj">
       <Project>{2A875510-9D8C-482F-99FD-19001548F681}</Project>
       <Name>KFC.SIT.ServiceLayer</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include=".gitignore" />
-    <Content Include="api\.gitignore" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
