@@ -8,7 +8,7 @@ using ServiceLayer.UserManagement.UserAccountServices;
 using SecurityLayer.utility;
 using System.Security.Cryptography;
 using Newtonsoft.Json;
-using ManagerLayer.UserManagement;
+using WebAPI.UserManagement;
 
 namespace SecurityLayer.Sessions
 {

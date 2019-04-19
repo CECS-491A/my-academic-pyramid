@@ -10,7 +10,7 @@ using SecurityLayer.Authorization.AuthorizationManagers;
 using Newtonsoft.Json;
 using SecurityLayer.Authorization;
 using DataAccessLayer;
-using ManagerLayer.UserManagement;
+using WebAPI.UserManagement;
 using System.Web.Http.Cors;
 using DataAccessLayer.Models;
 

@@ -33,14 +33,14 @@ namespace ServiceLayer.DataAnalysisDashboard
             return queryResult;
         }
 
-        public long CountSuccessfulLogin(int year, int month)
-        {
-            DateTime startDate = new DateTime(year, month, 0);
-            int numOfDays = DateTime.DaysInMonth(year, month);
-            DateTime endDate = new DateTime(year, month, numOfDays);
-            long queryResult = Collection.AsQueryable<TelemetryLog>().ToList();
-            return queryResult;
-        }
+        //public long CountSuccessfulLogin(int year, int month)
+        //{
+        //    DateTime startDate = new DateTime(year, month, 0);
+        //    int numOfDays = DateTime.DaysInMonth(year, month);
+        //    DateTime endDate = new DateTime(year, month, numOfDays);
+        //    long queryResult = Collection.AsQueryable<TelemetryLog>().ToList();
+        //    return queryResult;
+        //}
 
         public long CountFeatureUsage()
         {
@@ -48,14 +48,14 @@ namespace ServiceLayer.DataAnalysisDashboard
             return queryResult;
         }
 
-        public long CountDate()
-        {
-            var builder = Builders<BsonDocument>.Filter;
-            DateTime time = DateTime.Now;
-            int value = time.Second;
-            long queryResult = Collection.CountDocuments(i => i.Date. > "30");
-            return queryResult;
-        }
+        //public long CountDate()
+        //{
+        //    var builder = Builders<BsonDocument>.Filter;
+        //    DateTime time = DateTime.Now;
+        //    int value = time.Second;
+        //    long queryResult = Collection.CountDocuments(i => i.Date. > "30");
+        //    return queryResult;
+        //}
 
     }
 }

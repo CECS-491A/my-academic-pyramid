@@ -1,7 +1,7 @@
 ﻿using DataAccessLayer;
 using DataAccessLayer.DTOs;
 using DataAccessLayer.Models;
-using ManagerLayer.UserManagement;
+using WebAPI.UserManagement;
 using SecurityLayer.Sessions;
 using WebAPI.UserManagement;
 using ServiceLayer.PasswordChecking.HashFunctions;

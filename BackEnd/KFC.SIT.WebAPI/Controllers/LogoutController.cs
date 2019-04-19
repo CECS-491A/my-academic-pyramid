@@ -7,7 +7,7 @@ using System.Web.Http;
 using SecurityLayer;
 using DataAccessLayer;
 using DataAccessLayer.DTOs;
-using ManagerLayer.UserManagement;
+using WebAPI.UserManagement;
 using SecurityLayer.Sessions;
 
 namespace KFC.SIT.WebAPI.Controllers
