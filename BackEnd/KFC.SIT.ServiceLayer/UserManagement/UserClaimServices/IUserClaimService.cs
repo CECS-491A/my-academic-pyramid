@@ -14,7 +14,7 @@ namespace ServiceLayer.UserManagement.UserClaimServices
     {
         
         User AddClaim(User user, Claim claim );
-        User RemoveClaim(User user, Claim claim);
+        User RemoveClaim(User user, string claimStr);
         
     }
 }

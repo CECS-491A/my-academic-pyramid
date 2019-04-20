@@ -2,7 +2,7 @@
 using DataAccessLayer.DTOs;
 using DataAccessLayer.Models;
 using DemoProject;
-using ManagerLayer.Gateways.UserManagement;
+using ManagerLayer.UserManagement;
 using System;
 using System.Collections.Generic;
 using System.Linq;

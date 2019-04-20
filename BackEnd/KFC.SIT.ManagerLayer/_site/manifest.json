@@ -1,0 +1,366 @@
+{
+  "homepages": [],
+  "source_base_path": "C:/Users/khk40_/Desktop/Secret Room/github/my-academic-pyramid/BackEnd/KFC.SIT.ManagerLayer",
+  "xrefmap": "xrefmap.yml",
+  "files": [
+    {
+      "type": "Conceptual",
+      "source_relative_path": "README.md",
+      "output": {
+        ".html": {
+          "relative_path": "README.html",
+          "hash": "VzWAYlquXZhC/O1KPVKTWw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/DemoProject.MockUserManagementNameSpace.IUserManagement.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/DemoProject.MockUserManagementNameSpace.IUserManagement.html",
+          "hash": "2HQS12wEhlsNkcj1LFPV5w=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/DemoProject.MockUserManagementNameSpace.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/DemoProject.MockUserManagementNameSpace.html",
+          "hash": "/KL9geoTuvo69i/X7q6Ypw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ManagerLayer.Gateways.UsageAnalysisDashboard.DashboardManager.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ManagerLayer.Gateways.UsageAnalysisDashboard.DashboardManager.html",
+          "hash": "VbtaqazOKPFjHJGUJ5LZ1Q=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ManagerLayer.Gateways.UsageAnalysisDashboard.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ManagerLayer.Gateways.UsageAnalysisDashboard.html",
+          "hash": "bFsAztp2Dm7CJt03unv6Eg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/WebAPI.BundleConfig.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/WebAPI.BundleConfig.html",
+          "hash": "a7sT2BZ5JbfFz2zscQJleg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/WebAPI.BusinessRules.PasswordCheckingBR.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/WebAPI.BusinessRules.PasswordCheckingBR.html",
+          "hash": "YcpdF/ryxusKQEcauAxwMQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/WebAPI.BusinessRules.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/WebAPI.BusinessRules.html",
+          "hash": "7ipdR1LehLFxh905PKDkyA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/WebAPI.FilterConfig.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/WebAPI.FilterConfig.html",
+          "hash": "5Ah94ryGf+ter9OHkWRvRQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/WebAPI.Gateways.Messenger.MessengerGateway.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/WebAPI.Gateways.Messenger.MessengerGateway.html",
+          "hash": "0WzMHjdh4hC/9Tvh/tG25A=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/WebAPI.Gateways.Messenger.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/WebAPI.Gateways.Messenger.html",
+          "hash": "ffVROerEQpTQIMhD24pehQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/WebAPI.Logic.PasswordChecking.PasswordValidations.PwnedPasswordsValidation.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/WebAPI.Logic.PasswordChecking.PasswordValidations.PwnedPasswordsValidation.html",
+          "hash": "961okVPdOG/0DtAWvBeINw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/WebAPI.Logic.PasswordChecking.PasswordValidations.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/WebAPI.Logic.PasswordChecking.PasswordValidations.html",
+          "hash": "rdqqbfTwSNOS582Y3t6fMg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/WebAPI.Logic.PasswordStatus.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/WebAPI.Logic.PasswordStatus.html",
+          "hash": "R/CB9ADvl0yxc4dantpa8Q=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/WebAPI.Logic.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/WebAPI.Logic.html",
+          "hash": "7Lz9pEabVF1AZ04saJXUOA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/WebAPI.RouteConfig.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/WebAPI.RouteConfig.html",
+          "hash": "cxD1nwKC3hSHIOCJtiY4MA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/WebAPI.UserManagement.UserManager.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/WebAPI.UserManagement.UserManager.html",
+          "hash": "0+cfmm7pw+5XgZ1WZ+EK5A=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/WebAPI.UserManagement.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/WebAPI.UserManagement.html",
+          "hash": "aErTwf+Qg6jfkyzbgC/lbg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/WebAPI.WebApiApplication.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/WebAPI.WebApiApplication.html",
+          "hash": "9hmS3hqS6VgfZLTqfD2dnQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/WebAPI.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/WebAPI.html",
+          "hash": "kE5an8h0tjnGI/8jhwtPBQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "api/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "api/index.html",
+          "hash": "ALaVMVyLGmudFxPssos6Mw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "api/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/toc.html",
+          "hash": "r5vZBVXs8RZUjGhMATvkMw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/intro.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/intro.html",
+          "hash": "/8xxQ6WM6OHoJo0lxb96ZQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "articles/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "articles/toc.html",
+          "hash": "t7iiFrmuYmrKWisdq+lN6Q=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "index.md",
+      "output": {
+        ".html": {
+          "relative_path": "index.html",
+          "hash": "lM2sy4O3qqo1CQB2OyAPLg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "toc.html",
+          "hash": "k+/dkjFuwAVS32HduMpmBw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    }
+  ],
+  "incremental_info": [
+    {
+      "status": {
+        "can_incremental": true,
+        "incrementalPhase": "build",
+        "total_file_count": 0,
+        "skipped_file_count": 0
+      },
+      "processors": {
+        "TocDocumentProcessor": {
+          "can_incremental": false,
+          "details": "Processor TocDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
+          "incrementalPhase": "build",
+          "total_file_count": 0,
+          "skipped_file_count": 0
+        },
+        "ConceptualDocumentProcessor": {
+          "can_incremental": true,
+          "incrementalPhase": "build",
+          "total_file_count": 4,
+          "skipped_file_count": 4
+        },
+        "ManagedReferenceDocumentProcessor": {
+          "can_incremental": true,
+          "incrementalPhase": "build",
+          "total_file_count": 19,
+          "skipped_file_count": 19
+        }
+      }
+    },
+    {
+      "status": {
+        "can_incremental": true,
+        "details": "Can support incremental post processing.",
+        "incrementalPhase": "postProcessing",
+        "total_file_count": 0,
+        "skipped_file_count": 0
+      },
+      "processors": {}
+    }
+  ],
+  "version_info": {},
+  "groups": [
+    {
+      "xrefmap": "xrefmap.yml"
+    }
+  ]
+}

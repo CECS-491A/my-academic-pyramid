@@ -8,6 +8,7 @@ using ManagerLayer.UserManagement;
 using SecurityLayer;
 using ServiceLayer.PasswordChecking.HashFunctions;
 using DataAccessLayer.DTOs;
+using SecurityLayer.Sessions;
 
 namespace DemoProject
 {
@@ -15,63 +16,90 @@ namespace DemoProject
     {
         static void Main(string[] args)
         {
-            Dictionary<string, string> test = new Dictionary<string, string>()
+            CreateUsers();
+            JWTokenManager tm = new JWTokenManager();
+            Dictionary<string, string> testPayload = new Dictionary<string, string>()
             {
-                { "a", "1" },
-                { "b", "2" },
-                { "c", "3" }
+                { "user", "test@email.com" },
+                { "claim", "[Post, Delete, Edit]" }
             };
 
-            test["c"] = "New 3";
-
-            CreateUsers();
-
-
-            DatabaseContext _DbContext = new DatabaseContext();
-            var um = new UserManager();
-
-            User user = um.FindByUserName("Abc@gmail.com");
-            JWTokenManager tm = new JWTokenManager(_DbContext);
-
-            String token = tm.GenerateToken(user.Id, test);
+            string token = tm.CreateToken(testPayload);
             Console.Out.WriteLine(token);
-            Console.Out.WriteLine("Attempting to validate token");
-            Dictionary<string, string> payload = null;
-            if (tm.ValidateToken(token))
-            {
-                Console.Out.WriteLine("Getting payload");
-                payload = tm.GetPayload(token);
-                Console.Out.WriteLine(payload.ToString());
-            }
+            Dictionary<string, string> decodedPayload = tm.DecodePayload(token);
+            // Doesn't work for dictionary
+            bool equalPayloads = testPayload.Equals(decodedPayload);
+            Console.Out.WriteLine(equalPayloads);
+            
 
-            if (tm.ValidateToken("FakeToken"))
-            {
-                Console.Out.WriteLine("Error: FakeToken isn't a real token.");
+            //Dictionary<string, string> test = new Dictionary<string, string>()
+            //{
+            //    { "fed", "food" },
+            //    { "blue", "23" },
+            //    { "cred", "43" }
+            //};
 
-            }
-            else
-            {
-                Console.Out.WriteLine("Correct: FakeToken wasn't valid.");
-            }
+            //test["c"] = "New 3";
 
-            System.Threading.Thread.Sleep(50000);
-            if (!tm.ValidateToken(token))
-            {
-                Console.Out.WriteLine("Token is now invalid. Good.");
-            }
-            else
-            {
-                Console.Out.WriteLine("Error: Token should be invalid.");
-            }
-            string newToken = tm.RefreshToken(token, payload);
-            if (tm.ValidateToken(newToken))
-            {
-                Console.Out.WriteLine("Good! The refresh worked!");
-            }
-            else
-            {
-                Console.Out.WriteLine("Something is wrong with refresh.");
-            }
+            //CreateUsers();
+
+            //var um = new UserManager();
+
+            //User user = um.FindByUserName("Abc@gmail.com");
+            //SessionManager sm = new SessionManager();
+            //JWTokenManager tm = new JWTokenManager();
+            //String token = sm.CreateSession(user.Id);
+            //sm.InvalidateSession(token);
+            //token = sm.CreateSession(user.Id);
+            //Console.Out.WriteLine(token);
+            //Console.Out.WriteLine("Attempting to validate token");
+            //Dictionary<string, string> payload = null;
+            //if (sm.ValidateSession(token))
+            //{
+            //    Console.Out.WriteLine("Getting payload");
+            //    payload = tm.DecodePayload(token);
+            //    Console.Out.WriteLine(payload.ToString());
+            //}
+
+            //if (sm.ValidateSession("FakeToken"))
+            //{
+            //    Console.Out.WriteLine("Error: FakeToken isn't a real token.");
+
+            //}
+            //else
+            //{
+            //    Console.Out.WriteLine("Correct: FakeToken wasn't valid.");
+            //}
+
+            //System.Threading.Thread.Sleep(50000);
+
+            //if (!sm.ValidateSession(token))
+            //{
+            //    Console.Out.WriteLine("Token is now invalid. Good.");
+            //}
+            //else
+            //{
+            //    Console.Out.WriteLine("Error: Token should be invalid.");
+            //}
+            //string newToken = sm.RefreshSession(token, payload);
+            //if (sm.ValidateSession(newToken))
+            //{
+            //    Console.Out.WriteLine("Good! The refresh worked!");
+            //}
+            //else
+            //{
+            //    Console.Out.WriteLine("Something is wrong with refresh.");
+            //}
+
+            //sm.InvalidateSession(newToken);
+            //if (sm.ValidateSession(newToken))
+            //{
+            //    Console.Out.WriteLine("Something is wrong. Token should have been deleted.");
+            //}
+            //else
+            //{
+            //    Console.Out.WriteLine("The token is invalid as it should be. It was deleted after all.");
+            //}
 
             Console.In.Read();
             Console.Out.WriteLine("Ending program.");
@@ -85,7 +113,7 @@ namespace DemoProject
                 UserName = "Abc@gmail.com",
                 FirstName = "Jackie",
                 LastName = "Chan",
-                
+                Catergory = "NewUser"
             };
 
             UserDTO user2 = new UserDTO()
@@ -93,7 +121,7 @@ namespace DemoProject
                 UserName = "tri@yahoo.com",
                 FirstName = "David",
                 LastName = "Gonzales",
-             
+                Catergory = "NewUser"
             };
 
             UserDTO user3 = new UserDTO()
@@ -101,7 +129,7 @@ namespace DemoProject
                 UserName = "Smith@gmail.com",
                 FirstName = "Michael",
                 LastName = "Nguyen",
-                
+                Catergory = "NonStudent"
             };
 
             DatabaseContext db = new DatabaseContext();
