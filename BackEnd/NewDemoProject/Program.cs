@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ServiceLayer.DataAnalysisDashboard;
 using DataAccessLayer.Logging;
 using DataAccessLayer;
-namespace DemoProject
+using ManagerLayer;
+using ServiceLayer.DataAnalysisDashboard;
+namespace NewDemoProject
 {
-    class ProgramDashboard
+    class Program
     {
         static void Main(string[] args)
         {
@@ -19,14 +20,8 @@ namespace DemoProject
             {
                 Console.WriteLine(re.Action + ", " + re.Date);
             }
-            Console.In.Read();
-            //IDashboardService dashboard = new DashboardService();
-            //long result = dashboard.CountUsers();
-            Console.WriteLine(result);
-            Console.WriteLine("Hello");
+            IDashboardService temp = new DashboardService();
             Console.ReadKey();
-            Console.ReadLine();
         }
-        
     }
 }

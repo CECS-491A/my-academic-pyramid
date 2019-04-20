@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{AE9FC4E8-8999-4B28-AFC3-08E53DB2F847}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>NewDemoProject</RootNamespace>
+    <AssemblyName>NewDemoProject</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\KFC.SIT.DataAccessLayer\KFC.SIT.DataAccessLayer.csproj">
+      <Project>{6a61e75b-b35b-4f17-b7f4-da1af5806b23}</Project>
+      <Name>KFC.SIT.DataAccessLayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KFC.SIT.ManagerLayer\KFC.SIT.ManagerLayer.csproj">
+      <Project>{1f873dd8-8a42-411b-b217-ebe6e8eeb002}</Project>
+      <Name>KFC.SIT.ManagerLayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KFC.SIT.SecurityLayer\KFC.SIT.SecurityLayer.csproj">
+      <Project>{c9a70604-9c00-4586-a435-8d5254be05d4}</Project>
+      <Name>KFC.SIT.SecurityLayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KFC.SIT.ServiceLayer\KFC.SIT.ServiceLayer.csproj">
+      <Project>{2a875510-9d8c-482f-99fd-19001548f681}</Project>
+      <Name>KFC.SIT.ServiceLayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KFC.SIT.WebAPI\KFC.SIT.WebAPI.csproj">
+      <Project>{56cdaaf8-ba7e-47b5-bfcc-f1e9d9e34f40}</Project>
+      <Name>KFC.SIT.WebAPI</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
