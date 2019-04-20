@@ -13,11 +13,11 @@ namespace DataAccessLayer.Models
         [BsonElement("Date")]
         public DateTime Date { get; set; }
 
-        [BsonElement("Year")]
-        public int Year { get; set; }
-
         [BsonElement("Month")]
         public int Month { get; set; }
+
+        [BsonElement("Session Duration")]
+        public int SessionDuration { get; set; }
 
         [BsonElement("Action")]
         public string Action { get; set; }

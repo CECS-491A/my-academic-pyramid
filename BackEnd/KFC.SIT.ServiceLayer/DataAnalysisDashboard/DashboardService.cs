@@ -14,36 +14,90 @@ namespace ServiceLayer.DataAnalysisDashboard
 {
     public class DashboardService : IDashboardService
     {
-        private const string _collectionName = "TelemetryLogs";
+        private const string _collectionTName = "TelemetryLogs";
+        private const string _collectionEName = "ErrorLogs";
 
-        private readonly IMongoCollection<TelemetryLog> Collection;
+        private readonly IMongoCollection<TelemetryLog> CollectionT;
+        private readonly IMongoCollection<ErrorLog> CollectionE;
 
         protected MongoDBRepo _repo;
 
         public DashboardService()
         {
             _repo = new MongoDBRepo("mongodb+srv://super:superheroes@myacademicpyramidlogging-if0cx.mongodb.net/test?retryWrites=true", "test");
-            Collection = _repo.Db.GetCollection<TelemetryLog>(_collectionName);
+            CollectionT = _repo.Db.GetCollection<TelemetryLog>(_collectionTName);
+            CollectionE = _repo.Db.GetCollection<ErrorLog>(_collectionEName);
         }
 
         public long CountUsers()
         {
             DateTime currentTime = DateTime.Now;
-            long queryResult = Collection.CountDocuments(new BsonDocument { { "Action", "Login" } });
+            // practice query don't touch them 
+            long queryResult = CollectionT.CountDocuments(new BsonDocument { { "Action", "Login" } });
+            var query2 = from userInfo in CollectionT.AsQueryable()
+                         where userInfo.Action == "Login"
+                         orderby userInfo.Date
+                         group userInfo by userInfo.Month into monthlyInfo
+                         select monthlyInfo;
+            var query = from userInfo in CollectionT.AsQueryable()
+                        where userInfo.Date.Month == 1
+                        group userInfo by userInfo.Date.Month into monthlyInfo
+                        select monthlyInfo.Max();
             return queryResult;
         }
 
         public long[] CountAverageSuccessfulLogin()
         {
             long[] avgLoginMonth = new long[12];
-            var query = from userInfo in Collection.AsQueryable<TelemetryLog>()
-                        where userInfo.Action == "Login" && userInfo.Month > 1
-                        orderby userInfo.Month
-                        group userInfo by userInfo.Month into userInfoMonth
-                        select userInfoMonth;
-            var query2 = Collection.AsQueryable<TelemetryLog>().Where(e => e.Action == "Login" && e.Month == 1).Select(e => e).Count();
-            var something = Collection.Find(new BsonDocument { {"Action", "Login" } });
+            var query = CollectionT.Aggregate()
+                        .Match(x => x.Action == "Login")
+                        .SortByDescending(x => x.Date)
+                        .Group(
+                x => x.Date.Month,
+                i => new
+                {
+                    Result = i.Select(x => x.ID).Count(),
+                }
+                ).ToList();
+
+            int count = 0;
+            foreach (var monthly in query)
+            {
+                avgLoginMonth[count] = monthly.Result;
+                count++;
+            }
             return avgLoginMonth;
+        }
+
+        public long[] CountAverageSessionDuration()
+        {
+            long[] avgSessionDurMonth = new long[12];
+            var query = CollectionT.Aggregate()
+                        .Match(x => x.Action == "Login" || x.Action == "Logout")
+                        .SortByDescending(x => x.Date)
+                        .Group(
+                x => x.Date.Month,
+                i => new
+                {
+                    Result = i.Select(x => x.ID).Count(),
+                }
+                ).ToList();
+
+            int count = 0;
+            foreach (var monthly in query)
+            {
+                avgSessionDurMonth[count] = monthly.Result;
+                count++;
+            }
+            return avgSessionDurMonth;
+        }
+
+        public long[] CountFailedSuccessfulLogIn()
+        {
+            long[] attemptLogins = new long[12];
+            var query = CollectionT.Aggregate()
+                        .Match(x => x.Action == "Login")
+                        .Count();
         }
 
         //public long CountSuccessfulLogin(int year, int month)
@@ -57,7 +111,7 @@ namespace ServiceLayer.DataAnalysisDashboard
 
         public long CountFeatureUsage()
         {
-            long queryResult = Collection.CountDocuments(new BsonDocument { { "Action", "Feature" } });
+            long queryResult = CollectionT.CountDocuments(new BsonDocument { { "Action", "Feature" } });
             return queryResult;
         }
 

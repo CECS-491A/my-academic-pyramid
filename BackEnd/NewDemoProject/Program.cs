@@ -14,13 +14,17 @@ namespace NewDemoProject
         static void Main(string[] args)
         {
             TelemetryLogCollection collection = new TelemetryLogCollection();
-            var result = collection.GetAll();
-            Console.In.Read();
-            foreach (var re in result)
+            //var result = collection.GetAll();
+            //foreach (var re in result)
+            //{
+            //    Console.WriteLine(re.Action + ", " + re.Date.ToString());
+            //}
+            DashboardService temp = new DashboardService();
+            long[] something = temp.CountAverageSuccessfulLogin();
+            foreach (long i in something)
             {
-                Console.WriteLine(re.Action + ", " + re.Date);
+                Console.WriteLine("Finally: " + i);
             }
-            IDashboardService temp = new DashboardService();
             Console.ReadKey();
         }
     }
