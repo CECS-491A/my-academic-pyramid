@@ -5,7 +5,7 @@ using Microsoft.AspNet.SignalR.Hubs;
 using ServiceLayer.Messenger;
 using System.Threading.Tasks;
 
-namespace WebAPI.Signal
+namespace WebAPI.Signalr
 {
     [HubName("MessengerHub")]
     public class MessengerHub : Hub

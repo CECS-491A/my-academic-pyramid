@@ -1,6 +1,5 @@
-﻿using DataAccessLayer;
+﻿using DataAccessLayer.Models;
 using Service_Layer.UserManagement.UserTree;
-using System;
 
 namespace ServiceLayer.UserManagement.UserTree
 {

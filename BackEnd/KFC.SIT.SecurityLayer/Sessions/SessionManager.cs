@@ -1,14 +1,12 @@
 ﻿using DataAccessLayer;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using ServiceLayer.UserManagement.UserAccountServices;
 using SecurityLayer.utility;
 using System.Security.Cryptography;
 using Newtonsoft.Json;
 using WebAPI.UserManagement;
+using DataAccessLayer.Models;
 
 namespace SecurityLayer.Sessions
 {

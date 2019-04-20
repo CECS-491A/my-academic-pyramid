@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer;
+using DataAccessLayer.Models;
 using DataAccessLayer.Models.Messenger;
 using ServiceLayer.Messenger;
 using ServiceLayer.UserManagement.UserAccountServices;

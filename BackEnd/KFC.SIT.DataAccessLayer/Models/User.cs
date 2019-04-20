@@ -8,13 +8,12 @@
 //------------------------------------------------------------------------------
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using DataAccessLayer.Repository;
 using System;
 using System.Collections.Generic;
-using DataAccessLayer.Models;
 using DataAccessLayer.Models.Messenger;
+using DataAccessLayer.Models.School;
 
-namespace DataAccessLayer
+namespace DataAccessLayer.Models
 {    
     public partial class User : IEntity 
     {
@@ -23,6 +22,8 @@ namespace DataAccessLayer
         {
             this.ChildUsers = new HashSet<User>();
             this.Claims = new HashSet<Claim>();
+            this.Students = new List<Student>();
+            //this.Questions = new List<Question>();
         }
 
         [Key]
@@ -31,8 +32,8 @@ namespace DataAccessLayer
         public string FirstName { get; set; }
         public string LastName { get; set; }
 
-        public Nullable<int> CatergoryId { get; set; }
-        public virtual Catergory Catergory { get; set; }
+        public Nullable<int> CategoryId { get; set; }
+        public virtual Category Category { get; set; }
 
         [Required, Column(TypeName = "datetime2"), DataType(DataType.DateTime)]
         public DateTime DateOfBirth { get; set; }
@@ -61,6 +62,10 @@ namespace DataAccessLayer
         public virtual ICollection<UserSession> userSessions { get; set; }
 
         public virtual ICollection<FriendRelationship> FriendRelationship { get; set; }
+
+        public ICollection<Student> Students;
+
+        //public ICollection<Question> Questions;
 
         /// <summary>
         /// Override Equals method.  The UserName of each User is unique.

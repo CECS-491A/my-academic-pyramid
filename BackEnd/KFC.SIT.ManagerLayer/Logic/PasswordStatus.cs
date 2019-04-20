@@ -1,4 +1,4 @@
-﻿namespace WebAPI.Logic
+﻿namespace ManagerLayer.Logic
 {
     /// <summary>
     /// Holds the security of a password.

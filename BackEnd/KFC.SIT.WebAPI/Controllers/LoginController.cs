@@ -1,21 +1,16 @@
-﻿
-using ServiceLayer.PasswordChecking.HashFunctions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using SecurityLayer;
 using DataAccessLayer;
 using DataAccessLayer.DTOs;
 using WebAPI.UserManagement;
 using System.Web.Http.Cors;
 using SecurityLayer.Sessions;
 using ManagerLayer.Constants;
-using WebAPI.UserManagement;
+using DataAccessLayer.Models;
 
-namespace KFC.SIT.WebAPI
+namespace KFC.SIT.WebAPI.Controllers
 { 
     public class LoginController : ApiController
     {
@@ -39,7 +34,7 @@ namespace KFC.SIT.WebAPI
                 {
                     UserName = payload.Email,
                     Email = payload.Email,
-                    Catergory = "NewUser"
+                    Category = "NewUser"
                 };
                 um.CreateUserAccount(userDto);
                 user = um.FindByUserName(payload.Email);
@@ -50,7 +45,7 @@ namespace KFC.SIT.WebAPI
             Dictionary<string, string> redirectResponseDictionary
                 = new Dictionary<string, string>()
             {
-                {"redirectURL", RedirectUserUtility.GetUrlAddress(user.Catergory.Value) }
+                {"redirectURL", RedirectUserUtility.GetUrlAddress(user.Category.Value) }
             };
             redirectResponseDictionary["redirectURL"] 
                 = redirectResponseDictionary["redirectURL"] + "?SITtoken=" + token;

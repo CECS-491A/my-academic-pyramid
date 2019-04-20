@@ -1,5 +1,4 @@
-﻿using DataAccessLayer;
-using System;
+﻿using DataAccessLayer.Models;
 using System.Collections.Generic;
 
 namespace SecurityLayer.Authorization.AuthorizationManagers

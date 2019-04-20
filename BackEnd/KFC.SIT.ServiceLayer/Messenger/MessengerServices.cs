@@ -1,11 +1,9 @@
 ﻿using DataAccessLayer;
-using DataAccessLayer.DTOs;
+using DataAccessLayer.Models;
 using DataAccessLayer.Models.Messenger;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
 
 namespace ServiceLayer.Messenger
 {

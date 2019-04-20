@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Cors;
 
-namespace KFC.SIT.WebAPI
+namespace KFC.SIT.WebAPI.Controllers
 {
 
     [EnableCors(origins: "*", headers: "*", methods: "*")]
@@ -37,7 +37,7 @@ namespace KFC.SIT.WebAPI
                     UserName = user.UserName,
                     FirstName = user.FirstName,
                     LastName = user.LastName,
-                    Catergory = user.Catergory.Value,
+                    Category = user.Category.Value,
                     DateOfBirth = user.DateOfBirth.ToString("MMMM dd yyyy hh:mm:ss tt"),
                     CreatedAt = user.CreatedAt.ToString("MMMM dd yyyy hh:mm:ss tt")
                     
