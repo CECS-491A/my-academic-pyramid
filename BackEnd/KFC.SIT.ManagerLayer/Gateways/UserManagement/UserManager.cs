@@ -54,13 +54,13 @@ namespace WebAPI.UserManagement
                 LastName = userDto.LastName,
                 Catergory = new Catergory(userDto.Catergory),
                 //// date and time as it would be in Coordinated Universal Time
-                //CreatedAt = DateTime.Now, // https://stackoverflow.com/questions/62151/datetime-now-vs-datetime-utcnow 
-                //DateOfBirth = DateTime.Parse(userDto.DateOfBirth),
+                CreatedAt = DateTime.Now, // https://stackoverflow.com/questions/62151/datetime-now-vs-datetime-utcnow 
+                DateOfBirth = DateTime.Parse(userDto.DateOfBirth),
                 //Location = userDto.Location,
             };
 
             //Automatically assigning claim to user
-            user = AutomaticClaimAssigning(user);
+            user = _userManagementServices.AutomaticClaimAssigning(user);
             user = _userManagementServices.AssignCatergory(user, user.Catergory);
 
             var response = _userManagementServices.CreateUser(user);
@@ -217,7 +217,7 @@ namespace WebAPI.UserManagement
         /// </summary>
         /// <param name="targetedUserName"></param>
         /// <param name="claim"></param>
-        public User RemoveClaimAction(int targetedUserId, string claimStr)
+        public User RemoveClaimAction(int targetedUserId, Claim claim)
         {
             // List of required claims needed for AddClaimAction Method
             List<Claim> createUserRequiredClaimTypes = new List<Claim>
@@ -237,46 +237,11 @@ namespace WebAPI.UserManagement
                 // Check if the requesting user is  at least same level as  the targeted user
             else
             {
-                User user = _userManagementServices.RemoveClaim(targetedUser, claimStr);
+                User user = _userManagementServices.RemoveClaim(targetedUser, claim);
                 UpdateUserAccount(user);
                 return user;
             }
                    
-        }
-
-        public User AddClaimAction(int targetedUserId, Claim claim)
-        {
-            // TODO finish this. It assigns a list instead of adding a claim.
-            // List of required claims needed for AddClaimAction Method
-
-            // Check if the requesting user has the require claims
-
-            // Retrive targeted user exists from database
-            User targetedUser = FindUserById(targetedUserId);
-            if (targetedUser == null)
-            {
-                return null;
-
-            }
-            // Check if the requesting user is  at least same level as  the targeted user
-            else
-            {
-                User user = _userManagementServices.AddClaim(targetedUser, claim);
-                UpdateUserAccount(user);
-                return user;
-            }
-
-        }
-
-        public List<string> GetClaims(string username)
-        {
-            User user = _userManagementServices.FindByUsername(username);
-            List<string> claimList = new List<string>();
-            foreach(var claim in user.Claims)
-            {
-                claimList.Add(claim.Value);
-            }
-            return claimList;
         }
 
 
@@ -306,52 +271,6 @@ namespace WebAPI.UserManagement
             String hashSaltPassword = hashPassword.ToString();
 
             return (hashSaltPassword.Equals(storedHash));
-
-        }
-
-        public User AutomaticClaimAssigning(User user)
-        {
-            if (user.Catergory.Value.Equals("Student"))
-            {
-                //Check if user is over 18 year old
-                if (user.DateOfBirth.AddYears(18) <= DateTime.Now)
-                {
-                    user.Claims.Add(new Claim("Over18"));
-                }
-                //Messenger Feature's claims
-                _userManagementServices.AddClaim(user, new Claim("CanSendMessage"));
-                _userManagementServices.AddClaim(user, new Claim("CanReceiveMessage"));
-
-                //Discussion Forum's claims
-                _userManagementServices.AddClaim(user, new Claim("CanPostQuestion"));
-                _userManagementServices.AddClaim(user, new Claim("CanReceiveQuestion"));
-
-                //User Management's claims
-                _userManagementServices.AddClaim(user, new Claim("CanCreateOwnStudentAccount"));
-                _userManagementServices.AddClaim(user, new Claim("CanEditOwnAccount"));
-                _userManagementServices.AddClaim(user, new Claim("CanDeleteOwnAccount"));
-
-            }
-            else if (user.Catergory.Value.Equals("Admin") || user.Catergory.Value.Equals("SystemAdmin"))
-            {
-                _userManagementServices.AddClaim(user, new Claim("CanCreateNewStudentAccount"));
-                _userManagementServices.AddClaim(user, new Claim("CanDeleteStudentAccount"));
-                _userManagementServices.AddClaim(user, new Claim("CanEditStudentAccount"));
-                _userManagementServices.AddClaim(user, new Claim("CanEnableOrDisableStudentAccount"));
-                _userManagementServices.AddClaim(user, new Claim("CanAlterStudentAccountUAC"));
-
-            }
-
-            else if (user.Catergory.Value.Equals("SystemAdmin"))
-            {
-                _userManagementServices.AddClaim(user, new Claim("EnableOrDisableAdminAccount"));
-                _userManagementServices.AddClaim(user, new Claim("CanDeleteAdminAccount"));
-                _userManagementServices.AddClaim(user, new Claim("CanDeleteOtherUser"));
-                _userManagementServices.AddClaim(user, new Claim("CanAlterAdminAccountUAC"));
-            }
-
-
-            return user;
 
         }
 

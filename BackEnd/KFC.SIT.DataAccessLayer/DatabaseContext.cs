@@ -17,7 +17,7 @@ namespace DataAccessLayer
 
         //Set of Conservations
         public DbSet<Conversation> Conservations { get; set; }
-        
+
         public DbSet<MessengerContactHist> MessengerContactHists {get;set;}
 
         public DbSet<FriendRelationship>FriendRelationships { get; set; }
@@ -32,12 +32,19 @@ namespace DataAccessLayer
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            
 
-            Database.SetInitializer<DatabaseContext>(null);
             modelBuilder.Entity<User>()
                 .HasOptional(p => p.ParentUser)
                 .WithMany(p => p.ChildUsers)
                 .HasForeignKey(p => p.ParentUser_Id);
+
+     
+                
+
+
+
+
 
         }
 

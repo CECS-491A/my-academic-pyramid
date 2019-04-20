@@ -245,6 +245,7 @@ export default {
         }, 500);
 
         this.$eventBus.$emit("UpdateTable");
+       
         this.dialog = false;
       }
     },

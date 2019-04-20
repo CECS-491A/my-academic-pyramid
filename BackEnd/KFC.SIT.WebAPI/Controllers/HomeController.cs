@@ -10,7 +10,6 @@ using DataAccessLayer;
 using DataAccessLayer.DTOs;
 using WebAPI.UserManagement;
 using ServiceLayer.PasswordChecking.HashFunctions;
-using SecurityLayer.Sessions;
 
 namespace KFC.SIT.WebAPI
 {
@@ -68,7 +67,7 @@ namespace KFC.SIT.WebAPI
 
             CreateUsers();
             DatabaseContext db = new DatabaseContext();
-            SessionManager sm = new SessionManager();
+            JWTokenManager tm = new JWTokenManager(db);
             UserManager um = new UserManager();
             User user = um.FindByUserName(username);
             if (user == null)
@@ -83,7 +82,7 @@ namespace KFC.SIT.WebAPI
                     { "b", "2" },
                     { "c", "3" }
                 };
-                return sm.CreateSession(user.Id);
+                return tm.GenerateToken(user.Id, testPayload);
             }
             
 
