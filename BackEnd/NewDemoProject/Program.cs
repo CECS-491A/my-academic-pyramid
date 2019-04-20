@@ -20,11 +20,20 @@ namespace NewDemoProject
             //    Console.WriteLine(re.Action + ", " + re.Date.ToString());
             //}
             DashboardService temp = new DashboardService();
+            Dictionary<string, long> something3 = temp.CountMostUsedFeature();
+            foreach (var tmp in something3)
+            {
+                Console.WriteLine(tmp);
+            }
+            long[] something2 = temp.CountFailedSuccessfulLogIn();
+            Console.WriteLine(something2[0]);
             long[] something = temp.CountAverageSuccessfulLogin();
+            /**
             foreach (long i in something)
             {
                 Console.WriteLine("Finally: " + i);
             }
+            */
             Console.ReadKey();
         }
     }

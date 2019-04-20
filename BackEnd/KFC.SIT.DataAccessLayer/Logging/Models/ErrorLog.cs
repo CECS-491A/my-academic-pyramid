@@ -12,6 +12,9 @@ namespace DataAccessLayer.Models
         [BsonElement("Date")]
         public string Date { get; set; }
 
+        [BsonElement("Action")]
+        public string Action { get; set; }
+
         [BsonElement("Message")]
         public string Message { get; set; }
 

@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using MongoDB.Bson;
+using System.Threading.Tasks;
 
 namespace ServiceLayer.DataAnalysisDashboard
 {
@@ -94,10 +95,52 @@ namespace ServiceLayer.DataAnalysisDashboard
 
         public long[] CountFailedSuccessfulLogIn()
         {
-            long[] attemptLogins = new long[12];
+            long[] attemptLogins = new long[2];
+            Task<long> queryS = CollectionT.CountDocumentsAsync(x => x.Action == "Login");
+            Task<long> queryF = CollectionE.CountDocumentsAsync(x => x.Action == "Login");
+
+            attemptLogins[0] = queryS.Result;
+            attemptLogins[1] = queryF.Result;
+            return attemptLogins;
+        }
+
+        public Dictionary<string, long> CountAverageTimeSpentPage()
+        {
+            // need to fix it @Todo
+            Dictionary<string, long> avgTime = new Dictionary<string, long>();
             var query = CollectionT.Aggregate()
-                        .Match(x => x.Action == "Login")
-                        .Count();
+                        .Match(x => x.Action == "???" || x.Action == "???")
+                        .Group(
+                x => x.Action,
+                i => new
+                {
+                    Result = i.Select(x => x.ID).Count(),
+                }
+                ).ToList();
+
+            return avgTime;
+        }
+
+        public Dictionary<string, long> CountMostUsedFeature()
+        {
+            Dictionary<string, long> featureNum = new Dictionary<string, long>();
+            var query = CollectionT.Aggregate()
+                        .Match(x => x.Action == "Feature" || x.Action == "Feature2")
+                        .Group(
+                x => x.Action,
+                i => new
+                {
+                    NumUsed = i.Select(x => x.ID).Count(),
+                    Feature = i.Select(x => x.Action).First()
+                }
+                ).ToList();
+
+            foreach (var feature in query)
+            {
+                featureNum.Add(feature.Feature, feature.NumUsed);
+            }
+
+            return featureNum;
         }
 
         //public long CountSuccessfulLogin(int year, int month)
