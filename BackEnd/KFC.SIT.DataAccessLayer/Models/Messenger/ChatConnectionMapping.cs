@@ -12,7 +12,7 @@ namespace DataAccessLayer.Models.Messenger
     {
        
         
-        public int UserId { set; get; }
+        public string Username { set; get; }
 
         [Key]
         public string ConnectionId { get; set; }

@@ -12,7 +12,6 @@ using WebAPI.Signal;
 using System.Net.Http;
 using DataAccessLayer.DTOs;
 using System.Collections.Generic;
-using WebAPI.UserManagement;
 
 namespace KFC.SIT.WebAPI
 {
@@ -22,22 +21,22 @@ namespace KFC.SIT.WebAPI
     public class MessengerController : ApiController
     {
         HttpContext httpContext;
-        MessengerManager messengerManager;
+        MessengerGateway messengerManager;
         string username;
         public MessengerController()
         {
             httpContext = HttpContext.Current;
-            messengerManager = new MessengerManager();
+            messengerManager = new MessengerGateway();
             username = httpContext.Request.Headers["Authorization"];
            
         }
 
         [HttpGet]
         [ActionName("LoadMessageContact")]
-        public IQueryable<Conversation> MessengerWithContact(int receiverUserId)
+        public IQueryable<Conversation> MessengerWithContact(string receiverUserName)
         {
 
-            var conservations =  messengerManager.GetConversationBetweenUser(2, receiverUserId);
+            var conservations =  messengerManager.GetConservationBetweenUser("nguyentrong56@gmail.com", receiverUserName);
 
             return conservations.AsQueryable();
 
@@ -45,10 +44,10 @@ namespace KFC.SIT.WebAPI
 
         [HttpGet]
         [ActionName("LoadLatestMessageContact")]
-        public async Task<Conversation> GetLatestMessageWithContact(int receiverUserId2)
+        public async Task<Conversation> GetLatestMessageWithContact(string receiverUserName2)
         {
 
-            var conservations = await messengerManager.GetLatestMessageBetweenUser(2, receiverUserId2);
+            var conservations = await messengerManager.GetLatestMessageBetweenUser("nguyentrong56@gmail.com", receiverUserName2);
 
             return conservations;
 
@@ -61,49 +60,32 @@ namespace KFC.SIT.WebAPI
         //[ActionName("GetContactHistory")]
         public IQueryable<MessengerContactHist> GetAllContactHistory()
         {
-            var contactList =  messengerManager.GetAllContactHistory(2);
+            var contactList =  messengerManager.GetAllContactHistory("nguyentrong56@gmail.com");
             return contactList;
         }
 
         [HttpPost]
         [ActionName("SendMessage")]
         //[ActionName("SendMessage")]
-        public HttpResponseMessage SendMessage([FromBody] Conversation conversation)
+        public HttpStatusCode SendMessage([FromBody] Conversation conservation)
         {
-            conversation.CreatedDate = DateTime.Now;
-
-            try
-            {
-                messengerManager.SendMessage(conversation);
-
-            }
-            catch(ArgumentException Exception)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "User does not exist to send message");
-            }
-
-
+            conservation.CreatedDate = DateTime.Now;
+            messengerManager.SendMessage(conservation);
             var myHub = GlobalHost.ConnectionManager.GetHubContext<MessengerHub>();
-                MessengerHub mHub = new MessengerHub();
-                var connectionIDList = messengerManager.GetConnectionIdWithUserId(conversation.SenderId);
+            MessengerHub mHub = new MessengerHub();
+
+
+            var connectionIDList =  messengerManager.GetConnectionIdWithUserName(conservation.SenderUserName);
+            {
+                foreach(ChatConnectionMapping cM in connectionIDList)
                 {
-                    foreach (ChatConnectionMapping cM in connectionIDList)
-                    {
-                        var result = myHub.Clients.Client(cM.ConnectionId).FetchMessages(conversation.SenderId, conversation.ReceiverId);
+                    var result = myHub.Clients.Client(cM.ConnectionId).FetchMessages(conservation.SenderUserName, conservation.ReceiverUserName);
 
-                    }
                 }
-            return Request.CreateResponse(HttpStatusCode.OK, "Message is sent successfully");
-            
-
-            
-            
-
-
-            
+            }
             //var result = myHub.Clients.All.FetchMessages(conservation.SenderUserName, conservation.ReceiverUserName);
 
-            
+            return HttpStatusCode.OK;
 
 
         }
@@ -113,7 +95,6 @@ namespace KFC.SIT.WebAPI
         public HttpResponseMessage AddFriendContactList(string addedUsername)
         {
             int addingUserId = 2;
-     
 
             try
             {
@@ -144,54 +125,38 @@ namespace KFC.SIT.WebAPI
         public  HttpResponseMessage GetFriendList()
         {
             //This is just for test. Remove when token implemenation is finished 
-            int userId = 2;
+            string username = "nguyentrong56@gmail.com";
 
             try
             {
-                var friendList = messengerManager.GetFriendRelationships(userId);
-                List<FriendContactDTO> friendListDTO = new List<FriendContactDTO>();
-                var userManager = new UserManager();
-                foreach (FriendRelationship friend in friendList)
+                var friendList = messengerManager.GetFriendRelationships(username);
+                List <FriendContactDTO> friendListDTO = new List<FriendContactDTO>();
+
+                foreach(FriendRelationship friend in friendList)
                 {
                     friendListDTO.Add(new FriendContactDTO
                     {
-                        FriendId = friend.FriendId,
-                        FriendUsername = userManager.FindUserById(friend.FriendId).UserName
+                        FriendUsername = friend.friendUsername
+
                     });
-                    
                 }
+
+
+                
                 return Request.CreateResponse(HttpStatusCode.OK, friendListDTO);
             }
 
-            catch (Exception exception)
+            catch(Exception exception)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.NotFound, exception.Message);
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Friendlist is not avalaible to retrieve");
             }
-         
+            
 
+            
 
-        }
-
-        [HttpDelete]
-        [ActionName("RemoveFriendFromList")]
-        public HttpResponseMessage DeleteFriend(int friendId)
-        {
-            int testAuthUserId = 2;
-            try
-            {
-                messengerManager.RemoveUserFromFriendList(testAuthUserId, friendId);
-                return Request.CreateResponse(HttpStatusCode.OK, "Friend is succesfully removed from the list");
-            }
-            catch(ArgumentException exception)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.NotFound, exception.Message);
-            }
 
         }
 
 
     }
-
-
-    
 }

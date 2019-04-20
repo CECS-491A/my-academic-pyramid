@@ -4,22 +4,13 @@
   <v-container fluid grid-list-xl>
     <v-layout row wrap>
       <v-flex xs12 md4>
-        <v-tabs
-        left
-        color="cyan"
-        dark
-        icons-and-text=""
-        >
-        <v-tabs-slider color="green"></v-tabs-slider>
-        <v-tab id ="chatHistory">
-             Chat History
-        </v-tab>
-
-        <v-tab-item>
-            <v-card height="350px">
-  
-      <v-toolbar 
-      color="teal" dark>
+  <v-card height="350px">
+    <v-navigation-drawer
+      v-model="drawer"
+      permanent
+      absolute
+    >
+      <v-toolbar flat class="transparent">
         <v-list class="pa-0">
           <v-list-tile avatar>
             <v-list-tile-avatar>
@@ -27,30 +18,31 @@
             </v-list-tile-avatar>
 
             <v-list-tile-content>
-              <v-list-tile-title>Chat Messenger</v-list-tile-title>
+              <v-list-tile-title>Chat APP</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
            <v-btn
               fab
-              medium
+              small
               color="red"
               bottom
-              right
+              left
               absolute
               @click="chatDialog = !chatDialog"
             >
-              <v-icon>edit</v-icon>
+              <v-icon>add</v-icon>
             </v-btn>
         </v-list>
       </v-toolbar>
 
-      <v-list two-line="">
+      <v-list class="pt-0" dense>
         <v-divider></v-divider>
-        
+
         <v-list-tile
           v-for="item in chatHistory"
-          :key="item.ReceiverId"
-          @click="loadMessageWithContact(item.ReceiverId)"
+        
+          :key="item.ReceiverUsername"
+          @click="loadMessageWithContact(item.ReceiverUserName)"
 
         >
           <v-list-tile-action>
@@ -58,55 +50,33 @@
           </v-list-tile-action>
 
           <v-list-tile-content>
-            <v-list-tile-title>{{ item.ReceiverUsername }}</v-list-tile-title>
-            <v-list-tile-sub-title> {{item.ContactTime}} </v-list-tile-sub-title>
+            <v-list-tile-title>{{ item.ReceiverUserName }}</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
       </v-list>
+    </v-navigation-drawer>
   </v-card>
-
-        </v-tab-item>
-
-        <v-tab
-        id ="friendList">
-        Friend List
-
-        </v-tab>
-
-        <v-tab-item>
   <friendList></friendList>
-        </v-tab-item>
-        </v-tabs>
-
       </v-flex>
               <v-flex
           xs12
           md6
         >
         <v-card class="elevation-12">
-          <chat> </chat>    
-        </v-card>
-              </v-flex>
-    </v-layout>
-  </v-container>
-    <v-dialog v-model="chatDialog" max-width="500px">
+          <chat> </chat>
+
+           <v-dialog v-model="chatDialog" max-width="500px">
             <v-card>
               <v-card-text>
                 <v-text-field 
                 label="Recipient Username"
-                v-model="currentReceiverUsername"
+                v-model="conversation.receiverUsername"
                 ></v-text-field>
                 <v-text-field 
                 label="Message"
                 v-model="conversation.messageContent"
                 ></v-text-field>
-                <v-alert
-                :value="alert"
-                  type="error"
-                 transition="scale-transition">
-                 {{errorText}}
-                  
-                </v-alert>
+                <small class="grey--text">* This doesn't actually save.</small>
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
@@ -114,6 +84,11 @@
               </v-card-actions>
             </v-card>
           </v-dialog>
+          
+        </v-card>
+              </v-flex>
+    </v-layout>
+  </v-container>
 </v-app>
 </div>
 </template>
@@ -122,7 +97,7 @@
 import chat from "@/components/Messenger/Chat"
 import friendList from"@/components/Messenger/FriendList"
 
-    //import {hubConnection} from 'signalr-no-jquery'
+    import {hubConnection} from 'signalr-no-jquery'
   export default {
     components:{
       chat,
@@ -135,25 +110,19 @@ import friendList from"@/components/Messenger/FriendList"
         right: null,
         chatDialog: false,
         conversation:{
-          senderId: 2,
-          receiverId:null,
+					senderUsername: "nguyentrong56@gmail.com",
+					receiverUsername: "",
 					messageContent:""
         },
-
-        currentReceiverUsername:"null",
-
-        alert: false,
-        errorText: null,
-        errorFoundUser: null
+ 
+        errorText: null
         
       }
     },
     created(){
       this.loadContactHistory(),
-      this.$eventBus.$on("SendMessageFromFriendList",friendTo =>{
-      
-        this.currentReceiverUsername = friendTo.username,
-        this.conversation.receiverId = friendTo.Id,
+      this.$eventBus.$on("SendMessageFromFriendList",receiverUsername =>{
+        this.conversation.receiverUsername = receiverUsername,
         this.conversation.messageContent=""
         this.chatDialog = true
       })
@@ -172,12 +141,10 @@ import friendList from"@/components/Messenger/FriendList"
                     .catch(err => {
                         /* eslint no-console: "off" */
                         console.log(err);
-                        
-
                     });
       },
-    loadMessageWithContact(receiverId){
-      this.$eventBus.$emit("LoadMessageContact", receiverId)
+    loadMessageWithContact(receiverUsername){
+      this.$eventBus.$emit("LoadMessageContact", receiverUsername)
     },
 
     async sendMessageWithNewContact()
@@ -189,23 +156,17 @@ import friendList from"@/components/Messenger/FriendList"
 						crossDomain: true,
 						url: this.$hostname + "messenger/SendMessage" ,
 						data: this.conversation
-                    }).then(()=>{
-
+                    })
+                    
+					.catch(err => {
+                        /* eslint no-console: "off" */
+                        console.log(err);
+                    });
                     this.conversation.initialMessage = null;
                     this.errorText = null;
                     this.chatDialog = false;
                     this.loadContactHistory();
-                    this.$eventBus.$emit("LoadMessageContact", this.conversation.receiverId)
-
-                    })        
-					.catch(err => {
-                        /* eslint no-console: "off" */
-                        console.log(err);
-                        this.errorFoundUser = err.data;
-                        alert = true;
-
-                    });
-                   
+                    this.$eventBus.$emit("LoadMessageContact", this.conversation.receiverUsername)
                 } else {
                     this.errorText = "A message must be entered!"
                 }

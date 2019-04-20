@@ -34,13 +34,13 @@ namespace DataAccessLayer
         public Nullable<int> CatergoryId { get; set; }
         public virtual Catergory Catergory { get; set; }
 
-       
+        [Required, Column(TypeName = "datetime2"), DataType(DataType.DateTime)]
         public DateTime DateOfBirth { get; set; }
       
         public string Email { get; set; }
         //[Required, Column(TypeName = "datetime2"), DataType(DataType.DateTime)]
         //public DateTime UpdatedAt { get; set; }
-        ////[Column(TypeName = "datetime2"), DataType(DataType.DateTime)]
+        [Column(TypeName = "datetime2"), DataType(DataType.DateTime)]
         public DateTime CreatedAt { get; set; }
         ////public DateTime ModifiedDate { get; set; }
         //public string Location { get; set; }
@@ -59,7 +59,6 @@ namespace DataAccessLayer
         public virtual ICollection<Claim> Claims { get; set; }
 
         public virtual ICollection<UserSession> userSessions { get; set; }
-
 
         public virtual ICollection<FriendRelationship> FriendRelationship { get; set; }
 

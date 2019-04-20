@@ -1,5 +1,6 @@
 ﻿
 using DataAccessLayer;
+using SecurityLayer.Sessions;
 using ServiceLayer.UserManagement.UserAccountServices;
 using System;
 using System.Collections.Generic;
@@ -13,34 +14,42 @@ namespace SecurityLayer.Authorization.AuthorizationManagers
     /// Checks the existence of the user and privileges of the user.  
     /// An instance of AuthorizationManager will be created for every request from the user by Controller.
     /// </summary>
-    public class AuthorizationManager : IAuthorizationManager
+    public class AuthorizationManager
     {
 
-        private User authorizedUser;
-        /// <summary>
-        /// Default constructor
-        /// </summary>
-        public AuthorizationManager()
-        {
+        SecurityContext context;
 
-        }
+        
 
         /// <summary>
         /// Constructor of AuthorizationManager.
-        /// Takes in user as a parameter and save the value.
-        /// It would throw an exception, if the user is null
+        /// Takes in a SecurityContext as a parameter and save the value.
+        /// It would throw an exception, if the context is null
         /// </summary>
-        /// <param name="user"></param>
-        public AuthorizationManager(User user)
+        /// <param name="context"></param>
+        public AuthorizationManager(SecurityContext context)
         {
-            if (user == null)
+            if (context == null)
             {
-                throw new ArgumentNullException("user", "User cannot be null.");
+                throw new ArgumentNullException("SecurityContext", "context cannot be null.");
             }
 
-            authorizedUser = user;
+            this.context = context;
         }
 
+        public AuthorizationManager(string token)
+        {
+            JWTokenManager jwtManager = new JWTokenManager();
+            if (token == null)
+            {
+                throw new ArgumentNullException("token");
+            }
+            else if (!jwtManager.ValidateSignature(token))
+            {
+                throw new ArgumentException("token", "Not a valid JSON Web Token.");
+            }
+            this.context = new SecurityContext(token);
+        }
 
         /// <summary>
         /// checks that user has the required claim in the requiredClaims. It would throw the exception, if the requireClaims is null.
@@ -49,7 +58,7 @@ namespace SecurityLayer.Authorization.AuthorizationManagers
         /// </summary>
         /// <param name="requiredClaims"></param> required claim(s) to get a permission to use the feature
         /// <returns> true/false </returns>
-        public bool CheckClaims(List<Claim> requiredClaims)
+        public bool CheckClaims(List<string> requiredClaims)
         {
             if (requiredClaims == null)
             {
@@ -58,13 +67,15 @@ namespace SecurityLayer.Authorization.AuthorizationManagers
                 );
             }
 
+            
+
             // Checks if each required claim exists in user's claim list
             return requiredClaims.All(rc =>
             {
                 // body of lambda function
                 // looks for a uc (user claim) that matches rc (required claim)
-                Claim foundClaim = authorizedUser.Claims.ToList().Find(
-                    uc => uc.Value.Equals(rc.Value)
+                string foundClaim = context.Claims.ToList().Find(
+                    uc => uc.Equals(rc)
                 );
                 // If claim not found, then foundClaim will be null.
                 return (foundClaim != null);

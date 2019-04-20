@@ -16,7 +16,7 @@ namespace ServiceLayer.Messenger
         {
             _DbContext = DbContext;
         }
-        public List<User> GetAllChatContacts(String currentUsername)
+        public List<User>GetAllChatContacts(String currentUsername)
         {
 
             using (var db = new DatabaseContext())
@@ -26,33 +26,36 @@ namespace ServiceLayer.Messenger
             }
         }
 
-        public List<Conversation> GetAllConservationBetweenContact(int senderId, int receiverId)
+        public List<Conversation>GetAllConservationBetweenContact(string senderUserName, string receiverUserName)
         {
             using (var db = new DatabaseContext())
             {
+               
                 return db.Conservations.
-                              Where(c => (c.SenderId == senderId && c.ReceiverId == receiverId)
-                                         || c.SenderId == receiverId && c.ReceiverId == senderId)
+                              Where(c => (c.ReceiverUserName == receiverUserName
+                                  && c.SenderUserName == senderUserName) ||
+                                  (c.ReceiverUserName == senderUserName
+                                  && c.SenderUserName == receiverUserName))
                               .OrderBy(c => c.CreatedDate)
                               .ToList();
             }
         }
 
-        public Conversation GetLatestMessageBetweenContact(int senderId, int receiverId)
+        public Conversation GetLatestMessageBetweenContact(string senderUserName, string receiverUserName)
         {
             using (var db = new DatabaseContext())
             {
 
                 return db.Conservations.
-                              Where(c => ((c.ReceiverId == receiverId
-                                  && c.SenderId == senderId) ||
-                                  (c.ReceiverId == senderId
-                                  && c.SenderId == receiverId))
+                              Where(c => ((c.ReceiverUserName == receiverUserName
+                                  && c.SenderUserName == senderUserName) ||
+                                  (c.ReceiverUserName == senderUserName
+                                  && c.SenderUserName == receiverUserName))
                                   && c.CreatedDate == db.Conservations.Max(m => m.CreatedDate)).FirstOrDefault();
             }
         }
 
-        public void SaveMessageToDatabase(Conversation conversation)
+        public void SendMessage(Conversation conversation)
         {
 
             using (var db = new DatabaseContext())
@@ -62,54 +65,21 @@ namespace ServiceLayer.Messenger
             }
         }
 
-        //public void DeleteMessage(string senderUsername, string receiverUsername)
-        //{
-
-        //        _DbContext.Conservations.RemoveRange(_DbContext.Conservations.Where(c => ((c.ReceiverId.Equals(receiverUsername)
-        //                          && c.SenderUserName == senderUsername))));
-
-        //}
-
-        public void DeleteChatContactHistory (int senderId,int receiverId)
+        public IEnumerable<ChatConnectionMapping> GetConnectionIdWithUserName(string username)
         {
-             var chatHistory = _DbContext.MessengerContactHists.Where(h => h.SenderId == senderId && h.ReceiverId == receiverId).Single();
-
-            if(chatHistory != null)
-            {
-                _DbContext.MessengerContactHists.Remove(chatHistory);
-            }
-
-            else
-            {
-                throw new ArgumentNullException("Chat history does not exist to be removed ");
-            }
-            
-
-            
-
-
-
-
-
+            return _DbContext.ChatConnectionMappings.Where(c => c.Username.Equals(username)).AsEnumerable();
         }
 
-        public IEnumerable<ChatConnectionMapping> GetConnectionIdWithUserId(int userId)
-        {
-            return _DbContext.ChatConnectionMappings.Where(c => c.UserId == userId).AsEnumerable();
-        }
-
-        public void AddContactHistory(User sender, User receiver)
+        public void AddContactHistory(string senderUsername, string receiverUsername)
         {
             var newMessengerContactHist = new MessengerContactHist
             {
-                SenderId = sender.Id,
-                ReceiverId = receiver.Id,
-                SenderUsername = sender.UserName,
-                ReceiverUsername = receiver.UserName,
+                SenderUserName = senderUsername,
+                ReceiverUserName = receiverUsername,
                 ContactTime = DateTime.Now
             };
 
-            var existingChatRecord = _DbContext.MessengerContactHists.FirstOrDefault(e => e.ReceiverId.Equals(receiver.Id) && e.SenderId.Equals(sender.Id));
+            var existingChatRecord = _DbContext.MessengerContactHists.FirstOrDefault(e => e.ReceiverUserName.Equals(receiverUsername) && e.SenderUserName.Equals(senderUsername));
             if (existingChatRecord == null)
             {
                 _DbContext.MessengerContactHists.Add(newMessengerContactHist);
@@ -125,17 +95,17 @@ namespace ServiceLayer.Messenger
             }
         }
 
-        public IQueryable<MessengerContactHist> GetAllContactHistory(int senderId)
+        public IQueryable<MessengerContactHist> GetAllContactHistory(string senderUsername)
         {
-            return  _DbContext.MessengerContactHists.Where(u => u.SenderId == senderId).AsQueryable();
+            return  _DbContext.MessengerContactHists.Where(u => u.SenderUserName.Equals(senderUsername)).AsQueryable();
         }
 
-        public bool IsFriend(int addingUserId, int addedUserId)
+        public bool IsFriend(User addingUser, User addedUser)
         {
 
             FriendRelationship fr =  _DbContext.FriendRelationships.FirstOrDefault(f => 
-            (f.FriendId== addedUserId && f.UserOfRelationship.Id == addingUserId) ||
-            (f.FriendId == addingUserId && f.UserOfRelationship.Id == addedUserId)
+            (f.friendId== addingUser.Id && f.UserId == addedUser.Id) ||
+            (f.friendId == addedUser.Id && f.UserId == addingUser.Id)
             );
 
             if(fr== null)
@@ -149,21 +119,19 @@ namespace ServiceLayer.Messenger
 
         public void AddContactFriendList(User addingUser, User addedUser)
         {
-
-
         
             if (addedUser != null)
             {
                 
-                if(!IsFriend(addingUser.Id, addedUser.Id))
+                if(!IsFriend(addingUser, addedUser))
                 {
                     var fr = new FriendRelationship
                     {
-                        FriendId = addedUser.Id,
-                       
+                        friendId = addedUser.Id,
+                        friendUsername = addedUser.UserName,
                         UserOfRelationship = addingUser
                     };
-                    _DbContext.FriendRelationships.Add(fr);
+                    addingUser.FriendRelationship.Add(fr);
     
                 }
 
@@ -179,10 +147,10 @@ namespace ServiceLayer.Messenger
             }
         }
 
-        public IEnumerable<FriendRelationship> GetAllFriendRelationship(int userId)
+        public IEnumerable<FriendRelationship> GetAllFriendRelationship(string username)
         {
             
-            var user = _DbContext.Users.Where(u => u.Id == userId).FirstOrDefault();
+            var user = _DbContext.Users.Where(u => u.UserName.Equals(username)).Single();
 
             if (user != null)
             {
@@ -194,40 +162,6 @@ namespace ServiceLayer.Messenger
                 throw new ArgumentNullException("User does not exist to retrieve a friendlist");
             }
             
-        }
-
-
-        public void RemoveUserFromFriendList(int authUserId, int friendUserId)
-        {
-         
-            var friend = _DbContext.FriendRelationships.Where(f => (f.UserId == authUserId && f.FriendId == friendUserId)).FirstOrDefault();
-            if (friend != null)
-            {
-                _DbContext.FriendRelationships.Remove(friend);
-            }
-
-            else
-            {
-                throw new ArgumentNullException("Friend does not exist to be removed ");
-            }
-
-
-                
-            
-
-     
-                
-            
-
-            
- 
-    
-
-     
-
-
-               
-           
         }
     }
 }

@@ -1,8 +1,15 @@
 </<template>
-  <v-app id="friendList"> 
+  <v-app id="friendList">
+    <v-layout row>
+      <v-flex xs12 sm6 offset-sm3>
         <v-card>
           <v-toolbar color="teal" dark>
+            <v-toolbar-side-icon></v-toolbar-side-icon>
+  
+            <v-toolbar-title class="text-xs-center">Friend List</v-toolbar-title>
+  
             <v-spacer></v-spacer>
+  
             <v-btn
               fab
               small
@@ -11,76 +18,35 @@
               right
               absolute
               @click="addFriendDialog = !addFriendDialog"
-            >  
-            <v-icon>add</v-icon>
+            >
+              <v-icon>add</v-icon>
             </v-btn>
-              
-      
+              <v-icon>search</v-icon>
+            </v-btn>
           </v-toolbar>
   
           <v-list subheader>
+     
             <v-list-tile
               v-for="friend in friendList"
-              :key="friend.FriendId"
-              >
-              <v-list-tile-content
-              @click="sendNewMessage(friend.FriendId, friend.FriendUsername)">
-                <v-list-tile-title v-html="friend.FriendUsername"
-                ></v-list-tile-title>
-              </v-list-tile-content>
-                     <v-list-tile-action>
-              </v-list-tile-action>
-               <v-menu bottom left>
-              <template v-slot:activator="{ on }">
-                <v-btn
-                  dark
-                  icon
-                  v-on="on"
-                >
-                  <v-icon>more_vert</v-icon>
-                </v-btn>
-              </template>
-               <v-card>
-          <v-list>
-            <v-list-tile avatar>
-              <v-list-tile-avatar>
-                <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John">
-              </v-list-tile-avatar>
+              :key="friend.friendUsername"
+              avatar
+              @click="sendNewMessage(friend.FriendUsername)"
+            >
+              <!-- <v-list-tile-avatar>
+                <img :src="item.avatar">
+              </v-list-tile-avatar> -->
   
               <v-list-tile-content>
-                <v-list-tile-title>{{friend.FriendUsername}}</v-list-tile-title>
-                <v-list-tile-sub-title></v-list-tile-sub-title>
+                <v-list-tile-title v-html="friend.FriendUsername"></v-list-tile-title>
               </v-list-tile-content>
   
-              <v-list-tile-action>
-                <v-btn
-                  :class="fav ? 'red--text' : ''"
-                  icon
-                  @click="deleteFriend(friend.FriendId)"
-                >
-                  <v-icon>delete</v-icon>
-                </v-btn>
-              </v-list-tile-action>
+              <!-- <v-list-tile-action>
+                <v-icon :color="friend.active ? 'teal' : 'grey'">chat_bubble</v-icon>
+              </v-list-tile-action> -->
             </v-list-tile>
           </v-list>
   
-          <v-divider></v-divider>
-  
-         
-  
-          <v-card-actions>
-            <v-spacer></v-spacer>
-  
-            <v-btn flat @click="menu = false">Cancel</v-btn>
-            <v-btn color="primary" flat @click="menu = false">Save</v-btn>
-          </v-card-actions>
-        </v-card>
-              
-  
-            
-            </v-menu>
-            </v-list-tile>
-          </v-list>
           <v-divider></v-divider>
   
         </v-card>
@@ -100,6 +66,8 @@
               </v-card-actions>
             </v-card>
           </v-dialog>
+      </v-flex>
+    </v-layout>
   </v-app>
 </template>
 
@@ -108,17 +76,9 @@ export default {
   data() {
     return {
       friendList: {
-        FriendId: "",
         FriendUserName: "",
-        IsOnline: false
+        IsOnline: ""
       },
-
-      friendTO:{
-        Id:"",
-        username:"",
-
-      },
-
       addFriendUsername:"",
       addFriendDialog: false
     };
@@ -143,7 +103,7 @@ export default {
         });
     },
 
-    async addFriend() {
+    async addFriend(addFriendUsername) {
       await this.axios({
         method: "POST",
         crossDomain: true,
@@ -161,31 +121,12 @@ export default {
         });
 	},
 
-	sendNewMessage(friendId,friendUsername)
+	sendNewMessage(receiverUsername)
 	{
-    this.friendTO.Id = friendId,
-    this.friendTO.username = friendUsername
-		this.$eventBus.$emit("SendMessageFromFriendList", this.friendTO)
+		this.$eventBus.$emit("SendMessageFromFriendList", receiverUsername)
 		
 	
-  },
-  
-  async deleteFriend(friendId){
-    await this.axios({
-        method: "DELETE",
-        crossDomain: true,
-        url: this.$hostname + "messenger/RemoveFriendFromList?friendId=" + friendId
-      })
-        .then(response => {
-			this.loadFriendList()
-
-        //this.friendList.push({FriendUserName: this.addFriendUsername});
-        })
-        .catch(err => {
-          /* eslint no-console: "off" */
-          console.log(err);
-        });
-  }
+	}
 	
 
   }

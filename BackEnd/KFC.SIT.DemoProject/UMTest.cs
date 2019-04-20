@@ -4,7 +4,7 @@ using DataAccessLayer;
 using DataAccessLayer.DTOs;
 using DataAccessLayer.Models;
 using DemoProject.Helper;
-using ManagerLayer.UserManagement;
+using WebAPI.UserManagement;
 using SecurityLayer.Authorization.AuthorizationManagers;
 using ServiceLayer.PasswordChecking.HashFunctions;
 
@@ -14,7 +14,7 @@ namespace DemoProject
     {
         static void Main(String[] args)
         {
-
+            Console.WriteLine("EHl");
             Console.ReadKey();
         }
     }

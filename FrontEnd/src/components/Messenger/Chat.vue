@@ -1,5 +1,6 @@
 <template>
   <div class="chat container">
+    <v-card class="elevation-12" color="primary lighten-4">
       <v-toolbar dark color="primary darken-1">
         <h2 class="text-primary text-center">Real-Time Chat</h2>
       </v-toolbar>
@@ -9,7 +10,7 @@
             <p class="nomessages text-secondary" v-if="messages.length == 0">[No messages yet!]</p>
             <div class="messages" v-chat-scroll="{always: false, smooth: true}">
               <div v-for="message in messages" :key="message.id">
-                <span class="text-info">[{{ message.ReceiverId }}]:</span>
+                <span class="text-info">[{{ message.ReceiverUserName }}]:</span>
                 <span>{{message.MessageContent}}</span>
                 <span class="text-secondary time">{{message.timestamp}}</span>
               </div>
@@ -20,6 +21,7 @@
           <CreateMessage :name="name"/>
         </div>
       </div>
+    </v-card>
   </div>
 </template>
 
@@ -40,7 +42,7 @@
         data() {
             return{
                 messages: [],
-                selectedUserId:"",
+                selectedUsername:"",
                 connection:"",
                 hubProxy:""
 
@@ -49,18 +51,18 @@
         created() {
             this.loadMessage(),
           
-          this.$eventBus.$on("LoadMessageContact",receiverId =>{
-                this.selectedUserId = receiverId
-                this.loadMessage(receiverId)
+          this.$eventBus.$on("LoadMessageContact",receiverUsername =>{
+                this.selectedUsername = receiverUsername
+                this.loadMessage(receiverUsername)
             });
 
-             this.connection = hubConnection("http://localhost:59364/");
-          this.connection.qs = "jwt=2";
+             this.connection = hubConnection("http://localhost:59364");
+          this.connection.qs = "jwt=nguyentrong56@gmail.com";
            console.log(sessionStorage.token);
            this.hubProxy = this.connection.createHubProxy("MessengerHub");
 
             this.hubProxy.on('FetchMessages', ()=> {
-              this.loadLatestMessage (this.selectedUserId)  
+              this.loadLatestMessage (this.selectedUsername)  
             });
 
             this.connection.start()
@@ -70,14 +72,22 @@
 
             
         },
+        // mounted(){
+        //      this.connection.start().catch(function(err){
+        //         return console.error(err)
+        //      })
+        //     this.hubProxy.on('SendMessage', function(message){
+        //         console.log(message)
+        //     })
 
+        // },
        
         methods:{
-           async loadMessage(receiverId){
+           async loadMessage(receiverUsername){
                     await this.axios({
                         method: "GET",
                         crossDomain: true,
-						url: this.$hostname + "messenger/LoadMessageContact?receiverUserId=" + receiverId,	
+						url: this.$hostname + "messenger/LoadMessageContact?receiverUsername=" + receiverUsername,	
                     })
                     .then(response => {
                         this.messages = response.data;
@@ -89,11 +99,11 @@
                 
 
             },
-            async loadLatestMessage(receiverId){
+            async loadLatestMessage(receiverUsername){
                     await this.axios({
                         method: "GET",
                         crossDomain: true,
-						url: this.$hostname + "messenger/LoadLatestMessageContact?receiverUserId2=" + receiverId,	
+						url: this.$hostname + "messenger/LoadLatestMessageContact?receiverUsername2=" + receiverUsername,	
                     })
                     .then(response => {
                         this.messages.push(response.data);

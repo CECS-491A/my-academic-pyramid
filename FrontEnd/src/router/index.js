@@ -7,7 +7,9 @@ import Publish from '@/Views/Publish'
 import Logging from '@/Views/Logging'
 import Login from '@/Views/Login'
 import UserManagement from '@/Views/UserManagement'
+import LoginPrototype from '@/Views/LoginPrototype'
 import ChatContainer from '@/Views//ChatContainer'
+import UserRegistration from '@/Views/UserRegistration'
 
 
 Vue.use(Router)
@@ -43,11 +45,20 @@ export default new Router({
     name: 'UserManagement',
     component: UserManagement
   },
-
+  {
+    path: '/LoginPrototype',
+    name: 'LoginPrototype',
+    component: LoginPrototype
+  },
   {
     path: '/Chat',
     name: 'Chat',
     component: ChatContainer
+  },
+  {
+    path: "/UserRegistration",
+    name: "UserRegistration",
+    component:UserRegistration
   }
   ]
 })

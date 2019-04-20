@@ -33,16 +33,16 @@
         data(){
             return {
                 conversation:{
-					SenderId: "2",
-					ReceiverId: "",
+					senderUsername: "nguyentrong56@gmail.com",
+					receiverUsername: "",
 					messageContent:""
 				},
                 errorText: null
             }
         },
         created() {
-            this.$eventBus.$on("LoadMessageContact",receiverId =>{
-                this.conversation.ReceiverId = receiverId
+            this.$eventBus.$on("LoadMessageContact",receiverUsername =>{
+                this.conversation.receiverUsername = receiverUsername
             })
            
         },
