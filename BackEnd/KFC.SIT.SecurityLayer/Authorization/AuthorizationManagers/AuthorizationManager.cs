@@ -49,7 +49,7 @@ namespace SecurityLayer.Authorization.AuthorizationManagers
             {
                 throw new ArgumentException("token", "Not a valid JSON Web Token.");
             }
-            this.context = new SecurityContext(jwtManager.DecodePayload(token));
+            this.context = new SecurityContext(token);
         }
 
         /// <summary>

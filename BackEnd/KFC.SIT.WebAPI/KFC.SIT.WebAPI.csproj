@@ -254,6 +254,7 @@
     <Compile Include="Signalr\MessengerHub.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegistrationData.cs" />
+    <Compile Include="Utility\SecurityContextBuilder.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\Error.cshtml" />
