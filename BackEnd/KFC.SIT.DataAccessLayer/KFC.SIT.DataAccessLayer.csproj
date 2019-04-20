@@ -149,45 +149,13 @@
     <Compile Include="Logging\OptimizeLogging\NLogger.cs" />
     <Compile Include="Logging\OptimizeLogging\TelemetryFormat.cs" />
     <Compile Include="Logging\Models\Repository\TelemetryLogCollection.cs" />
-    <Compile Include="Migrations\201904100316557_First_Migration_Step.cs" />
-    <Compile Include="Migrations\201904100316557_First_Migration_Step.Designer.cs">
-      <DependentUpon>201904100316557_First_Migration_Step.cs</DependentUpon>
+    <Compile Include="Migrations\201904190301412_initialMigration.cs" />
+    <Compile Include="Migrations\201904190301412_initialMigration.Designer.cs">
+      <DependentUpon>201904190301412_initialMigration.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201904140442210_addMessengerRelatedlass.cs" />
-    <Compile Include="Migrations\201904140442210_addMessengerRelatedlass.Designer.cs">
-      <DependentUpon>201904140442210_addMessengerRelatedlass.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201904142342176_FriendList.cs" />
-    <Compile Include="Migrations\201904142342176_FriendList.Designer.cs">
-      <DependentUpon>201904142342176_FriendList.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201904150600388_AddConnectionMapping.cs" />
-    <Compile Include="Migrations\201904150600388_AddConnectionMapping.Designer.cs">
-      <DependentUpon>201904150600388_AddConnectionMapping.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201904150613453_AddConnectionMappingfix.cs" />
-    <Compile Include="Migrations\201904150613453_AddConnectionMappingfix.Designer.cs">
-      <DependentUpon>201904150613453_AddConnectionMappingfix.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201904150614219_AddConnectionMappingfix2.cs" />
-    <Compile Include="Migrations\201904150614219_AddConnectionMappingfix2.Designer.cs">
-      <DependentUpon>201904150614219_AddConnectionMappingfix2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201904150622574_AddConnectionMappingfix4.cs" />
-    <Compile Include="Migrations\201904150622574_AddConnectionMappingfix4.Designer.cs">
-      <DependentUpon>201904150622574_AddConnectionMappingfix4.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201904150633056_AddConnectionMappingfix5.cs" />
-    <Compile Include="Migrations\201904150633056_AddConnectionMappingfix5.Designer.cs">
-      <DependentUpon>201904150633056_AddConnectionMappingfix5.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201904162054590_ChangePrimaryKeyConnnectionMappingClass.cs" />
-    <Compile Include="Migrations\201904162054590_ChangePrimaryKeyConnnectionMappingClass.Designer.cs">
-      <DependentUpon>201904162054590_ChangePrimaryKeyConnnectionMappingClass.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201904170349442_changeFriendRelationshipclass.cs" />
-    <Compile Include="Migrations\201904170349442_changeFriendRelationshipclass.Designer.cs">
-      <DependentUpon>201904170349442_changeFriendRelationshipclass.cs</DependentUpon>
+    <Compile Include="Migrations\201904190335165_fixingRelationship.cs" />
+    <Compile Include="Migrations\201904190335165_fixingRelationship.Designer.cs">
+      <DependentUpon>201904190335165_fixingRelationship.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Catergory.cs" />
@@ -224,7 +192,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="api\index.md" />
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <Content Include=".gitignore" />
     <Content Include="api\.gitignore" />
     <Content Include="NLog.config">
@@ -244,35 +214,11 @@
     <None Include="toc.yml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201904100316557_First_Migration_Step.resx">
-      <DependentUpon>201904100316557_First_Migration_Step.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201904190301412_initialMigration.resx">
+      <DependentUpon>201904190301412_initialMigration.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904140442210_addMessengerRelatedlass.resx">
-      <DependentUpon>201904140442210_addMessengerRelatedlass.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904142342176_FriendList.resx">
-      <DependentUpon>201904142342176_FriendList.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904150600388_AddConnectionMapping.resx">
-      <DependentUpon>201904150600388_AddConnectionMapping.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904150613453_AddConnectionMappingfix.resx">
-      <DependentUpon>201904150613453_AddConnectionMappingfix.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904150614219_AddConnectionMappingfix2.resx">
-      <DependentUpon>201904150614219_AddConnectionMappingfix2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904150622574_AddConnectionMappingfix4.resx">
-      <DependentUpon>201904150622574_AddConnectionMappingfix4.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904150633056_AddConnectionMappingfix5.resx">
-      <DependentUpon>201904150633056_AddConnectionMappingfix5.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904162054590_ChangePrimaryKeyConnnectionMappingClass.resx">
-      <DependentUpon>201904162054590_ChangePrimaryKeyConnnectionMappingClass.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904170349442_changeFriendRelationshipclass.resx">
-      <DependentUpon>201904170349442_changeFriendRelationshipclass.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201904190335165_fixingRelationship.resx">
+      <DependentUpon>201904190335165_fixingRelationship.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

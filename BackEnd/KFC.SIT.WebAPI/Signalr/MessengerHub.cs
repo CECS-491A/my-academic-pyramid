@@ -3,6 +3,7 @@ using DataAccessLayer.Models.Messenger;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
 using ServiceLayer.Messenger;
+using System;
 using System.Threading.Tasks;
 
 namespace WebAPI.Signal
@@ -38,7 +39,7 @@ namespace WebAPI.Signal
                 {
                     ChatConnectionMapping newConnection = new ChatConnectionMapping
                     {
-                        Username = token,
+                        UserId = Convert.ToInt32(token) ,
                         ConnectionId = Context.ConnectionId
                     };
                     db.ChatConnectionMappings.Add(newConnection);

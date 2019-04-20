@@ -60,6 +60,7 @@ namespace DataAccessLayer
 
         public virtual ICollection<UserSession> userSessions { get; set; }
 
+
         public virtual ICollection<FriendRelationship> FriendRelationship { get; set; }
 
         /// <summary>

@@ -226,7 +226,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="BusinessRules\PasswordCheckingBR.cs" />
-    <Compile Include="Gateways\MessengerManager\MessengerGateway.cs" />
+    <Compile Include="Gateways\MessengerManager\MessengerManager.cs" />
     <Compile Include="Gateways\UsageAnalysisDashboard\DashboardManager.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
