@@ -1,18 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Cors;
-using SecurityLayer;
 using DataAccessLayer;
 using DataAccessLayer.DTOs;
 using WebAPI.UserManagement;
-using ServiceLayer.PasswordChecking.HashFunctions;
 using SecurityLayer.Sessions;
+using DataAccessLayer.Models;
 
-namespace KFC.SIT.WebAPI
+namespace KFC.SIT.WebAPI.Controllers
 {
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class HomeController : ApiController

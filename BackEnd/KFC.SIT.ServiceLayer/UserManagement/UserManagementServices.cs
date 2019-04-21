@@ -207,19 +207,19 @@ namespace ServiceLayer.UserManagement.UserAccountServices
             return user;
         }
 
-        public User AssignCatergory(User user, Catergory catergory)
+        public User AssignCategory(User user, Category category)
         {
-            Catergory existingCatergory = _DbContext.Catergories.FirstOrDefault(c => c.Value == catergory.Value);
-            if (existingCatergory == null)
+            Category existingCategory = _DbContext.Categories.FirstOrDefault(c => c.Value == category.Value);
+            if (existingCategory == null)
             {
-                catergory.Users.Add(user);
+                category.Users.Add(user);
                 
             }
 
             else
             {
-                existingCatergory.Users.Add(user);
-                user.Catergory = existingCatergory;
+                existingCategory.Users.Add(user);
+                user.Category = existingCategory;
             }
 
             return user;

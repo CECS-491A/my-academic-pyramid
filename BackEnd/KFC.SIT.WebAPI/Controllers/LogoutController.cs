@@ -9,18 +9,41 @@ using DataAccessLayer;
 using DataAccessLayer.DTOs;
 using WebAPI.UserManagement;
 using SecurityLayer.Sessions;
+using SecurityLayer.Authorization;
+using KFC.SIT.WebAPI.Utility;
 
 namespace KFC.SIT.WebAPI.Controllers
 {
     public class LogoutController : ApiController
     {
         // POST api/<controller>
-        public void Post([FromBody]string token)
+        public HttpResponseMessage Post([FromBody]int userId)
         {
+            SecurityContext securityContext = SecurityContextBuilder.CreateSecurityContext(Request.Headers);
+            if (securityContext == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.Unauthorized);
+            }
             // TODO invalidate the token.
             DatabaseContext db = new DatabaseContext();
             SessionManager sm = new SessionManager();
-            sm.InvalidateSession(token);
+            // TODO modify this to allow admins to use this.
+            if (securityContext.UserId != userId)
+            {
+                return Request.CreateResponse(HttpStatusCode.Unauthorized);
+            }
+            if (!sm.ValidateSession(securityContext.Token)) {
+                return Request.CreateResponse(HttpStatusCode.Unauthorized);
+            }
+            try
+            {
+                sm.InvalidateSession(securityContext.Token);
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch
+            {
+                return Request.CreateResponse(HttpStatusCode.ExpectationFailed);
+            }
         }
     }
 }

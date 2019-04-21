@@ -10,15 +10,17 @@ namespace DemoProject
 {
     class ProgramDashboard
     {
-        public static void Main(string[] args)
+        static void Main(string[] args)
         {
             TelemetryLogCollection collection = new TelemetryLogCollection();
             var result = collection.GetAll();
-            foreach(var re in result)
+            Console.In.Read();
+            foreach (var re in result)
             {
                 Console.WriteLine(re.Action + ", " + re.Date);
             }
-            IDashboardService dashboard = new DashboardService();
+            Console.In.Read();
+            //IDashboardService dashboard = new DashboardService();
             //long result = dashboard.CountUsers();
             Console.WriteLine(result);
             Console.WriteLine("Hello");

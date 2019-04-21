@@ -52,7 +52,7 @@ namespace WebAPI.UserManagement
                 UserName = userDto.UserName,
                 FirstName = userDto.FirstName,
                 LastName = userDto.LastName,
-                Catergory = new Catergory(userDto.Catergory),
+                Category = new Category(userDto.Category),
                 //// date and time as it would be in Coordinated Universal Time
                 //CreatedAt = DateTime.Now, // https://stackoverflow.com/questions/62151/datetime-now-vs-datetime-utcnow 
                 //DateOfBirth = DateTime.Parse(userDto.DateOfBirth),
@@ -61,7 +61,7 @@ namespace WebAPI.UserManagement
 
             //Automatically assigning claim to user
             user = AutomaticClaimAssigning(user);
-            user = _userManagementServices.AssignCatergory(user, user.Catergory);
+            user = _userManagementServices.AssignCategory(user, user.Category);
 
             var response = _userManagementServices.CreateUser(user);
             try
@@ -189,6 +189,26 @@ namespace WebAPI.UserManagement
             return user;
         }
 
+        public UserDTO GetUserInfo(int id)
+        {
+            User user = FindUserById(id);
+            UserDTO userDTO = null;
+            if (user != null)
+            {
+                userDTO = new UserDTO()
+                {
+                    Id = user.Id,
+                    UserName = user.UserName,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Category = user.Category.Value,
+                    DateOfBirth = user.DateOfBirth.ToLongDateString(),
+                    Email = user.Email,
+                    CreatedAt = user.CreatedAt.ToLongDateString()
+                };
+            }
+            return userDTO;
+        }
 
         /// <summary>
         /// Method to find user object by UserName
@@ -311,7 +331,7 @@ namespace WebAPI.UserManagement
 
         public User AutomaticClaimAssigning(User user)
         {
-            if (user.Catergory.Value.Equals("Student"))
+            if (user.Category.Value.Equals("Student"))
             {
                 //Check if user is over 18 year old
                 if (user.DateOfBirth.AddYears(18) <= DateTime.Now)
@@ -330,24 +350,26 @@ namespace WebAPI.UserManagement
                 _userManagementServices.AddClaim(user, new Claim("CanCreateOwnStudentAccount"));
                 _userManagementServices.AddClaim(user, new Claim("CanEditOwnAccount"));
                 _userManagementServices.AddClaim(user, new Claim("CanDeleteOwnAccount"));
-
+                _userManagementServices.AddClaim(user, new Claim("CanReadOwnStudentAccount"));
+                _DbContext.SaveChanges();
             }
-            else if (user.Catergory.Value.Equals("Admin") || user.Catergory.Value.Equals("SystemAdmin"))
+            else if (user.Category.Value.Equals("Admin") || user.Category.Value.Equals("SystemAdmin"))
             {
                 _userManagementServices.AddClaim(user, new Claim("CanCreateNewStudentAccount"));
                 _userManagementServices.AddClaim(user, new Claim("CanDeleteStudentAccount"));
                 _userManagementServices.AddClaim(user, new Claim("CanEditStudentAccount"));
                 _userManagementServices.AddClaim(user, new Claim("CanEnableOrDisableStudentAccount"));
                 _userManagementServices.AddClaim(user, new Claim("CanAlterStudentAccountUAC"));
-
+                _DbContext.SaveChanges();
             }
-
-            else if (user.Catergory.Value.Equals("SystemAdmin"))
+            
+            else if (user.Category.Value.Equals("SystemAdmin"))
             {
                 _userManagementServices.AddClaim(user, new Claim("EnableOrDisableAdminAccount"));
                 _userManagementServices.AddClaim(user, new Claim("CanDeleteAdminAccount"));
                 _userManagementServices.AddClaim(user, new Claim("CanDeleteOtherUser"));
                 _userManagementServices.AddClaim(user, new Claim("CanAlterAdminAccountUAC"));
+                _DbContext.SaveChanges();
             }
 
 

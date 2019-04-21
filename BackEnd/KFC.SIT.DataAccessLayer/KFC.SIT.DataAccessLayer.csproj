@@ -157,8 +157,12 @@
     <Compile Include="Migrations\201904212257427_addDeleteByReceiverInChatHistory.Designer.cs">
       <DependentUpon>201904212257427_addDeleteByReceiverInChatHistory.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201904200607358_create-school-related-tables.cs" />
+    <Compile Include="Migrations\201904200607358_create-school-related-tables.Designer.cs">
+      <DependentUpon>201904200607358_create-school-related-tables.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Models\Catergory.cs" />
+    <Compile Include="Models\Category.cs" />
     <Compile Include="Models\Claim.cs" />
     <Compile Include="DatabaseContext.cs" />
     <Compile Include="Logging\Models\ErrorLog.cs" />
@@ -169,6 +173,15 @@
     <Compile Include="Models\Messenger\MessengerContactHist.cs" />
     <Compile Include="Models\PasswordQA.cs" />
     <Compile Include="Logging\Models\TelemetryLog.cs" />
+    <Compile Include="Models\School\Course.cs" />
+    <Compile Include="Models\School\Department.cs" />
+    <Compile Include="Models\School\School.cs" />
+    <Compile Include="Models\School\SchoolDepartment.cs" />
+    <Compile Include="Models\School\SchoolTeacher.cs" />
+    <Compile Include="Models\School\SchoolTeacherCourseStudent.cs" />
+    <Compile Include="Models\School\Student.cs" />
+    <Compile Include="Models\School\SchoolTeacherCourse.cs" />
+    <Compile Include="Models\School\Teacher.cs" />
     <Compile Include="Models\TokenManager.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserSession.cs" />
@@ -215,6 +228,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201904212257427_addDeleteByReceiverInChatHistory.resx">
       <DependentUpon>201904212257427_addDeleteByReceiverInChatHistory.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904200607358_create-school-related-tables.resx">
+      <DependentUpon>201904200607358_create-school-related-tables.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

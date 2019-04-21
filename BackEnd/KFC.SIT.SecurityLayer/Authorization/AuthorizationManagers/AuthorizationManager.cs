@@ -1,5 +1,6 @@
 ﻿
 using DataAccessLayer;
+using DataAccessLayer.Models;
 using SecurityLayer.Sessions;
 using ServiceLayer.UserManagement.UserAccountServices;
 using System;

@@ -1,6 +1,6 @@
 ﻿
 
-using WebAPI.BusinessRules;
+using ManagerLayer.BusinessRules;
 using ServiceLayer.PasswordChecking.HashFunctions;
 using System;
 using ServiceLayer.HttpClients;
@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace WebAPI.Logic.PasswordChecking.PasswordValidations
+namespace ManagerLayer.Logic.PasswordChecking.PasswordValidations
 {
     /// <summary>
     /// A password validation implementation using Troy Hunt's Pwned Passwords Service.

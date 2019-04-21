@@ -6,14 +6,11 @@
 //     Manual changes to this file will be overwritten if the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
+using System;
+using System.Collections.Generic;
 
-namespace DataAccessLayer
+namespace DataAccessLayer.Models
 {
-    using DataAccessLayer.Repository;
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations.Schema;
-
     /// <summary>
     /// The class is used for user's claim
     /// </summary>

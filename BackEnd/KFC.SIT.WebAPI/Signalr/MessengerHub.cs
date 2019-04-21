@@ -6,7 +6,7 @@ using ServiceLayer.Messenger;
 using System;
 using System.Threading.Tasks;
 
-namespace WebAPI.Signal
+namespace WebAPI.Signalr
 {
     [HubName("MessengerHub")]
     public class MessengerHub : Hub

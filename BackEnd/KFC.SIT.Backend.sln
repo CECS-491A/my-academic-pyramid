@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KFC.SIT.ServiceLayer", "KFC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KFC.SIT.WebAPI", "KFC.SIT.WebAPI\KFC.SIT.WebAPI.csproj", "{56CDAAF8-BA7E-47B5-BFCC-F1E9D9E34F40}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewDemoProject", "NewDemoProject\NewDemoProject.csproj", "{AE9FC4E8-8999-4B28-AFC3-08E53DB2F847}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,10 @@ Global
 		{56CDAAF8-BA7E-47B5-BFCC-F1E9D9E34F40}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{56CDAAF8-BA7E-47B5-BFCC-F1E9D9E34F40}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{56CDAAF8-BA7E-47B5-BFCC-F1E9D9E34F40}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE9FC4E8-8999-4B28-AFC3-08E53DB2F847}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE9FC4E8-8999-4B28-AFC3-08E53DB2F847}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE9FC4E8-8999-4B28-AFC3-08E53DB2F847}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE9FC4E8-8999-4B28-AFC3-08E53DB2F847}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
