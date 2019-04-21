@@ -16,7 +16,7 @@
         <v-textarea
           name="tokenArea"
           label="Default style"
-          v-bind:value="token"
+          v-bind:value="registrationUrl"
         ></v-textarea>
       </v-flex>    
 
@@ -32,10 +32,10 @@ export default {
   data () {
     return {
       payloadStr: "{\"email\": \"julianpoyo+22@gmail.com\"," 
-                    + "\"signature\": \"4T5Csu2U9OozqN66Us+pEc5ODcBwPs1ldaq2fmBqtfo=\","
                     + "\"ssoUserId\": \"0743cd2c-fec3-4b79-a5b6-a6c52a752c71\","
-                    + "\"timestamp\": \"1552766624957\"}",
-      token: ""
+                    + "\"timestamp\": \"1552766624957\","
+                    + "\"signature\": \"4T5Csu2U9OozqN66Us+pEc5ODcBwPs1ldaq2fmBqtfo=\"}",
+      registrationUrl: ""
     }
     
   },
@@ -58,8 +58,8 @@ export default {
               const url = "http://localhost:59364/api/Login";
               axios.post(url, temp)
                    .then(response => {
-                       this.token = response.data["redirectURL"]
-                       console.log("Session Storage.token = " + sessionStorage.SITToken)
+                       this.registrationUrl = response.data["redirectURL"]
+                       console.log("Session Storage.token = " + sessionStorage.SITtoken)
                    })
                    .catch(err => console.log("There was error. " + err.response));
               

@@ -11,6 +11,7 @@ namespace SecurityLayer.Authorization
 {
     public class SecurityContext
     {
+        public int UserId { get; set; }
         public string UserName { get; set; }
         public List<string> Claims { get; set; }
         public string Token { get; set; }
@@ -31,6 +32,7 @@ namespace SecurityLayer.Authorization
             Token = token;
             string userName = null;
             string claimsStr = null;
+            string userIdStr = null;
             if (payload.TryGetValue("username", out userName))
             {
                 UserName = userName;
@@ -46,6 +48,17 @@ namespace SecurityLayer.Authorization
             else
             {
                 throw new ArgumentException("Payload has no claims entry.");
+            }
+            if (payload.TryGetValue("userid", out userIdStr))
+            {
+                try
+                {
+                    UserId = int.Parse(userIdStr);
+                }
+                catch(FormatException)
+                {
+                    throw new ArgumentException("Payload had invalid userId");
+                }
             }
         }
         

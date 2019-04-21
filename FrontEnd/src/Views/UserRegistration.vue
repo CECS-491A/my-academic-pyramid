@@ -96,7 +96,7 @@ export default {
           headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + this.$route.query.SITtoken
+          'Authorization': 'Bearer ' + sessionStorage.SITtoken
           }
         }
         // console.log(requestPayload.DateOfBirth)
@@ -105,7 +105,7 @@ export default {
              .then(response => {
                console.log(response.data)
                sessionStorage.SITtoken = response.data.SITtoken
-               this.$router.push({name: "Home"})
+               this.$router.push({name: "UserHomePage"})
                })
              .catch(error => {console.log(error)})
     }
@@ -114,8 +114,25 @@ export default {
   created() {
     if (this.$route.query.SITtoken != undefined) {
       sessionStorage.SITtoken = this.$route.query.SITtoken
+      console.log("In creation")
+      // try to get userinfo
+      this.axios.get("http://localhost:59364/api/UserManager/GetContextId", 
+                     {headers: {'Accept': 'application/json',
+                                'Content-Type': 'application/json',
+                                'Authorization': 'Bearer ' + this.$route.query.SITtoken}})
+                .then(response => {
+                    // Get user userid.
+                    sessionStorage.SITuserid = response.data.userid
+                    sessionStorage.SITtoken = response.data.SITtoken
+                })
+                .catch(error => {
+                  //Indicate an error. Server might be down so just logout the user.
+                  // delete token to logout the user.
+                  // Redirect user to error page.
+                })
     }
     else {
+      //
       // display error message.
     }
   }

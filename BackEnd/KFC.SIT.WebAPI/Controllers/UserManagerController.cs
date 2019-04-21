@@ -14,6 +14,9 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Cors;
+using KFC.SIT.WebAPI.Utility;
+using SecurityLayer.Authorization;
+using SecurityLayer.Authorization.AuthorizationManagers;
 
 namespace KFC.SIT.WebAPI
 {
@@ -48,11 +51,71 @@ namespace KFC.SIT.WebAPI
             return list.AsQueryable();
         }
 
-        // GET api/<controller>/5
-        public string GetUserWithId(Guid id)
+        [HttpGet]
+        [ActionName("GetContextId")]
+        public HttpResponseMessage GetContextId()
         {
-            return "value";
+            SecurityContext securityContext = SecurityContextBuilder.CreateSecurityContext(
+               Request.Headers
+            );
+            if (securityContext == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.Unauthorized);
+            }
+            SessionManager sm = new SessionManager();
+            if (!sm.ValidateSession(securityContext.Token))
+            {
+                return Request.CreateResponse(HttpStatusCode.Unauthorized);
+            }
+            string updatedToken = sm.RefreshSession(securityContext.Token);
+            // TODO finish this.
+            return Request.CreateResponse(
+                HttpStatusCode.OK, new { userid = securityContext.UserId, SITtoken = updatedToken }
+            );
         }
+
+        [HttpGet]
+        [ActionName("GetUserInfoWithId")]
+        public HttpResponseMessage GetUserInfoWithId(int id)
+        {
+            SecurityContext securityContext = SecurityContextBuilder.CreateSecurityContext(
+               Request.Headers
+           );
+            if (securityContext == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.Unauthorized);
+            }
+            SessionManager sm = new SessionManager();
+            if (!sm.ValidateSession(securityContext.Token))
+            {
+                return Request.CreateResponse(HttpStatusCode.Unauthorized);
+            }
+
+            AuthorizationManager authorizationManager = new AuthorizationManager(
+                securityContext
+            );
+            // TODO get this from table in database.
+            List<string> requiredClaims = new List<string>()
+            {
+                "CanReadOwnStudentAccount"
+            };
+
+            if (securityContext.UserId != id ||
+                !authorizationManager.CheckClaims(requiredClaims))
+            {
+                return Request.CreateResponse(HttpStatusCode.Unauthorized);
+            }
+            else
+            {
+                UserManager um = new UserManager();
+                UserDTO userDTO = um.GetUserInfo(id);
+                string updatedToken = sm.RefreshSession(securityContext.Token);
+                return Request.CreateResponse(
+                    HttpStatusCode.OK, new {User = userDTO, SITtoken = updatedToken}
+                );
+            }
+        }
+
 
         // POST api/<controller>
         [HttpPost]
