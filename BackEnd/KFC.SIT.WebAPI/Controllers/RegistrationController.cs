@@ -15,7 +15,7 @@ using System.Web.Http.Cors;
 using DataAccessLayer.Models;
 using KFC.SIT.WebAPI.Utility;
 
-namespace KFC.SIT.WebAPI.Controllers
+namespace KFC.SIT.WebAPI.Controllers.Controllers
 {
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class RegistrationController : ApiController
@@ -62,7 +62,7 @@ namespace KFC.SIT.WebAPI.Controllers
                 user.LastName = registrationData.LastName;
                 // TODO test this.
                 user.DateOfBirth = registrationData.DateOfBirth;
-                user.Catergory = new Catergory("Student");
+                user.Category = new Category("Student");
                 um.UpdateUserAccount(user);
                 um.RemoveClaimAction(user.Id, "CanRegister");
                 um.AutomaticClaimAssigning(user);

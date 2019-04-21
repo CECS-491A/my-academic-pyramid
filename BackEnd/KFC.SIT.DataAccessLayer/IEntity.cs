@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccessLayer.Repository
+namespace DataAccessLayer
 {
     /// <summary>
     /// Interface which allow repository class access the commn Id attribute in every entity class

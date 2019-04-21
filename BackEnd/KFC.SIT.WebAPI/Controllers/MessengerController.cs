@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using System.Web.Http.Cors;
-using WebAPI.Signal;
+using WebAPI.Signalr;
 using System.Net.Http;
 using DataAccessLayer.DTOs;
 using System.Collections.Generic;
 
-namespace KFC.SIT.WebAPI
+namespace KFC.SIT.WebAPI.Controllers
 {
 
     [EnableCors(origins: "*", headers: "*", methods: "*")]

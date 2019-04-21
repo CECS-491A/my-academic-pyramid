@@ -18,7 +18,7 @@ using KFC.SIT.WebAPI.Utility;
 using SecurityLayer.Authorization;
 using SecurityLayer.Authorization.AuthorizationManagers;
 
-namespace KFC.SIT.WebAPI
+namespace KFC.SIT.WebAPI.Controllers
 {
 
     [EnableCors(origins: "*", headers: "*", methods: "*")]
@@ -40,7 +40,7 @@ namespace KFC.SIT.WebAPI
                     UserName = user.UserName,
                     FirstName = user.FirstName,
                     LastName = user.LastName,
-                    Catergory = user.Catergory.Value,
+                    Category = user.Category.Value,
                     DateOfBirth = user.DateOfBirth.ToString("MMMM dd yyyy hh:mm:ss tt"),
                     CreatedAt = user.CreatedAt.ToString("MMMM dd yyyy hh:mm:ss tt")
                     

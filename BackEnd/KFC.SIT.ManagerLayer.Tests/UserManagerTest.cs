@@ -1,13 +1,8 @@
-﻿using DataAccessLayer;
-using DataAccessLayer.DTOs;
+﻿using DataAccessLayer.DTOs;
 using DataAccessLayer.Models;
-using DemoProject;
-using ManagerLayer.UserManagement;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using WebAPI.UserManagement;
 using Xunit;
 
 namespace ManagerLayer.Tests
@@ -31,7 +26,7 @@ namespace ManagerLayer.Tests
                     FirstName = "Arturo",
                     LastName = "NA",
                     //BirthDate = DateTime.UtcNow,
-                    RawPassword = "PasswordArturo",
+                    //RawPassword = "PasswordArturo",
                     //Location = "Long Beach",
                     Email = "Arturo1@gmail.com",
                 });
@@ -73,7 +68,7 @@ namespace ManagerLayer.Tests
                     FirstName = "Arturo",
                     LastName = "NA",
                     //BirthDate = DateTime.UtcNow,
-                    RawPassword = "PasswordArturo",
+                    //RawPassword = "PasswordArturo",
                     //Location = "Long Beach",
                     Email = invalidEmail,
                 });
@@ -107,7 +102,7 @@ namespace ManagerLayer.Tests
                 FirstName = "Kevin",
                 LastName = "NA",
                 //BirthDate = DateTime.UtcNow,
-                RawPassword = "PasswordArturo",
+                //RawPassword = "PasswordArturo",
                 //Location = "Long Beach",
                 Email = "Artur1o@gmail.com",
             });
@@ -150,7 +145,7 @@ namespace ManagerLayer.Tests
                 FirstName = "Arturo",
                 LastName = "NA",
                 //BirthDate = DateTime.UtcNow,
-                RawPassword = "PasswordArturo",
+                //RawPassword = "PasswordArturo",
                 //Location = "Long Beach",
                 Email = "Arturo@gmail.com",
             });
@@ -184,7 +179,7 @@ namespace ManagerLayer.Tests
                 FirstName = "Luis",
                 LastName = "IDK",
                 //BirthDate = DateTime.UtcNow,
-                RawPassword = "PasswordArturo",
+                //RawPassword = "PasswordArturo",
                 //Location = "Long Beach",
                 Email = "Luis@gmail.com",
             });
@@ -227,7 +222,7 @@ namespace ManagerLayer.Tests
                 FirstName = "Kry",
                 LastName = "Leon",
                 //BirthDate = DateTime.UtcNow,
-                RawPassword = "PasswordArturo",
+                //RawPassword = "PasswordArturo",
                 //Location = "Long Beach",
                 Email = "123Arturo@gmail.com",
             });
@@ -260,7 +255,7 @@ namespace ManagerLayer.Tests
                 FirstName = "Arturo",
                 LastName = "NA",
                 //BirthDate = DateTime.UtcNow,s
-                RawPassword = "PasswordArturo",
+                //RawPassword = "PasswordArturo",
                 //Location = "Long Beach",
                 Email = "Arturo@gmail.com",
             });
@@ -270,7 +265,7 @@ namespace ManagerLayer.Tests
                 FirstName = "ArturoSon",
                 LastName = "NA",
                 //BirthDate = DateTime.UtcNow,
-                RawPassword = "PasswordArturo",
+                //RawPassword = "PasswordArturo",
                 //Location = "Long Beach",
                 Email = "Arturo2@gmail.com",
             });
@@ -310,7 +305,7 @@ namespace ManagerLayer.Tests
                 FirstName = "Arturo",
                 LastName = "NA",
                 //BirthDate = DateTime.UtcNow,
-                RawPassword = "PasswordArturo",
+                //RawPassword = "PasswordArturo",
                 //Location = "Long Beach",
                 Email = "Arturo@gmail.com",
             });
@@ -320,7 +315,7 @@ namespace ManagerLayer.Tests
                 FirstName = "ArturoSon",
                 LastName = "NA",
                 //BirthDate = DateTime.UtcNow,
-                RawPassword = "PasswordArturo",
+                //RawPassword = "PasswordArturo",
                 //Location = "Long Beach",
                 Email = "Arturo2@gmail.com",
             });
@@ -361,7 +356,7 @@ namespace ManagerLayer.Tests
                 FirstName = "Arturo",
                 LastName = "NA",
                 //BirthDate = DateTime.UtcNow,
-                RawPassword = "PasswordArturo",
+                //RawPassword = "PasswordArturo",
                 //Location = "Long Beach",
                 Email = "Arturo@gmail.com",
             });
@@ -371,7 +366,7 @@ namespace ManagerLayer.Tests
                 FirstName = "ArturoSon",
                 LastName = "NA",
                 //BirthDate = DateTime.UtcNow,
-                RawPassword = "PasswordArturo",
+                //RawPassword = "PasswordArturo",
                 //Location = "Long Beach",
                 Email = "Arturo2@gmail.com",
             });
@@ -412,7 +407,7 @@ namespace ManagerLayer.Tests
                 FirstName = "Kevin",
                 LastName = "Kim",
                 //BirthDate = DateTime.UtcNow,
-                RawPassword = "PasswordArturo",
+                //RawPassword = "PasswordArturo",
                 //Location = "Long Beach",
                 Email = "BTS@gmail.com",
             });
@@ -451,7 +446,7 @@ namespace ManagerLayer.Tests
                 FirstName = "Arturo",
                 LastName = "NA",
                 //BirthDate = DateTime.UtcNow,
-                RawPassword = "PasswordArturo",
+                //RawPassword = "PasswordArturo",
                 //Location = "Long Beach",
                 Email = "ArturoKevin@gmail.com",
             });
@@ -491,7 +486,7 @@ namespace ManagerLayer.Tests
                 FirstName = "Arturo",
                 LastName = "NA",
                 //BirthDate = DateTime.UtcNow,
-                RawPassword = "PasswordArturo",
+                //RawPassword = "PasswordArturo",
                 //Location = "Long Beach",
                 Email = "ArturoKevin2@gmail.com",
             });
@@ -533,7 +528,7 @@ namespace ManagerLayer.Tests
                 FirstName = "Arturo",
                 LastName = "NA",
                 //BirthDate = DateTime.UtcNow,
-                RawPassword = "PasswordArturo",
+                //RawPassword = "PasswordArturo",
                 //Location = "Long Beach",
                 Email = "ArturoKevin@gmail.com",
             });
@@ -574,7 +569,7 @@ namespace ManagerLayer.Tests
                 FirstName = "Arturo",
                 LastName = "NA",
                 //BirthDate = DateTime.UtcNow,
-                RawPassword = "PasswordArturo",
+                //RawPassword = "PasswordArturo",
                 //Location = "Long Beach",
                 Email = "ArturoKevin@gmail.com",
             });
@@ -616,7 +611,7 @@ namespace ManagerLayer.Tests
                 FirstName = "Arturo",
                 LastName = "NA",
                 //BirthDate = DateTime.UtcNow,
-                RawPassword = "PasswordArturo",
+                //RawPassword = "PasswordArturo",
                 //Location = "Long Beach",
                 Email = "ArturoKevin@gmail.com",
             });
@@ -657,7 +652,7 @@ namespace ManagerLayer.Tests
                 FirstName = "Arturo",
                 LastName = "NA",
                 //BirthDate = DateTime.UtcNow,
-                RawPassword = "PasswordArturo",
+                //RawPassword = "PasswordArturo",
                 //Location = "Long Beach",
                 Email = "Arturo1Kevin@gmail.com",
             });
@@ -699,7 +694,7 @@ namespace ManagerLayer.Tests
                 FirstName = "Hyunwoo",
                 LastName = "Kim",
                 //BirthDate = DateTime.UtcNow,
-                RawPassword = "PasswordArturo",
+                //RawPassword = "PasswordArturo",
                 //Location = "Long Beach",
                 Email = "11ArturoKevin@gmail.com",
             });
@@ -710,7 +705,7 @@ namespace ManagerLayer.Tests
                 FirstName = "Hyunwoo2",
                 LastName = "Kim2",
                 //BirthDate = DateTime.UtcNow,
-                RawPassword = "PasswordArturo",
+                //RawPassword = "PasswordArturo",
                 //Location = "Long Beach",
                 Email = "11ArturoKevin2@gmail.com",
             });
@@ -754,9 +749,9 @@ namespace ManagerLayer.Tests
                 UserName = "User",
                 FirstName = "Hyunwoo",
                 LastName = "Kim",
-                Catergory = "User",
+                Category = "User",
                 //BirthDate = DateTime.UtcNow,
-                RawPassword = "PasswordArturo",
+                //RawPassword = "PasswordArturo",
                 //Location = "Long Beach",
                 Email = "11ArturoKevin@gmail.com",
             });
@@ -766,9 +761,9 @@ namespace ManagerLayer.Tests
                 UserName = "User",
                 FirstName = "Hyunwoo2",
                 LastName = "Kim2",
-                Catergory = "User",
+                Category = "User",
                 //BirthDate = DateTime.UtcNow,
-                RawPassword = "PasswordArturo",
+                //RawPassword = "PasswordArturo",
                 //Location = "Long Beach",
                 Email = "11ArturoKevin2@gmail.com",
             });
@@ -809,9 +804,9 @@ namespace ManagerLayer.Tests
                 UserName = "User",
                 FirstName = "Hyunwoo",
                 LastName = "Kim",
-                Catergory = "User",
+                Category = "User",
                 //BirthDate = DateTime.UtcNow,
-                RawPassword = "PasswordArturo",
+                //RawPassword = "PasswordArturo",
                 //Location = "Long Beach",
                 Email = "11ArturoKevin@gmail.com",
             });
@@ -821,9 +816,9 @@ namespace ManagerLayer.Tests
                 UserName = "User",
                 FirstName = "Hyunwoo2",
                 LastName = "Kim2",
-                Catergory = "User",
+                Category = "User",
                 //BirthDate = DateTime.UtcNow,
-                RawPassword = "PasswordArturo",
+                //RawPassword = "PasswordArturo",
                 //Location = "Long Beach",
                 Email = "11ArturoKevin2@gmail.com",
             });
@@ -864,9 +859,9 @@ namespace ManagerLayer.Tests
                 UserName = "User",
                 FirstName = "Hyunwoo",
                 LastName = "Kim",
-                Catergory = "User",
+                Category = "User",
                 //BirthDate = DateTime.UtcNow,
-                RawPassword = "PasswordArturo",
+                //RawPassword = "PasswordArturo",
                 //Location = "Long Beach",
                 Email = "11ArturoKevin@gmail.com",
             });
@@ -876,9 +871,9 @@ namespace ManagerLayer.Tests
                 UserName = "User",
                 FirstName = "Hyunwoo2",
                 LastName = "Kim2",
-                Catergory = "User",
+                Category = "User",
                 //BirthDate = DateTime.UtcNow,
-                RawPassword = "PasswordArturo",
+                //RawPassword = "PasswordArturo",
                 //Location = "Long Beach",
                 Email = "11ArturoKevin2@gmail.com",
             });
@@ -919,9 +914,9 @@ namespace ManagerLayer.Tests
                 UserName = "User",
                 FirstName = "Hyunwoo",
                 LastName = "Kim",
-                Catergory = "User",
+                Category = "User",
                 //BirthDate = DateTime.UtcNow,
-                RawPassword = "PasswordArturo",
+                //RawPassword = "PasswordArturo",
                 //Location = "Long Beach",
                 Email = "11ArturoKevin@gmail.com",
             });
@@ -931,9 +926,9 @@ namespace ManagerLayer.Tests
                 UserName = "User",
                 FirstName = "Hyunwoo2",
                 LastName = "Kim2",
-                Catergory = "User",
+                Category = "User",
                 //BirthDate = DateTime.UtcNow,
-                RawPassword = "PasswordArturo",
+                //RawPassword = "PasswordArturo",
                 //Location = "Long Beach",
                 Email = "11ArturoKevin2@gmail.com",
             });
@@ -974,9 +969,9 @@ namespace ManagerLayer.Tests
                 UserName = "User",
                 FirstName = "Hyunwoo",
                 LastName = "Kim",
-                Catergory = "User",
+                Category = "User",
                 //BirthDate = DateTime.UtcNow,
-                RawPassword = "PasswordArturo",
+                //RawPassword = "PasswordArturo",
                 //Location = "Long Beach",
                 Email = "11ArturoKevin@gmail.com",
             });
@@ -986,9 +981,9 @@ namespace ManagerLayer.Tests
                 UserName = "User",
                 FirstName = "Hyunwoo2",
                 LastName = "Kim2",
-                Catergory = "User",
+                Category = "User",
                 //BirthDate = DateTime.UtcNow,
-                RawPassword = "PasswordArturo",
+                //RawPassword = "PasswordArturo",
                 //Location = "Long Beach",
                 Email = "11ArturoKevin2@gmail.com",
             });
@@ -1029,9 +1024,9 @@ namespace ManagerLayer.Tests
                 UserName = "User",
                 FirstName = "Hyunwoo",
                 LastName = "Kim",
-                Catergory = "User",
+                Category = "User",
                 //BirthDate = DateTime.UtcNow,
-                RawPassword = "PasswordArturo",
+                //RawPassword = "PasswordArturo",
                 //Location = "Long Beach",
                 Email = "11ArturoKevin@gmail.com",
             });
@@ -1041,9 +1036,9 @@ namespace ManagerLayer.Tests
                 UserName = "User",
                 FirstName = "Hyunwoo2",
                 LastName = "Kim2",
-                Catergory = "User",
+                Category = "User",
                 //BirthDate = DateTime.UtcNow,
-                RawPassword = "PasswordArturo",
+                //RawPassword = "PasswordArturo",
                 //Location = "Long Beach",
                 Email = "11ArturoKevin2@gmail.com",
             });

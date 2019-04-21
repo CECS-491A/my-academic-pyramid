@@ -52,7 +52,7 @@ namespace WebAPI.UserManagement
                 UserName = userDto.UserName,
                 FirstName = userDto.FirstName,
                 LastName = userDto.LastName,
-                Catergory = new Catergory(userDto.Catergory),
+                Category = new Category(userDto.Category),
                 //// date and time as it would be in Coordinated Universal Time
                 //CreatedAt = DateTime.Now, // https://stackoverflow.com/questions/62151/datetime-now-vs-datetime-utcnow 
                 //DateOfBirth = DateTime.Parse(userDto.DateOfBirth),
@@ -61,7 +61,7 @@ namespace WebAPI.UserManagement
 
             //Automatically assigning claim to user
             user = AutomaticClaimAssigning(user);
-            user = _userManagementServices.AssignCatergory(user, user.Catergory);
+            user = _userManagementServices.AssignCategory(user, user.Category);
 
             var response = _userManagementServices.CreateUser(user);
             try
@@ -331,7 +331,7 @@ namespace WebAPI.UserManagement
 
         public User AutomaticClaimAssigning(User user)
         {
-            if (user.Catergory.Value.Equals("Student"))
+            if (user.Category.Value.Equals("Student"))
             {
                 //Check if user is over 18 year old
                 if (user.DateOfBirth.AddYears(18) <= DateTime.Now)
@@ -353,7 +353,7 @@ namespace WebAPI.UserManagement
                 _userManagementServices.AddClaim(user, new Claim("CanReadOwnStudentAccount"));
                 _DbContext.SaveChanges();
             }
-            else if (user.Catergory.Value.Equals("Admin") || user.Catergory.Value.Equals("SystemAdmin"))
+            else if (user.Category.Value.Equals("Admin") || user.Category.Value.Equals("SystemAdmin"))
             {
                 _userManagementServices.AddClaim(user, new Claim("CanCreateNewStudentAccount"));
                 _userManagementServices.AddClaim(user, new Claim("CanDeleteStudentAccount"));
@@ -362,8 +362,8 @@ namespace WebAPI.UserManagement
                 _userManagementServices.AddClaim(user, new Claim("CanAlterStudentAccountUAC"));
                 _DbContext.SaveChanges();
             }
-
-            else if (user.Catergory.Value.Equals("SystemAdmin"))
+            
+            else if (user.Category.Value.Equals("SystemAdmin"))
             {
                 _userManagementServices.AddClaim(user, new Claim("EnableOrDisableAdminAccount"));
                 _userManagementServices.AddClaim(user, new Claim("CanDeleteAdminAccount"));
