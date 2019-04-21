@@ -1,4 +1,4 @@
-﻿namespace WebAPI.Logic.PasswordChecking.PasswordValidations
+﻿namespace ManagerLayer.Logic.PasswordChecking.PasswordValidations
 {
     /// <summary>
     /// A validation method to test the security

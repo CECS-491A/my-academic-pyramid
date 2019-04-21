@@ -15,12 +15,12 @@ namespace KFC.SIT.WebAPI.Controllers
     public class LogoutController : ApiController
     {
         // POST api/<controller>
-        public void Post([FromBody]string value)
+        public void Post([FromBody]string token)
         {
             // TODO invalidate the token.
             DatabaseContext db = new DatabaseContext();
             SessionManager sm = new SessionManager();
-            sm.InvalidateSession(value);
+            sm.InvalidateSession(token);
         }
     }
 }

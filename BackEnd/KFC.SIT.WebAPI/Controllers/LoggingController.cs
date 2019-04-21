@@ -9,7 +9,7 @@ using DataAccessLayer.Logging;
 using System.Web.Http.Cors;
 
 
-namespace KFC.SIT.WebAPI
+namespace KFC.SIT.WebAPI.Controllers
 {
     //readonly MongoDatabase mongoDatabase;
     [EnableCors(origins: "*", headers: "*", methods: "*")]
