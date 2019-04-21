@@ -19,7 +19,7 @@ export default {
       this.userid = sessionStorage.SITuserid
       // TODO set header
       this.axios
-          .get(`http://localhost:59364/api/UserManager/GetUserInfoWithId?id=${sessionStorage.SITuserid}`, 
+          .get(`${this.$hostname}UserManager/GetUserInfoWithId?id=${sessionStorage.SITuserid}`, 
                 {headers: {'Accept': 'application/json',
                            'Content-Type': 'application/json',
                            'Authorization': 'Bearer ' + sessionStorage.SITtoken}})

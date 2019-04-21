@@ -55,7 +55,7 @@ export default {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
               }
-              const url = "http://localhost:59364/api/Login";
+              const url = `${this.$hostname}Login`;
               axios.post(url, temp)
                    .then(response => {
                        this.registrationUrl = response.data["redirectURL"]

@@ -113,7 +113,7 @@ namespace DemoProject
                 UserName = "Abc@gmail.com",
                 FirstName = "Jackie",
                 LastName = "Chan",
-                Catergory = "NewUser"
+                Category = "NewUser"
             };
 
             UserDTO user2 = new UserDTO()
@@ -121,7 +121,7 @@ namespace DemoProject
                 UserName = "tri@yahoo.com",
                 FirstName = "David",
                 LastName = "Gonzales",
-                Catergory = "NewUser"
+                Category = "NewUser"
             };
 
             UserDTO user3 = new UserDTO()
@@ -129,7 +129,7 @@ namespace DemoProject
                 UserName = "Smith@gmail.com",
                 FirstName = "Michael",
                 LastName = "Nguyen",
-                Catergory = "NonStudent"
+                Category = "NonStudent"
             };
 
             DatabaseContext db = new DatabaseContext();

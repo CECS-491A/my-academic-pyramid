@@ -201,7 +201,7 @@ namespace WebAPI.UserManagement
                     UserName = user.UserName,
                     FirstName = user.FirstName,
                     LastName = user.LastName,
-                    Catergory = user.Catergory.Value,
+                    Category = user.Category.Value,
                     DateOfBirth = user.DateOfBirth.ToLongDateString(),
                     Email = user.Email,
                     CreatedAt = user.CreatedAt.ToLongDateString()

@@ -100,7 +100,7 @@ export default {
           }
         }
         // console.log(requestPayload.DateOfBirth)
-        let urlRegistration = "http://localhost:59364/api/Registration"
+        let urlRegistration = `${this.$hostname}Registration`
         Axios.post(urlRegistration, requestPayload, headersObject)
              .then(response => {
                console.log(response.data)
@@ -116,7 +116,7 @@ export default {
       sessionStorage.SITtoken = this.$route.query.SITtoken
       console.log("In creation")
       // try to get userinfo
-      this.axios.get("http://localhost:59364/api/UserManager/GetContextId", 
+      this.axios.get(`${this.$hostname}UserManager/GetContextId`, 
                      {headers: {'Accept': 'application/json',
                                 'Content-Type': 'application/json',
                                 'Authorization': 'Bearer ' + this.$route.query.SITtoken}})
