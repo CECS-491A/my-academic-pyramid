@@ -9,87 +9,141 @@ using System.Web;
 
 namespace ServiceLayer.Messenger
 {
+
+    /// <summary>
+    /// Class that provide services for Chat Messengger's functionality
+    /// </summary>
     public class MessengerServices
     {
         protected DatabaseContext _DbContext;
+
+        
+        /// <summary>
+        /// Constructor that will accept DbContext as parameter
+        /// DbContext object will be pass from Manager Layera and SaveChanges method will be called from there
+        /// </summary>
+        /// <param name="DbContext"></param>
         public MessengerServices(DatabaseContext DbContext)
         {
             _DbContext = DbContext;
         }
-        public List<User> GetAllChatContacts(String currentUsername)
-        {
 
+
+        //public List<User> GetAllChatContacts(String currentUsername)
+        //{
+
+        //    using (var db = new DatabaseContext())
+        //    {
+        //        return db.Users.Where(u => u.UserName != currentUsername)
+        //                             .ToList();
+        //    }
+        //}
+
+        /// <summary>
+        /// Method used to get all conversations between two users
+        /// </summary>
+        /// <param name="firstUserId"></param> 
+        /// <param name="secondUserId"></param>
+        /// <returns></returns>
+        public List<Conversation> GetAllMessagesBetweenUsers(int firstUserId, int secondUserId)
+        {
             using (var db = new DatabaseContext())
             {
-                return db.Users.Where(u => u.UserName != currentUsername)
-                                     .ToList();
-            }
-        }
-
-        public List<Conversation> GetAllConservationBetweenContact(int senderId, int receiverId)
-        {
-            using (var db = new DatabaseContext())
-            {
-                return db.Conservations.
-                              Where(c => (c.SenderId == senderId && c.ReceiverId == receiverId)
-                                         || c.SenderId == receiverId && c.ReceiverId == senderId)
+                return db.Conversations.
+                              Where(c => (c.SenderId == firstUserId && c.ReceiverId == secondUserId)
+                                         || c.SenderId == secondUserId && c.ReceiverId == firstUserId)
                               .OrderBy(c => c.CreatedDate)
                               .ToList();
             }
         }
 
-        public Conversation GetLatestMessageBetweenContact(int senderId, int receiverId)
+        public Conversation GetMostRecentMessageBetweenUsers(int firstUserId, int secondUserId)
         {
             using (var db = new DatabaseContext())
             {
 
-                return db.Conservations.
-                              Where(c => ((c.ReceiverId == receiverId
-                                  && c.SenderId == senderId) ||
-                                  (c.ReceiverId == senderId
-                                  && c.SenderId == receiverId))
-                                  && c.CreatedDate == db.Conservations.Max(m => m.CreatedDate)).FirstOrDefault();
+                return db.Conversations.
+                              Where(c => ((c.ReceiverId == secondUserId
+                                  && c.SenderId == firstUserId) ||
+                                  (c.ReceiverId == firstUserId
+                                  && c.SenderId == secondUserId))
+                                  && c.CreatedDate == db.Conversations.Max(m => m.CreatedDate)).FirstOrDefault();
             }
         }
 
+        /// <summary>
+        /// Method to save the conversation to database
+        /// </summary>
+        /// <param name="conversation"></param>
         public void SaveMessageToDatabase(Conversation conversation)
         {
 
             using (var db = new DatabaseContext())
             {
-                db.Conservations.Add(conversation);
+                db.Conversations.Add(conversation);
                 db.SaveChanges();
             }
         }
 
-        //public void DeleteMessage(string senderUsername, string receiverUsername)
-        //{
-
-        //        _DbContext.Conservations.RemoveRange(_DbContext.Conservations.Where(c => ((c.ReceiverId.Equals(receiverUsername)
-        //                          && c.SenderUserName == senderUsername))));
-
-        //}
-
-        public void DeleteChatContactHistory (int senderId,int receiverId)
+        /// <summary>
+        /// Method to delete all messages between 2 users
+        /// The chat history which hold recent contact between 2 users will be delete as well
+        /// </summary>
+        /// <param name="firstUserId"></param>
+        /// <param name="secondUserId"></param>
+        public void DeleteMessageFromDatabase(int firstUserId, int secondUserId)
         {
-             var chatHistory = _DbContext.MessengerContactHists.Where(h => h.SenderId == senderId && h.ReceiverId == receiverId).Single();
+            _DbContext.Conversations.RemoveRange(_DbContext.Conversations
+                .Where(c => (c.SenderId == firstUserId && c.ReceiverId == secondUserId)
+                        || (c.SenderId == secondUserId && c.ReceiverId == firstUserId)));
+        }
 
-            if(chatHistory != null)
+        /// <summary>
+        /// Method to delete chat history record between 2 users
+        /// The actual messages will not be delete. 
+        /// This method should be combine with DeleteMessageFromDatabase method to completely delete messages
+        /// </summary>
+        /// <param name="senderId"></param>
+        /// <param name="targetUserId"></param>
+        public void DeleteChatHistoryRecord (int authUserId,int targetUserId)
+        {
+             var chatHistory = _DbContext.MessengerContactHists.Where(h => (h.SenderId == authUserId && h.ReceiverId == targetUserId)
+                                                                           ||(h.SenderId == targetUserId && h.ReceiverId == authUserId)).FirstOrDefault();
+
+
+            if(chatHistory.SenderId == authUserId  )
             {
-                _DbContext.MessengerContactHists.Remove(chatHistory);
+                if(chatHistory.DeleteByReceiver == true)
+                {
+                    _DbContext.MessengerContactHists.Remove(chatHistory);
+                }
+
+                else
+                {
+                    _DbContext.Entry(chatHistory).State = System.Data.Entity.EntityState.Modified;
+                    chatHistory.DeleteBySender = true;
+                }
+               
             }
 
-            else
+            else if (chatHistory.ReceiverId == authUserId)
             {
-                throw new ArgumentNullException("Chat history does not exist to be removed ");
+                if(chatHistory.DeleteBySender == true)
+                {
+                    _DbContext.MessengerContactHists.Remove(chatHistory);
+                }
+
+                else
+                {
+                    _DbContext.Entry(chatHistory).State = System.Data.Entity.EntityState.Modified;
+                    chatHistory.DeleteByReceiver = true;
+                }
+                
             }
-            
+    
+           
 
             
-
-
-
-
 
         }
 
@@ -100,7 +154,7 @@ namespace ServiceLayer.Messenger
 
         public void AddContactHistory(User sender, User receiver)
         {
-            var newMessengerContactHist = new MessengerContactHist
+            var newMessengerContactHist = new ChatHistory
             {
                 SenderId = sender.Id,
                 ReceiverId = receiver.Id,
@@ -109,7 +163,10 @@ namespace ServiceLayer.Messenger
                 ContactTime = DateTime.Now
             };
 
-            var existingChatRecord = _DbContext.MessengerContactHists.FirstOrDefault(e => e.ReceiverId.Equals(receiver.Id) && e.SenderId.Equals(sender.Id));
+            var existingChatRecord = _DbContext.MessengerContactHists.FirstOrDefault
+                (e => (e.ReceiverId == receiver.Id && e.SenderId == sender.Id) 
+                ||  (e.ReceiverId == sender.Id && e.SenderId== receiver.Id)) ;
+
             if (existingChatRecord == null)
             {
                 _DbContext.MessengerContactHists.Add(newMessengerContactHist);
@@ -125,9 +182,15 @@ namespace ServiceLayer.Messenger
             }
         }
 
-        public IQueryable<MessengerContactHist> GetAllContactHistory(int senderId)
+        public IQueryable<ChatHistory> GetAllContactHistory(int senderId)
         {
-            return  _DbContext.MessengerContactHists.Where(u => u.SenderId == senderId).AsQueryable();
+            return  _DbContext.MessengerContactHists.Where(u => u.SenderId == senderId || u.ReceiverId == senderId).AsQueryable();
+        }
+
+        public ChatHistory GetContactHistoryBetweenUsers(int firstUserId, int secondUserId)
+        {
+            return _DbContext.MessengerContactHists.Where(u => (u.SenderId == firstUserId && u.ReceiverId == secondUserId)
+                                                                || (u.SenderId == secondUserId && u.ReceiverId == firstUserId)).FirstOrDefault();
         }
 
         public bool IsFriend(int addingUserId, int addedUserId)
@@ -211,23 +274,8 @@ namespace ServiceLayer.Messenger
                 throw new ArgumentNullException("Friend does not exist to be removed ");
             }
 
-
-                
-            
-
-     
-                
-            
-
-            
- 
-    
-
-     
-
-
-               
-           
         }
+
+    
     }
 }

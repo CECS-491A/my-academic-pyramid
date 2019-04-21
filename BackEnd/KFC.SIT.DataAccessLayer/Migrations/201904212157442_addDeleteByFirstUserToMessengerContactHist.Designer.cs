@@ -7,13 +7,13 @@ namespace DataAccessLayer.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class initialMigration : IMigrationMetadata
+    public sealed partial class addDeleteByFirstUserToMessengerContactHist : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(initialMigration));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(addDeleteByFirstUserToMessengerContactHist));
         
         string IMigrationMetadata.Id
         {
-            get { return "201904190301412_initialMigration"; }
+            get { return "201904212157442_addDeleteByFirstUserToMessengerContactHist"; }
         }
         
         string IMigrationMetadata.Source

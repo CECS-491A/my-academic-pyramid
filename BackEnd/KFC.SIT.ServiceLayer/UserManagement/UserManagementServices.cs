@@ -115,7 +115,7 @@ namespace ServiceLayer.UserManagement.UserAccountServices
 
         public User FindByUsername(String username)
         {
-            User user = _DbContext.Set<User>().FirstOrDefault( u => u.UserName.Equals(username));
+            User user = _DbContext.Set<User>().Where( u => u.UserName.Equals(username)).FirstOrDefault();
             return user;
         }
 

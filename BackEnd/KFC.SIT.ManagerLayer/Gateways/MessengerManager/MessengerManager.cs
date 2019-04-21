@@ -25,13 +25,23 @@ namespace WebAPI.Gateways.Messenger
         {
             
             
-            return msServices.GetAllConservationBetweenContact(senderId, receiverId);
+            return msServices.GetAllMessagesBetweenUsers(senderId, receiverId);
+        }
+
+
+        public void DeleteConversation(int senderId, int receiverId)
+        {
+            msServices.DeleteChatHistoryRecord(senderId, receiverId);
+            msServices.DeleteMessageFromDatabase(senderId, receiverId);
+            
         }
 
         public Task<Conversation> GetLatestMessageBetweenUser(int senderId, int receiverId)
         {
-            return Task.FromResult(msServices.GetLatestMessageBetweenContact(senderId, receiverId));
+            return Task.FromResult(msServices.GetMostRecentMessageBetweenUsers(senderId, receiverId));
         }
+
+
 
        
 
@@ -55,21 +65,33 @@ namespace WebAPI.Gateways.Messenger
         }
 
 
-        //public void DeleteConversation(string senderUsername, string receiveUsername)
-        //{
-        //    var sender = umServices.FindByUsername(senderUsername);
-        //    var receiver = umServices.FindByUsername(receiveUsername);
-        //    msServices.DeleteMessage(sender.Id, receiver.Id);
-        //        msServices.DeleteChatContactHistory(senderUsername, receiveUsername);
 
-        //}
+
+        public void DeleteChatMessageBetweenUsers(int authUserId, int targetUserId)
+        {
+            var chatHistory = msServices.GetContactHistoryBetweenUsers(authUserId, targetUserId);
+
+            if(chatHistory.DeleteByReceiver == true)
+            {
+                msServices.DeleteMessageFromDatabase(authUserId, targetUserId);
+                msServices.DeleteChatHistoryRecord(authUserId, targetUserId);
+            }
+
+            else
+            {
+                msServices.DeleteChatHistoryRecord(authUserId, targetUserId);
+            }
+
+            DbContext.SaveChanges();
+
+        }
 
         public IEnumerable<ChatConnectionMapping> GetConnectionIdWithUserId(int userId)
         {
             return msServices.GetConnectionIdWithUserId(userId);
         }
 
-        public IQueryable<MessengerContactHist> GetAllContactHistory(int senderId)
+        public IQueryable<ChatHistory> GetAllContactHistory(int senderId)
         {
            
             return msServices.GetAllContactHistory(senderId);
@@ -96,10 +118,10 @@ namespace WebAPI.Gateways.Messenger
 
         public IEnumerable<FriendRelationship>GetFriendRelationships(int userId)
         {
-            int testUserId = 2;
+     
             try
             {
-                return msServices.GetAllFriendRelationship(testUserId);
+                return msServices.GetAllFriendRelationship(userId);
             }
 
             catch (Exception exception)

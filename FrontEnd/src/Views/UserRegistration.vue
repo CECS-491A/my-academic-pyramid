@@ -100,7 +100,7 @@ export default {
           }
         }
         // console.log(requestPayload.DateOfBirth)
-        let urlRegistration = "http://localhost:59364/api/Registration"
+        let urlRegistration = this.$hostname  + "Registration"
         Axios.post(urlRegistration, requestPayload, headersObject)
              .then(response => {
                console.log(response.data)

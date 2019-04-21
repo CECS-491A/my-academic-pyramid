@@ -50,9 +50,11 @@
             async createMessage () {
                 if (this.conversation.messageContent) {
                     await this.axios({
-                        headers:{
-                        'Authorization': 'test'
-                        },
+                        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + sessionStorage.SITtoken
+        },
 						method: "POST",
 						crossDomain: true,
 						url: this.$hostname + "messenger/SendMessage" ,
@@ -63,8 +65,10 @@
                         /* eslint no-console: "off" */
                         console.log(err);
                     });
+
                     this.conversation.messageContent = null;
                     this.errorText = null;
+                    this.$eventBus.$emit("LoadLatestMessage", this.conversation.ReceiverId)
                 } else {
                     this.errorText = "A message must be entered!"
                 }

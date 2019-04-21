@@ -7,13 +7,13 @@ namespace DataAccessLayer.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class fixingRelationship : IMigrationMetadata
+    public sealed partial class addDeleteByReceiverInChatHistory : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(fixingRelationship));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(addDeleteByReceiverInChatHistory));
         
         string IMigrationMetadata.Id
         {
-            get { return "201904190335165_fixingRelationship"; }
+            get { return "201904212257427_addDeleteByReceiverInChatHistory"; }
         }
         
         string IMigrationMetadata.Source

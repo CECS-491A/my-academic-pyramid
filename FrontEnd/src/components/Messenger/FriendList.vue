@@ -6,8 +6,8 @@
             <v-btn
               fab
               small
-              color="gray"
-              bottom
+              color="red"
+              top
               right
               absolute
               @click="addFriendDialog = !addFriendDialog"
@@ -25,8 +25,8 @@
               >
               <v-list-tile-content
               @click="sendNewMessage(friend.FriendId, friend.FriendUsername)">
-                <v-list-tile-title v-html="friend.FriendUsername"
-                ></v-list-tile-title>
+                <v-list-tile-title> {{friend.FriendUsername}}
+                </v-list-tile-title>
               </v-list-tile-content>
                      <v-list-tile-action>
               </v-list-tile-action>
@@ -36,6 +36,8 @@
                   dark
                   icon
                   v-on="on"
+                  color="black"
+                  
                 >
                   <v-icon>more_vert</v-icon>
                 </v-btn>
@@ -54,7 +56,6 @@
   
               <v-list-tile-action>
                 <v-btn
-                  :class="fav ? 'red--text' : ''"
                   icon
                   @click="deleteFriend(friend.FriendId)"
                 >
@@ -130,6 +131,11 @@ export default {
   methods: {
     async loadFriendList() {
       await this.axios({
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + sessionStorage.SITtoken
+        },
         method: "GET",
         crossDomain: true,
         url: this.$hostname + "messenger/GetFriendList"
@@ -145,6 +151,11 @@ export default {
 
     async addFriend() {
       await this.axios({
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + sessionStorage.SITtoken
+        },
         method: "POST",
         crossDomain: true,
         url: this.$hostname + "messenger/AddFriend?addedUsername=" + this.addFriendUsername
@@ -172,6 +183,11 @@ export default {
   
   async deleteFriend(friendId){
     await this.axios({
+      headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + sessionStorage.SITtoken
+        },
         method: "DELETE",
         crossDomain: true,
         url: this.$hostname + "messenger/RemoveFriendFromList?friendId=" + friendId

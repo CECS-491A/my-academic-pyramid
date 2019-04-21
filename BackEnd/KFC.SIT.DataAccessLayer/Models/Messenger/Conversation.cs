@@ -17,7 +17,6 @@ namespace DataAccessLayer.Models.Messenger
         public int ReceiverId { get; set; }
 
         public string MessageContent { get; set; }
-
         public DateTime CreatedDate { get; set; }
 
 

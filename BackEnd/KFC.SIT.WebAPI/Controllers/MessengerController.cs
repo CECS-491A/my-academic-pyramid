@@ -13,6 +13,12 @@ using System.Net.Http;
 using DataAccessLayer.DTOs;
 using System.Collections.Generic;
 using WebAPI.UserManagement;
+using SecurityLayer.Authorization;
+using KFC.SIT.WebAPI.Utility;
+using SecurityLayer.Sessions;
+using SecurityLayer.Authorization.AuthorizationManagers;
+using DataAccessLayer;
+using System.Web.Http.Controllers;
 
 namespace KFC.SIT.WebAPI
 {
@@ -23,54 +29,408 @@ namespace KFC.SIT.WebAPI
     {
         HttpContext httpContext;
         MessengerManager messengerManager;
-        string username;
+        private int authUserId ;
+        private bool securityPass = false;
         public MessengerController()
         {
+
+
+            
             httpContext = HttpContext.Current;
             messengerManager = new MessengerManager();
-            username = httpContext.Request.Headers["Authorization"];
+            
+          
            
         }
 
+
         [HttpGet]
         [ActionName("LoadMessageContact")]
-        public IQueryable<Conversation> MessengerWithContact(int receiverUserId)
+        public IQueryable<ConversationDTO> MessengerWithContact(int receiverUserId)
         {
+            UserManager um = new UserManager();
+            SecurityContext securityContext = SecurityContextBuilder.CreateSecurityContext(
+               Request.Headers
+           );
+            if (securityContext == null)
+            {
+                securityPass = false;
+            }
+            SessionManager sm = new SessionManager();
+            if (!sm.ValidateSession(securityContext.Token))
+            {
+                securityPass = false;
+            }
 
-            var conservations =  messengerManager.GetConversationBetweenUser(2, receiverUserId);
+            AuthorizationManager authorizationManager = new AuthorizationManager(
+                securityContext
+            );
+            // TODO get this from table in database.
+            List<string> requiredClaims = new List<string>()
+            {
+                //"CanSendMessage"
+            };
+            if (!authorizationManager.CheckClaims(requiredClaims))
+            {
+                securityPass = false;
+            }
+            else
+            {
+                
+                User user = um.FindByUserName(securityContext.UserName);
+                authUserId = um.FindByUserName(securityContext.UserName).Id;
+                if (user == null)
+                {
+                    securityPass = false;
+                }
+            }
+            var conversations =  messengerManager.GetConversationBetweenUser(authUserId, receiverUserId);
 
-            return conservations.AsQueryable();
+            var firstUsername = um.FindUserById(authUserId).UserName;
+            var secondUsername = um.FindUserById(receiverUserId).UserName;
+
+            List<ConversationDTO> conversationDTOs = new List<ConversationDTO>();
+            foreach (Conversation c in conversations)
+            {
+                if (c.SenderId == authUserId)
+                {
+                    ConversationDTO conversationDTO = new ConversationDTO
+                    {
+                        SenderUsername = firstUsername,
+                        ReceiverUsername = secondUsername,
+                        MessageContent = c.MessageContent,
+                        CreatedDate = c.CreatedDate
+                    };
+                    conversationDTOs.Add(conversationDTO);
+                }
+
+               else if(c.SenderId == receiverUserId)
+                {
+                    ConversationDTO conversationDTO = new ConversationDTO
+                    {
+                        SenderUsername = secondUsername,
+                        ReceiverUsername = firstUsername,
+                        MessageContent = c.MessageContent,
+                        CreatedDate = c.CreatedDate
+                    };
+
+                    conversationDTOs.Add(conversationDTO);
+                }
+
+                     
+            }
+               
+            
+            return conversationDTOs.AsQueryable();
 
         }
 
         [HttpGet]
         [ActionName("LoadLatestMessageContact")]
-        public async Task<Conversation> GetLatestMessageWithContact(int receiverUserId2)
+        public async Task<ConversationDTO> GetLatestMessageWithContact(int receiverUserId2)
         {
+            UserManager um = new UserManager();
+            SecurityContext securityContext = SecurityContextBuilder.CreateSecurityContext(
+               Request.Headers
+           );
+            if (securityContext == null)
+            {
+                securityPass = false;
+            }
+            SessionManager sm = new SessionManager();
+            if (!sm.ValidateSession(securityContext.Token))
+            {
+                securityPass = false;
+            }
 
-            var conservations = await messengerManager.GetLatestMessageBetweenUser(2, receiverUserId2);
+            AuthorizationManager authorizationManager = new AuthorizationManager(
+                securityContext
+            );
+            // TODO get this from table in database.
+            List<string> requiredClaims = new List<string>()
+            {
+                //"CanSendMessage"
+            };
+            if (!authorizationManager.CheckClaims(requiredClaims))
+            {
+                securityPass = false;
+            }
+            else
+            {
+                um = new UserManager();
+                User user = um.FindByUserName(securityContext.UserName);
+                authUserId = um.FindByUserName(securityContext.UserName).Id;
+                if (user == null)
+                {
+                    securityPass = false;
+                }
+            }
 
-            return conservations;
+            var firstUsername = um.FindUserById(authUserId).UserName;
+            var secondUsername = um.FindUserById(receiverUserId2).UserName;
+            var conservations = await messengerManager.GetLatestMessageBetweenUser(authUserId, receiverUserId2);
+
+            if (conservations.SenderId == authUserId)
+            {
+                ConversationDTO conversationDTO = new ConversationDTO
+                {
+                    SenderUsername = firstUsername,
+                    ReceiverUsername = secondUsername,
+                    MessageContent = conservations.MessageContent,
+                    CreatedDate = conservations.CreatedDate
+                };
+                return conversationDTO;
+
+            }
+
+            else if (conservations.SenderId == receiverUserId2)
+            {
+                ConversationDTO conversationDTO = new ConversationDTO
+                {
+                    SenderUsername = secondUsername,
+                    ReceiverUsername = firstUsername,
+                    MessageContent = conservations.MessageContent,
+                    CreatedDate = conservations.CreatedDate
+                };
+
+                return conversationDTO;
+            }
+
+            return null;
+
+           
 
         }
 
+        [HttpDelete]
+        [ActionName("DeleteMessage")]
+        public HttpResponseMessage DeleteChatMessageBetweenUser(int targetUserId)
+        {
+            UserManager um = new UserManager();
+            SecurityContext securityContext = SecurityContextBuilder.CreateSecurityContext(
+              Request.Headers
+          );
+            if (securityContext == null)
+            {
+                securityPass = false;
+            }
+            SessionManager sm = new SessionManager();
+            if (!sm.ValidateSession(securityContext.Token))
+            {
+                securityPass = false;
+            }
+
+            AuthorizationManager authorizationManager = new AuthorizationManager(
+                securityContext
+            );
+            // TODO get this from table in database.
+            List<string> requiredClaims = new List<string>()
+            {
+                //"CanSendMessage"
+            };
+            if (!authorizationManager.CheckClaims(requiredClaims))
+            {
+                securityPass = false;
+            }
+            else
+            {
+                um = new UserManager();
+                User user = um.FindByUserName(securityContext.UserName);
+                authUserId = um.FindByUserName(securityContext.UserName).Id;
+                if (user == null)
+                {
+                    securityPass = false;
+                }
+            }
+
+            try
+            {
+                messengerManager.DeleteChatMessageBetweenUsers(authUserId, targetUserId);
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+
+            catch (Exception exception)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound);
+            }
+
+
+            
+            
+        }
 
 
         [HttpGet]
         [ActionName("GetContactHistory")]
         //[ActionName("GetContactHistory")]
-        public IQueryable<MessengerContactHist> GetAllContactHistory()
+        public IQueryable<ContactHistoryDTO> GetAllContactHistory()
         {
-            var contactList =  messengerManager.GetAllContactHistory(2);
-            return contactList;
+            SecurityContext securityContext = SecurityContextBuilder.CreateSecurityContext(
+               Request.Headers
+           );
+            if (securityContext == null)
+            {
+                securityPass = false;
+            }
+            SessionManager sm = new SessionManager();
+            if (!sm.ValidateSession(securityContext.Token))
+            {
+                securityPass = false;
+            }
+
+            AuthorizationManager authorizationManager = new AuthorizationManager(
+                securityContext
+            );
+            // TODO get this from table in database.
+            List<string> requiredClaims = new List<string>()
+             {
+                 //"CanSendMessage"
+             };
+            if (!authorizationManager.CheckClaims(requiredClaims))
+            {
+                securityPass = false;
+            }
+            else
+            {
+                UserManager um = new UserManager();
+                User user = um.FindByUserName(securityContext.UserName);
+                authUserId = um.FindByUserName(securityContext.UserName).Id;
+                if (user == null)
+                {
+                    securityPass = false;
+                }
+            }
+          
+          
+            var contactList =  messengerManager.GetAllContactHistory(authUserId);
+            var contactListDTO = new List<ContactHistoryDTO>();
+            foreach(ChatHistory mch in contactList)
+            {
+                if(mch.SenderId == authUserId && mch.DeleteBySender==false)
+                {
+                    contactListDTO.Add(new ContactHistoryDTO
+                    {
+                        ContactId = mch.ReceiverId,
+                        ContactUsername = mch.ReceiverUsername,
+                        ContactTime = mch.ContactTime
+                    });
+                }
+
+                else if (mch.ReceiverId == authUserId && mch.DeleteByReceiver == false)
+                {
+                    contactListDTO.Add(new ContactHistoryDTO
+                    {
+                        ContactId = mch.SenderId,
+                        ContactUsername = mch.SenderUsername,
+                        ContactTime = mch.ContactTime
+                    });
+                }
+
+
+            }
+            return contactListDTO.AsQueryable();
         }
+        [HttpGet]
+        [ActionName("GetUserIdWithUsername")]
+        public HttpResponseMessage GetUserIdWithUsername(string username)
+        {
+            UserManager umManager = new UserManager();
+            var user = umManager.FindByUserName(username);
+            return Request.CreateResponse(HttpStatusCode.OK, user.Id);
+        }
+        [HttpGet]
+        [ActionName("GetAuthUserId")]
+        public HttpResponseMessage GetAuthUserId()
+        {
+            SecurityContext securityContext = SecurityContextBuilder.CreateSecurityContext(
+                 Request.Headers
+             );
+            if (securityContext == null)
+            {
+                securityPass = false;
+            }
+            SessionManager sm = new SessionManager();
+            if (!sm.ValidateSession(securityContext.Token))
+            {
+                securityPass = false;
+            }
+
+            AuthorizationManager authorizationManager = new AuthorizationManager(
+                securityContext
+            );
+            // TODO get this from table in database.
+            List<string> requiredClaims = new List<string>()
+            {
+                //"CanSendMessage"
+            };
+            if (!authorizationManager.CheckClaims(requiredClaims))
+            {
+                securityPass = false;
+            }
+            else
+            {
+                UserManager um = new UserManager();
+                User user = um.FindByUserName(securityContext.UserName);
+                authUserId = um.FindByUserName(securityContext.UserName).Id;
+                if (user == null)
+                {
+                    securityPass = false;
+                }
+            }
+          
+           
+            return Request.CreateResponse(HttpStatusCode.OK, authUserId);
+        }
+
+
+
+
+
+
 
         [HttpPost]
         [ActionName("SendMessage")]
         //[ActionName("SendMessage")]
         public HttpResponseMessage SendMessage([FromBody] Conversation conversation)
+
         {
+            SecurityContext securityContext = SecurityContextBuilder.CreateSecurityContext(
+              Request.Headers
+          );
+            if (securityContext == null)
+            {
+                securityPass = false;
+            }
+            SessionManager sm = new SessionManager();
+            if (!sm.ValidateSession(securityContext.Token))
+            {
+                securityPass = false;
+            }
+
+            AuthorizationManager authorizationManager = new AuthorizationManager(
+                securityContext
+            );
+            // TODO get this from table in database.
+            List<string> requiredClaims = new List<string>()
+             {
+                 //"CanSendMessage"
+             };
+            if (!authorizationManager.CheckClaims(requiredClaims))
+            {
+                securityPass = false;
+            }
+            else
+            {
+                UserManager um = new UserManager();
+                User user = um.FindByUserName(securityContext.UserName);
+                authUserId = um.FindByUserName(securityContext.UserName).Id;
+                if (user == null)
+                {
+                    securityPass = false;
+                }
+            }
             conversation.CreatedDate = DateTime.Now;
+            conversation.SenderId = authUserId;
 
             try
             {
@@ -85,7 +445,7 @@ namespace KFC.SIT.WebAPI
 
             var myHub = GlobalHost.ConnectionManager.GetHubContext<MessengerHub>();
                 MessengerHub mHub = new MessengerHub();
-                var connectionIDList = messengerManager.GetConnectionIdWithUserId(conversation.SenderId);
+                var connectionIDList = messengerManager.GetConnectionIdWithUserId(conversation.ReceiverId);
                 {
                     foreach (ChatConnectionMapping cM in connectionIDList)
                     {
@@ -95,30 +455,55 @@ namespace KFC.SIT.WebAPI
                 }
             return Request.CreateResponse(HttpStatusCode.OK, "Message is sent successfully");
             
-
-            
-            
-
-
-            
-            //var result = myHub.Clients.All.FetchMessages(conservation.SenderUserName, conservation.ReceiverUserName);
-
-            
-
-
         }
+
+ 
 
         [HttpPost]
         [ActionName("AddFriend")]
         public HttpResponseMessage AddFriendContactList(string addedUsername)
         {
-            int addingUserId = 2;
-     
+            SecurityContext securityContext = SecurityContextBuilder.CreateSecurityContext(
+                 Request.Headers
+             );
+            if (securityContext == null)
+            {
+                securityPass = false;
+            }
+            SessionManager sm = new SessionManager();
+            if (!sm.ValidateSession(securityContext.Token))
+            {
+                securityPass = false;
+            }
+
+            AuthorizationManager authorizationManager = new AuthorizationManager(
+                securityContext
+            );
+            // TODO get this from table in database.
+            List<string> requiredClaims = new List<string>()
+             {
+                 //"CanSendMessage"
+             };
+            if (!authorizationManager.CheckClaims(requiredClaims))
+            {
+                securityPass = false;
+            }
+            else
+            {
+                UserManager um = new UserManager();
+                User user = um.FindByUserName(securityContext.UserName);
+                authUserId = um.FindByUserName(securityContext.UserName).Id;
+                if (user == null)
+                {
+                    securityPass = false;
+                }
+            }
+
 
             try
             {
                 
-                messengerManager.AddUserFriendList(addingUserId, addedUsername);
+                messengerManager.AddUserFriendList(authUserId, addedUsername);
                 return Request.CreateResponse(HttpStatusCode.OK, "The User was added to friendlist");
             }
 
@@ -144,11 +529,45 @@ namespace KFC.SIT.WebAPI
         public  HttpResponseMessage GetFriendList()
         {
             //This is just for test. Remove when token implemenation is finished 
-            int userId = 2;
+            SecurityContext securityContext = SecurityContextBuilder.CreateSecurityContext(
+                Request.Headers
+            );
+            if (securityContext == null)
+            {
+                securityPass = false;
+            }
+            SessionManager sm = new SessionManager();
+            if (!sm.ValidateSession(securityContext.Token))
+            {
+                securityPass = false;
+            }
+
+            AuthorizationManager authorizationManager = new AuthorizationManager(
+                securityContext
+            );
+            // TODO get this from table in database.
+            List<string> requiredClaims = new List<string>()
+             {
+                 //"CanSendMessage"
+             };
+            if (!authorizationManager.CheckClaims(requiredClaims))
+            {
+                securityPass = false;
+            }
+            else
+            {
+                UserManager um = new UserManager();
+                User user = um.FindByUserName(securityContext.UserName);
+                authUserId = um.FindByUserName(securityContext.UserName).Id;
+                if (user == null)
+                {
+                    securityPass = false;
+                }
+            }
 
             try
             {
-                var friendList = messengerManager.GetFriendRelationships(userId);
+                var friendList = messengerManager.GetFriendRelationships(authUserId);
                 List<FriendContactDTO> friendListDTO = new List<FriendContactDTO>();
                 var userManager = new UserManager();
                 foreach (FriendRelationship friend in friendList)
@@ -176,10 +595,44 @@ namespace KFC.SIT.WebAPI
         [ActionName("RemoveFriendFromList")]
         public HttpResponseMessage DeleteFriend(int friendId)
         {
-            int testAuthUserId = 2;
+            SecurityContext securityContext = SecurityContextBuilder.CreateSecurityContext(
+                   Request.Headers
+               );
+            if (securityContext == null)
+            {
+                securityPass = false;
+            }
+            SessionManager sm = new SessionManager();
+            if (!sm.ValidateSession(securityContext.Token))
+            {
+                securityPass = false;
+            }
+
+            AuthorizationManager authorizationManager = new AuthorizationManager(
+                securityContext
+            );
+            // TODO get this from table in database.
+            List<string> requiredClaims = new List<string>()
+             {
+                // "CanSendMessage"
+             };
+            if (!authorizationManager.CheckClaims(requiredClaims))
+            {
+                securityPass = false;
+            }
+            else
+            {
+                UserManager um = new UserManager();
+                User user = um.FindByUserName(securityContext.UserName);
+                authUserId = um.FindByUserName(securityContext.UserName).Id;
+                if (user == null)
+                {
+                    securityPass = false;
+                }
+            }
             try
             {
-                messengerManager.RemoveUserFromFriendList(testAuthUserId, friendId);
+                messengerManager.RemoveUserFromFriendList(authUserId, friendId);
                 return Request.CreateResponse(HttpStatusCode.OK, "Friend is succesfully removed from the list");
             }
             catch(ArgumentException exception)

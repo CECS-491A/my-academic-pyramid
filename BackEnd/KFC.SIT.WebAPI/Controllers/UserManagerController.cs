@@ -49,10 +49,7 @@ namespace KFC.SIT.WebAPI
         }
 
         // GET api/<controller>/5
-        public string GetUserWithId(Guid id)
-        {
-            return "value";
-        }
+
 
         // POST api/<controller>
         [HttpPost]
@@ -93,6 +90,7 @@ namespace KFC.SIT.WebAPI
         {
             return new HttpResponseMessage { StatusCode = HttpStatusCode.OK };
         }
+
 
 
 

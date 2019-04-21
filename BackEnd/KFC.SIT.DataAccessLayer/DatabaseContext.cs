@@ -16,9 +16,9 @@ namespace DataAccessLayer
         public DbSet<Catergory> Catergories { get; set; }
 
         //Set of Conservations
-        public DbSet<Conversation> Conservations { get; set; }
+        public DbSet<Conversation> Conversations { get; set; }
         
-        public DbSet<MessengerContactHist> MessengerContactHists {get;set;}
+        public DbSet<ChatHistory> MessengerContactHists {get;set;}
 
         public DbSet<FriendRelationship>FriendRelationships { get; set; }
 
