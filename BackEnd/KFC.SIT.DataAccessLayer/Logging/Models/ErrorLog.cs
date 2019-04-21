@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using System;
 
 namespace DataAccessLayer.Models
 {
@@ -10,7 +11,7 @@ namespace DataAccessLayer.Models
         public string ID { get; set; }
 
         [BsonElement("Date")]
-        public string Date { get; set; }
+        public DateTime Date { get; set; }
 
         [BsonElement("Action")]
         public string Action { get; set; }
@@ -24,8 +25,8 @@ namespace DataAccessLayer.Models
         [BsonElement("Line of Code")]
         public string LineOfCode { get; set; }
 
-        [BsonElement("User")]
-        public string User { get; set; }
+        [BsonElement("User Name")]
+        public string UserName { get; set; }
 
         [BsonElement("Request")]
         public string Request { get; set; }

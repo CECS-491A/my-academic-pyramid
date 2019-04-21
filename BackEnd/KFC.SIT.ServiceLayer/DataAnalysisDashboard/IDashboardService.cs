@@ -8,6 +8,5 @@ namespace ServiceLayer.DataAnalysisDashboard
 {
     public interface IDashboardService
     {
-        long CountUsers();
     }
 }

@@ -30,42 +30,45 @@ namespace ServiceLayer.DataAnalysisDashboard
             CollectionE = _repo.Db.GetCollection<ErrorLog>(_collectionEName);
         }
 
-        public long CountUsers()
-        {
-            DateTime currentTime = DateTime.Now;
-            // practice query don't touch them 
-            long queryResult = CollectionT.CountDocuments(new BsonDocument { { "Action", "Login" } });
-            var query2 = from userInfo in CollectionT.AsQueryable()
-                         where userInfo.Action == "Login"
-                         orderby userInfo.Date
-                         group userInfo by userInfo.Month into monthlyInfo
-                         select monthlyInfo;
-            var query = from userInfo in CollectionT.AsQueryable()
-                        where userInfo.Date.Month == 1
-                        group userInfo by userInfo.Date.Month into monthlyInfo
-                        select monthlyInfo.Max();
-            return queryResult;
-        }
-
         public long[] CountAverageSuccessfulLogin()
         {
             long[] avgLoginMonth = new long[12];
-            var query = CollectionT.Aggregate()
+            long[] failedLogIn = new long[12];
+            var queryS = CollectionT.Aggregate()
                         .Match(x => x.Action == "Login")
                         .SortByDescending(x => x.Date)
                         .Group(
                 x => x.Date.Month,
                 i => new
                 {
-                    Result = i.Select(x => x.ID).Count(),
+                    Result = i.Select(x => x.ID).Count()
+                }
+                ).ToList();
+
+            var queryF = CollectionE.Aggregate()
+                        .Match(x => x.Action == "Login")
+                        .SortByDescending(x => x.Date)
+                        .Group(
+                x => x.Date.Month,
+                i => new
+                {
+                    Result = i.Select(x => x.ID).Count()
                 }
                 ).ToList();
 
             int count = 0;
-            foreach (var monthly in query)
+            foreach (var monthly in queryF)
             {
-                avgLoginMonth[count] = monthly.Result;
+                failedLogIn[count] = monthly.Result;
                 count++;
+                if (count == 12) { break; }
+            }
+            count = 0;
+            foreach (var monthly in queryS)
+            {
+                avgLoginMonth[count] = monthly.Result / (failedLogIn[count] + monthly.Result);
+                count++;
+                if (count == 12) { break; }
             }
             return avgLoginMonth;
         }
@@ -89,6 +92,7 @@ namespace ServiceLayer.DataAnalysisDashboard
             {
                 avgSessionDurMonth[count] = monthly.Result;
                 count++;
+                if (count == 12) { break; }
             }
             return avgSessionDurMonth;
         }
@@ -143,29 +147,29 @@ namespace ServiceLayer.DataAnalysisDashboard
             return featureNum;
         }
 
-        //public long CountSuccessfulLogin(int year, int month)
-        //{
-        //    DateTime startDate = new DateTime(year, month, 0);
-        //    int numOfDays = DateTime.DaysInMonth(year, month);
-        //    DateTime endDate = new DateTime(year, month, numOfDays);
-        //    long queryResult = Collection.AsQueryable<TelemetryLog>().ToList();
-        //    return queryResult;
-        //}
-
-        public long CountFeatureUsage()
+        public long[] CountSuccessfulLogin()
         {
-            long queryResult = CollectionT.CountDocuments(new BsonDocument { { "Action", "Feature" } });
-            return queryResult;
-        }
+            long[] avgLoginMonth = new long[6];
+            var query = CollectionT.Aggregate()
+                        .Match(x => x.Action == "Login")
+                        .SortByDescending(x => x.Date)
+                        .Group(
+                x => x.Date.Month,
+                i => new
+                {
+                    Result = i.Select(x => x.UserName)
+                }
+                ).ToList();
 
-        //public long CountDate()
-        //{
-        //    var builder = Builders<BsonDocument>.Filter;
-        //    DateTime time = DateTime.Now;
-        //    int value = time.Second;
-        //    long queryResult = Collection.CountDocuments(i => i.Date. > "30");
-        //    return queryResult;
-        //}
+            int count = 0;
+            foreach (var monthly in query)
+            {
+                //monthly.Result.AsQueryable().GroupBy(monthly.Result)
+                count++;
+                if (count == 6) { break; }
+            }
+            return avgLoginMonth;
+        }
 
     }
 }

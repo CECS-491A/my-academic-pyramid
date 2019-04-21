@@ -27,13 +27,14 @@ namespace NewDemoProject
             }
             long[] something2 = temp.CountFailedSuccessfulLogIn();
             Console.WriteLine(something2[0]);
-            long[] something = temp.CountAverageSuccessfulLogin();
-            /**
+            long[] something = temp.CountSuccessfulLogin();
+            Console.WriteLine("End");
+            
             foreach (long i in something)
             {
                 Console.WriteLine("Finally: " + i);
             }
-            */
+            
             Console.ReadKey();
         }
     }

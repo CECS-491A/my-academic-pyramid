@@ -16,6 +16,9 @@ namespace DataAccessLayer.Models
         [BsonElement("Month")]
         public int Month { get; set; }
 
+        [BsonElement("User Name")]
+        public string UserName { get; set; }
+
         [BsonElement("Session Duration")]
         public int SessionDuration { get; set; }
 
