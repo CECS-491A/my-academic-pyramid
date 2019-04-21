@@ -189,6 +189,26 @@ namespace WebAPI.UserManagement
             return user;
         }
 
+        public UserDTO GetUserInfo(int id)
+        {
+            User user = FindUserById(id);
+            UserDTO userDTO = null;
+            if (user != null)
+            {
+                userDTO = new UserDTO()
+                {
+                    Id = user.Id,
+                    UserName = user.UserName,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Catergory = user.Catergory.Value,
+                    DateOfBirth = user.DateOfBirth.ToLongDateString(),
+                    Email = user.Email,
+                    CreatedAt = user.CreatedAt.ToLongDateString()
+                };
+            }
+            return userDTO;
+        }
 
         /// <summary>
         /// Method to find user object by UserName
@@ -330,7 +350,8 @@ namespace WebAPI.UserManagement
                 _userManagementServices.AddClaim(user, new Claim("CanCreateOwnStudentAccount"));
                 _userManagementServices.AddClaim(user, new Claim("CanEditOwnAccount"));
                 _userManagementServices.AddClaim(user, new Claim("CanDeleteOwnAccount"));
-
+                _userManagementServices.AddClaim(user, new Claim("CanReadOwnStudentAccount"));
+                _DbContext.SaveChanges();
             }
             else if (user.Catergory.Value.Equals("Admin") || user.Catergory.Value.Equals("SystemAdmin"))
             {
@@ -339,7 +360,7 @@ namespace WebAPI.UserManagement
                 _userManagementServices.AddClaim(user, new Claim("CanEditStudentAccount"));
                 _userManagementServices.AddClaim(user, new Claim("CanEnableOrDisableStudentAccount"));
                 _userManagementServices.AddClaim(user, new Claim("CanAlterStudentAccountUAC"));
-
+                _DbContext.SaveChanges();
             }
 
             else if (user.Catergory.Value.Equals("SystemAdmin"))
@@ -348,6 +369,7 @@ namespace WebAPI.UserManagement
                 _userManagementServices.AddClaim(user, new Claim("CanDeleteAdminAccount"));
                 _userManagementServices.AddClaim(user, new Claim("CanDeleteOtherUser"));
                 _userManagementServices.AddClaim(user, new Claim("CanAlterAdminAccountUAC"));
+                _DbContext.SaveChanges();
             }
 
 

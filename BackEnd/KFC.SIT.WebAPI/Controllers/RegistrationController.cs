@@ -66,7 +66,10 @@ namespace KFC.SIT.WebAPI.Controllers
                 um.UpdateUserAccount(user);
                 um.RemoveClaimAction(user.Id, "CanRegister");
                 um.AutomaticClaimAssigning(user);
-                string updatedToken = sm.RefreshSession(securityContext.Token);
+                string updatedToken = sm.RefreshSessionUpdatedPayload(
+                    securityContext.Token, 
+                    securityContext.UserId
+                );
                 Dictionary<string, string> responseContent = new Dictionary<string, string>()
                 {
                     { "SITtoken", updatedToken}

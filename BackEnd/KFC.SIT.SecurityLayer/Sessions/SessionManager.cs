@@ -147,6 +147,21 @@ namespace SecurityLayer.Sessions
             return this.RefreshSession(encodedToken, payload);
         }
 
+        public string RefreshSessionUpdatedPayload(string encodedToken, int userid)
+        {
+            // Should only be used while registering a user.
+            Dictionary<string, string> updatedPayload = GeneratePayload(userid);
+
+            SessionTimeStamp sessionTimeStamp = SetTime(updatedPayload);
+            string newToken = _jwtManager.CreateToken(updatedPayload);
+            _sessionServices.RefreshSession(
+                encodedToken, newToken, sessionTimeStamp.CurrentTime,
+                sessionTimeStamp.ExpireTime
+            );
+
+            return newToken;
+        }
+
         public void InvalidateSession(string token)
         {
             // Delete session from database.
@@ -187,6 +202,7 @@ namespace SecurityLayer.Sessions
                     "There is no user with the given userid."
                 );
             }
+            payload["userid"] = user.Id.ToString();
             payload["username"] = user.UserName;
             List<string> claims = _userManager.GetClaims(user.UserName);
             string claimsJson = JsonConvert.SerializeObject(claims);
