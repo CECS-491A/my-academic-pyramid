@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace ServiceLayer.DataAnalysisDashboard
 {
-    public class DashboardService : IDashboardService
+    public class DashboardService
     {
         private const string _collectionTName = "TelemetryLogs";
         private const string _collectionEName = "ErrorLogs";

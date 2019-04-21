@@ -100,7 +100,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataAnalysisDashboard\DashboardService.cs" />
-    <Compile Include="DataAnalysisDashboard\IDashboardService.cs" />
     <Compile Include="HttpClients\IHttpClient.cs" />
     <Compile Include="Messenger\ChatConnectionMapping.cs" />
     <Compile Include="Messenger\MessengerServices.cs" />
