@@ -98,6 +98,11 @@ namespace WebAPI.Gateways.Messenger
             return msServices.GetAllContactHistory(senderId);
         }
 
+        public ChatHistory GetChatHistoryBetweenUsers(int firstUserId, int secondUserId)
+        {
+            return msServices.GetContactHistoryBetweenUsers(firstUserId, secondUserId);
+        }
+
         public User AddUserFriendList(int addingUserId, string addedUsername)
         {
             var addingUserObj = umServices.FindById(addingUserId);

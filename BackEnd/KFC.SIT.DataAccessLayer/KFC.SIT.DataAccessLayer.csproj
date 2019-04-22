@@ -149,17 +149,13 @@
     <Compile Include="Logging\OptimizeLogging\NLogger.cs" />
     <Compile Include="Logging\OptimizeLogging\TelemetryFormat.cs" />
     <Compile Include="Logging\Models\Repository\TelemetryLogCollection.cs" />
-    <Compile Include="Migrations\201904212157442_addDeleteByFirstUserToMessengerContactHist.cs" />
-    <Compile Include="Migrations\201904212157442_addDeleteByFirstUserToMessengerContactHist.Designer.cs">
-      <DependentUpon>201904212157442_addDeleteByFirstUserToMessengerContactHist.cs</DependentUpon>
+    <Compile Include="Migrations\201904220231362_Initial.cs" />
+    <Compile Include="Migrations\201904220231362_Initial.Designer.cs">
+      <DependentUpon>201904220231362_Initial.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201904212257427_addDeleteByReceiverInChatHistory.cs" />
-    <Compile Include="Migrations\201904212257427_addDeleteByReceiverInChatHistory.Designer.cs">
-      <DependentUpon>201904212257427_addDeleteByReceiverInChatHistory.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201904200607358_create-school-related-tables.cs" />
-    <Compile Include="Migrations\201904200607358_create-school-related-tables.Designer.cs">
-      <DependentUpon>201904200607358_create-school-related-tables.cs</DependentUpon>
+    <Compile Include="Migrations\201904220303209_AddDeleteTimeMark.cs" />
+    <Compile Include="Migrations\201904220303209_AddDeleteTimeMark.Designer.cs">
+      <DependentUpon>201904220303209_AddDeleteTimeMark.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Category.cs" />
@@ -168,9 +164,9 @@
     <Compile Include="Logging\Models\ErrorLog.cs" />
     <Compile Include="Models\HashSalt.cs" />
     <Compile Include="Models\Messenger\ChatConnectionMapping.cs" />
+    <Compile Include="Models\Messenger\ChatHistory.cs" />
     <Compile Include="Models\Messenger\Conversation.cs" />
     <Compile Include="Models\Messenger\FriendRelationship.cs" />
-    <Compile Include="Models\Messenger\MessengerContactHist.cs" />
     <Compile Include="Models\PasswordQA.cs" />
     <Compile Include="Logging\Models\TelemetryLog.cs" />
     <Compile Include="Models\School\Course.cs" />
@@ -223,14 +219,11 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201904212157442_addDeleteByFirstUserToMessengerContactHist.resx">
-      <DependentUpon>201904212157442_addDeleteByFirstUserToMessengerContactHist.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201904220231362_Initial.resx">
+      <DependentUpon>201904220231362_Initial.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904212257427_addDeleteByReceiverInChatHistory.resx">
-      <DependentUpon>201904212257427_addDeleteByReceiverInChatHistory.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904200607358_create-school-related-tables.resx">
-      <DependentUpon>201904200607358_create-school-related-tables.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201904220303209_AddDeleteTimeMark.resx">
+      <DependentUpon>201904220303209_AddDeleteTimeMark.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

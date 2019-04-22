@@ -19,6 +19,7 @@ using SecurityLayer.Sessions;
 using SecurityLayer.Authorization.AuthorizationManagers;
 using DataAccessLayer;
 using System.Web.Http.Controllers;
+using DataAccessLayer.Models;
 
 namespace KFC.SIT.WebAPI.Controllers
 {
@@ -89,6 +90,8 @@ namespace KFC.SIT.WebAPI.Controllers
             var firstUsername = um.FindUserById(authUserId).UserName;
             var secondUsername = um.FindUserById(receiverUserId).UserName;
 
+            var chatHistory = messengerManager.GetChatHistoryBetweenUsers(authUserId, receiverUserId);
+
             List<ConversationDTO> conversationDTOs = new List<ConversationDTO>();
             foreach (Conversation c in conversations)
             {
@@ -101,7 +104,14 @@ namespace KFC.SIT.WebAPI.Controllers
                         MessageContent = c.MessageContent,
                         CreatedDate = c.CreatedDate
                     };
-                    conversationDTOs.Add(conversationDTO);
+                    if(chatHistory.DeleteByReceiver == true || chatHistory.DeleteBySender == true)
+                    {
+                        if(chatHistory.TimeWhenMarkedDeleted < conversationDTO.CreatedDate)
+                        {
+                            conversationDTOs.Add(conversationDTO);
+                        }
+                    }
+                    
                 }
 
                else if(c.SenderId == receiverUserId)
@@ -113,8 +123,14 @@ namespace KFC.SIT.WebAPI.Controllers
                         MessageContent = c.MessageContent,
                         CreatedDate = c.CreatedDate
                     };
-
-                    conversationDTOs.Add(conversationDTO);
+                    if (chatHistory.DeleteByReceiver == true || chatHistory.DeleteBySender == true)
+                    {
+                        if (chatHistory.TimeWhenMarkedDeleted < conversationDTO.CreatedDate)
+                        {
+                            conversationDTOs.Add(conversationDTO);
+                        }
+                    }
+     
                 }
 
                      

@@ -120,6 +120,7 @@ namespace ServiceLayer.Messenger
                 {
                     _DbContext.Entry(chatHistory).State = System.Data.Entity.EntityState.Modified;
                     chatHistory.DeleteBySender = true;
+                    chatHistory.TimeWhenMarkedDeleted = DateTime.Now;
                 }
                
             }
@@ -135,6 +136,7 @@ namespace ServiceLayer.Messenger
                 {
                     _DbContext.Entry(chatHistory).State = System.Data.Entity.EntityState.Modified;
                     chatHistory.DeleteByReceiver = true;
+                    chatHistory.TimeWhenMarkedDeleted = DateTime.Now;
                 }
                 
             }

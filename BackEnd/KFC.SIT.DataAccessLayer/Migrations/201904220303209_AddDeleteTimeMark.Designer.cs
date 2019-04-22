@@ -7,13 +7,13 @@ namespace DataAccessLayer.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class addDeleteByReceiverInChatHistory : IMigrationMetadata
+    public sealed partial class AddDeleteTimeMark : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(addDeleteByReceiverInChatHistory));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(AddDeleteTimeMark));
         
         string IMigrationMetadata.Id
         {
-            get { return "201904212257427_addDeleteByReceiverInChatHistory"; }
+            get { return "201904220303209_AddDeleteTimeMark"; }
         }
         
         string IMigrationMetadata.Source
