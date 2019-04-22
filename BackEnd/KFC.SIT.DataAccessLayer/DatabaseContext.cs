@@ -19,7 +19,7 @@ namespace DataAccessLayer
         //Set of Conservations
         public DbSet<Conversation> Conversations { get; set; }
         
-        public DbSet<ChatHistory> MessengerContactHists {get;set;}
+        public DbSet<ChatHistory> ChatHistory {get;set;}
 
         public DbSet<FriendRelationship>FriendRelationships { get; set; }
 

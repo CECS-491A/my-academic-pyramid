@@ -105,7 +105,7 @@ namespace ServiceLayer.Messenger
         /// <param name="targetUserId"></param>
         public void DeleteChatHistoryRecord (int authUserId,int targetUserId)
         {
-             var chatHistory = _DbContext.MessengerContactHists.Where(h => (h.SenderId == authUserId && h.ReceiverId == targetUserId)
+             var chatHistory = _DbContext.ChatHistory.Where(h => (h.SenderId == authUserId && h.ReceiverId == targetUserId)
                                                                            ||(h.SenderId == targetUserId && h.ReceiverId == authUserId)).FirstOrDefault();
 
 
@@ -113,7 +113,7 @@ namespace ServiceLayer.Messenger
             {
                 if(chatHistory.DeleteByReceiver == true)
                 {
-                    _DbContext.MessengerContactHists.Remove(chatHistory);
+                    _DbContext.ChatHistory.Remove(chatHistory);
                 }
 
                 else
@@ -128,7 +128,7 @@ namespace ServiceLayer.Messenger
             {
                 if(chatHistory.DeleteBySender == true)
                 {
-                    _DbContext.MessengerContactHists.Remove(chatHistory);
+                    _DbContext.ChatHistory.Remove(chatHistory);
                 }
 
                 else
@@ -139,10 +139,6 @@ namespace ServiceLayer.Messenger
                 
             }
     
-           
-
-            
-
         }
 
         public IEnumerable<ChatConnectionMapping> GetConnectionIdWithUserId(int userId)
@@ -161,19 +157,19 @@ namespace ServiceLayer.Messenger
                 ContactTime = DateTime.Now
             };
 
-            var existingChatRecord = _DbContext.MessengerContactHists.FirstOrDefault
+            var existingChatRecord = _DbContext.ChatHistory.FirstOrDefault
                 (e => (e.ReceiverId == receiver.Id && e.SenderId == sender.Id) 
                 ||  (e.ReceiverId == sender.Id && e.SenderId== receiver.Id)) ;
 
             if (existingChatRecord == null)
             {
-                _DbContext.MessengerContactHists.Add(newMessengerContactHist);
+                _DbContext.ChatHistory.Add(newMessengerContactHist);
 
             }
 
             else
             {
-                _DbContext.MessengerContactHists.Attach(existingChatRecord);
+                _DbContext.ChatHistory.Attach(existingChatRecord);
                 existingChatRecord.ContactTime = DateTime.Now;
                
 
@@ -182,12 +178,12 @@ namespace ServiceLayer.Messenger
 
         public IQueryable<ChatHistory> GetAllContactHistory(int senderId)
         {
-            return  _DbContext.MessengerContactHists.Where(u => u.SenderId == senderId || u.ReceiverId == senderId).AsQueryable();
+            return  _DbContext.ChatHistory.Where(u => u.SenderId == senderId || u.ReceiverId == senderId).AsQueryable();
         }
 
         public ChatHistory GetContactHistoryBetweenUsers(int firstUserId, int secondUserId)
         {
-            return _DbContext.MessengerContactHists.Where(u => (u.SenderId == firstUserId && u.ReceiverId == secondUserId)
+            return _DbContext.ChatHistory.Where(u => (u.SenderId == firstUserId && u.ReceiverId == secondUserId)
                                                                 || (u.SenderId == secondUserId && u.ReceiverId == firstUserId)).FirstOrDefault();
         }
 
