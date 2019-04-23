@@ -55,6 +55,9 @@ namespace ManagerLayer.Gateways.UsageAnalysisDashboard
 
         public Dictionary<string, long> GetTotalData()
         {
+            Dictionary<string, long> totalData = new Dictionary<string, long>();
+
+            return totalData;
 
         }
 

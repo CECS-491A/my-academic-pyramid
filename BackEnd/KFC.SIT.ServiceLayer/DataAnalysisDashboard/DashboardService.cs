@@ -30,6 +30,12 @@ namespace ServiceLayer.DataAnalysisDashboard
             CollectionE = _repo.Db.GetCollection<ErrorLog>(_collectionEName);
         }
 
+        /// <summary>
+        /// Get a list of total number of successful login per month from the MongoDB using a query
+        /// Divide that by the number of students
+        /// The order would be chrnological order January to December
+        /// </summary>
+        /// <returns></returns>
         public long[] CountAverageSuccessfulLogin()
         {
             long[] avgLoginMonth = new long[12];
@@ -73,6 +79,12 @@ namespace ServiceLayer.DataAnalysisDashboard
             return avgLoginMonth;
         }
 
+        /// <summary>
+        /// Get a list of session duration per month from the MongoDB using a query
+        /// Divide that by the number of students
+        /// The order would be chrnological order January to December
+        /// </summary>
+        /// <returns></returns>
         public long[] CountAverageSessionDuration()
         {
             long[] avgSessionDurMonth = new long[12];
