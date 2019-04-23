@@ -15,37 +15,50 @@ namespace ManagerLayer.Gateways.UsageAnalysisDashboard
             _dashboardService = new DashboardService();
         }
 
-        public void GetAverageSuccessfulLogin()
+        public long[] GetAverageSuccessfulLogin()
         {
             long[] avgSuccessLog = _dashboardService.CountAverageSuccessfulLogin();
 
+            return avgSuccessLog;
+
         }
 
-        public void GetAverageSessionDuration()
+        public long[] GetAverageSessionDuration()
         {
             long[] avgSessionDur = _dashboardService.CountAverageSessionDuration();
-
+            return avgSessionDur;
         }
 
-        public void GetFailedSuccessfulLogIn()
+        public long[] GetFailedSuccessfulLogIn()
         {
             long[] logFS = _dashboardService.CountFailedSuccessfulLogIn();
-
+            return logFS;
         }
 
-        public void GetAverageTimeSpentPage()
+        public Dictionary<string, long> GetAverageTimeSpentPage()
         {
             Dictionary<string, long> featureTime = _dashboardService.CountAverageTimeSpentPage();
+            return featureTime;
         }
 
-        public void GetMostUsedFeature()
+        public Dictionary<string, long> GetMostUsedFeature()
         {
             Dictionary<string, long> featureNumUsed = _dashboardService.CountMostUsedFeature();
+            return featureNumUsed;
         }
 
-        public void GetSuccessfulLogin()
+        public long[] GetSuccessfulLogin()
         {
             long[] numLogin = _dashboardService.CountSuccessfulLogin();
+            return numLogin;
+        }
+
+        public Dictionary<string, long> GetTotalData()
+        {
+            Dictionary<string, long> totalData = new Dictionary<string, long>();
+
+            return totalData;
+
         }
 
 
