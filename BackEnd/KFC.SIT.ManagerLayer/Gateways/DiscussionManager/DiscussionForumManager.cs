@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using DataAccessLayer;
+using DataAccessLayer.Models;
 using DataAccessLayer.Models.DiscussionForum;
 using ServiceLayer.DiscussionForum;
 using WebAPI.UserManagement;

@@ -7,7 +7,7 @@ using DataAccessLayer.Models.DiscussionForum;
 
 namespace DataAccessLayer.DTOs
 {
-    class AnswerDTO
+    public class AnswerDTO
     {
         public int Id { get; set; }
         public int AccountId { get; set; }
