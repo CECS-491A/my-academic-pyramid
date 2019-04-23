@@ -1,6 +1,7 @@
 ﻿using DataAccessLayer.Models;
 using DataAccessLayer.Models.Messenger;
 using DataAccessLayer.Models.School;
+using DataAccessLayer.Models.DiscussionForum;
 using System.Data.Entity;
 
 namespace DataAccessLayer
@@ -24,6 +25,10 @@ namespace DataAccessLayer
         public DbSet<FriendRelationship>FriendRelationships { get; set; }
 
         public DbSet<ChatConnectionMapping> ChatConnectionMappings { get; set; }
+
+        public DbSet<Question> Questions { get; set; }
+
+        public DbSet<Answer> Answers { get; set; }
 
         // School Tables
         public DbSet<Course> Courses { get; set; }
