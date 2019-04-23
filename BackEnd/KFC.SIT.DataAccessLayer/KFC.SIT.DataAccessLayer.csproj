@@ -149,13 +149,9 @@
     <Compile Include="Logging\OptimizeLogging\NLogger.cs" />
     <Compile Include="Logging\OptimizeLogging\TelemetryFormat.cs" />
     <Compile Include="Logging\Models\Repository\TelemetryLogCollection.cs" />
-    <Compile Include="Migrations\201904220231362_Initial.cs" />
-    <Compile Include="Migrations\201904220231362_Initial.Designer.cs">
-      <DependentUpon>201904220231362_Initial.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201904220303209_AddDeleteTimeMark.cs" />
-    <Compile Include="Migrations\201904220303209_AddDeleteTimeMark.Designer.cs">
-      <DependentUpon>201904220303209_AddDeleteTimeMark.cs</DependentUpon>
+    <Compile Include="Migrations\201904221716118_Initial.cs" />
+    <Compile Include="Migrations\201904221716118_Initial.Designer.cs">
+      <DependentUpon>201904221716118_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Category.cs" />
@@ -219,11 +215,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201904220231362_Initial.resx">
-      <DependentUpon>201904220231362_Initial.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904220303209_AddDeleteTimeMark.resx">
-      <DependentUpon>201904220303209_AddDeleteTimeMark.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201904221716118_Initial.resx">
+      <DependentUpon>201904221716118_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

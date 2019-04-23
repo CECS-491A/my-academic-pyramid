@@ -60,6 +60,9 @@
 						url: this.$hostname + "messenger/SendMessage" ,
 						data: this.conversation
                     })
+                    .then(response => {
+                        //sessionStorage.SITtoken = response.data.SITtoken
+                    })
                     
 					.catch(err => {
                         /* eslint no-console: "off" */

@@ -148,14 +148,20 @@ export default {
     };
   },
   created() {
-    this.loadContactHistory(),
-      this.getAuthUserId(),
+          this.getAuthUserId(),
+    this.loadAllChatHistory(),
+
       this.$eventBus.$on("SendMessageFromFriendList", friendTO => {
         (this.ReceiverUsername = friendTO.username),
           (this.conversation.receiverId = friendTO.Id),
           (this.conversation.messageContent = ""),
           (this.chatDialog = true);
       });
+
+      this.$eventBus.$on("ReloadChatHistoryList", ()=>
+      {
+        this.loadAllChatHistory()
+      })
   },
   methods: {
     async getAuthUserId() {
@@ -170,7 +176,8 @@ export default {
         url: this.$hostname + "messenger/GetAuthUserId"
       })
         .then(response => {
-          localStorage.userId = response.data;
+          localStorage.userId = response.data.authUserId;
+         // sessionStorage.SITtoken = response.data.SITtoken
         })
         .catch(err => {
           /* eslint no-console: "off" */
@@ -178,7 +185,7 @@ export default {
         });
     },
 
-    async loadContactHistory() {
+    async loadAllChatHistory() {
       await this.axios({
         headers: {
           Accept: "application/json",
@@ -187,10 +194,11 @@ export default {
         },
         method: "GET",
         crossDomain: true,
-        url: this.$hostname + "messenger/GetContactHistory"
+        url: this.$hostname + "messenger/GetAllChatHistory"
       })
         .then(response => {
-          this.chatHistory = response.data;
+          this.chatHistory = response.data.chatHistory;
+          //sessionStorage.SITtoken = response.data.SITtoken
         })
         .catch(err => {
           /* eslint no-console: "off" */
@@ -218,6 +226,7 @@ export default {
       })
         .then(response => {
           this.conversation.receiverId = response.data;
+         // sessionStorage.SITtoken = response.data.SITtoken
         })
         .catch(err => {
           /* eslint no-console: "off" */
@@ -240,10 +249,11 @@ export default {
           url: this.$hostname + "messenger/SendMessage",
           data: this.conversation
         })
-          .then(() => {
+          .then(response => {
+            //sessionStorage.SITtoken = response.data.SITtoken
             this.errorText = null;
             this.chatDialog = false;
-            this.loadContactHistory();
+            this.loadAllChatHistory();
             this.$eventBus.$emit(
               "LoadMessageContact",
               this.conversation.receiverId
@@ -275,9 +285,10 @@ export default {
           url: this.$hostname + "messenger/DeleteMessage?targetUserId=" + targetUserId,
           data: this.conversation
         })
-          .then(() => {
-           
-            this.loadContactHistory();
+          .then(response => {
+          // sessionStorage.SITtoken = response.data.SITtoken
+            this.loadAllChatHistory();
+            this.$eventBus.$emit("ClearChatScreen" )
           })
           .catch(err => {
             /* eslint no-console: "off" */

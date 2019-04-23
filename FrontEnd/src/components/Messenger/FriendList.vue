@@ -141,7 +141,8 @@ export default {
         url: this.$hostname + "messenger/GetFriendList"
       })
         .then(response => {
-          this.friendList = response.data;
+          this.friendList = response.data.friendList;
+         // sessionStorage.SITtoken = response.data.SITtoken
         })
         .catch(err => {
           /* eslint no-console: "off" */
@@ -161,6 +162,7 @@ export default {
         url: this.$hostname + "messenger/AddFriend?addedUsername=" + this.addFriendUsername
       })
         .then(response => {
+        //  sessionStorage.SITtoken = response.data.SITtoken,
 			this.addFriendDialog = false,
 			this.loadFriendList()
 
@@ -193,6 +195,7 @@ export default {
         url: this.$hostname + "messenger/RemoveFriendFromList?friendId=" + friendId
       })
         .then(response => {
+          //sessionStorage.SITtoken = response.data.SITtoken,
 			this.loadFriendList()
 
         //this.friendList.push({FriendUserName: this.addFriendUsername});

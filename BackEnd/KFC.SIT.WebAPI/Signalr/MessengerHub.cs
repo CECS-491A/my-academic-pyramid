@@ -37,12 +37,18 @@ namespace WebAPI.Signalr
                 var connection = db.ChatConnectionMappings.Find(Context.ConnectionId);
                 if(connection == null)
                 {
-                    ChatConnectionMapping newConnection = new ChatConnectionMapping
+                    if(token !="undefine")
                     {
-                        UserId = Convert.ToInt32(token) ,
-                        ConnectionId = Context.ConnectionId
-                    };
-                    db.ChatConnectionMappings.Add(newConnection);
+                        ChatConnectionMapping newConnection = new ChatConnectionMapping
+                        {
+
+                            UserId = Convert.ToInt32(token),
+                            ConnectionId = Context.ConnectionId
+                        };
+                        db.ChatConnectionMappings.Add(newConnection);
+                    }
+                    
+                    
                 }
 
                 db.SaveChanges();

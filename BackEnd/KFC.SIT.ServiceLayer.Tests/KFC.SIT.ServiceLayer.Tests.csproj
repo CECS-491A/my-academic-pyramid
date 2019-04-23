@@ -79,6 +79,7 @@
   <ItemGroup>
     <Compile Include="HashTest.cs" />
     <Compile Include="HttpClientStringTests.cs" />
+    <Compile Include="MessengerServicesTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserManagementServicesTest.cs" />
     <Compile Include="UserTreeTest.cs" />

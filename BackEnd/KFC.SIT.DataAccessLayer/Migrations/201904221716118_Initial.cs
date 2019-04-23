@@ -38,6 +38,20 @@ namespace DataAccessLayer.Migrations
                 .Index(t => t.ParentUser_Id);
             
             CreateTable(
+                "dbo.ChatHistories",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        ContactId = c.Int(nullable: false),
+                        ContactUsername = c.String(),
+                        ContactTime = c.DateTime(nullable: false),
+                        UserId = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.Users", t => t.UserId, cascadeDelete: true)
+                .Index(t => t.UserId);
+            
+            CreateTable(
                 "dbo.Claims",
                 c => new
                     {
@@ -96,21 +110,6 @@ namespace DataAccessLayer.Migrations
                         UserId = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.ConnectionId);
-            
-            CreateTable(
-                "dbo.ChatHistories",
-                c => new
-                    {
-                        Id = c.Int(nullable: false, identity: true),
-                        SenderId = c.Int(nullable: false),
-                        SenderUsername = c.String(),
-                        ReceiverUsername = c.String(),
-                        DeleteBySender = c.Boolean(nullable: false),
-                        DeleteByReceiver = c.Boolean(nullable: false),
-                        ReceiverId = c.Int(nullable: false),
-                        ContactTime = c.DateTime(nullable: false),
-                    })
-                .PrimaryKey(t => t.Id);
             
             CreateTable(
                 "dbo.Conversations",
@@ -238,6 +237,7 @@ namespace DataAccessLayer.Migrations
             DropForeignKey("dbo.FriendRelationships", "UserId", "dbo.Users");
             DropForeignKey("dbo.ClaimUsers", "User_Id", "dbo.Users");
             DropForeignKey("dbo.ClaimUsers", "Claim_Id", "dbo.Claims");
+            DropForeignKey("dbo.ChatHistories", "UserId", "dbo.Users");
             DropForeignKey("dbo.Users", "CategoryId", "dbo.Categories");
             DropIndex("dbo.ClaimUsers", new[] { "User_Id" });
             DropIndex("dbo.ClaimUsers", new[] { "Claim_Id" });
@@ -251,6 +251,7 @@ namespace DataAccessLayer.Migrations
             DropIndex("dbo.SchoolTeacherCourseStudents", new[] { "SchoolTeacherCourseId" });
             DropIndex("dbo.UserSessions", new[] { "UserId" });
             DropIndex("dbo.FriendRelationships", new[] { "UserId" });
+            DropIndex("dbo.ChatHistories", new[] { "UserId" });
             DropIndex("dbo.Users", new[] { "ParentUser_Id" });
             DropIndex("dbo.Users", new[] { "CategoryId" });
             DropTable("dbo.ClaimUsers");
@@ -262,12 +263,12 @@ namespace DataAccessLayer.Migrations
             DropTable("dbo.SchoolTeacherCourses");
             DropTable("dbo.Courses");
             DropTable("dbo.Conversations");
-            DropTable("dbo.ChatHistories");
             DropTable("dbo.ChatConnectionMappings");
             DropTable("dbo.SchoolTeacherCourseStudents");
             DropTable("dbo.UserSessions");
             DropTable("dbo.FriendRelationships");
             DropTable("dbo.Claims");
+            DropTable("dbo.ChatHistories");
             DropTable("dbo.Users");
             DropTable("dbo.Categories");
         }
