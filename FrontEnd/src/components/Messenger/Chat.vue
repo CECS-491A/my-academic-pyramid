@@ -64,7 +64,7 @@
            .fail(function(){ console.log('Could not connect'); });
           this.$eventBus.$on("LoadMessageContact",receiverId =>{
                 this.selectedUserId = receiverId
-                this.loadMessage(receiverId)
+                this.getMessageWithUser(receiverId)
             });
 
             this.$eventBus.$on("LoadLatestMessage",receiverId =>{
@@ -72,12 +72,16 @@
                 this.loadLatestMessage(receiverId)
             });
 
+            this.$eventBus.$on("ClearChatScreen",() =>{
+                this.messages = []
+            });
+
 
         },
 
        
         methods:{
-           async loadMessage(receiverId){
+           async getMessageWithUser(receiverId){
              
                     await this.axios({
                        headers: {
@@ -87,10 +91,11 @@
         },
                         method: "GET",
                         crossDomain: true,
-						url: this.$hostname + "messenger/LoadMessageContact?receiverUserId=" + receiverId,	
+						url: this.$hostname + "messenger/GetMessageWithUser?receiverUserId=" + receiverId,	
                     })
                     .then(response => {
-                        this.messages = response.data;
+                        this.messages = response.data.conversation;
+                       // sessionStorage.SITtoken = response.data.SITtoken
                         
                     })
                     .catch(err => {
@@ -108,10 +113,11 @@
         },
                         method: "GET",
                         crossDomain: true,
-						url: this.$hostname + "messenger/LoadLatestMessageContact?receiverUserId2=" + receiverId,	
+						url: this.$hostname + "messenger/GetRecentMessageWithUser?receiverUserId2=" + receiverId,	
                     })
                     .then(response => {
-                        this.messages.push(response.data);
+                        this.messages.push(response.data.conversation);
+                        //sessionStorage.SITtoken = response.data.SITtoken
                     })
                     .catch(err => {
                         /* eslint no-console: "off" */
