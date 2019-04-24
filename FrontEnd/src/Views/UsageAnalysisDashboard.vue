@@ -1,68 +1,50 @@
 <template>
-    
+  <div class="small">
+    Hello
+    <line-chart :chart-data="datacollection"></line-chart>
+    <button @click="fillData()">Randomize</button>
+  </div>
 </template>
 
 <script>
-import Axios from 'axios';
-import { Bar } from 'vue-chartjs'
+  //import LineChart from './LineChart.js'
 
-export default {
-    extends: Bar,
-    mounted() {
-        this.renderChart(data, options)
+  export default {
+    data () {
+      return {
+        datacollection: null
+      }
     },
-    data() {
-    return {
-        labels: ["Januaray", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-      errorheaders: [
-        { text: "id", value: "ID" , sortable: false},
-        {
-          text: "date",
-          // align: "left",
-          // sortable: false,
-          value: "Date"
-        },
-        { text: "message", value: "Message" },
-        { text: "target site", value: "TargetSite" },
-        { text: "line of code", value: "LineOfCode" },
-        { text: "user", value: "User" },
-        { text: "request", value: "Request" }
-      ],
-      telemetryheaders: [
-        { text: "id", value: "ID" , sortable: false},
-        {
-          text: "date",
-          // align: "left",
-          // sortable: false,
-          value: "Date"
-        },
-        { text: "action", value: "Action" },
-        { text: "ip Adress", value: "IPAdress" },
-        { text: "location", value: "Location" }
-      ],
-      fetchUsers() {
-      this.axios
-        .get(this.$hostname + "UserManager/", {
-          headers: { "Content-Type": "application/Json" }
-        })
-        .then(response => {
-          this.users = response.data;
-          console.log(response.data);
-        })
-        .catch(error => {
-          console.log(error);
-        });
+    mounted () {
+      this.fillData()
     },
-      errors: [],
-      telemetries: [],
-      response: ""
-    };
-      
+    methods: {
+      fillData () {
+        this.datacollection = {
+          labels: [this.getRandomInt(), this.getRandomInt()],
+          datasets: [
+            {
+              label: 'Data One',
+              backgroundColor: '#f87979',
+              data: [this.getRandomInt(), this.getRandomInt()]
+            }, {
+              label: 'Data One',
+              backgroundColor: '#f87979',
+              data: [this.getRandomInt(), this.getRandomInt()]
+            }
+          ]
+        }
+      },
+      getRandomInt () {
+        return Math.floor(Math.random() * (50 - 5 + 1)) + 5
+      }
+    }
   }
-    
-}
 </script>
 
 <style>
-
+  .small {
+    max-width: 600px;
+    margin:  150px auto;
+  }
 </style>

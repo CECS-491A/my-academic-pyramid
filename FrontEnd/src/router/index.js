@@ -11,6 +11,7 @@ import LoginPrototype from '@/Views/LoginPrototype'
 import ChatContainer from '@/Views/ChatContainer'
 import UserRegistration from '@/Views/UserRegistration'
 import UserHomePage from '@/Views/UserHomePage'
+import UsageAnalysisDashboard from '@/Views/UsageAnalysisDashboard'
 
 
 Vue.use(Router)
@@ -65,6 +66,11 @@ export default new Router({
     path: "/UserHomePage",
     name: "UserHomePage",
     component: UserHomePage
+  },
+  {
+    path: "/Dashboard",
+    name: "Dashboard",
+    component: UsageAnalysisDashboard
   }
   ]
 })
