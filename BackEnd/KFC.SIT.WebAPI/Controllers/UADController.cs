@@ -11,7 +11,9 @@ namespace KFC.SIT.WebAPI.Controllers
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class UADController: ApiController
     {
-        private DashboardManager _dashboardManager = new DashboardManager();
+        private const string url = "mongodb+srv://super:superheroes@myacademicpyramidlogging-if0cx.mongodb.net/test?retryWrites=true";
+        private const string database = "test";
+        private DashboardManager _dashboardManager = new DashboardManager(url, database);
 
         [HttpGet]
         [Route("api/dashboard/slogin")]
@@ -22,7 +24,7 @@ namespace KFC.SIT.WebAPI.Controllers
         }
 
         [HttpGet]
-        [Route("api/dashboard/slogin")]
+        [Route("api/dashboard/avgSession")]
         public long[] GetavgSessionTime()
         {
 
@@ -30,7 +32,7 @@ namespace KFC.SIT.WebAPI.Controllers
         }
 
         [HttpGet]
-        [Route("api/dashboard/slogin")]
+        [Route("api/dashboard/fslogin")]
         public long[] GetFSLogin()
         {
 
@@ -38,7 +40,7 @@ namespace KFC.SIT.WebAPI.Controllers
         }
 
         [HttpGet]
-        [Route("api/dashboard/slogin")]
+        [Route("api/dashboard/feature")]
         public long[] GetFeatureData()
         {
 

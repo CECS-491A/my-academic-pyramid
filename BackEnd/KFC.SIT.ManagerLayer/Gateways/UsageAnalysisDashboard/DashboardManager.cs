@@ -12,7 +12,7 @@ namespace ManagerLayer.Gateways.UsageAnalysisDashboard
         private const string url = "mongodb+srv://super:superheroes@myacademicpyramidlogging-if0cx.mongodb.net/test?retryWrites=true";
         private const string database = "test";
 
-        public DashboardManager()
+        public DashboardManager(string url, string database)
         {
             _dashboardService = new DashboardService(url, database);
         }
@@ -54,16 +54,6 @@ namespace ManagerLayer.Gateways.UsageAnalysisDashboard
             long[] numLogin = _dashboardService.CountSuccessfulLogin();
             return numLogin;
         }
-
-        public Dictionary<string, long> GetTotalData()
-        {
-            Dictionary<string, long> totalData = new Dictionary<string, long>();
-
-            return totalData;
-
-        }
-
-
 
 
 

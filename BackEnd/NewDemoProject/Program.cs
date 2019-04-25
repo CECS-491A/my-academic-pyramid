@@ -27,7 +27,7 @@ namespace NewDemoProject
                 Console.WriteLine(tmp);
             }
             long[] something2 = temp.GetFailedSuccessfulLogIn();
-            Console.WriteLine(something2[0]);
+            //Console.WriteLine(something2[0]);
 
             long[] something = temp.GetSuccessfulLogin();
             Console.WriteLine("End");

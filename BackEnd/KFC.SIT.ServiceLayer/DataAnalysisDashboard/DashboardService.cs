@@ -109,6 +109,11 @@ namespace ServiceLayer.DataAnalysisDashboard
             return avgSessionDurMonth;
         }
 
+        /// <summary>
+        /// Get the number of successful logins from CollectionT and Get the number of failed logins from CollectionE
+        /// Save them into the list and return it
+        /// </summary>
+        /// <returns></returns>
         public long[] CountFailedSuccessfulLogIn()
         {
             long[] attemptLogins = new long[2];
@@ -119,7 +124,12 @@ namespace ServiceLayer.DataAnalysisDashboard
             attemptLogins[1] = queryF.Result;
             return attemptLogins;
         }
-
+    
+        /// <summary>
+        /// Get the average time that user spent per page and top five pages that user spent their time most
+        /// Save them into the dictionary and return it
+        /// </summary>
+        /// <returns></returns>
         public Dictionary<string, long> CountAverageTimeSpentPage()
         {
             // need to fix it @Todo
@@ -137,6 +147,11 @@ namespace ServiceLayer.DataAnalysisDashboard
             return avgTime;
         }
 
+        /// <summary>
+        /// Count how many times user used the each feature and get the feature name
+        /// Save them into the dictionary and return it
+        /// </summary>
+        /// <returns></returns>
         public Dictionary<string, long> CountMostUsedFeature()
         {
             Dictionary<string, long> featureNum = new Dictionary<string, long>();
@@ -160,6 +175,11 @@ namespace ServiceLayer.DataAnalysisDashboard
             return featureNum;
         }
 
+        /// <summary>
+        /// Count the number of logged in users per month over 6 months and save them into the list
+        /// return it
+        /// </summary>
+        /// <returns></returns>
         public long[] CountSuccessfulLogin()
         {
             long[] avgLoginMonth = new long[6];
@@ -174,7 +194,8 @@ namespace ServiceLayer.DataAnalysisDashboard
                 x => x.Date.Month,
                 i => new
                 {
-                    Result = i.Select(x => x.UserName)
+                    Result = i.Select(x => x.UserName).ToList(),
+                    sum = i.Select(x => x.UserName).Count()
                 }
                 ).ToList();
             string[] list = new string[12];
@@ -183,8 +204,12 @@ namespace ServiceLayer.DataAnalysisDashboard
             int sum = 0;
             foreach (var monthly in query)
             {
-
-                
+                Console.WriteLine("Line___________________________" + monthly.Result + monthly.sum);
+                List<string> temp = monthly.Result;
+                foreach(var a in temp)
+                {
+                    Console.WriteLine(a);
+                }
             }
             return avgLoginMonth;
         }
