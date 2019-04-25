@@ -11,6 +11,7 @@
       <v-btn to="Logging" flat>Logging</v-btn>
       <v-btn to="UserManagement" flat>UM</v-btn>
       <v-btn to="Chat" flat>Chat</v-btn>
+      <v-btn to="Dashboard" flat>Dashboard</v-btn>
     </v-toolbar>
     
 	<v-content>

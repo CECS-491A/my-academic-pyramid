@@ -33,16 +33,16 @@
         data(){
             return {
                 conversation:{
-					senderUsername: "nguyentrong56@gmail.com",
-					receiverUsername: "",
+					SenderId: "2",
+					ReceiverId: "",
 					messageContent:""
 				},
                 errorText: null
             }
         },
         created() {
-            this.$eventBus.$on("LoadMessageContact",receiverUsername =>{
-                this.conversation.receiverUsername = receiverUsername
+            this.$eventBus.$on("LoadMessageContact",receiverId =>{
+                this.conversation.ReceiverId = receiverId
             })
            
         },
@@ -50,21 +50,28 @@
             async createMessage () {
                 if (this.conversation.messageContent) {
                     await this.axios({
-                        headers:{
-                        'Authorization': 'test'
-                        },
+                        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + sessionStorage.SITtoken
+        },
 						method: "POST",
 						crossDomain: true,
 						url: this.$hostname + "messenger/SendMessage" ,
 						data: this.conversation
+                    })
+                    .then(response => {
+                        //sessionStorage.SITtoken = response.data.SITtoken
                     })
                     
 					.catch(err => {
                         /* eslint no-console: "off" */
                         console.log(err);
                     });
+
                     this.conversation.messageContent = null;
                     this.errorText = null;
+                    this.$eventBus.$emit("LoadLatestMessage", this.conversation.ReceiverId)
                 } else {
                     this.errorText = "A message must be entered!"
                 }

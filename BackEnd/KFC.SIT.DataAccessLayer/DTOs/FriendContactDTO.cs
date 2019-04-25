@@ -8,6 +8,7 @@ namespace DataAccessLayer.DTOs
 {
     public class FriendContactDTO
     {
+        public int FriendId { get; set; }
         public string FriendUsername { get; set; }
         public bool IsOnline { get; set; }
     }

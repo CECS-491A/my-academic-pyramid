@@ -134,6 +134,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DTOs\ContactHistoryDTO.cs" />
+    <Compile Include="DTOs\ConversationDTO.cs" />
     <Compile Include="DTOs\FriendContactDTO.cs" />
     <Compile Include="DTOs\UserDTO.cs" />
     <Compile Include="IEntity.cs" />
@@ -147,13 +149,9 @@
     <Compile Include="Logging\OptimizeLogging\NLogger.cs" />
     <Compile Include="Logging\OptimizeLogging\TelemetryFormat.cs" />
     <Compile Include="Logging\Models\Repository\TelemetryLogCollection.cs" />
-    <Compile Include="Migrations\201904190642402_Another_First_Migration.cs" />
-    <Compile Include="Migrations\201904190642402_Another_First_Migration.Designer.cs">
-      <DependentUpon>201904190642402_Another_First_Migration.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201904200607358_create-school-related-tables.cs" />
-    <Compile Include="Migrations\201904200607358_create-school-related-tables.Designer.cs">
-      <DependentUpon>201904200607358_create-school-related-tables.cs</DependentUpon>
+    <Compile Include="Migrations\201904221716118_Initial.cs" />
+    <Compile Include="Migrations\201904221716118_Initial.Designer.cs">
+      <DependentUpon>201904221716118_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Category.cs" />
@@ -162,9 +160,9 @@
     <Compile Include="Logging\Models\ErrorLog.cs" />
     <Compile Include="Models\HashSalt.cs" />
     <Compile Include="Models\Messenger\ChatConnectionMapping.cs" />
-    <Compile Include="Models\Messenger\Conservation.cs" />
+    <Compile Include="Models\Messenger\ChatHistory.cs" />
+    <Compile Include="Models\Messenger\Conversation.cs" />
     <Compile Include="Models\Messenger\FriendRelationship.cs" />
-    <Compile Include="Models\Messenger\MessengerContactHist.cs" />
     <Compile Include="Models\PasswordQA.cs" />
     <Compile Include="Logging\Models\TelemetryLog.cs" />
     <Compile Include="Models\School\Course.cs" />
@@ -198,6 +196,12 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <None Include="api\index.md" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include=".gitignore" />
+    <Content Include="api\.gitignore" />
     <None Include="App.config" />
     <Content Include="NLog.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -211,11 +215,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201904190642402_Another_First_Migration.resx">
-      <DependentUpon>201904190642402_Another_First_Migration.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904200607358_create-school-related-tables.resx">
-      <DependentUpon>201904200607358_create-school-related-tables.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201904221716118_Initial.resx">
+      <DependentUpon>201904221716118_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

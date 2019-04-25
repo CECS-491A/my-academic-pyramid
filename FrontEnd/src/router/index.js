@@ -12,6 +12,7 @@ import ChatContainer from '@/Views/ChatContainer'
 import UserRegistration from '@/Views/UserRegistration'
 import UserHomePage from '@/Views/UserHomePage'
 import Redirect from '@/Views/Redirect'
+import UsageAnalysisDashboard from '@/Views/UsageAnalysisDashboard'
 
 
 Vue.use(Router)
@@ -71,6 +72,11 @@ export default new Router({
     path: "/Redirect",
     name: "Redirect",
     component: Redirect
+  },
+  {
+    path: "/Dashboard",
+    name: "Dashboard",
+    component: UsageAnalysisDashboard
   }
   ]
 })
