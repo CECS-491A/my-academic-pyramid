@@ -180,11 +180,11 @@ namespace ServiceLayer.DataAnalysisDashboard
             string[] list = new string[12];
 
             int count = 0;
+            int sum = 0;
             foreach (var monthly in query)
             {
-                avgLoginMonth[count] = monthly;
-                count++;
-                if (count == 6) { break; }
+
+                
             }
             return avgLoginMonth;
         }
