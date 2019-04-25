@@ -255,6 +255,7 @@
     <Compile Include="Signalr\MessengerHub.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegistrationData.cs" />
+    <Compile Include="Utility\WebAPIConstants.cs" />
     <Compile Include="Utility\SecurityContextBuilder.cs" />
   </ItemGroup>
   <ItemGroup>
