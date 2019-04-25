@@ -7,9 +7,12 @@
 </template>
 
 <script>
-  //import LineChart from './LineChart.js'
+  import LineChart from "./componenets/Dashboard/LineChart.vue";
 
   export default {
+    components: {
+      LineChart
+    },
     data () {
       return {
         datacollection: null
