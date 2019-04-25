@@ -23,9 +23,9 @@ namespace ServiceLayer.DataAnalysisDashboard
 
         protected MongoDBRepo _repo;
 
-        public DashboardService(string url, string database)
+        public DashboardService()
         {
-            _repo = new MongoDBRepo(url, database);
+            _repo = new MongoDBRepo("mongodb+srv://super:superheroes@myacademicpyramidlogging-if0cx.mongodb.net/test?retryWrites=true", "test");
             CollectionT = _repo.Db.GetCollection<TelemetryLog>(_collectionTName);
             CollectionE = _repo.Db.GetCollection<ErrorLog>(_collectionEName);
         }
@@ -163,10 +163,6 @@ namespace ServiceLayer.DataAnalysisDashboard
         public long[] CountSuccessfulLogin()
         {
             long[] avgLoginMonth = new long[6];
-            for (int i = 0; i < 6; i++)
-            {
-
-            }
             var query = CollectionT.Aggregate()
                         .Match(x => x.Action == "Login")
                         .SortByDescending(x => x.Date)
@@ -177,12 +173,11 @@ namespace ServiceLayer.DataAnalysisDashboard
                     Result = i.Select(x => x.UserName)
                 }
                 ).ToList();
-            string[] list = new string[12];
 
             int count = 0;
             foreach (var monthly in query)
             {
-                avgLoginMonth[count] = monthly;
+                //monthly.Result.AsQueryable().GroupBy(monthly.Result)
                 count++;
                 if (count == 6) { break; }
             }

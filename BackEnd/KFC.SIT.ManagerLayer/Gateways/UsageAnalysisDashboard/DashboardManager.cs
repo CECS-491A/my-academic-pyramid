@@ -9,12 +9,10 @@ namespace ManagerLayer.Gateways.UsageAnalysisDashboard
     public class DashboardManager
     {
         private DashboardService _dashboardService;
-        private const string url = "mongodb+srv://super:superheroes@myacademicpyramidlogging-if0cx.mongodb.net/test?retryWrites=true";
-        private const string database = "test";
 
         public DashboardManager()
         {
-            _dashboardService = new DashboardService(url, database);
+            _dashboardService = new DashboardService();
         }
 
         public long[] GetAverageSuccessfulLogin()

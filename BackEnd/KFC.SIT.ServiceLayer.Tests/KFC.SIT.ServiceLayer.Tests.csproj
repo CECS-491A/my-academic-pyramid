@@ -77,7 +77,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DashboardTest.cs" />
     <Compile Include="HashTest.cs" />
     <Compile Include="HttpClientStringTests.cs" />
     <Compile Include="MessengerServicesTest.cs" />

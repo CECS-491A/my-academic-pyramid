@@ -7,7 +7,6 @@ using DataAccessLayer.Logging;
 using DataAccessLayer;
 using ManagerLayer;
 using ServiceLayer.DataAnalysisDashboard;
-using ManagerLayer.Gateways.UsageAnalysisDashboard;
 namespace NewDemoProject
 {
     class Program
@@ -20,16 +19,15 @@ namespace NewDemoProject
             //{
             //    Console.WriteLine(re.Action + ", " + re.Date.ToString());
             //}
-            DashboardManager temp = new DashboardManager();
-            Dictionary<string, long> something3 = temp.GetMostUsedFeature();
+            DashboardService temp = new DashboardService();
+            Dictionary<string, long> something3 = temp.CountMostUsedFeature();
             foreach (var tmp in something3)
             {
                 Console.WriteLine(tmp);
             }
-            long[] something2 = temp.GetFailedSuccessfulLogIn();
+            long[] something2 = temp.CountFailedSuccessfulLogIn();
             Console.WriteLine(something2[0]);
-
-            long[] something = temp.GetSuccessfulLogin();
+            long[] something = temp.CountSuccessfulLogin();
             Console.WriteLine("End");
             
             foreach (long i in something)
