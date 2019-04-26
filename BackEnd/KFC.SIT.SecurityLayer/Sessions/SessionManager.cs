@@ -35,7 +35,7 @@ namespace SecurityLayer.Sessions
             string activeSessionToken = _sessionServices.GetActiveSessionToken(userid);
             if (activeSessionToken != null)
             {
-                token = activeSessionToken;
+                token = RefreshSession(activeSessionToken);
                 return token;
             }
             Dictionary<string, string> payload = GeneratePayload(userid);

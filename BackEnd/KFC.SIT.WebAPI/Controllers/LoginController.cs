@@ -9,6 +9,8 @@ using System.Web.Http.Cors;
 using SecurityLayer.Sessions;
 using ManagerLayer.Constants;
 using DataAccessLayer.Models;
+using KFC.SIT.WebAPI.Utility;
+
 
 namespace KFC.SIT.WebAPI.Controllers
 { 
@@ -21,6 +23,8 @@ namespace KFC.SIT.WebAPI.Controllers
             //CreateUsers();
             SessionManager sm = new SessionManager();
             UserManager um = new UserManager();
+            string URL_FIRST_PART 
+                = $"{WebAPIConstants.FRONT_END_LOCAL}/Redirect";
             // Assume it's there for now.
             if (!sm.ValidateSSOPayload(payload))
             {
@@ -39,13 +43,14 @@ namespace KFC.SIT.WebAPI.Controllers
                 um.CreateUserAccount(userDto);
                 user = um.FindByUserName(payload.Email);
                 um.AddClaimAction(user.Id, new Claim("CanRegister"));
+                um.AddClaimAction(user.Id, new Claim("CanReadOwnStudentAccount"));
             }
             string token = sm.CreateSession(user.Id);
 
             Dictionary<string, string> redirectResponseDictionary
                 = new Dictionary<string, string>()
             {
-                {"redirectURL", RedirectUserUtility.GetUrlAddress(user.Category.Value) }
+                {"redirectURL", URL_FIRST_PART }
             };
             redirectResponseDictionary["redirectURL"] 
                 = redirectResponseDictionary["redirectURL"] + "?SITtoken=" + token;

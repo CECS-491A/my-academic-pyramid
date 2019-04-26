@@ -35,7 +35,9 @@ export default {
                     + "\"ssoUserId\": \"0743cd2c-fec3-4b79-a5b6-a6c52a752c71\","
                     + "\"timestamp\": \"1552766624957\","
                     + "\"signature\": \"4T5Csu2U9OozqN66Us+pEc5ODcBwPs1ldaq2fmBqtfo=\"}",
-      registrationUrl: ""
+      registrationUrl: "",
+      redirectViewName: "Redirect",
+      indexToCut: -1
     }
     
   },
@@ -46,7 +48,6 @@ export default {
           // then send to server with axios command.
           console.log("Sending payload...");
           let tempStr = this.payloadStr.split("\n").join("");
-          console.log(this.payloadStr);
           try {
               
               
@@ -59,7 +60,8 @@ export default {
               axios.post(url, temp)
                    .then(response => {
                        this.registrationUrl = response.data["redirectURL"]
-                       console.log("Session Storage.token = " + sessionStorage.SITtoken)
+                       this.indexToCut = this.registrationUrl.search(this.redirectViewName)
+                       this.$router.push(this.registrationUrl.substr(this.indexToCut))
                    })
                    .catch(err => console.log("There was error. " + err.response));
               
