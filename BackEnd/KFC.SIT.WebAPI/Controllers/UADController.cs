@@ -27,7 +27,6 @@ namespace KFC.SIT.WebAPI.Controllers
         [Route("api/dashboard/avgSession")]
         public long[] GetavgSessionTime()
         {
-
             return _dashboardManager.GetAverageSessionDuration();
         }
 
@@ -35,7 +34,6 @@ namespace KFC.SIT.WebAPI.Controllers
         [Route("api/dashboard/fslogin")]
         public long[] GetFSLogin()
         {
-
             return _dashboardManager.GetFailedSuccessfulLogIn();
         }
 
@@ -43,7 +41,6 @@ namespace KFC.SIT.WebAPI.Controllers
         [Route("api/dashboard/feature")]
         public long[] GetFeatureData()
         {
-
             return _dashboardManager.GetAverageSuccessfulLogin();
         }
 
