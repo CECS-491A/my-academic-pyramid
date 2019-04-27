@@ -5,11 +5,11 @@ using System.Web;
 using DataAccessLayer;
 using DataAccessLayer.Logging;
 using DataAccessLayer.Models;
-using System.Collections.Generic;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using MongoDB.Bson;
 using System.Threading.Tasks;
+using System.Collections;
 
 namespace ServiceLayer.DataAnalysisDashboard
 {
@@ -31,52 +31,59 @@ namespace ServiceLayer.DataAnalysisDashboard
         }
 
         /// <summary>
-        /// Get a list of total number of successful login per month from the MongoDB using a query
-        /// Divide that by the number of students
-        /// The order would be chrnological order January to December
+        /// Use the query to get the list of the number of successful logged in users.
+        /// Each element represents a month and sorted by date. Starts from Jan to Dec.
         /// </summary>
-        /// <returns></returns>
-        public long[] CountAverageSuccessfulLogin()
+        /// <returns>successLogin</returns>
+        public Dictionary<int, long> CountSuccessfulLogin(int numOfMonth)
         {
-            long[] avgLoginMonth = new long[12];
-            long[] failedLogIn = new long[12];
-            var queryS = CollectionT.Aggregate()
-                        .Match(x => x.Action == "Login")
-                        .SortByDescending(x => x.Date)
-                        .Group(
+            Dictionary<int, long> successLogin = new Dictionary<int, long>();
+            var queryResult = CollectionT.Aggregate()
+                            .Match(x => x.Action == "Login")
+                            .Group(
                 x => x.Date.Month,
                 i => new
                 {
-                    Result = i.Select(x => x.ID).Count()
-                }
-                ).ToList();
+                    Result = i.Select(x => x.ID).Count(),
+                    Date = i.Select(x => x.Date).First()
+                })
+                .SortByDescending(x => x.Date)
+                .Limit(numOfMonth)
+                .ToList();
 
-            var queryF = CollectionE.Aggregate()
-                        .Match(x => x.Action == "Login")
-                        .SortByDescending(x => x.Date)
-                        .Group(
+            foreach (var monthly in queryResult)
+            {
+                successLogin.Add(monthly.Date.Month, monthly.Result);
+            }
+            return successLogin;
+        }
+
+        /// <summary>
+        /// Use the query to get the list of the number of failed logged in users.
+        /// Each element represents a month and sorted by date. Starts from Jan to Dec.
+        /// </summary>
+        /// <returns>failedLogin</returns>
+        public Dictionary<int, long> CountFailedLogin(int numOfMonth)
+        {
+            Dictionary<int, long> failedLogin = new Dictionary<int, long>();
+            var queryResult = CollectionE.Aggregate()
+                            .Match(x => x.Action == "Login")
+                            .Group(
                 x => x.Date.Month,
                 i => new
                 {
-                    Result = i.Select(x => x.ID).Count()
-                }
-                ).ToList();
+                    Result = i.Select(x => x.ID).Count(),
+                    Date = i.Select(x => x.Date).First()
+                })
+                .SortByDescending(x => x.Date)
+                .Limit(numOfMonth)
+                .ToList();
 
-            int count = 0;
-            foreach (var monthly in queryF)
+            foreach (var monthly in queryResult)
             {
-                failedLogIn[count] = monthly.Result;
-                count++;
-                if (count == 12) { break; }
+                failedLogin.Add(monthly.Date.Month, monthly.Result);
             }
-            count = 0;
-            foreach (var monthly in queryS)
-            {
-                avgLoginMonth[count] = monthly.Result / (failedLogIn[count] + monthly.Result);
-                count++;
-                if (count == 12) { break; }
-            }
-            return avgLoginMonth;
+            return failedLogin;
         }
 
         /// <summary>
@@ -110,19 +117,23 @@ namespace ServiceLayer.DataAnalysisDashboard
         }
 
         /// <summary>
-        /// Get the number of successful logins from CollectionT and Get the number of failed logins from CollectionE
-        /// Save them into the list and return it
+        /// Get the total number of successful logins from CollectionT
         /// </summary>
         /// <returns></returns>
-        public long[] CountFailedSuccessfulLogIn()
+        public long CountTotalSuccessfulLogin()
         {
-            long[] attemptLogins = new long[2];
-            Task<long> queryS = CollectionT.CountDocumentsAsync(x => x.Action == "Login");
-            Task<long> queryF = CollectionE.CountDocumentsAsync(x => x.Action == "Login");
+            Task<long> queryResult = CollectionT.CountDocumentsAsync(x => x.Action == "Login");
+            return queryResult.Result;
+        }
 
-            attemptLogins[0] = queryS.Result;
-            attemptLogins[1] = queryF.Result;
-            return attemptLogins;
+        /// <summary>
+        /// Get the total number of failed logins from CollectionE
+        /// </summary>
+        /// <returns></returns>
+        public long CountTotalFailedLogin()
+        {
+            Task<long> queryResult = CollectionE.CountDocumentsAsync(x => x.Action == "Login");
+            return queryResult.Result;
         }
     
         /// <summary>
@@ -180,7 +191,7 @@ namespace ServiceLayer.DataAnalysisDashboard
         /// return it
         /// </summary>
         /// <returns></returns>
-        public long[] CountSuccessfulLogin()
+        public long[] CountSuccessfulLogin2()
         {
             long[] avgLoginMonth = new long[6];
             for (int i = 0; i < 6; i++)
@@ -213,6 +224,5 @@ namespace ServiceLayer.DataAnalysisDashboard
             }
             return avgLoginMonth;
         }
-
     }
 }

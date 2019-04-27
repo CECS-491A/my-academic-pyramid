@@ -12,15 +12,24 @@ namespace NewDemoProject
 {
     class Program
     {
+        private const string url = "mongodb+srv://super:superheroes@myacademicpyramidlogging-if0cx.mongodb.net/test?retryWrites=true";
+        private const string database = "test";
+
         static void Main(string[] args)
         {
-            TelemetryLogCollection collection = new TelemetryLogCollection();
             //var result = collection.GetAll();
             //foreach (var re in result)
             //{
             //    Console.WriteLine(re.Action + ", " + re.Date.ToString());
             //}
-            DashboardManager temp = new DashboardManager();
+            DashboardManager temp = new DashboardManager(url, database);
+            DashboardService temp2 = new DashboardService(url, database);
+            IList<long> get = temp2.CountFailedLogin(6);
+            IList<long> get2 = temp.GetAverageSuccessfulLogin();
+            foreach (var s in get2)
+            {
+                Console.WriteLine(s);
+            }
             Dictionary<string, long> something3 = temp.GetMostUsedFeature();
             foreach (var tmp in something3)
             {
@@ -29,13 +38,9 @@ namespace NewDemoProject
             long[] something2 = temp.GetFailedSuccessfulLogIn();
             //Console.WriteLine(something2[0]);
 
-            long[] something = temp.GetSuccessfulLogin();
+            //long[] something = temp.GetSuccessfulLogin();
             Console.WriteLine("End");
-            
-            foreach (long i in something)
-            {
-                Console.WriteLine("Finally: " + i);
-            }
+   
             
             Console.ReadKey();
         }

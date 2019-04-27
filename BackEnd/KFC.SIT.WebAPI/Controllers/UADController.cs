@@ -19,8 +19,8 @@ namespace KFC.SIT.WebAPI.Controllers
         [Route("api/dashboard/slogin")]
         public long[] GetScuessfulLogin()
         {
-
-            return _dashboardManager.GetAverageSuccessfulLogin();
+            throw new System.Exception();
+            //return _dashboardManager.GetAverageSuccessfulLogin();
         }
 
         [HttpGet]
@@ -41,7 +41,8 @@ namespace KFC.SIT.WebAPI.Controllers
         [Route("api/dashboard/feature")]
         public long[] GetFeatureData()
         {
-            return _dashboardManager.GetAverageSuccessfulLogin();
+            throw new System.Exception();
+            //return _dashboardManager.GetAverageSuccessfulLogin();
         }
 
     }

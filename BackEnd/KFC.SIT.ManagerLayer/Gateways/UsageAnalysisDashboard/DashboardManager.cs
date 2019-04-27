@@ -17,24 +17,65 @@ namespace ManagerLayer.Gateways.UsageAnalysisDashboard
             _dashboardService = new DashboardService(url, database);
         }
 
-        public long[] GetAverageSuccessfulLogin()
+        /// <summary>
+        /// Get the list of number of successful login and list of number of failed login per month 
+        /// Divide number of successful login by the number of total login attempts
+        /// The avgLogin will be sorted in reverse chronological order
+        /// It will get the data of recent 12 month according to the business rules. 
+        /// </summary>
+        /// <returns>avgLogin</returns>
+        public Dictionary<int, long> GetAverageSuccessfulLogin()
         {
-            long[] avgSuccessLog = _dashboardService.CountAverageSuccessfulLogin();
+            int numOfMonth = 12;
+            Dictionary<int, long> successLogin = _dashboardService.CountSuccessfulLogin(numOfMonth);
+            Dictionary<int, long> failedLogin = _dashboardService.CountFailedLogin(numOfMonth);
+            Dictionary<int, long> avgLogin = new Dictionary<int, long>();
+            int monthToday = DateTime.Today.Month;
 
-            return avgSuccessLog;
+            for (int i = 1; i < numOfMonth + 1; i++)
+            {
+                long avgSuccessfulLogin = 0;
+                long numSuccessfulLogin = 0;
+                long numFailedLogin = 0;
 
+                if (successLogin.ContainsKey(i))
+                {
+                    numSuccessfulLogin = successLogin[i];
+                    if (failedLogin.ContainsKey(i))
+                    {
+                        numFailedLogin = failedLogin[i];
+                    }
+                    long totalLoginAttempt = successLogin[i] + failedLogin[i];
+
+                }
+                avgLogin.Add(monthToday, avgSuccessfulLogin);
+                monthToday--;
+                if (monthToday == 0) { monthToday = 12; }
+            }
+            return avgLogin;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public long[] GetAverageSessionDuration()
         {
             long[] avgSessionDur = _dashboardService.CountAverageSessionDuration();
             return avgSessionDur;
         }
 
-        public long[] GetFailedSuccessfulLogIn()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<long> GetFailedSuccessfulLogIn()
         {
-            long[] logFS = _dashboardService.CountFailedSuccessfulLogIn();
-            return logFS;
+            long[] successFailed = new long[2];
+            successFailed[0] = _dashboardService.CountTotalSuccessfulLogin();
+            successFailed[1] = _dashboardService.CountTotalFailedLogin();
+
+            return successFailed;
         }
 
         public Dictionary<string, long> GetAverageTimeSpentPage()
@@ -51,8 +92,9 @@ namespace ManagerLayer.Gateways.UsageAnalysisDashboard
 
         public long[] GetSuccessfulLogin()
         {
-            long[] numLogin = _dashboardService.CountSuccessfulLogin();
-            return numLogin;
+            throw new Exception();
+           // long[] numLogin = _dashboardService.CountSuccessfulLogin();
+           // return numLogin;
         }
 
 
