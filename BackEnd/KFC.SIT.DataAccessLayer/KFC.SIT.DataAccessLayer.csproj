@@ -137,6 +137,7 @@
     <Compile Include="DTOs\ContactHistoryDTO.cs" />
     <Compile Include="DTOs\ConversationDTO.cs" />
     <Compile Include="DTOs\FriendContactDTO.cs" />
+    <Compile Include="DTOs\SearchResultDTO.cs" />
     <Compile Include="DTOs\UserDTO.cs" />
     <Compile Include="IEntity.cs" />
     <Compile Include="Logging\OptimizeLogging\ErrorFormat.cs" />
@@ -149,9 +150,9 @@
     <Compile Include="Logging\OptimizeLogging\NLogger.cs" />
     <Compile Include="Logging\OptimizeLogging\TelemetryFormat.cs" />
     <Compile Include="Logging\Models\Repository\TelemetryLogCollection.cs" />
-    <Compile Include="Migrations\201904221716118_Initial.cs" />
-    <Compile Include="Migrations\201904221716118_Initial.Designer.cs">
-      <DependentUpon>201904221716118_Initial.cs</DependentUpon>
+    <Compile Include="Migrations\201904272012319_Initial.cs" />
+    <Compile Include="Migrations\201904272012319_Initial.Designer.cs">
+      <DependentUpon>201904272012319_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Category.cs" />
@@ -216,8 +217,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201904221716118_Initial.resx">
-      <DependentUpon>201904221716118_Initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201904272012319_Initial.resx">
+      <DependentUpon>201904272012319_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

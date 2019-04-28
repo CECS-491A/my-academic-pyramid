@@ -28,5 +28,6 @@ namespace DataAccessLayer.Models.School
 
         public ICollection<SchoolTeacher> Teachers { set; get; }
         public ICollection<SchoolDepartment> Departments { set; get; }
+        public ICollection<Student> Students { set; get; }
     }
 }
