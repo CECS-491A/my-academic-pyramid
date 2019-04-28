@@ -9,6 +9,7 @@ using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using MongoDB.Bson;
 using System.Threading.Tasks;
+using DataAccessLayer.MongoDBQueryConstants;
 using System.Collections;
 
 namespace ServiceLayer.DataAnalysisDashboard
@@ -35,11 +36,11 @@ namespace ServiceLayer.DataAnalysisDashboard
         /// Each element represents a month and sorted by date. Starts from Jan to Dec.
         /// </summary>
         /// <returns>successLogin</returns>
-        public Dictionary<int, long> CountSuccessfulLogin(int numOfMonth)
+        public IDictionary<int, long> CountSuccessfulLogin(int numOfMonth)
         {
             Dictionary<int, long> successLogin = new Dictionary<int, long>();
             var queryResult = CollectionT.Aggregate()
-                            .Match(x => x.Action == "Login")
+                            .Match(x => x.Action == MongoDBAction.Login)
                             .Group(
                 x => x.Date.Month,
                 i => new
@@ -63,11 +64,11 @@ namespace ServiceLayer.DataAnalysisDashboard
         /// Each element represents a month and sorted by date. Starts from Jan to Dec.
         /// </summary>
         /// <returns>failedLogin</returns>
-        public Dictionary<int, long> CountFailedLogin(int numOfMonth)
+        public IDictionary<int, long> CountFailedLogin(int numOfMonth)
         {
             Dictionary<int, long> failedLogin = new Dictionary<int, long>();
             var queryResult = CollectionE.Aggregate()
-                            .Match(x => x.Action == "Login")
+                            .Match(x => x.Action == MongoDBAction.Login)
                             .Group(
                 x => x.Date.Month,
                 i => new
@@ -141,7 +142,7 @@ namespace ServiceLayer.DataAnalysisDashboard
         /// Save them into the dictionary and return it
         /// </summary>
         /// <returns></returns>
-        public Dictionary<string, long> CountAverageTimeSpentPage()
+        public IDictionary<string, long> CountAverageTimeSpentPage()
         {
             // need to fix it @Todo
             Dictionary<string, long> avgTime = new Dictionary<string, long>();
@@ -163,7 +164,7 @@ namespace ServiceLayer.DataAnalysisDashboard
         /// Save them into the dictionary and return it
         /// </summary>
         /// <returns></returns>
-        public Dictionary<string, long> CountMostUsedFeature()
+        public IDictionary<string, long> CountMostUsedFiveFeature()
         {
             Dictionary<string, long> featureNum = new Dictionary<string, long>();
             string[] features = { "Feature", "Feature2" };
@@ -176,10 +177,14 @@ namespace ServiceLayer.DataAnalysisDashboard
                     NumUsed = i.Select(x => x.ID).Count(),
                     Feature = i.Select(x => x.Action).First()
                 }
-                ).ToList();
+                )
+                .SortBy(x => x.NumUsed)
+                .Limit(5)
+                .ToList();
 
             foreach (var feature in query)
             {
+                Console.WriteLine(feature.Feature + ", " + featureNum);
                 featureNum.Add(feature.Feature, feature.NumUsed);
             }
 

@@ -22,21 +22,33 @@ namespace NewDemoProject
             //{
             //    Console.WriteLine(re.Action + ", " + re.Date.ToString());
             //}
-            DashboardManager temp = new DashboardManager(url, database);
-            DashboardService temp2 = new DashboardService(url, database);
-            IList<long> get = temp2.CountFailedLogin(6);
-            IList<long> get2 = temp.GetAverageSuccessfulLogin();
+            DashboardManager manager = new DashboardManager(url, database);
+            DashboardService service = new DashboardService(url, database);
+            IDictionary<int, long> get = service.CountSuccessfulLogin(12);
+            IDictionary<int, long> get2 = service.CountFailedLogin(12);
+            IDictionary<int, double> get3 = manager.GetAverageSuccessfulLogin();
+            Console.WriteLine("succesufl");
+            foreach (var s in get)
+            {
+                Console.WriteLine(s.Key +"," + s.Value);
+            }
+            Console.WriteLine("failed login");
             foreach (var s in get2)
             {
-                Console.WriteLine(s);
+                Console.WriteLine(s.Key + "," + s.Value);
             }
-            Dictionary<string, long> something3 = temp.GetMostUsedFeature();
+            Console.WriteLine("Avg successful login");
+            foreach (var s in get3)
+            {
+                Console.WriteLine(s.Key + "," + s.Value);
+            }
+            IDictionary<string, long> something3 = manager.GetMostUsedFeature();
             foreach (var tmp in something3)
             {
                 Console.WriteLine(tmp);
             }
-            long[] something2 = temp.GetFailedSuccessfulLogIn();
-            //Console.WriteLine(something2[0]);
+            long[] something2 = (long[]) manager.GetFailedSuccessfulLogIn();
+            Console.WriteLine(something2[0]);
 
             //long[] something = temp.GetSuccessfulLogin();
             Console.WriteLine("End");
