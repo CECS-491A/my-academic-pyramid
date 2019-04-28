@@ -137,7 +137,7 @@
     <Compile Include="DTOs\ContactHistoryDTO.cs" />
     <Compile Include="DTOs\ConversationDTO.cs" />
     <Compile Include="DTOs\FriendContactDTO.cs" />
-    <Compile Include="DTOs\SearchResultDTO.cs" />
+    <Compile Include="DTOs\SearchDTO.cs" />
     <Compile Include="DTOs\UserDTO.cs" />
     <Compile Include="IEntity.cs" />
     <Compile Include="Logging\OptimizeLogging\ErrorFormat.cs" />
@@ -150,9 +150,9 @@
     <Compile Include="Logging\OptimizeLogging\NLogger.cs" />
     <Compile Include="Logging\OptimizeLogging\TelemetryFormat.cs" />
     <Compile Include="Logging\Models\Repository\TelemetryLogCollection.cs" />
-    <Compile Include="Migrations\201904272012319_Initial.cs" />
-    <Compile Include="Migrations\201904272012319_Initial.Designer.cs">
-      <DependentUpon>201904272012319_Initial.cs</DependentUpon>
+    <Compile Include="Migrations\201904282230048_Initial.cs" />
+    <Compile Include="Migrations\201904282230048_Initial.Designer.cs">
+      <DependentUpon>201904282230048_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Category.cs" />
@@ -169,11 +169,7 @@
     <Compile Include="Models\School\Course.cs" />
     <Compile Include="Models\School\Department.cs" />
     <Compile Include="Models\School\School.cs" />
-    <Compile Include="Models\School\SchoolDepartment.cs" />
-    <Compile Include="Models\School\SchoolTeacher.cs" />
-    <Compile Include="Models\School\SchoolTeacherCourseStudent.cs" />
     <Compile Include="Models\School\Student.cs" />
-    <Compile Include="Models\School\SchoolTeacherCourse.cs" />
     <Compile Include="Models\School\Teacher.cs" />
     <Compile Include="Models\TokenManager.cs" />
     <Compile Include="Models\User.cs" />
@@ -217,8 +213,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201904272012319_Initial.resx">
-      <DependentUpon>201904272012319_Initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201904282230048_Initial.resx">
+      <DependentUpon>201904282230048_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
