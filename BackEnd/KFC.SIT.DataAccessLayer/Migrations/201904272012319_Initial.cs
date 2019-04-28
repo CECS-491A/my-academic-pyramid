@@ -29,13 +29,19 @@ namespace DataAccessLayer.Migrations
                         Email = c.String(),
                         CreatedAt = c.DateTime(nullable: false, precision: 7, storeType: "datetime2"),
                         ParentUser_Id = c.Int(),
+                        SchoolId = c.Int(),
+                        DepartmentId = c.Int(),
                         Discriminator = c.String(nullable: false, maxLength: 128),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Categories", t => t.CategoryId)
                 .ForeignKey("dbo.Users", t => t.ParentUser_Id)
+                .ForeignKey("dbo.Schools", t => t.SchoolId, cascadeDelete: true)
+                .ForeignKey("dbo.Departments", t=> t.DepartmentId, cascadeDelete: true)
                 .Index(t => t.CategoryId)
-                .Index(t => t.ParentUser_Id);
+                .Index(t => t.ParentUser_Id)
+                .Index(t => t.SchoolId)
+                .Index(t => t.DepartmentId);
             
             CreateTable(
                 "dbo.ChatHistories",
@@ -191,7 +197,7 @@ namespace DataAccessLayer.Migrations
                         SchoolDepartmentId = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Schools", t => t.SchoolId, cascadeDelete: true)
+                .ForeignKey("dbo.Schools", t => t.SchoolId, cascadeDelete: false)
                 .ForeignKey("dbo.Teachers", t => t.TeacherId, cascadeDelete: true)
                 .Index(t => t.SchoolId)
                 .Index(t => t.TeacherId);
@@ -227,6 +233,8 @@ namespace DataAccessLayer.Migrations
             DropForeignKey("dbo.SchoolTeachers", "TeacherId", "dbo.Teachers");
             DropForeignKey("dbo.SchoolTeachers", "SchoolId", "dbo.Schools");
             DropForeignKey("dbo.SchoolTeacherCourses", "SchoolTeacherId", "dbo.SchoolTeachers");
+            DropForeignKey("dbo.Users", "SchoolId", "dbo.Schools");
+            DropForeignKey("dbo.Users", "DepartmentId", "dbo.Departments");
             DropForeignKey("dbo.SchoolDepartments", "SchoolId", "dbo.Schools");
             DropForeignKey("dbo.SchoolDepartments", "DepartmentId", "dbo.Departments");
             DropForeignKey("dbo.SchoolTeacherCourses", "CourseId", "dbo.Courses");
@@ -252,8 +260,10 @@ namespace DataAccessLayer.Migrations
             DropIndex("dbo.UserSessions", new[] { "UserId" });
             DropIndex("dbo.FriendRelationships", new[] { "UserId" });
             DropIndex("dbo.ChatHistories", new[] { "UserId" });
+            DropIndex("dbo.Users", new[] { "SchoolId" });
             DropIndex("dbo.Users", new[] { "ParentUser_Id" });
             DropIndex("dbo.Users", new[] { "CategoryId" });
+            DropIndex("dbo.Users", new[] { "DepartmentId" });
             DropTable("dbo.ClaimUsers");
             DropTable("dbo.Teachers");
             DropTable("dbo.SchoolTeachers");
