@@ -20,17 +20,19 @@ using SecurityLayer.Authorization.AuthorizationManagers;
 using DataAccessLayer;
 using System.Web.Http.Controllers;
 using DataAccessLayer.Models;
+using System.Data.Entity.Infrastructure;
+using static ServiceLayer.ServiceExceptions.SignalRException;
 
 namespace KFC.SIT.WebAPI.Controllers
 {
 
     [EnableCors(origins: "*", headers: "*", methods: "*")]
- 
+
     public class MessengerController : ApiController
     {
-      
+
         private MessengerManager messengerManager;
-        private int authUserId ;
+        private int authUserId;
         private bool securityPass = false;
         public MessengerController()
         {
@@ -38,9 +40,9 @@ namespace KFC.SIT.WebAPI.Controllers
         }
 
         [HttpGet]
-        [ActionName("GetAllChatHistory")]
+        [ActionName("GetAllConversation")]
         //[ActionName("GetContactHistory")]
-        public IHttpActionResult GetAllChatHistory()
+        public IHttpActionResult GetAllConversation()
 
         {
             SecurityContext securityContext = SecurityContextBuilder.CreateSecurityContext(
@@ -71,189 +73,37 @@ namespace KFC.SIT.WebAPI.Controllers
             else
             {
                 UserManager um = new UserManager();
-                User user = um.FindByUserName(securityContext.UserName);
                 authUserId = um.FindByUserName(securityContext.UserName).Id;
-                var contactList = messengerManager.GetAllContactHistory(authUserId);
-                var contactListDTO = new List<ContactHistoryDTO>();
-                foreach (ChatHistory mch in contactList)
+
+                var conversationList = messengerManager.GetAllConversations(authUserId);
+
+                if (conversationList != null)
                 {
-
-                    contactListDTO.Add(new ContactHistoryDTO
+                    var conversationDTOList = new List<ConversationDTO>();
+                    foreach (Conversation c in conversationList)
                     {
-                        ContactId = mch.ContactId,
-                        ContactUsername = mch.ContactUsername,
-                        ContactTime = mch.ContactTime
-                    });
+                        var contactUsername = um.FindUserById(c.ContactUserId).UserName;
+                        conversationDTOList.Add(new ConversationDTO
+                        {
+                            Id = c.Id,
+                            ContactUsername = contactUsername,
+                            CreatedDate = c.CreatedDate
+                        });
 
+                    }
+                    return Ok(new { conversations = conversationDTOList, /*SITtoken = updatedToken*/ });
                 }
+                return Content(HttpStatusCode.NotFound, "User does not have any conversation");
                 //string updatedToken = sm.RefreshSession(securityContext.Token);
-                return Ok(new { chatHistory = contactListDTO, /*SITtoken = updatedToken*/ });
-
-            }
-
-
-            
-        }
-
-        [HttpGet]
-        [ActionName("GetMessageWithUser")]
-        public IHttpActionResult GetMessageWithUser(int receiverUserId)
-        {
-            UserManager um = new UserManager();
-            SecurityContext securityContext = SecurityContextBuilder.CreateSecurityContext(
-               Request.Headers
-           );
-            if (securityContext == null)
-            {
-                return Unauthorized();
-            }
-            SessionManager sm = new SessionManager();
-            if (!sm.ValidateSession(securityContext.Token))
-            {
-                return Unauthorized();
-            }
-
-            AuthorizationManager authorizationManager = new AuthorizationManager(
-                securityContext
-            );
-            // TODO get this from table in database.
-            List<string> requiredClaims = new List<string>()
-            {
-                "CanSendMessage"
-            };
-            if (!authorizationManager.CheckClaims(requiredClaims))
-            {
-                return Unauthorized();
-            }
-            else
-            {
-                
-     
-                authUserId = um.FindByUserName(securityContext.UserName).Id;
-            }
-            var conversations =  messengerManager.GetConversationBetweenUser(authUserId, receiverUserId);
-
-            var firstUsername = um.FindUserById(authUserId).UserName;
-            var secondUsername = um.FindUserById(receiverUserId).UserName;
-
-            var chatHistory = messengerManager.GetChatHistoryBetweenUsers(authUserId, receiverUserId);
-
-            List<ConversationDTO> conversationDTOs = new List<ConversationDTO>();
-            foreach (Conversation c in conversations)
-            {
-                if (c.SenderId == authUserId && (c.CreatedDate.CompareTo(chatHistory.ContactTime) ==1 || c.CreatedDate.CompareTo(chatHistory.ContactTime)==0))
-                {
-                    ConversationDTO conversationDTO = new ConversationDTO
-                    {
-                        SenderUsername = firstUsername,
-                        ReceiverUsername = secondUsername,
-                        MessageContent = c.MessageContent,
-                        CreatedDate = c.CreatedDate
-                    };
-                    conversationDTOs.Add(conversationDTO);
-
-                }
-
-               else if(c.ReceiverId == authUserId && (c.CreatedDate.CompareTo(chatHistory.ContactTime) == 1 || c.CreatedDate.CompareTo(chatHistory.ContactTime) == 0))
-                {
-                    ConversationDTO conversationDTO = new ConversationDTO
-                    {
-                        SenderUsername = secondUsername,
-                        ReceiverUsername = firstUsername,
-                        MessageContent = c.MessageContent,
-                        CreatedDate = c.CreatedDate
-                    };
-                    conversationDTOs.Add(conversationDTO);
-                }
-
-                     
-            }
-            //string updatedToken = sm.RefreshSession(securityContext.Token);
-
-            return Ok(new { conversation = conversationDTOs, /*SITtoken = updatedToken*/ });
-
-        }
-
-        [HttpGet]
-        [ActionName("GetRecentMessageWithUser")]
-        public IHttpActionResult GetRecentMessageWithUser(int receiverUserId2)
-        {
-            UserManager um = new UserManager();
-            SecurityContext securityContext = SecurityContextBuilder.CreateSecurityContext(
-               Request.Headers
-           );
-            if (securityContext == null)
-            {
-                return Unauthorized();
-            }
-            SessionManager sm = new SessionManager();
-            if (!sm.ValidateSession(securityContext.Token))
-            {
-                return Unauthorized();
-            }
-
-            AuthorizationManager authorizationManager = new AuthorizationManager(
-                securityContext
-            );
-            // TODO get this from table in database.
-            List<string> requiredClaims = new List<string>()
-            {
-                "CanSendMessage"
-            };
-            if (!authorizationManager.CheckClaims(requiredClaims))
-            {
-                return Unauthorized();
-            }
-            else
-            {
-                um = new UserManager();
-                authUserId = um.FindByUserName(securityContext.UserName).Id;
-                var firstUsername = um.FindUserById(authUserId).UserName;
-                var secondUsername = um.FindUserById(receiverUserId2).UserName;
-                var conservations = messengerManager.GetRecentMessageBetweenUser(authUserId, receiverUserId2);
-                
-
-                if (conservations.SenderId == authUserId)
-                {
-                    ConversationDTO conversationDTO = new ConversationDTO
-                    {
-                        SenderUsername = firstUsername,
-                        ReceiverUsername = secondUsername,
-                        MessageContent = conservations.MessageContent,
-                        CreatedDate = conservations.CreatedDate
-                    };
-                    return Ok( new{ conversation = conversationDTO, /*SITtoken = updatedToken*/ });
-
-                }
-
-                else if (conservations.SenderId == receiverUserId2)
-                {
-                    ConversationDTO conversationDTO = new ConversationDTO
-                    {
-                        SenderUsername = secondUsername,
-                        ReceiverUsername = firstUsername,
-                        MessageContent = conservations.MessageContent,
-                        CreatedDate = conservations.CreatedDate
-                    };
-                    //string updatedToken = sm.RefreshSession(securityContext.Token);
-                    return Ok(new { conversation = conversationDTO, /*SITtoken = updatedToken */});
-
-
-                }
-
 
 
             }
-
-            return NotFound();
-
-
 
         }
 
         [HttpDelete]
-        [ActionName("DeleteMessage")]
-        public IHttpActionResult DeleteChatMessageBetweenUser(int targetUserId)
+        [ActionName("DeleteConversation")]
+        public IHttpActionResult DeleteConversation(int conversationId)
         {
             UserManager um = new UserManager();
             SecurityContext securityContext = SecurityContextBuilder.CreateSecurityContext(
@@ -284,43 +134,175 @@ namespace KFC.SIT.WebAPI.Controllers
             else
             {
                 um = new UserManager();
-                User user = um.FindByUserName(securityContext.UserName);
                 authUserId = um.FindByUserName(securityContext.UserName).Id;
-                if (user == null)
-                {
-                    return Unauthorized();
-                }
 
                 try
                 {
                     //string updatedToken = sm.RefreshSession(securityContext.Token);
 
-                    messengerManager.DeleteChatMessageBetweenUsers(authUserId, targetUserId);
-                    return Ok(/*new { SITtoken = updatedToken}*/);
+                    var conversation = messengerManager.DeleteConversation(conversationId);
+                    return Ok(new { conversation = conversation }/*new { SITtoken = updatedToken}*/);
                 }
 
                 catch (Exception exception)
                 {
-                    return Content(HttpStatusCode.NotFound,exception.Message);
+                    return Content(HttpStatusCode.NotFound, exception.Message);
                 }
             }
 
-          
-
-
-            
-            
         }
 
+        [HttpGet]
+        [ActionName("GetMessageInConversation")]
+        public IHttpActionResult GetMessageInConversation(int conversationId)
+        {
+            UserManager um = new UserManager();
+            SecurityContext securityContext = SecurityContextBuilder.CreateSecurityContext(
+               Request.Headers
+           );
+            if (securityContext == null)
+            {
+                return Unauthorized();
+            }
+            SessionManager sm = new SessionManager();
+            if (!sm.ValidateSession(securityContext.Token))
+            {
+                return Unauthorized();
+            }
 
-       
+            AuthorizationManager authorizationManager = new AuthorizationManager(
+                securityContext
+            );
+            // TODO get this from table in database.
+            List<string> requiredClaims = new List<string>()
+            {
+                "CanSendMessage"
+            };
+            if (!authorizationManager.CheckClaims(requiredClaims))
+            {
+                return Unauthorized();
+            }
+            else
+            {
+
+                authUserId = um.FindByUserName(securityContext.UserName).Id;
+
+                var authUsername = securityContext.UserName;
+                var conversation = messengerManager.GetConversationFromId(conversationId);
+                var contactUsername = messengerManager.GetContactUsernameFromConversation(conversationId);
+
+                var frontEndDislayUsername = "";
+                var messageList = messengerManager.GetMessageInConversation(conversationId);
+                if (messageList != null)
+                {
+                    List<StoredMessageDTO> messageDTOList = new List<StoredMessageDTO>();
+                    foreach (Message m in messageList)
+                    {
+
+                        if (m.OutgoingMessage == true)
+                        {
+                            frontEndDislayUsername = securityContext.UserName;
+                        }
+                        else
+                        {
+                            frontEndDislayUsername = contactUsername;
+                        }
+                        messageDTOList.Add(new StoredMessageDTO
+                        {
+                            SenderUsername = frontEndDislayUsername,
+                            MessageContent = m.MessageContent,
+
+                        });
+                    }
+                    return Ok(new { messages = messageDTOList, /*SITtoken = updatedToken*/ });
+                }
+
+                return Content(HttpStatusCode.NotFound, "No message in conversation");
+
+
+            }
+
+        }
+
+        [HttpGet]
+        [ActionName("GetRecentMessage")]
+        public IHttpActionResult GetRecentMessageWithUser(int conversationId2)
+        {
+            UserManager um = new UserManager();
+            SecurityContext securityContext = SecurityContextBuilder.CreateSecurityContext(
+               Request.Headers
+           );
+            if (securityContext == null)
+            {
+                return Unauthorized();
+            }
+            SessionManager sm = new SessionManager();
+            if (!sm.ValidateSession(securityContext.Token))
+            {
+                return Unauthorized();
+            }
+
+            AuthorizationManager authorizationManager = new AuthorizationManager(
+                securityContext
+            );
+            // TODO get this from table in database.
+            List<string> requiredClaims = new List<string>()
+            {
+                "CanSendMessage"
+            };
+            if (!authorizationManager.CheckClaims(requiredClaims))
+            {
+                return Unauthorized();
+            }
+            else
+            {
+                var authUsername = securityContext.UserName;
+                var conversation = messengerManager.GetConversationFromId(conversationId2);
+                var contactUsername = conversation.ContactUsername;
+                var recentMessage = messengerManager.GetRecentMessageBetweenUser(conversationId2);
+                var senderUsername = "";
+
+                if (recentMessage != null)
+                {
+                    if (recentMessage.OutgoingMessage == true)
+                    {
+                        senderUsername = securityContext.UserName;
+                    }
+                    else
+                    {
+                        senderUsername = contactUsername;
+                    }
+                    var StoredMessageDTO = new StoredMessageDTO
+                    {
+                        SenderUsername = senderUsername,
+                        MessageContent = recentMessage.MessageContent,
+
+                    };
+                    return Ok(new { message = StoredMessageDTO });
+                }
+
+                return Content(HttpStatusCode.NotFound, "No message in conversation");
+            }
+
+
+
+
+
+
+
+        }
+
+        
+
+
+
         [HttpGet]
         [ActionName("GetUserIdWithUsername")]
         public IHttpActionResult GetUserIdWithUsername(string username)
         {
             UserManager umManager = new UserManager();
             var user = umManager.FindByUserName(username);
-            if(user != null)
+            if (user != null)
             {
 
                 return Ok(user.Id);
@@ -329,7 +311,7 @@ namespace KFC.SIT.WebAPI.Controllers
             {
                 return NotFound();
             }
-            
+
         }
 
         [HttpGet]
@@ -370,16 +352,16 @@ namespace KFC.SIT.WebAPI.Controllers
 
                 return Ok(new { authUserId = authUserId, /*SITtoken = updatedToken*/ });
             }
-          
-           
-            
+
+
+
         }
 
 
         [HttpPost]
-        [ActionName("SendMessage")]
-        //[ActionName("SendMessage")]
-        public IHttpActionResult SendMessage([FromBody] Conversation conversation)
+        [ActionName("SendMessageExistingConversation")]
+        //[ActionName("SendMessageExistingConversation")]
+        public IHttpActionResult SendMessageWithExistingConversation([FromBody] MessageDTO messageDTO)
 
         {
             SecurityContext securityContext = SecurityContextBuilder.CreateSecurityContext(
@@ -410,46 +392,129 @@ namespace KFC.SIT.WebAPI.Controllers
             else
             {
                 UserManager um = new UserManager();
-                User user = um.FindByUserName(securityContext.UserName);
                 authUserId = um.FindByUserName(securityContext.UserName).Id;
-              
-            }
-            conversation.CreatedDate = DateTime.Now;
-            conversation.SenderId = authUserId;
-          
-            try
-            {
-                messengerManager.SendMessageToUser(conversation);
-                
-                var myHub = GlobalHost.ConnectionManager.GetHubContext<MessengerHub>();
+                var contactId = messengerManager.GetContactUserIdFromConversation(messageDTO.ConversationId);
+                var message = new Message
+                {
+                    ConversationId = messageDTO.ConversationId,
+                    MessageContent = messageDTO.MessageContent,
+                    OutgoingMessage = true,
+                    CreatedDate = DateTime.Now
+                };
 
-                var connectionIDList = messengerManager.GetConnectionIdWithUserId(conversation.ReceiverId);
-                if(connectionIDList != null)
+                try
+                {
+                    messengerManager.SaveMessageToDatabase(message, authUserId, contactId);
+                }
+                catch (DbUpdateException ex)
+                {
+                    return Content(HttpStatusCode.InternalServerError, "There is an error when saving message to database");
+                }
+
+                var myHub = GlobalHost.ConnectionManager.GetHubContext<MessengerHub>();
+                var authUsername = securityContext.UserName;
+                var connectionIDList = messengerManager.GetConnectionIdWithUserId(contactId);
+                if (connectionIDList != null)
                 {
                     foreach (ChatConnectionMapping cM in connectionIDList)
                     {
-                        var result = myHub.Clients.Client(cM.ConnectionId).FetchMessages(conversation.SenderId, conversation.ReceiverId);
+                        var result = myHub.Clients.Client(cM.ConnectionId).FetchMessages();
 
                     }
-                   // string updatedToken = sm.RefreshSession(securityContext.Token);
-                    return Ok(/*new { SITtoken = updatedToken }*/);
+                    // string updatedToken = sm.RefreshSession(securityContext.Token);
                 }
-
-                else
+                
+                var StoredMessageDTO = new StoredMessageDTO
                 {
-                    return Content(HttpStatusCode.NotFound, "SignalR were unable to broadcast message to receiver");
-                }
-               
+                    SenderUsername = authUsername,
+                    MessageContent = messageDTO.MessageContent,
 
+                };
+
+                return Ok(new { message = StoredMessageDTO }/*new { SITtoken = updatedToken }*/);
             }
-            catch(ArgumentException Exception)
-            {
-                return Content(HttpStatusCode.NotFound, new { /*SITtoken = updatedToken*/ });
-            }
- 
+
         }
 
- 
+
+
+
+        [HttpPost]
+        [ActionName("SendMessageWithNewConversation")]
+        //[ActionName("SendMessageExistingConversation")]
+        public IHttpActionResult SendMessageWithNewConversation([FromBody] NewConversationMessageDTO newConversationMessageDTO)
+
+        {
+            UserManager um = new UserManager();
+            SecurityContext securityContext = SecurityContextBuilder.CreateSecurityContext(Request.Headers);
+            if (securityContext == null)
+            {
+                return Unauthorized(); ;
+            }
+            SessionManager sm = new SessionManager();
+            if (!sm.ValidateSession(securityContext.Token))
+            {
+                return Unauthorized(); ;
+            }
+
+            AuthorizationManager authorizationManager = new AuthorizationManager(
+                securityContext
+            );
+            // TODO get this from table in database.
+            List<string> requiredClaims = new List<string>()
+             {
+                 "CanSendMessage"
+             };
+            if (!authorizationManager.CheckClaims(requiredClaims))
+            {
+                return Unauthorized(); ;
+            }
+            else
+            {
+                authUserId = um.FindByUserName(securityContext.UserName).Id;
+                var contactUser = um.FindByUserName(newConversationMessageDTO.ContactUsername);
+                Message returnMessage;
+              
+
+                if (contactUser != null)
+                {
+                    var message = new Message
+                    {
+                        MessageContent = newConversationMessageDTO.MessageContent,
+                        OutgoingMessage = true,
+                        CreatedDate = DateTime.Now
+                    };
+
+                    try
+                    {
+                        returnMessage =  messengerManager.SaveMessageToDatabase(message, authUserId, contactUser.Id);
+
+                    }
+
+                    catch (DbUpdateException ex)
+                    {
+                        return Content(HttpStatusCode.InternalServerError, "There is an error when saving message to database");
+                    }
+
+                    var myHub = GlobalHost.ConnectionManager.GetHubContext<MessengerHub>();
+                    var connectionIDList = messengerManager.GetConnectionIdWithUserId(contactUser.Id);
+
+                    if (connectionIDList != null)
+                    {
+                        foreach (ChatConnectionMapping cM in connectionIDList)
+                        {
+                            var result = myHub.Clients.Client(cM.ConnectionId).FetchMessages();
+
+                        }
+                        // string updatedToken = sm.RefreshSession(securityContext.Token);
+
+                    }
+                    return Ok(new { message = message }/*new { SITtoken = updatedToken }*/);
+                }
+                return Content(HttpStatusCode.NotFound, "Receiver does not exist to receive message");
+            }
+        }
+
 
         [HttpPost]
         [ActionName("AddFriend")]
@@ -483,43 +548,36 @@ namespace KFC.SIT.WebAPI.Controllers
             else
             {
                 UserManager um = new UserManager();
-                User user = um.FindByUserName(securityContext.UserName);
                 authUserId = um.FindByUserName(securityContext.UserName).Id;
-                if (user == null)
+                FriendRelationship friendRelationship = null;
+                try
                 {
-                    return Unauthorized(); ;
+                    friendRelationship = messengerManager.AddUserFriendList(authUserId, addedUsername);
+
                 }
+
+                catch (DbUpdateException ex)
+                {
+                    return Content(HttpStatusCode.InternalServerError, "There is an error when adding a friend to database");
+                }
+
+                if (friendRelationship == null)
+                {
+                    return Content(HttpStatusCode.NotAcceptable, new { error = "A User already exists in friendlist", /*SITtoken = updatedToken*/ });
+                }
+
+                return Ok(new { friend = friendRelationship }/*new { SITtoken = updatedToken }*/);
             }
 
             //string updatedToken = sm.RefreshSession(securityContext.Token);
-            try
-            {
-                
-                messengerManager.AddUserFriendList(authUserId, addedUsername);
-                
-                return Ok(/*new { SITtoken = updatedToken }*/);
-            }
 
-            catch (Exception ex)
-            {
-                if (ex is InvalidOperationException)
-                {
-                    return Content(HttpStatusCode.NotAcceptable, new { error = "A User already exists in friendlist", /*SITtoken = updatedToken*/ });
 
-                }
 
-                else if (ex is ArgumentNullException)
-                {
-                    return Content(HttpStatusCode.NotFound, new { error = "Added User does not exist to be add ", /*SITtoken = updatedToken*/ });
-
-                }
-            }
-            return Content(HttpStatusCode.NotAcceptable, new { error = "Unknown error", /*SITtoken = updatedToken*/ });
         }
 
         [HttpGet]
         [ActionName("GetFriendList")]
-        public  IHttpActionResult GetFriendList()
+        public IHttpActionResult GetFriendList()
         {
             //This is just for test. Remove when token implemenation is finished 
             SecurityContext securityContext = SecurityContextBuilder.CreateSecurityContext(
@@ -530,7 +588,7 @@ namespace KFC.SIT.WebAPI.Controllers
                 return Unauthorized(); ;
             }
             SessionManager sm = new SessionManager();
-            
+
 
             if (!sm.ValidateSession(securityContext.Token))
             {
@@ -554,9 +612,10 @@ namespace KFC.SIT.WebAPI.Controllers
                 UserManager um = new UserManager();
                 User user = um.FindByUserName(securityContext.UserName);
                 authUserId = um.FindByUserName(securityContext.UserName).Id;
-                try
+
+                var friendList = messengerManager.GetAllFriendRelationships(authUserId);
+                if (friendList != null)
                 {
-                    var friendList = messengerManager.GetAllFriendRelationships(authUserId);
                     List<FriendContactDTO> friendListDTO = new List<FriendContactDTO>();
                     var userManager = new UserManager();
                     foreach (FriendRelationship friend in friendList)
@@ -572,15 +631,17 @@ namespace KFC.SIT.WebAPI.Controllers
                     return Ok(new { friendList = friendListDTO, /*SITtoken = updatedToken */});
                 }
 
-                catch (Exception exception)
+                else
                 {
-                    return Content(HttpStatusCode.NotFound, new { error = exception.Message, /*SITtoken = updatedToken*/ });
+                    return Content(HttpStatusCode.NotFound, "User does not have any friend");
                 }
+
+                
 
             }
 
-         
-         
+
+
 
 
         }
@@ -597,7 +658,7 @@ namespace KFC.SIT.WebAPI.Controllers
                 return Unauthorized();
             }
             SessionManager sm = new SessionManager();
-           
+
 
             if (!sm.ValidateSession(securityContext.Token))
             {
@@ -627,13 +688,13 @@ namespace KFC.SIT.WebAPI.Controllers
                     messengerManager.RemoveUserFromFriendList(authUserId, friendId);
                     return Ok(/*new { SITtoken = updatedToken }*/);
                 }
-                catch (ArgumentException exception)
+                catch (DbUpdateException ex)
                 {
-                    return Content(HttpStatusCode.NotFound, new { error = exception.Message, /*SITtoken = updatedToken*/ });
+                    return Content(HttpStatusCode.InternalServerError, "There is a error removing user from friend list"  /*SITtoken = updatedToken*/ );
                 }
 
             }
-           
+
 
         }
 
@@ -641,5 +702,5 @@ namespace KFC.SIT.WebAPI.Controllers
     }
 
 
-    
+
 }

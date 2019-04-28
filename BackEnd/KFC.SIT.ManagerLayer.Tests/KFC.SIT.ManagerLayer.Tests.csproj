@@ -83,6 +83,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MessengerManagerTests.cs" />
     <Compile Include="PwnedPasswordValidationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserManagerTest.cs" />

@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.DTOs
 {
-    public class ContactHistoryDTO
+    public class NewConversationMessageDTO
     {
-        public int ContactId { get; set; }
         public string ContactUsername { get; set; }
-        public DateTime ContactTime { get; set; }
+        public string MessageContent { get; set; }
+
     }
 }

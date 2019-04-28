@@ -8,10 +8,9 @@ namespace DataAccessLayer.DTOs
 {
     public class ConversationDTO
     {
-        public string SenderUsername { get; set; }
-        public string ReceiverUsername{ get; set; }
+        public int Id { get; set; }
+        public string ContactUsername{ get; set; }
 
-        public string MessageContent { get; set; }
         public DateTime CreatedDate { get; set; }
     }
 }

@@ -38,18 +38,32 @@ namespace DataAccessLayer.Migrations
                 .Index(t => t.ParentUser_Id);
             
             CreateTable(
-                "dbo.ChatHistories",
+                "dbo.Conversations",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        ContactId = c.Int(nullable: false),
+                        ContactUserId = c.Int(nullable: false),
                         ContactUsername = c.String(),
-                        ContactTime = c.DateTime(nullable: false),
+                        CreatedDate = c.DateTime(nullable: false),
                         UserId = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Users", t => t.UserId, cascadeDelete: true)
                 .Index(t => t.UserId);
+            
+            CreateTable(
+                "dbo.Messages",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        OutgoingMessage = c.Boolean(nullable: false),
+                        MessageContent = c.String(),
+                        CreatedDate = c.DateTime(nullable: false),
+                        ConversationId = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.Conversations", t => t.ConversationId, cascadeDelete: true)
+                .Index(t => t.ConversationId);
             
             CreateTable(
                 "dbo.Claims",
@@ -110,18 +124,6 @@ namespace DataAccessLayer.Migrations
                         UserId = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.ConnectionId);
-            
-            CreateTable(
-                "dbo.Conversations",
-                c => new
-                    {
-                        Id = c.Int(nullable: false, identity: true),
-                        SenderId = c.Int(nullable: false),
-                        ReceiverId = c.Int(nullable: false),
-                        MessageContent = c.String(),
-                        CreatedDate = c.DateTime(nullable: false),
-                    })
-                .PrimaryKey(t => t.Id);
             
             CreateTable(
                 "dbo.Courses",
@@ -237,7 +239,8 @@ namespace DataAccessLayer.Migrations
             DropForeignKey("dbo.FriendRelationships", "UserId", "dbo.Users");
             DropForeignKey("dbo.ClaimUsers", "User_Id", "dbo.Users");
             DropForeignKey("dbo.ClaimUsers", "Claim_Id", "dbo.Claims");
-            DropForeignKey("dbo.ChatHistories", "UserId", "dbo.Users");
+            DropForeignKey("dbo.Conversations", "UserId", "dbo.Users");
+            DropForeignKey("dbo.Messages", "ConversationId", "dbo.Conversations");
             DropForeignKey("dbo.Users", "CategoryId", "dbo.Categories");
             DropIndex("dbo.ClaimUsers", new[] { "User_Id" });
             DropIndex("dbo.ClaimUsers", new[] { "Claim_Id" });
@@ -251,7 +254,8 @@ namespace DataAccessLayer.Migrations
             DropIndex("dbo.SchoolTeacherCourseStudents", new[] { "SchoolTeacherCourseId" });
             DropIndex("dbo.UserSessions", new[] { "UserId" });
             DropIndex("dbo.FriendRelationships", new[] { "UserId" });
-            DropIndex("dbo.ChatHistories", new[] { "UserId" });
+            DropIndex("dbo.Messages", new[] { "ConversationId" });
+            DropIndex("dbo.Conversations", new[] { "UserId" });
             DropIndex("dbo.Users", new[] { "ParentUser_Id" });
             DropIndex("dbo.Users", new[] { "CategoryId" });
             DropTable("dbo.ClaimUsers");
@@ -262,13 +266,13 @@ namespace DataAccessLayer.Migrations
             DropTable("dbo.Departments");
             DropTable("dbo.SchoolTeacherCourses");
             DropTable("dbo.Courses");
-            DropTable("dbo.Conversations");
             DropTable("dbo.ChatConnectionMappings");
             DropTable("dbo.SchoolTeacherCourseStudents");
             DropTable("dbo.UserSessions");
             DropTable("dbo.FriendRelationships");
             DropTable("dbo.Claims");
-            DropTable("dbo.ChatHistories");
+            DropTable("dbo.Messages");
+            DropTable("dbo.Conversations");
             DropTable("dbo.Users");
             DropTable("dbo.Categories");
         }

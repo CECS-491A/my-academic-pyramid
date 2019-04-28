@@ -24,7 +24,7 @@
               :key="friend.FriendId"
               >
               <v-list-tile-content
-              @click="sendNewMessage(friend.FriendId, friend.FriendUsername)">
+              @click="sendNewMessage(friend.FriendUsername)">
                 <v-list-tile-title> {{friend.FriendUsername}}
                 </v-list-tile-title>
               </v-list-tile-content>
@@ -32,16 +32,10 @@
               </v-list-tile-action>
                <v-menu bottom left>
               <template v-slot:activator="{ on }">
-                <v-btn
-                  dark
-                  icon
-                  v-on="on"
-                  color="black"
-                  
-                >
-                  <v-icon>more_vert</v-icon>
-                </v-btn>
-              </template>
+  <v-btn dark icon v-on="on" color="black">
+    <v-icon>more_vert</v-icon>
+  </v-btn>
+</template>
                <v-card>
           <v-list>
             <v-list-tile avatar>
@@ -64,11 +58,7 @@
               </v-list-tile-action>
             </v-list-tile>
           </v-list>
-  
           <v-divider></v-divider>
-  
-         
-  
           <v-card-actions>
             <v-spacer></v-spacer>
   
@@ -76,16 +66,13 @@
             <v-btn color="primary" flat @click="menu = false">Save</v-btn>
           </v-card-actions>
         </v-card>
-              
-  
-            
+
             </v-menu>
             </v-list-tile>
           </v-list>
           <v-divider></v-divider>
-  
         </v-card>
-
+        
 		<v-dialog v-model="addFriendDialog" max-width="500px">
             <v-card>
               <v-card-text>
@@ -114,13 +101,12 @@ export default {
         IsOnline: false
       },
 
-      friendTO:{
-        Id:"",
-        username:"",
-
+      friendTO: {
+        Id: "",
+        username: ""
       },
 
-      addFriendUsername:"",
+      addFriendUsername: "",
       addFriendDialog: false
     };
   },
@@ -142,7 +128,7 @@ export default {
       })
         .then(response => {
           this.friendList = response.data.friendList;
-         // sessionStorage.SITtoken = response.data.SITtoken
+          // sessionStorage.SITtoken = response.data.SITtoken
         })
         .catch(err => {
           /* eslint no-console: "off" */
@@ -159,54 +145,50 @@ export default {
         },
         method: "POST",
         crossDomain: true,
-        url: this.$hostname + "messenger/AddFriend?addedUsername=" + this.addFriendUsername
+        url:
+          this.$hostname +
+          "messenger/AddFriend?addedUsername=" +
+          this.addFriendUsername
       })
         .then(response => {
-        //  sessionStorage.SITtoken = response.data.SITtoken,
-			this.addFriendDialog = false,
-			this.loadFriendList()
+          //  sessionStorage.SITtoken = response.data.SITtoken,
+          (this.addFriendDialog = false), this.loadFriendList();
 
-        //this.friendList.push({FriendUserName: this.addFriendUsername});
+          //this.friendList.push({FriendUserName: this.addFriendUsername});
         })
         .catch(err => {
           /* eslint no-console: "off" */
           console.log(err);
         });
-	},
+    },
 
-	sendNewMessage(friendId,friendUsername)
-	{
-    this.friendTO.Id = friendId,
-    this.friendTO.username = friendUsername
-		this.$eventBus.$emit("SendMessageFromFriendList", this.friendTO)
-		
-	
-  },
-  
-  async deleteFriend(friendId){
-    await this.axios({
-      headers: {
+    sendNewMessage(friendUsername) {
+      this.$eventBus.$emit("SendMessageFromFriendList", friendUsername);
+    },
+
+    async deleteFriend(friendId) {
+      await this.axios({
+        headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
           Authorization: "Bearer " + sessionStorage.SITtoken
         },
         method: "DELETE",
         crossDomain: true,
-        url: this.$hostname + "messenger/RemoveFriendFromList?friendId=" + friendId
+        url:
+          this.$hostname + "messenger/RemoveFriendFromList?friendId=" + friendId
       })
         .then(response => {
           //sessionStorage.SITtoken = response.data.SITtoken,
-			this.loadFriendList()
+          this.loadFriendList();
 
-        //this.friendList.push({FriendUserName: this.addFriendUsername});
+          //this.friendList.push({FriendUserName: this.addFriendUsername});
         })
         .catch(err => {
           /* eslint no-console: "off" */
           console.log(err);
         });
-  }
-	
-
+    }
   }
 };
 </script>

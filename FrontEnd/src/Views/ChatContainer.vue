@@ -37,13 +37,13 @@
                     <v-divider></v-divider>
 
                     <v-list-tile
-                      v-for="item in chatHistory"
-                      :key="item.ContactId"
-                      @click="loadMessageWithContact(item.ContactId)"
+                      v-for="item in conversations"
+                      :key="item.Id"
+                      @click="getMessageInConversation(item.Id)"
                     >
                       <v-list-tile-content>
                         <v-list-tile-title>{{ item.ContactUsername }}</v-list-tile-title>
-                        <v-list-tile-sub-title>{{item.ContactTime}}</v-list-tile-sub-title>
+                        <v-list-tile-sub-title>{{item.CreatedDate}}</v-list-tile-sub-title>
                       </v-list-tile-content>
                       <v-list-tile-action>
                         <v-menu bottom left>
@@ -65,7 +65,7 @@
                                 </v-list-tile-content>
 
                                 <v-list-tile-action>
-                                  <v-btn icon @click="DeleteContactMessage(item.ContactId)">
+                                  <v-btn icon @click="DeleteConversation(item.Id)">
                                     <v-icon>delete</v-icon>
                                   </v-btn>
                                 </v-list-tile-action>
@@ -105,13 +105,13 @@
       <v-dialog v-model="chatDialog" max-width="500px">
         <v-card>
           <v-card-text>
-            <v-text-field label="Recipient Username" v-model="ReceiverUsername"></v-text-field>
-            <v-text-field label="Message" v-model="conversation.messageContent"></v-text-field>
+            <v-text-field label="Recipient Username" v-model="newMessage.contactUsername"></v-text-field>
+            <v-text-field label="Message" v-model="newMessage.messageContent"></v-text-field>
             <v-alert :value="alert" type="error" transition="scale-transition">{{errorText}}</v-alert>
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn flat color="primary" @click="SendMessageWithNewContact">Submit</v-btn>
+            <v-btn flat color="primary" @click="sendMessageWithNewConversation">Submit</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -132,36 +132,33 @@ export default {
   data() {
     return {
       drawer: true,
-      chatHistory: [],
+      conversations: [],
       right: null,
       chatDialog: false,
-      conversation: {
-        receiverId: null,
+      newMessage: {
+        contactUsername: "",
         messageContent: ""
       },
-      authUserId: "",
 
-      ReceiverUsername: "",
+      selectedConversationId: "",
+
       alert: false,
       errorText: null,
       errorFoundUser: null
     };
   },
-  created() {
-          this.getAuthUserId(),
-    this.loadAllChatHistory(),
 
-      this.$eventBus.$on("SendMessageFromFriendList", friendTO => {
-        (this.ReceiverUsername = friendTO.username),
-          (this.conversation.receiverId = friendTO.Id),
-          (this.conversation.messageContent = ""),
+  created() {
+    this.getAuthUserId(),
+      this.getAllConversations(),
+      this.$eventBus.$on("SendMessageFromFriendList", friendUsername => {
+        (this.newMessage.ReceiverUsername = friendUsername),
           (this.chatDialog = true);
       });
 
-      this.$eventBus.$on("ReloadChatHistoryList", ()=>
-      {
-        this.loadAllChatHistory()
-      })
+    this.$eventBus.$on("ReloadChatHistoryList", () => {
+      this.getAllConversations();
+    });
   },
   methods: {
     async getAuthUserId() {
@@ -177,7 +174,7 @@ export default {
       })
         .then(response => {
           localStorage.userId = response.data.authUserId;
-         // sessionStorage.SITtoken = response.data.SITtoken
+          // sessionStorage.SITtoken = response.data.SITtoken
         })
         .catch(err => {
           /* eslint no-console: "off" */
@@ -185,7 +182,7 @@ export default {
         });
     },
 
-    async loadAllChatHistory() {
+    async getAllConversations() {
       await this.axios({
         headers: {
           Accept: "application/json",
@@ -194,10 +191,10 @@ export default {
         },
         method: "GET",
         crossDomain: true,
-        url: this.$hostname + "messenger/GetAllChatHistory"
+        url: this.$hostname + "messenger/GetAllConversation"
       })
         .then(response => {
-          this.chatHistory = response.data.chatHistory;
+          this.conversations = response.data.conversations;
           //sessionStorage.SITtoken = response.data.SITtoken
         })
         .catch(err => {
@@ -206,38 +203,15 @@ export default {
         });
     },
 
-    loadMessageWithContact(receiverId) {
-      this.$eventBus.$emit("LoadMessageContact", receiverId);
+    getMessageInConversation(conversationId) {
+      this.$eventBus.$emit("GetMessageInConversation", conversationId),
+        (this.selectedConversationId = conversationId);
     },
 
-    async CheckIfReceiverExist(username) {
-      await this.axios({
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + sessionStorage.SITtoken
-        },
-        method: "GET",
-        crossDomain: true,
-        url:
-          this.$hostname +
-          "Messenger/GetUserIdWithUsername?username=" +
-          username
-      })
-        .then(response => {
-          this.conversation.receiverId = response.data;
-         // sessionStorage.SITtoken = response.data.SITtoken
-        })
-        .catch(err => {
-          /* eslint no-console: "off" */
-          console.log(err);
-          this.errorFoundUser = err.data;
-          alert = true;
-        });
-    },
+    
 
-    async sendMessage() {
-      if (this.conversation.messageContent) {
+    async sendMessageWithNewConversation() {
+      if (this.newMessage.messageContent) {
         await this.axios({
           headers: {
             Accept: "application/json",
@@ -246,17 +220,18 @@ export default {
           },
           method: "POST",
           crossDomain: true,
-          url: this.$hostname + "messenger/SendMessage",
-          data: this.conversation
+          url: this.$hostname + "messenger/SendMessageWithNewConversation",
+          data: this.newMessage
         })
           .then(response => {
             //sessionStorage.SITtoken = response.data.SITtoken
             this.errorText = null;
             this.chatDialog = false;
-            this.loadAllChatHistory();
+            this.selectedConversationId = response.data.message.conversationID=d,
+            this.getAllConversations();
             this.$eventBus.$emit(
-              "LoadMessageContact",
-              this.conversation.receiverId
+              "GetMessageInConversation",
+              this.selectedConversationId
             );
           })
           .catch(err => {
@@ -269,31 +244,30 @@ export default {
         this.errorText = "A message must be entered!";
       }
     },
-    async SendMessageWithNewContact() {
-      this.CheckIfReceiverExist(this.ReceiverUsername), this.sendMessage();
-    },
 
-    async DeleteContactMessage(targetUserId){
-       await this.axios({
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + sessionStorage.SITtoken
-          },
-          method: "DELETE",
-          crossDomain: true,
-          url: this.$hostname + "messenger/DeleteMessage?targetUserId=" + targetUserId,
-          data: this.conversation
-        })
-          .then(response => {
+    async DeleteConversation(conversationId) {
+      await this.axios({
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + sessionStorage.SITtoken
+        },
+        method: "DELETE",
+        crossDomain: true,
+        url:
+          this.$hostname +
+          "messenger/DeleteConversation?conversationId=" +
+          conversationId
+      })
+        .then(response => {
           // sessionStorage.SITtoken = response.data.SITtoken
-            this.loadAllChatHistory();
-            this.$eventBus.$emit("ClearChatScreen" )
-          })
-          .catch(err => {
-            /* eslint no-console: "off" */
-            console.log(err);
-          });
+         this.getAllConversations(),
+          this.$eventBus.$emit("ClearChatScreen");
+        })
+        .catch(err => {
+          /* eslint no-console: "off" */
+          console.log(err);
+        });
     }
   }
 };

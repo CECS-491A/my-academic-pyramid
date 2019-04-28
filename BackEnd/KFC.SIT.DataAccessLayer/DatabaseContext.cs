@@ -19,7 +19,7 @@ namespace DataAccessLayer
         //Set of Conservations
         public DbSet<Conversation> Conversations { get; set; }
         
-        public DbSet<ChatHistory> ChatHistory {get;set;}
+        public DbSet<Message> Messages {get;set;}
 
         public DbSet<FriendRelationship>FriendRelationships { get; set; }
 
@@ -52,6 +52,7 @@ namespace DataAccessLayer
                 .HasForeignKey(p => p.ParentUser_Id);
 
         }
+
 
 
     }

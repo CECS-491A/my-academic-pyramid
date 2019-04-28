@@ -32,50 +32,23 @@
         props: ['name'],
         data(){
             return {
-                conversation:{
+                newMessage:{
 					SenderId: "2",
-					ReceiverId: "",
+					ContactUsername: "",
 					messageContent:""
-				},
+                },
+                currentConversationId,
                 errorText: null
             }
         },
         created() {
-            this.$eventBus.$on("LoadMessageContact",receiverId =>{
-                this.conversation.ReceiverId = receiverId
+            this.$eventBus.$on("LoadMessageContact",conversationId =>{
+                this.currentConversationId = conversationId
             })
            
         },
         methods: {
-            async createMessage () {
-                if (this.conversation.messageContent) {
-                    await this.axios({
-                        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + sessionStorage.SITtoken
-        },
-						method: "POST",
-						crossDomain: true,
-						url: this.$hostname + "messenger/SendMessage" ,
-						data: this.conversation
-                    })
-                    .then(response => {
-                        //sessionStorage.SITtoken = response.data.SITtoken
-                    })
-                    
-					.catch(err => {
-                        /* eslint no-console: "off" */
-                        console.log(err);
-                    });
-
-                    this.conversation.messageContent = null;
-                    this.errorText = null;
-                    this.$eventBus.$emit("LoadLatestMessage", this.conversation.ReceiverId)
-                } else {
-                    this.errorText = "A message must be entered!"
-                }
-            }
+            
         }
     }
 </script>

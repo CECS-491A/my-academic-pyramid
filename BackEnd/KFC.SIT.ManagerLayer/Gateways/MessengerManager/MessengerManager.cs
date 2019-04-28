@@ -1,10 +1,12 @@
 ﻿using DataAccessLayer;
+using DataAccessLayer.DTOs;
 using DataAccessLayer.Models;
 using DataAccessLayer.Models.Messenger;
 using ServiceLayer.Messenger;
 using ServiceLayer.UserManagement.UserAccountServices;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -24,16 +26,12 @@ namespace WebAPI.Gateways.Messenger
         }
 
 
-        /// <summary>
-        /// Method to get messages between current authenticated user and other user
-        /// </summary>
-        /// <param name="authUserId"></param>
-        /// <param name="targetUserId"></param>
-        /// <returns></returns>
-        public List<Conversation> GetConversationBetweenUser(int authUserId, int targetUserId)
+
+
+        public IEnumerable<Message> GetMessageInConversation(int conversationId)
         {
-            
-            return _msServices.GetAllMessagesBetweenUsers(authUserId, targetUserId);
+             return _msServices.GetAllMessagesFromConversation(conversationId).AsEnumerable();
+
         }
 
 
@@ -43,9 +41,10 @@ namespace WebAPI.Gateways.Messenger
         /// <param name="senderId"></param>
         /// <param name="receiverId"></param>
         /// <returns></returns>
-        public Conversation GetRecentMessageBetweenUser(int senderId, int receiverId)
+        public Message GetRecentMessageBetweenUser(int conversationId)
         {
-            return _msServices.GetMostRecentMessageBetweenUsers(senderId, receiverId);
+                return _msServices.GetMostRecentMessageConversation(conversationId);
+  
         }
 
 
@@ -56,25 +55,91 @@ namespace WebAPI.Gateways.Messenger
         /// Then save the message to database. Dbcontext will call SaveChanges after  those 2 operations finish.
         /// </summary>
         /// <param name="conversation"></param>
-        public void SendMessageToUser(Conversation conversation)
+        public Message SaveMessageToDatabase(Message message, int authUserId, int contactUserId)
         {
 
-            var sender = _umServices.FindById(conversation.SenderId);
-            var receiver = _umServices.FindById(conversation.ReceiverId);
-            if(receiver != null)
+            Conversation authUserConversation = _msServices.GetConversationBetweenUsers(authUserId,contactUserId);
+            Conversation targetUserConversation;
+            var contactUsername = _umServices.FindById(contactUserId).UserName;
+
+            if (authUserConversation == null)
             {
-                _msServices.CreateChatHistory(sender, receiver);
-                _msServices.SaveMessageToDatabase(conversation);
-               
-                _DbContext.SaveChanges();
+                authUserConversation = _msServices.CreateConversation(authUserId, contactUserId, contactUsername);
+                authUserConversation.Id = -1;
+                
+                targetUserConversation = _msServices.GetConversationBetweenUsers(contactUserId, authUserId);
+                if (targetUserConversation == null)
+                {
+                    targetUserConversation = _msServices.CreateConversation(contactUserId, authUserId, contactUsername);
+                    targetUserConversation.Id = -2;
+                }
+                
             }
+
             else
             {
-                throw new ArgumentNullException("User with username does not exist to receive message ");
+                targetUserConversation = _msServices.GetConversationBetweenUsers(contactUserId,authUserId);
+                if (targetUserConversation == null)
+                {
+                    targetUserConversation = _msServices.CreateConversation(contactUserId, authUserId, contactUsername);
+                    targetUserConversation.Id = -2;
+                }
             }
-           
+
+
+            var authUserMessage = new Message
+                {
+                    
+                    ConversationId = authUserConversation.Id,
+                    MessageContent = message.MessageContent,
+                    OutgoingMessage = true,
+                    CreatedDate = DateTime.Now
+
+                };
+                
+
+                var targetUserMessage = new Message
+                {
+                    ConversationId = targetUserConversation.Id,
+                    MessageContent = message.MessageContent,
+                    OutgoingMessage = false,
+                    CreatedDate = DateTime.Now
+
+                };
+        
+
+
+                _msServices.SaveMessageToDatabase(authUserMessage);
+                _msServices.SaveMessageToDatabase(targetUserMessage);
+
+            try
+            {
+                _DbContext.SaveChanges();
+                return message;
+
+            }
+
+            catch (DbUpdateException ex)
+            {
+                if(ex.InnerException ==  null)
+                {
+                    throw ex.InnerException;
+                }
+                else
+                {
+                    throw ex;
+                   
+                }
+
+            }
+                
+
+
+                
 
         }
+
+
 
 
         /// <summary>
@@ -86,23 +151,16 @@ namespace WebAPI.Gateways.Messenger
         /// </summary>
         /// <param name="authUserId"></param>
         /// <param name="targetUserId"></param>
-        public void DeleteChatMessageBetweenUsers(int authUserId, int targetUserId)
+        public Conversation DeleteConversation(int conversationid)
         {
-            _msServices.DeleteChatHistoryRecord(authUserId, targetUserId);
+            var conversation = _msServices.DeleteConversation(conversationid);   
+            if(conversation !=null)
+            {
+                _DbContext.SaveChanges();
+                return conversation;
+            }
+            return null;
             
-            var chatHistoryFromReceiverSide = _msServices.GetContactHistoryBetweenUsers(targetUserId, authUserId);
-
-            if(chatHistoryFromReceiverSide == null )
-            {
-                _msServices.DeleteMessageFromDatabase(authUserId, targetUserId, DateTime.Now);
-            }
-            else
-            {
-                _msServices.DeleteMessageFromDatabase(authUserId, targetUserId, chatHistoryFromReceiverSide.ContactTime);
-
-            }
-
-            _DbContext.SaveChanges();
 
         }
 
@@ -123,22 +181,33 @@ namespace WebAPI.Gateways.Messenger
         /// </summary>
         /// <param name="senderId"></param>
         /// <returns></returns>
-        public IQueryable<ChatHistory> GetAllContactHistory(int authUserId)
+        public IEnumerable<Conversation> GetAllConversations(int authUserId)
         {
-           
-            return _msServices.GetAllChatHistory(authUserId);
+
+            return _msServices.GetAllConversation(authUserId);
         }
 
 
+
+
         /// <summary>
-        /// Method to get a chat history between 2 users
+        /// Method get contact userId from a conversation
         /// </summary>
-        /// <param name="authUserId"></param>
-        /// <param name="secondUserId"></param>
+        /// <param name="conversationId"></param>
         /// <returns></returns>
-        public ChatHistory GetChatHistoryBetweenUsers(int authUserId, int targetUserId)
+        public int GetContactUserIdFromConversation(int conversationId)
         {
-            return _msServices.GetContactHistoryBetweenUsers(authUserId, targetUserId);
+            return _msServices.GetContactUserIdFromConversation( conversationId);
+        }
+
+        public string GetContactUsernameFromConversation(int conversationId)
+        {
+            return _DbContext.Conversations.Where(c => c.Id == conversationId).FirstOrDefault().ContactUsername;
+        }
+
+        public Conversation GetConversationFromId(int conversationId)
+        {
+            return _DbContext.Conversations.Where(c => c.Id == conversationId).FirstOrDefault();
         }
 
 
@@ -148,23 +217,37 @@ namespace WebAPI.Gateways.Messenger
         /// <param name="authUserId"></param>
         /// <param name="targetUserId"></param>
         /// <returns></returns>
-        public User AddUserFriendList(int authUserId, string targetUserId)
+        public FriendRelationship AddUserFriendList(int authUserId, string targetUserId)
         {
             var authUser = _umServices.FindById(authUserId);
             var targetUser = _umServices.FindByUsername(targetUserId);
-            
-            try
+
+           var fs = _msServices.AddContactFriendList(authUserId, targetUser.Id);
+
+            if (fs != null)
             {
-                _msServices.AddContactFriendList(authUser, targetUser);
-                _DbContext.SaveChanges();
-                return targetUser;
+                try
+                {
+
+                    _DbContext.SaveChanges();
+                    return fs;
+                }
+
+                catch (DbUpdateException ex)
+                {
+                    if (ex.InnerException == null)
+                    {
+                        throw ex.InnerException;
+                    }
+                    else
+                    {
+                        throw ex;
+                    }
+                }
             }
 
-            catch (Exception exception)
-            {
-                throw exception;
-            }
-           
+            return fs;
+
         }
 
         /// <summary>
@@ -172,33 +255,44 @@ namespace WebAPI.Gateways.Messenger
         /// </summary>
         /// <param name="authUserId"></param>
         /// <returns></returns>
-        public IEnumerable<FriendRelationship>GetAllFriendRelationships(int authUserId)
+        public IEnumerable<FriendRelationship> GetAllFriendRelationships(int authUserId)
         {
-     
-            try
-            {
-                return _msServices.GetAllFriendRelationship(authUserId);
-            }
 
-            catch (Exception exception)
-            {
-                throw exception;
-            }
+ 
+                return _msServices.GetAllFriendRelationship(authUserId);
+
         }
 
-        public void RemoveUserFromFriendList(int authUserId, int friendUserId)
+        public FriendRelationship RemoveUserFromFriendList(int authUserId, int friendUserId)
         {
 
             try
             {
-                _msServices.RemoveUserFromFriendList(authUserId, friendUserId);
+                var fs = _msServices.RemoveUserFromFriendList(authUserId, friendUserId);
                 _DbContext.SaveChanges();
+                return fs;
+               
             }
 
-            catch(ArgumentException exception)
+            catch (DbUpdateException ex)
             {
-                throw (exception);
+                if (ex.InnerException == null)
+                {
+                    throw ex.InnerException;
+                }
+                else
+                {
+                   if (ex.InnerException == null)
+                {
+                    throw ex.InnerException;
+                }
+                else
+                {
+                    throw ex;
+                }
+                }
             }
+            return null;
 
         }
     }

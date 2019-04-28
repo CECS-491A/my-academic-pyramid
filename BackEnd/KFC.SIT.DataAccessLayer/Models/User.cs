@@ -61,7 +61,7 @@ namespace DataAccessLayer.Models
 
         public virtual ICollection<UserSession> userSessions { get; set; }
 
-        public virtual ICollection<ChatHistory> ChatRecords { get; set; }
+        public virtual ICollection<Conversation> ChatRecords { get; set; }
 
 
         public virtual ICollection<FriendRelationship> FriendRelationship { get; set; }
