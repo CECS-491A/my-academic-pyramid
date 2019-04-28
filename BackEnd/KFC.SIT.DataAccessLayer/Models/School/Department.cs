@@ -5,12 +5,11 @@ namespace DataAccessLayer.Models.School
 {
     public class Department
     {
-        public Department(int id, string name)
+        public Department(string name)
         {
-            Id = id;
             Name = name;
-
-            Schools = new List<SchoolDepartment>();
+            Schools = new List<School>();
+            Students = new List<Student>();
         }
 
         [Required, Key]
@@ -18,6 +17,7 @@ namespace DataAccessLayer.Models.School
         [Required]
         public string Name { set; get; }
 
-        public ICollection<SchoolDepartment> Schools { set; get; }
+        public virtual ICollection<School> Schools { set; get; }
+        public virtual ICollection<Student> Students { set; get; }
     }
 }
