@@ -22,6 +22,5 @@ namespace ManagerLayer.Gateways.Search
             _searchService = new SearchService(_db, _schoolId);
         }
 
-        
     }
 }
