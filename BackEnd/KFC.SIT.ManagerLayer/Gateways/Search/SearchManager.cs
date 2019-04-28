@@ -22,19 +22,6 @@ namespace ManagerLayer.Gateways.Search
             _searchService = new SearchService(_db, _schoolId);
         }
 
-        public SearchResultDTO SearchStudents(string searchInput)
-        {
-            if(searchInput is null)
-            {
-                throw new ArgumentNullException("Null Search Input"); // TODO: Make message constant
-            }
-
-            return (SearchResultDTO) _searchService.SearchStudents(searchInput);
-        }
-
-        public SearchResultDTO SearchTeachers(string searchInput)
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 }
