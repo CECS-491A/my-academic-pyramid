@@ -103,7 +103,6 @@ export default {
         let urlRegistration = `${this.$hostname}Registration`
         Axios.post(urlRegistration, requestPayload, headersObject)
              .then(response => {
-               console.log(response.data)
                sessionStorage.SITtoken = response.data.SITtoken
                this.$router.push({name: "UserHomePage"})
                })
@@ -111,15 +110,13 @@ export default {
     }
   },
 
-  created() {
-    if (this.$route.query.SITtoken != undefined) {
-      sessionStorage.SITtoken = this.$route.query.SITtoken
+  created() {        
       console.log("In creation")
       // try to get userinfo
       this.axios.get(`${this.$hostname}UserManager/GetContextId`, 
                      {headers: {'Accept': 'application/json',
                                 'Content-Type': 'application/json',
-                                'Authorization': 'Bearer ' + this.$route.query.SITtoken}})
+                                'Authorization': `Bearer ${sessionStorage.SITtoken}`}})
                 .then(response => {
                     // Get user userid.
                     sessionStorage.SITuserid = response.data.userid
@@ -130,11 +127,6 @@ export default {
                   // delete token to logout the user.
                   // Redirect user to error page.
                 })
-    }
-    else {
-      //
-      // display error message.
-    }
   }
 }
 </script>

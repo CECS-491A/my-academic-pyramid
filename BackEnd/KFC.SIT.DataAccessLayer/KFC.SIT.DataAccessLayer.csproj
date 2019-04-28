@@ -200,6 +200,7 @@
     <Compile Include="DTOs\MessageDTO.cs" />
     <Compile Include="DTOs\NewConversationMessageDTO.cs" />
     <Compile Include="DTOs\StoredMessageDTO.cs" />
+    <Compile Include="DTOs\SearchResultDTO.cs" />
     <Compile Include="DTOs\UserDTO.cs" />
     <Compile Include="IEntity.cs" />
     <Compile Include="Logging\OptimizeLogging\ErrorFormat.cs" />
@@ -219,6 +220,9 @@
     <Compile Include="Migrations\201904232310154_AddPrimaryKeyMessage.cs" />
     <Compile Include="Migrations\201904232310154_AddPrimaryKeyMessage.Designer.cs">
       <DependentUpon>201904232310154_AddPrimaryKeyMessage.cs</DependentUpon>
+    <Compile Include="Migrations\201904272012319_Initial.cs" />
+    <Compile Include="Migrations\201904272012319_Initial.Designer.cs">
+      <DependentUpon>201904272012319_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Category.cs" />
@@ -244,6 +248,7 @@
     <Compile Include="Models\TokenManager.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserSession.cs" />
+    <Compile Include="MongoDBQueryConstants\MongoDBAction.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -287,6 +292,8 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201904232310154_AddPrimaryKeyMessage.resx">
       <DependentUpon>201904232310154_AddPrimaryKeyMessage.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201904272012319_Initial.resx">
+      <DependentUpon>201904272012319_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

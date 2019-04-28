@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DataAccessLayer;
-using ManagerLayer.UserManagement;
+//using ManagerLayer.UserManagement;
 using SecurityLayer;
 using ServiceLayer.PasswordChecking.HashFunctions;
 using DataAccessLayer.DTOs;
@@ -133,10 +133,10 @@ namespace DemoProject
             };
 
             DatabaseContext db = new DatabaseContext();
-            UserManager uM = new UserManager();
-            uM.CreateUserAccount(user1);
-            uM.CreateUserAccount(user2);
-            uM.CreateUserAccount(user3);
+            //UserManager uM = new UserManager();
+            //uM.CreateUserAccount(user1);
+            //uM.CreateUserAccount(user2);
+            //uM.CreateUserAccount(user3);
             db.SaveChanges();
 
         }
