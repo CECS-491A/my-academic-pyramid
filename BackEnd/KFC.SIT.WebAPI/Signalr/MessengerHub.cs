@@ -65,6 +65,35 @@ namespace WebAPI.Signalr
                 return base.OnConnected();
         }
 
+        public override Task OnReconnected()
+        {
+            string authUserId = Context.QueryString["authUserId"];
+
+            using (var db = new DatabaseContext())
+            {
+                var connection = db.ChatConnectionMappings.Find(Context.ConnectionId);
+                if (connection == null)
+                {
+                    ChatConnectionMapping newConnection = new ChatConnectionMapping
+                    {
+
+                        UserId = Convert.ToInt32(authUserId),
+                        ConnectionId = Context.ConnectionId
+                    };
+                    db.ChatConnectionMappings.Add(newConnection);
+                    db.SaveChanges();
+                }
+                return base.OnReconnected();
+
+                
+            }
+               
+
+          
+
+            return base.OnReconnected();
+        }
+
         public override Task OnDisconnected(bool stopCalled)
         {
             string authUserId = Context.QueryString["authUserId"];

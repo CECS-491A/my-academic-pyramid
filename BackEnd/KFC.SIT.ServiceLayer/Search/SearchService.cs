@@ -21,10 +21,10 @@ namespace ServiceLayer.Search
         public IQueryable SearchStudents(string searchName)
         {
             return _db.Students
-                .Join(_db.Departments, s => s.DepartmentId, d => d.Id, (s,d) => new { Student = s, Department = d})
+                .Join(_db.Departments, s => s.DepartmentId, d => d.Id, (s, d) => new { Student = s, Department = d })
                 .Where(sd => sd.Student.SchoolId == _schoolId &&
                 (sd.Student.FirstName == searchName || sd.Student.LastName == searchName))
-                .Select(sd => new { sd.Student.Id, sd.Student.FirstName, sd.Student.LastName, sd.Department.Name});
+                .Select(sd => new { sd.Student.Id, sd.Student.FirstName, sd.Student.LastName, sd.Department.Name });
         }
 
         public IQueryable SearchTeachers(string searchName)
@@ -39,7 +39,7 @@ namespace ServiceLayer.Search
                             on schoolDepartment.DepartmentId equals department.Id
                             where schoolTeacher.Id == _schoolId && (teacher.FirstName == searchName
                             || teacher.MiddleName == searchName || teacher.LastName == searchName)
-                            select new { teacher.Id, teacher.FirstName, teacher.MiddleName, teacher.LastName, department.Name});
+                            select new { teacher.Id, teacher.FirstName, teacher.MiddleName, teacher.LastName, department.Name });
 
             return teachers;
         }

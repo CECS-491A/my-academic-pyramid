@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.DTOs
 {
-    public class FriendContactDTO
+    public class FriendRelationshipDTO
     {
         public int FriendId { get; set; }
         public string FriendUsername { get; set; }

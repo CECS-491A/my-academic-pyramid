@@ -87,6 +87,7 @@ namespace KFC.SIT.WebAPI.Controllers
                         {
                             Id = c.Id,
                             ContactUsername = contactUsername,
+                            HasNewMessage = true,
                             CreatedDate = c.CreatedDate
                         });
 
@@ -214,7 +215,7 @@ namespace KFC.SIT.WebAPI.Controllers
 
                         });
                     }
-                    return Ok(new { messages = messageDTOList, /*SITtoken = updatedToken*/ });
+                    return Ok(new { messages = messageDTOList, contactUsername = contactUsername /*SITtoken = updatedToken*/ });
                 }
 
                 return Content(HttpStatusCode.NotFound, "No message in conversation");
@@ -257,29 +258,35 @@ namespace KFC.SIT.WebAPI.Controllers
             else
             {
                 var authUsername = securityContext.UserName;
+
                 var conversation = messengerManager.GetConversationFromId(conversationId2);
-                var contactUsername = conversation.ContactUsername;
-                var recentMessage = messengerManager.GetRecentMessageBetweenUser(conversationId2);
-                var senderUsername = "";
-
-                if (recentMessage != null)
+                if(conversation != null)
                 {
-                    if (recentMessage.OutgoingMessage == true)
-                    {
-                        senderUsername = securityContext.UserName;
-                    }
-                    else
-                    {
-                        senderUsername = contactUsername;
-                    }
-                    var StoredMessageDTO = new StoredMessageDTO
-                    {
-                        SenderUsername = senderUsername,
-                        MessageContent = recentMessage.MessageContent,
+                    var contactUsername = conversation.ContactUsername;
+                    var recentMessage = messengerManager.GetRecentMessageBetweenUser(conversationId2);
+                    var senderUsername = "";
 
-                    };
-                    return Ok(new { message = StoredMessageDTO });
+                    if (recentMessage != null)
+                    {
+                        if (recentMessage.OutgoingMessage == true)
+                        {
+                            senderUsername = securityContext.UserName;
+                        }
+                        else
+                        {
+                            senderUsername = contactUsername;
+                        }
+                        var StoredMessageDTO = new StoredMessageDTO
+                        {
+                            ConversationId = conversationId2,
+                            SenderUsername = senderUsername,
+                            MessageContent = recentMessage.MessageContent,
+
+                        };
+                        return Ok(new { message = StoredMessageDTO });
+                    }
                 }
+              
 
                 return Content(HttpStatusCode.NotFound, "No message in conversation");
             }
@@ -315,8 +322,8 @@ namespace KFC.SIT.WebAPI.Controllers
         }
 
         [HttpGet]
-        [ActionName("GetAuthUserId")]
-        public IHttpActionResult GetAuthUserId()
+        [ActionName("GetAuthUserIdAndUsername")]
+        public IHttpActionResult GetAuthUserIdAndUsername()
         {
             SecurityContext securityContext = SecurityContextBuilder.CreateSecurityContext(
                  Request.Headers
@@ -347,10 +354,11 @@ namespace KFC.SIT.WebAPI.Controllers
             {
                 UserManager um = new UserManager();
                 User user = um.FindByUserName(securityContext.UserName);
-                authUserId = um.FindByUserName(securityContext.UserName).Id;
+                authUserId = user.Id;
+                var authUsername = user.UserName;
                 //string updatedToken = sm.RefreshSession(securityContext.Token);
 
-                return Ok(new { authUserId = authUserId, /*SITtoken = updatedToken*/ });
+                return Ok(new { authUserId = authUserId, authUsername = authUsername/*SITtoken = updatedToken*/ });
             }
 
 
@@ -416,9 +424,10 @@ namespace KFC.SIT.WebAPI.Controllers
                 var connectionIDList = messengerManager.GetConnectionIdWithUserId(contactId);
                 if (connectionIDList != null)
                 {
+                    int conversationIdToFetchMessage = messengerManager.GetConversationBetweenUsers(contactId, authUserId).Id;
                     foreach (ChatConnectionMapping cM in connectionIDList)
                     {
-                        var result = myHub.Clients.Client(cM.ConnectionId).FetchMessages();
+                        var result = myHub.Clients.Client(cM.ConnectionId).FetchMessages(conversationIdToFetchMessage);
 
                     }
                     // string updatedToken = sm.RefreshSession(securityContext.Token);
@@ -501,9 +510,10 @@ namespace KFC.SIT.WebAPI.Controllers
 
                     if (connectionIDList != null)
                     {
+                        int conversationIdToFetchMessage = messengerManager.GetConversationBetweenUsers(contactUser.Id, authUserId).Id;
                         foreach (ChatConnectionMapping cM in connectionIDList)
                         {
-                            var result = myHub.Clients.Client(cM.ConnectionId).FetchMessages();
+                            var result = myHub.Clients.Client(cM.ConnectionId).FetchMessages(conversationIdToFetchMessage);
 
                         }
                         // string updatedToken = sm.RefreshSession(securityContext.Token);
@@ -566,7 +576,15 @@ namespace KFC.SIT.WebAPI.Controllers
                     return Content(HttpStatusCode.NotAcceptable, new { error = "A User already exists in friendlist", /*SITtoken = updatedToken*/ });
                 }
 
-                return Ok(new { friend = friendRelationship }/*new { SITtoken = updatedToken }*/);
+
+
+                var friendRelationshipDTO = new FriendRelationshipDTO
+                {
+                    FriendId = friendRelationship.FriendId,
+                    FriendUsername = um.FindUserById(friendRelationship.FriendId).UserName
+                };
+
+                return Ok(new { friend = friendRelationshipDTO }/*new { SITtoken = updatedToken }*/);
             }
 
             //string updatedToken = sm.RefreshSession(securityContext.Token);
@@ -616,14 +634,14 @@ namespace KFC.SIT.WebAPI.Controllers
                 var friendList = messengerManager.GetAllFriendRelationships(authUserId);
                 if (friendList != null)
                 {
-                    List<FriendContactDTO> friendListDTO = new List<FriendContactDTO>();
-                    var userManager = new UserManager();
+                    List<FriendRelationshipDTO> friendListDTO = new List<FriendRelationshipDTO>();
+                 
                     foreach (FriendRelationship friend in friendList)
                     {
-                        friendListDTO.Add(new FriendContactDTO
+                        friendListDTO.Add(new FriendRelationshipDTO
                         {
                             FriendId = friend.FriendId,
-                            FriendUsername = userManager.FindUserById(friend.FriendId).UserName
+                            FriendUsername = um.FindUserById(friend.FriendId).UserName
                         });
 
                     }

@@ -44,7 +44,7 @@
               </v-list-tile-avatar>
   
               <v-list-tile-content>
-                <v-list-tile-title>{{friend.FriendUsername}}</v-list-tile-title>
+                <v-list-tile-title>{{friendList.FriendUsername}}</v-list-tile-title>
                 <v-list-tile-sub-title></v-list-tile-sub-title>
               </v-list-tile-content>
   
@@ -96,9 +96,6 @@ export default {
   data() {
     return {
       friendList: {
-        FriendId: "",
-        FriendUserName: "",
-        IsOnline: false
       },
 
       friendTO: {
@@ -152,9 +149,9 @@ export default {
       })
         .then(response => {
           //  sessionStorage.SITtoken = response.data.SITtoken,
-          (this.addFriendDialog = false), this.loadFriendList();
+          this.addFriendDialog = false
 
-          //this.friendList.push({FriendUserName: this.addFriendUsername});
+          this.friendList.push(response.data.friend);
         })
         .catch(err => {
           /* eslint no-console: "off" */

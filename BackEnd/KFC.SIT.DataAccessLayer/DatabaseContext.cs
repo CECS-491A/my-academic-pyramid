@@ -25,7 +25,7 @@ namespace DataAccessLayer
 
         public DbSet<ChatConnectionMapping> ChatConnectionMappings { get; set; }
 
-        // School Tables
+         //School Tables
         public DbSet<Course> Courses { get; set; }
         public DbSet<Department> Departments { get; set; }
         public DbSet<School> Schools { get; set; }

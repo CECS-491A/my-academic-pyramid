@@ -39,11 +39,15 @@
                     <v-list-tile
                       v-for="item in conversations"
                       :key="item.Id"
+                      :to="item.path"
+                      
                       @click="getMessageInConversation(item.Id)"
                     >
                       <v-list-tile-content>
                         <v-list-tile-title>{{ item.ContactUsername }}</v-list-tile-title>
+                        <v-icon :color="item.HasNewMessage ? 'teal' : 'grey'">chat_bubble</v-icon>
                         <v-list-tile-sub-title>{{item.CreatedDate}}</v-list-tile-sub-title>
+                            
                       </v-list-tile-content>
                       <v-list-tile-action>
                         <v-menu bottom left>
@@ -60,7 +64,8 @@
                                 </v-list-tile-avatar>
 
                                 <v-list-tile-content>
-                                  <v-list-tile-title>{{item.ContactUsername}}</v-list-tile-title>
+                                  <v-list-tile-title
+                                 >{{item.ContactUsername}}</v-list-tile-title>
                                   <v-list-tile-sub-title></v-list-tile-sub-title>
                                 </v-list-tile-content>
 
@@ -149,10 +154,10 @@ export default {
   },
 
   created() {
-    this.getAuthUserId(),
+    
       this.getAllConversations(),
       this.$eventBus.$on("SendMessageFromFriendList", friendUsername => {
-        (this.newMessage.ReceiverUsername = friendUsername),
+        (this.newMessage.contactUsername = friendUsername),
           (this.chatDialog = true);
       });
 
@@ -161,26 +166,7 @@ export default {
     });
   },
   methods: {
-    async getAuthUserId() {
-      await this.axios({
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + sessionStorage.SITtoken
-        },
-        method: "GET",
-        crossDomain: true,
-        url: this.$hostname + "messenger/GetAuthUserId"
-      })
-        .then(response => {
-          localStorage.userId = response.data.authUserId;
-          // sessionStorage.SITtoken = response.data.SITtoken
-        })
-        .catch(err => {
-          /* eslint no-console: "off" */
-          console.log(err);
-        });
-    },
+   
 
     async getAllConversations() {
       await this.axios({
@@ -227,7 +213,7 @@ export default {
             //sessionStorage.SITtoken = response.data.SITtoken
             this.errorText = null;
             this.chatDialog = false;
-            this.selectedConversationId = response.data.message.conversationID=d,
+            this.selectedConversationId = response.data.message.conversationID,
             this.getAllConversations();
             this.$eventBus.$emit(
               "GetMessageInConversation",

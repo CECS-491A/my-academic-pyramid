@@ -29,6 +29,8 @@ namespace DataAccessLayer.Migrations
                         Email = c.String(),
                         CreatedAt = c.DateTime(nullable: false, precision: 7, storeType: "datetime2"),
                         ParentUser_Id = c.Int(),
+                        SchoolId = c.Int(),
+                        DepartmentId = c.Int(),
                         Discriminator = c.String(nullable: false, maxLength: 128),
                     })
                 .PrimaryKey(t => t.Id)
@@ -112,8 +114,6 @@ namespace DataAccessLayer.Migrations
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Users", t => t.StudentId, cascadeDelete: true)
-                .ForeignKey("dbo.SchoolTeacherCourses", t => t.SchoolTeacherCourseId, cascadeDelete: true)
-                .Index(t => t.SchoolTeacherCourseId)
                 .Index(t => t.StudentId);
             
             CreateTable(
@@ -124,90 +124,6 @@ namespace DataAccessLayer.Migrations
                         UserId = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.ConnectionId);
-            
-            CreateTable(
-                "dbo.Courses",
-                c => new
-                    {
-                        Id = c.Int(nullable: false, identity: true),
-                        Name = c.String(nullable: false),
-                        SchoolDepartmentId = c.Int(nullable: false),
-                    })
-                .PrimaryKey(t => t.Id);
-            
-            CreateTable(
-                "dbo.SchoolTeacherCourses",
-                c => new
-                    {
-                        Id = c.Int(nullable: false, identity: true),
-                        SchoolTeacherId = c.Int(nullable: false),
-                        CourseId = c.Int(nullable: false),
-                    })
-                .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Courses", t => t.CourseId, cascadeDelete: true)
-                .ForeignKey("dbo.SchoolTeachers", t => t.SchoolTeacherId, cascadeDelete: true)
-                .Index(t => t.SchoolTeacherId)
-                .Index(t => t.CourseId);
-            
-            CreateTable(
-                "dbo.Departments",
-                c => new
-                    {
-                        Id = c.Int(nullable: false, identity: true),
-                        Name = c.String(nullable: false),
-                    })
-                .PrimaryKey(t => t.Id);
-            
-            CreateTable(
-                "dbo.SchoolDepartments",
-                c => new
-                    {
-                        Id = c.Int(nullable: false, identity: true),
-                        SchoolId = c.Int(nullable: false),
-                        DepartmentId = c.Int(nullable: false),
-                    })
-                .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Departments", t => t.DepartmentId, cascadeDelete: true)
-                .ForeignKey("dbo.Schools", t => t.SchoolId, cascadeDelete: true)
-                .Index(t => t.SchoolId)
-                .Index(t => t.DepartmentId);
-            
-            CreateTable(
-                "dbo.Schools",
-                c => new
-                    {
-                        Id = c.Int(nullable: false, identity: true),
-                        Name = c.String(nullable: false),
-                        ContactEmail = c.String(nullable: false),
-                        EmailDomain = c.String(nullable: false),
-                    })
-                .PrimaryKey(t => t.Id);
-            
-            CreateTable(
-                "dbo.SchoolTeachers",
-                c => new
-                    {
-                        Id = c.Int(nullable: false, identity: true),
-                        SchoolId = c.Int(nullable: false),
-                        TeacherId = c.Int(nullable: false),
-                        SchoolDepartmentId = c.Int(nullable: false),
-                    })
-                .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Schools", t => t.SchoolId, cascadeDelete: true)
-                .ForeignKey("dbo.Teachers", t => t.TeacherId, cascadeDelete: true)
-                .Index(t => t.SchoolId)
-                .Index(t => t.TeacherId);
-            
-            CreateTable(
-                "dbo.Teachers",
-                c => new
-                    {
-                        Id = c.Int(nullable: false, identity: true),
-                        FirstName = c.String(nullable: false),
-                        MiddleName = c.String(),
-                        LastName = c.String(nullable: false),
-                    })
-                .PrimaryKey(t => t.Id);
             
             CreateTable(
                 "dbo.ClaimUsers",
@@ -226,13 +142,6 @@ namespace DataAccessLayer.Migrations
         
         public override void Down()
         {
-            DropForeignKey("dbo.SchoolTeachers", "TeacherId", "dbo.Teachers");
-            DropForeignKey("dbo.SchoolTeachers", "SchoolId", "dbo.Schools");
-            DropForeignKey("dbo.SchoolTeacherCourses", "SchoolTeacherId", "dbo.SchoolTeachers");
-            DropForeignKey("dbo.SchoolDepartments", "SchoolId", "dbo.Schools");
-            DropForeignKey("dbo.SchoolDepartments", "DepartmentId", "dbo.Departments");
-            DropForeignKey("dbo.SchoolTeacherCourses", "CourseId", "dbo.Courses");
-            DropForeignKey("dbo.SchoolTeacherCourseStudents", "SchoolTeacherCourseId", "dbo.SchoolTeacherCourses");
             DropForeignKey("dbo.SchoolTeacherCourseStudents", "StudentId", "dbo.Users");
             DropForeignKey("dbo.UserSessions", "UserId", "dbo.Users");
             DropForeignKey("dbo.Users", "ParentUser_Id", "dbo.Users");
@@ -244,14 +153,7 @@ namespace DataAccessLayer.Migrations
             DropForeignKey("dbo.Users", "CategoryId", "dbo.Categories");
             DropIndex("dbo.ClaimUsers", new[] { "User_Id" });
             DropIndex("dbo.ClaimUsers", new[] { "Claim_Id" });
-            DropIndex("dbo.SchoolTeachers", new[] { "TeacherId" });
-            DropIndex("dbo.SchoolTeachers", new[] { "SchoolId" });
-            DropIndex("dbo.SchoolDepartments", new[] { "DepartmentId" });
-            DropIndex("dbo.SchoolDepartments", new[] { "SchoolId" });
-            DropIndex("dbo.SchoolTeacherCourses", new[] { "CourseId" });
-            DropIndex("dbo.SchoolTeacherCourses", new[] { "SchoolTeacherId" });
             DropIndex("dbo.SchoolTeacherCourseStudents", new[] { "StudentId" });
-            DropIndex("dbo.SchoolTeacherCourseStudents", new[] { "SchoolTeacherCourseId" });
             DropIndex("dbo.UserSessions", new[] { "UserId" });
             DropIndex("dbo.FriendRelationships", new[] { "UserId" });
             DropIndex("dbo.Messages", new[] { "ConversationId" });
@@ -259,13 +161,6 @@ namespace DataAccessLayer.Migrations
             DropIndex("dbo.Users", new[] { "ParentUser_Id" });
             DropIndex("dbo.Users", new[] { "CategoryId" });
             DropTable("dbo.ClaimUsers");
-            DropTable("dbo.Teachers");
-            DropTable("dbo.SchoolTeachers");
-            DropTable("dbo.Schools");
-            DropTable("dbo.SchoolDepartments");
-            DropTable("dbo.Departments");
-            DropTable("dbo.SchoolTeacherCourses");
-            DropTable("dbo.Courses");
             DropTable("dbo.ChatConnectionMappings");
             DropTable("dbo.SchoolTeacherCourseStudents");
             DropTable("dbo.UserSessions");

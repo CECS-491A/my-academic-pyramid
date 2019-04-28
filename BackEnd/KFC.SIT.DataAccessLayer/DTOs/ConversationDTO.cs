@@ -10,7 +10,7 @@ namespace DataAccessLayer.DTOs
     {
         public int Id { get; set; }
         public string ContactUsername{ get; set; }
-
+        public bool HasNewMessage { get; set; }
         public DateTime CreatedDate { get; set; }
     }
 }

@@ -196,11 +196,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DTOs\ConversationDTO.cs" />
-    <Compile Include="DTOs\FriendContactDTO.cs" />
+    <Compile Include="DTOs\FriendRelationshipDTO.cs" />
     <Compile Include="DTOs\MessageDTO.cs" />
     <Compile Include="DTOs\NewConversationMessageDTO.cs" />
     <Compile Include="DTOs\StoredMessageDTO.cs" />
-    <Compile Include="DTOs\SearchResultDTO.cs" />
     <Compile Include="DTOs\UserDTO.cs" />
     <Compile Include="IEntity.cs" />
     <Compile Include="Logging\OptimizeLogging\ErrorFormat.cs" />
@@ -213,16 +212,13 @@
     <Compile Include="Logging\OptimizeLogging\NLogger.cs" />
     <Compile Include="Logging\OptimizeLogging\TelemetryFormat.cs" />
     <Compile Include="Logging\Models\Repository\TelemetryLogCollection.cs" />
-    <Compile Include="Migrations\201904232244304_Initial.cs" />
-    <Compile Include="Migrations\201904232244304_Initial.Designer.cs">
-      <DependentUpon>201904232244304_Initial.cs</DependentUpon>
+    <Compile Include="Migrations\201904280552546_Initial.cs" />
+    <Compile Include="Migrations\201904280552546_Initial.Designer.cs">
+      <DependentUpon>201904280552546_Initial.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201904232310154_AddPrimaryKeyMessage.cs" />
-    <Compile Include="Migrations\201904232310154_AddPrimaryKeyMessage.Designer.cs">
-      <DependentUpon>201904232310154_AddPrimaryKeyMessage.cs</DependentUpon>
-    <Compile Include="Migrations\201904272012319_Initial.cs" />
-    <Compile Include="Migrations\201904272012319_Initial.Designer.cs">
-      <DependentUpon>201904272012319_Initial.cs</DependentUpon>
+    <Compile Include="Migrations\201904282337588_addHasNewMessageAttribute.cs" />
+    <Compile Include="Migrations\201904282337588_addHasNewMessageAttribute.Designer.cs">
+      <DependentUpon>201904282337588_addHasNewMessageAttribute.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Category.cs" />
@@ -287,13 +283,11 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201904232244304_Initial.resx">
-      <DependentUpon>201904232244304_Initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201904280552546_Initial.resx">
+      <DependentUpon>201904280552546_Initial.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904232310154_AddPrimaryKeyMessage.resx">
-      <DependentUpon>201904232310154_AddPrimaryKeyMessage.cs</DependentUpon>
-    <EmbeddedResource Include="Migrations\201904272012319_Initial.resx">
-      <DependentUpon>201904272012319_Initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201904282337588_addHasNewMessageAttribute.resx">
+      <DependentUpon>201904282337588_addHasNewMessageAttribute.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

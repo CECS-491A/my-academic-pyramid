@@ -8,6 +8,7 @@ namespace DataAccessLayer.DTOs
 {
     public class StoredMessageDTO
     {
+        public int ConversationId { get; set; }
         public string SenderUsername { get; set; }
         public string MessageContent { get; set; }
         DateTime CreatedDate { get; set; }

@@ -47,6 +47,11 @@ namespace WebAPI.Gateways.Messenger
   
         }
 
+        public Conversation GetConversationBetweenUsers(int authUserId, int targetUserId)
+        {
+            return _msServices.GetConversationBetweenUsers(authUserId, targetUserId);
+
+        }
 
         /// <summary>
         /// Method to send a message to another user
@@ -60,17 +65,20 @@ namespace WebAPI.Gateways.Messenger
 
             Conversation authUserConversation = _msServices.GetConversationBetweenUsers(authUserId,contactUserId);
             Conversation targetUserConversation;
+            var authUsername  = _umServices.FindById(authUserId).UserName;
             var contactUsername = _umServices.FindById(contactUserId).UserName;
 
             if (authUserConversation == null)
             {
                 authUserConversation = _msServices.CreateConversation(authUserId, contactUserId, contactUsername);
+                
                 authUserConversation.Id = -1;
                 
                 targetUserConversation = _msServices.GetConversationBetweenUsers(contactUserId, authUserId);
+                
                 if (targetUserConversation == null)
                 {
-                    targetUserConversation = _msServices.CreateConversation(contactUserId, authUserId, contactUsername);
+                    targetUserConversation = _msServices.CreateConversation(contactUserId, authUserId, authUsername);
                     targetUserConversation.Id = -2;
                 }
                 
@@ -106,11 +114,14 @@ namespace WebAPI.Gateways.Messenger
                     CreatedDate = DateTime.Now
 
                 };
-        
+
+            authUserConversation.HasNewMessage = true;
+            targetUserConversation.HasNewMessage = true;
 
 
-                _msServices.SaveMessageToDatabase(authUserMessage);
-                _msServices.SaveMessageToDatabase(targetUserMessage);
+
+            _msServices.SaveMessageToDatabase(authUserMessage);
+            _msServices.SaveMessageToDatabase(targetUserMessage);
 
             try
             {

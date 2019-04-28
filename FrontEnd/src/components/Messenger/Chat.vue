@@ -1,7 +1,7 @@
 <template>
   <div class="chat container">
     <v-toolbar dark color="primary darken-1">
-      <h2 class="text-primary text-center">Receiver</h2>
+      <h2 class="text-primary text-center">{{contactUsername}}</h2>
     </v-toolbar>
     <div class="card">
       <div class="card-body">
@@ -58,39 +58,35 @@ export default {
       connection: "",
       hubProxy: "",
       authUsername: "",
-      currentContactUsername:"",
-      errorText: ""
+      currentContactUsername: "",
+      errorText: "",
+
+      authUserId: "",
+      authUsername: "",
+      contactUsername: ""
     };
   },
 
-  watch:{
-    currentConversationId : function() {
+  watch: {
+    currentConversationId: function() {
       this.getMessageInConversation(this.currentConversationId),
-      this.newMessage.conversationId = this.currentConversationId
+        (this.newMessage.conversationId = this.currentConversationId);
     }
-    },
+  },
   created() {
-    this.connection = hubConnection("http://localhost:59364/");
-    this.connection.qs = "authUserId=" + localStorage.userId;
+    this.getAuthUserIdAndUsername(),
+      (this.connection = hubConnection("http://localhost:59364/"));
+    
     console.log(sessionStorage.token);
     this.hubProxy = this.connection.createHubProxy("MessengerHub");
 
-    this.hubProxy.on("FetchMessages", () => {
-      this.GetRecentMessage(this.currentConversationId),
+    this.hubProxy.on("FetchMessages", conversationIdToFetch => {
+      this.GetRecentMessage(conversationIdToFetch),
         this.$eventBus.$emit("ReloadChatHistoryList");
     });
 
-    this.connection
-      .start()
-      .done(function() {
-        console.log("SignalR Hub Now connected");
-      })
-      .fail(function() {
-        console.log("SignalR Hub Could not connect");
-      });
     this.$eventBus.$on("GetMessageInConversation", conversationId => {
-      (this.currentConversationId = conversationId)
-        
+      this.currentConversationId = conversationId;
     });
 
     this.$eventBus.$on("GetRecentMessage", conversationId => {
@@ -104,6 +100,38 @@ export default {
   },
 
   methods: {
+    getAuthUserIdAndUsername() {
+      this.axios({
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + sessionStorage.SITtoken
+        },
+        method: "GET",
+        crossDomain: true,
+        url: this.$hostname + "messenger/GetAuthUserIdAndUsername"
+      })
+        .then(response => {
+          (this.authUserId = response.data.authUserId),
+            (this.authUsername = response.data.authUsername),
+            this.connection.qs = "authUserId=" + this.authUserId,
+            this.connection
+              .start()
+              .done(function() {
+                console.log("SignalR Hub Now connected");
+              })
+              .fail(function() {
+                console.log("SignalR Hub Could not connect");
+              });
+
+          // sessionStorage.SITtoken = response.data.SITtoken
+        })
+        .catch(err => {
+          /* eslint no-console: "off" */
+          console.log(err);
+        });
+    },
+
     async getMessageInConversation(conversationId) {
       await this.axios({
         headers: {
@@ -121,6 +149,7 @@ export default {
         .then(response => {
           this.messages = response.data.messages;
           this.currentConversationId = conversationId;
+          this.contactUsername = response.data.contactUsername;
           // sessionStorage.SITtoken = response.data.SITtoken
         })
         .catch(err => {
@@ -143,7 +172,12 @@ export default {
           conversationId
       })
         .then(response => {
-          this.messages.push(response.data.message);
+          if (
+            response.data.message.ConversationId == this.currentConversationId
+          ) {
+            this.messages.push(response.data.message);
+          }
+
           //sessionStorage.SITtoken = response.data.SITtoken
         })
         .catch(err => {
@@ -166,7 +200,7 @@ export default {
           data: this.newMessage
         })
           .then(response => {
-            this.messages.push(response.data.message)
+            this.messages.push(response.data.message);
             //this.GetRecentMessage(this.currentConversationId)
             this.newMessage.MessageContent = null;
             //sessionStorage.SITtoken = response.data.SITtoken
