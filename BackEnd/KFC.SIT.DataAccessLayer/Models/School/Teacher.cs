@@ -5,21 +5,19 @@ namespace DataAccessLayer.Models.School
 {
     public class Teacher
     {
-        public Teacher(int id, string firstName, string middleName, string lastName)
+        public Teacher(string firstName, string middleName, string lastName)
         {
-            Id = id;
             FirstName = firstName;
             MiddleName = middleName;
             LastName = lastName;
-            Schools = new List<SchoolTeacher>();
+            Schools = new List<School>();
         }
 
-        public Teacher(int id, string firstName, string lastName)
+        public Teacher(string firstName, string lastName)
         {
-            Id = id;
             FirstName = firstName;
             LastName = lastName;
-            Schools = new List<SchoolTeacher>();
+            Schools = new List<School>();
         }
 
         [Required, Key]
@@ -30,6 +28,6 @@ namespace DataAccessLayer.Models.School
         [Required]
         public string LastName { set; get; }
 
-        public ICollection<SchoolTeacher> Schools { set; get; }
+        public virtual ICollection<School> Schools { set; get; }
     }
 }

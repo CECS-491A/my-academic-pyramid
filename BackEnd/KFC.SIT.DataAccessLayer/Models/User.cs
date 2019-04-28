@@ -66,7 +66,7 @@ namespace DataAccessLayer.Models
 
         public virtual ICollection<FriendRelationship> FriendRelationship { get; set; }
 
-        public ICollection<Student> Students;
+        public virtual ICollection<Student> Students { get; set; }
 
         //public ICollection<Question> Questions;
 
