@@ -50,6 +50,7 @@ namespace WebAPI.UserManagement
             User user = new User
             {
                 UserName = userDto.UserName,
+                SsoId = userDto.SsoId,
                 FirstName = userDto.FirstName,
                 LastName = userDto.LastName,
                 Category = new Category(userDto.Category),
@@ -103,6 +104,12 @@ namespace WebAPI.UserManagement
             return _DbContext.SaveChanges();
         }
 
+
+        public int GetUserId(int ssoId)
+        {
+            // TODO finish this
+            return 0;
+        }
 
         /// <summary>
         /// Method to update user account in database after making changes 

@@ -30,13 +30,12 @@ namespace KFC.SIT.WebAPI.Controllers
             return _dashboardManager.GetAverageSessionDuration();
         }
 
-        [HttpGet]
-        [Route("api/dashboard/fslogin")]
-        public long[] GetFSLogin()
-        {
-            throw new System.Exception();
-            //return _dashboardManager.GetFailedSuccessfulLogIn();
-        }
+        //[HttpGet]
+        //[Route("api/dashboard/fslogin")]
+        //public long[] GetFSLogin()
+        //{
+        //    return _dashboardManager.GetFailedSuccessfulLogIn();
+        //}
 
         [HttpGet]
         [Route("api/dashboard/feature")]

@@ -1,30 +1,26 @@
+
+
+
 <template>
   <v-app>
-    <v-toolbar app>
-      <v-toolbar-title class="headline text-uppercase">
-        <span class="font-weight-light">My Academic Pyramid</span>
-      </v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-btn to="/" flat>Home</v-btn>
-      <v-btn to="Login" flat>Login</v-btn>
-      <v-btn to="Publish" flat>Publish</v-btn>
-      <v-btn to="Logging" flat>Logging</v-btn>
-      <v-btn to="UserManagement" flat>UM</v-btn>
-      <v-btn to="Chat" flat>Chat</v-btn>
-      <v-btn to="Dashboard" flat>Dashboard</v-btn>
-    </v-toolbar>
+    <NavBarComp></NavBarComp>
     
-	<v-content>
-    <keep-alive>
-		<router-view />
-    </keep-alive> 
-	</v-content>
+    <v-content>
+      <keep-alive>
+      <router-view />
+      </keep-alive> 
+    </v-content>
   </v-app>
+  
 </template>
 
 <script>
-
+import NavBarComp from "@/components/NavBarComp"
+// TODO figure out how to make a toolbar component.
 export default {
   name: 'App',
+  components: {
+    NavBarComp
+  }
 }
 </script>

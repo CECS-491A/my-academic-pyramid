@@ -27,8 +27,8 @@ namespace DataAccessLayer.Models
         //          SigningCredentials = new SigningCredentials(securityKey,
         //          SecurityAlgorithms.HmacSha256Signature)
         //      };
-  	     
-  	     //JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
+
+        //JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
         //      JwtSecurityToken token = handler.CreateJwtSecurityToken(descriptor);
         //      return handler.WriteToken(token);
         //  }

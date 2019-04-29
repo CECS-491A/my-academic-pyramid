@@ -134,10 +134,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DTOs\AnswerDTO.cs" />
     <Compile Include="DTOs\ContactHistoryDTO.cs" />
     <Compile Include="DTOs\ConversationDTO.cs" />
     <Compile Include="DTOs\FriendContactDTO.cs" />
     <Compile Include="DTOs\SearchDTO.cs" />
+    <Compile Include="DTOs\QuestionDTO.cs" />
     <Compile Include="DTOs\UserDTO.cs" />
     <Compile Include="IEntity.cs" />
     <Compile Include="Logging\OptimizeLogging\ErrorFormat.cs" />
@@ -154,11 +156,21 @@
     <Compile Include="Migrations\201904282230048_Initial.Designer.cs">
       <DependentUpon>201904282230048_Initial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201904290517308_DiscussionForum.cs" />
+    <Compile Include="Migrations\201904290517308_DiscussionForum.Designer.cs">
+      <DependentUpon>201904290517308_DiscussionForum.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904290827470_AddedSsoIdToUser.cs" />
+    <Compile Include="Migrations\201904290827470_AddedSsoIdToUser.Designer.cs">
+      <DependentUpon>201904290827470_AddedSsoIdToUser.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\Claim.cs" />
     <Compile Include="DatabaseContext.cs" />
     <Compile Include="Logging\Models\ErrorLog.cs" />
+    <Compile Include="Models\DiscussionForum\Answer.cs" />
+    <Compile Include="Models\DiscussionForum\Question.cs" />
     <Compile Include="Models\HashSalt.cs" />
     <Compile Include="Models\Messenger\ChatConnectionMapping.cs" />
     <Compile Include="Models\Messenger\ChatHistory.cs" />
@@ -215,6 +227,12 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201904282230048_Initial.resx">
       <DependentUpon>201904282230048_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904290517308_DiscussionForum.resx">
+      <DependentUpon>201904290517308_DiscussionForum.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904290827470_AddedSsoIdToUser.resx">
+      <DependentUpon>201904290827470_AddedSsoIdToUser.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

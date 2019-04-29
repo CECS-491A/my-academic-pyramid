@@ -29,8 +29,11 @@ namespace DataAccessLayer.Models
         [Key]
         public int Id { get; set; }
         public string UserName { get; set; }
+        [Required]
+        public Guid SsoId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public Nullable<int> Exp { get; set; }
 
         public Nullable<int> CategoryId { get; set; }
         public virtual Category Category { get; set; }

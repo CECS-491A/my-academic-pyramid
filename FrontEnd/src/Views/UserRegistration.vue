@@ -54,6 +54,7 @@
           </v-layout>
 
           <v-btn @click="registerUser" color="primary">Complete Registration</v-btn>
+          <v-btn @click="logoutFunc">Log Out</v-btn>
         </v-container>
     </v-form>
   </div>
@@ -61,6 +62,7 @@
 
 <script>
 import Axios from 'axios';
+import AppSession from '@/services/AppSession'
 //import axios from 'axios'
 export default {
   name: "UserRegistration",
@@ -85,8 +87,6 @@ export default {
     },
 
     registerUser() {
-        // create a register obj 
-        // TODO get token from query if it's there when the page is being generated
         let requestPayload = {
           FirstName: this.firstName,
           LastName: this.lastName,
@@ -96,17 +96,40 @@ export default {
           headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + sessionStorage.SITtoken
+          'Authorization': 'Bearer ' + AppSession.state.token
           }
         }
         // console.log(requestPayload.DateOfBirth)
         let urlRegistration = `${this.$hostname}Registration`
         Axios.post(urlRegistration, requestPayload, headersObject)
              .then(response => {
-               sessionStorage.SITtoken = response.data.SITtoken
+               AppSession.updateSession(response.data.SITtoken)
                this.$router.push({name: "UserHomePage"})
                })
              .catch(error => {console.log(error)})
+    },
+
+    logoutFunc() {
+      let requestPayload = parseInt(AppSession.state.userid)
+      console.log(AppSession.state.userid)
+      console.log(requestPayload)
+      let headersObject = {
+          headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + AppSession.state.userid
+          }
+      }
+      let urlLogOut = `${this.$hostname}Logout`
+      this.axios.post(urlLogOut, requestPayload, headersObject)
+                .then(response => {
+                  // TODO check the status code
+                  AppSession.logout()
+                  this.$router.push({name: "Home"})
+                })
+                .catch(error => {
+
+                })
     }
   },
 
@@ -116,11 +139,11 @@ export default {
       this.axios.get(`${this.$hostname}UserManager/GetContextId`, 
                      {headers: {'Accept': 'application/json',
                                 'Content-Type': 'application/json',
-                                'Authorization': `Bearer ${sessionStorage.SITtoken}`}})
+                                'Authorization': `Bearer ${AppSession.state.token}`}})
                 .then(response => {
                     // Get user userid.
-                    sessionStorage.SITuserid = response.data.userid
-                    sessionStorage.SITtoken = response.data.SITtoken
+                    AppSession.setUserId(response.data.userid)
+                    AppSession.updateSession(response.data.SITtoken)
                 })
                 .catch(error => {
                   //Indicate an error. Server might be down so just logout the user.
