@@ -195,8 +195,8 @@ namespace KFC.SIT.WebAPI.Controllers
         }
 
         [HttpPost]
-        [ActionName("PostQuestions")]
-        public IHttpActionResult PostQuestion([FromBody] QuestionDTO questionDTO)
+        [ActionName("UpdateQuestions")]
+        public IHttpActionResult UpdateQuestion([FromBody] QuestionDTO questionDTO)
         {
             SecurityContext securityContext = SecurityContextBuilder.CreateSecurityContext(
                  Request.Headers
@@ -239,15 +239,114 @@ namespace KFC.SIT.WebAPI.Controllers
                 Question question;
                 try
                 {
-                    questionDTO.PosterId = authUserId;
                     DiscussionForumManager discussionManager = new DiscussionForumManager(_db);
-                    question = discussionManager.PostQuestion(questionDTO);
+                    question = discussionManager.EditQuestion(questionDTO, authUserId);
                 }
                 catch
                 {
 
                 }
                 return Content(HttpStatusCode.OK, "Question was posted succesfully.");
+            }
+        }
+
+        [HttpPost]
+        [ActionName("IncreaseQuestionSpamCount")]
+        public IHttpActionResult IncreaseQuestionSpamCount(int questionId)
+        {
+            using (var _db = new DatabaseContext())
+            {
+                Question question;
+                try
+                {
+                    DiscussionForumManager discussionManager = new DiscussionForumManager(_db);
+                    question = discussionManager.IncreaseQuestionSpamCount(questionId);
+                    return Content(HttpStatusCode.OK, question);
+                }
+                catch
+                {
+
+                }
+            }
+        }
+
+        [HttpPost]
+        [ActionName("IncreaseAnswerSpamCount")]
+        public IHttpActionResult IncreaseAnswerSpamCount(int answerId)
+        {
+            using (var _db = new DatabaseContext())
+            {
+                Answer answer;
+                try
+                {
+                    DiscussionForumManager discussionManager = new DiscussionForumManager(_db);
+                    answer = discussionManager.IncreaseAnswerSpamCount(answerId);
+                    return Content(HttpStatusCode.OK, answer);
+                }
+                catch
+                {
+
+                }
+            }
+        }
+
+        [HttpPost]
+        [ActionName("IncreaseAnswerHelpfulCount")]
+        public IHttpActionResult IncreaseAnswerHelpfulCount(int answerId)
+        {
+            using (var _db = new DatabaseContext())
+            {
+                Answer answer;
+                try
+                {
+                    DiscussionForumManager discussionManager = new DiscussionForumManager(_db);
+                    answer = discussionManager.IncreaseHelpfulCount(answerId);
+                    return Content(HttpStatusCode.OK, answer);
+                }
+                catch
+                {
+
+                }
+            }
+        }
+
+        [HttpPost]
+        [ActionName("IncreaseAnswerUnHelpfulCount")]
+        public IHttpActionResult IncreaseAnswerUnHelpfulCount(int answerId)
+        {
+            using (var _db = new DatabaseContext())
+            {
+                Answer answer;
+                try
+                {
+                    DiscussionForumManager discussionManager = new DiscussionForumManager(_db);
+                    answer = discussionManager.IncreaseUnHelpfulCount(answerId);
+                    return Content(HttpStatusCode.OK, answer);
+                }
+                catch
+                {
+
+                }
+            }
+        }
+
+        [HttpPost]
+        [ActionName("MarkAsCorrectAnswer")]
+        public IHttpActionResult MarkAsCorrectAnswer(int answerId)
+        {
+            using (var _db = new DatabaseContext())
+            {
+                Answer answer;
+                try
+                {
+                    DiscussionForumManager discussionManager = new DiscussionForumManager(_db);
+                    answer = discussionManager.MarkAsCorrectAnswer(answerId);
+                    return Content(HttpStatusCode.OK, answer);
+                }
+                catch
+                {
+
+                }
             }
         }
 

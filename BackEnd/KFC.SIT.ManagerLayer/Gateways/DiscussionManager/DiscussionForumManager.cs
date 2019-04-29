@@ -93,11 +93,11 @@ namespace ManagerLayer.DiscussionManager
 
         // update spam count
         // email sys admin if a question or answer reaches spam limit 
-        public Question IncreaseQuestionSpamCount(Question q)
+        public Question IncreaseQuestionSpamCount(int id)
         {
-            Question question = _discussionservices.GetQuestion(q.Id);
+            Question question = _discussionservices.GetQuestion(id);
             //
-            question = _discussionservices.IncreaseQuestionSpamCount(q.Id);
+            question = _discussionservices.IncreaseQuestionSpamCount(id);
             if (question.SpamCount == _spamLimit)
             {
  //               // call service to email admin because question reached spam limit
@@ -107,11 +107,11 @@ namespace ManagerLayer.DiscussionManager
 
         // update spam count
         // email sys admin if a question or answer reaches spam limit 
-        public Answer IncreaseAnswerSpamCount(Answer a)
+        public Answer IncreaseAnswerSpamCount(int id)
         {
-            Answer answer = _discussionservices.GetAnswer(a.Id);
+            Answer answer = _discussionservices.GetAnswer(id);
             //
-            answer = _discussionservices.IncreaseAnswerSpamCount(a.Id);
+            answer = _discussionservices.IncreaseAnswerSpamCount(id);
             if (answer.SpamCount == _spamLimit)
             {
 //               // call service to email admin because question reached spam limit
@@ -122,7 +122,7 @@ namespace ManagerLayer.DiscussionManager
         // similar to PostQuestion without creating a new Question 
         // update question content... answers can never be updated 
         // check that question is open 
-        public Question EditQuestion(QuestionDTO q)
+        public Question EditQuestion(QuestionDTO q, int userId)
         {
             Question question = _discussionservices.GetQuestion(q.Id);
 
@@ -135,6 +135,7 @@ namespace ManagerLayer.DiscussionManager
             {
                 // throw exception 
             }
+            if (userId != question.PosterId)
             // Any more validations?
 
             // Create Question after passed in Question is validated
