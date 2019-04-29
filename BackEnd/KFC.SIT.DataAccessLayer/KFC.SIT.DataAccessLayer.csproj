@@ -156,6 +156,10 @@
     <Compile Include="Migrations\201904282230048_Initial.Designer.cs">
       <DependentUpon>201904282230048_Initial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201904290517308_DiscussionForum.cs" />
+    <Compile Include="Migrations\201904290517308_DiscussionForum.Designer.cs">
+      <DependentUpon>201904290517308_DiscussionForum.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\Claim.cs" />
@@ -219,6 +223,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201904282230048_Initial.resx">
       <DependentUpon>201904282230048_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904290517308_DiscussionForum.resx">
+      <DependentUpon>201904290517308_DiscussionForum.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
