@@ -17,6 +17,7 @@ using System.Web.Http.Cors;
 using KFC.SIT.WebAPI.Utility;
 using SecurityLayer.Authorization;
 using SecurityLayer.Authorization.AuthorizationManagers;
+using ManagerLayer.sso;
 
 namespace KFC.SIT.WebAPI.Controllers
 {

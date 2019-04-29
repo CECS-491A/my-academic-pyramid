@@ -164,12 +164,11 @@ namespace ServiceLayer.DataAnalysisDashboard
         /// Save them into the dictionary and return it
         /// </summary>
         /// <returns></returns>
-        public IDictionary<string, long> CountMostUsedFiveFeature()
+        public IDictionary<string, long> CountMostUsedFiveFeature(int numOfFeature)
         {
             Dictionary<string, long> featureNum = new Dictionary<string, long>();
-            string[] features = { "Feature", "Feature2" };
             var query = CollectionT.Aggregate()
-                        .Match(x => x.Action == features[0] || x.Action == features[1])
+                        .Match(x => x.Action != MongoDBAction.Login) // extensibility problem
                         .Group(
                 x => x.Action,
                 i => new
@@ -178,13 +177,12 @@ namespace ServiceLayer.DataAnalysisDashboard
                     Feature = i.Select(x => x.Action).First()
                 }
                 )
-                .SortBy(x => x.NumUsed)
-                .Limit(5)
+                .SortByDescending(x => x.NumUsed)
+                .Limit(numOfFeature)
                 .ToList();
 
             foreach (var feature in query)
             {
-                Console.WriteLine(feature.Feature + ", " + featureNum);
                 featureNum.Add(feature.Feature, feature.NumUsed);
             }
 
@@ -192,41 +190,33 @@ namespace ServiceLayer.DataAnalysisDashboard
         }
 
         /// <summary>
-        /// Count the number of logged in users per month over 6 months and save them into the list
+        /// Count the number of logged in users in specific month
         /// return it
         /// </summary>
         /// <returns></returns>
-        public long[] CountSuccessfulLogin2()
+        public long[] CountUniqueLoggedInUsers(int chosenMonth)
         {
             long[] avgLoginMonth = new long[6];
-            for (int i = 0; i < 6; i++)
-            {
-
-            }
             var query = CollectionT.Aggregate()
-                        .Match(x => x.Action == "Login")
-                        .SortByDescending(x => x.Date)
+                        .Match(x => x.Action == MongoDBAction.Login)
                         .Group(
-                x => x.Date.Month,
+                x => x.UserName,
                 i => new
                 {
-                    Result = i.Select(x => x.UserName).ToList(),
-                    sum = i.Select(x => x.UserName).Count()
+                    User = i.Select(x => x.UserName).Count(),
+                    Name = i.Select(x => x.UserName).First(),
+                    Month = i.Select(x => x.Date.Month).First()
                 }
-                ).ToList();
-            string[] list = new string[12];
-
-            int count = 0;
-            int sum = 0;
-            foreach (var monthly in query)
-            {
-                Console.WriteLine("Line___________________________" + monthly.Result + monthly.sum);
-                List<string> temp = monthly.Result;
-                foreach(var a in temp)
-                {
-                    Console.WriteLine(a);
-                }
-            }
+                )
+                .Match(x => x.Month == chosenMonth)
+                .ToList().Count();
+            int sum = query;
+            Console.WriteLine(sum);
+            //foreach (var s in query)
+            //{
+             //   Console.WriteLine(s.User + ",," + s.Name);
+            //}
+            
             return avgLoginMonth;
         }
     }
