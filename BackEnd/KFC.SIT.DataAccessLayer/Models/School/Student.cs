@@ -6,6 +6,11 @@ namespace DataAccessLayer.Models.School
 {
     public class Student : User, IEntity
     {
+        public Student()
+        {
+
+        }
+
         public Student(int schoolId, int departmentId)
         {
             SchoolId = schoolId;

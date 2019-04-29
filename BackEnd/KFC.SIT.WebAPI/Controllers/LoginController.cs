@@ -11,7 +11,7 @@ using ManagerLayer.Constants;
 using DataAccessLayer.Models;
 using KFC.SIT.WebAPI.Utility;
 using ManagerLayer.sso;
-
+using System;
 
 namespace KFC.SIT.WebAPI.Controllers
 { 
@@ -38,6 +38,7 @@ namespace KFC.SIT.WebAPI.Controllers
                 UserDTO userDto = new UserDTO()
                 {
                     UserName = payload.Email,
+                    SsoId = new Guid(payload.SSOUserId),
                     Email = payload.Email,
                     Category = "NewUser"
                 };

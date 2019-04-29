@@ -50,6 +50,7 @@ namespace WebAPI.UserManagement
             User user = new User
             {
                 UserName = userDto.UserName,
+                SsoId = userDto.SsoId,
                 FirstName = userDto.FirstName,
                 LastName = userDto.LastName,
                 Category = new Category(userDto.Category),
