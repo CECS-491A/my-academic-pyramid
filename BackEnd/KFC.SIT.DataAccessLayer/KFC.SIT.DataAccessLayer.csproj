@@ -163,6 +163,7 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\Claim.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="DatabaseContext.cs" />
     <Compile Include="Logging\Models\ErrorLog.cs" />
     <Compile Include="Models\DiscussionForum\Answer.cs" />

@@ -56,6 +56,7 @@ namespace KFC.SIT.WebAPI.Controllers
 
         //}
 
+        // where to get userId
         [HttpGet]
         [ActionName("GetQuestionDrafts")]
         public IHttpActionResult GetQuestionDrafts(int userId)
@@ -338,17 +339,40 @@ namespace KFC.SIT.WebAPI.Controllers
         }
 
         [HttpPost]
+        [ActionName("CloseQuestion")]
+        public IHttpActionResult CloseQuestion(int questionId)
+        {
+            using (var _db = new DatabaseContext())
+            {
+                Question question;
+                try
+                {
+                    DiscussionForumServices discussionServices = new DiscussionForumServices(_db);
+                    question = discussionServices.CloseQuestion(questionId);
+                    return Content(HttpStatusCode.OK, question);
+                }
+                catch
+                {
+
+                }
+                return Content(HttpStatusCode.ExpectationFailed, "Error");
+            }
+        }
+
+        [HttpPost]
         [ActionName("MarkAsCorrectAnswer")]
         public IHttpActionResult MarkAsCorrectAnswer(int answerId)
         {
+            //Todo get userId
+
             using (var _db = new DatabaseContext())
             {
                 Answer answer;
                 try
                 {
                     DiscussionForumManager discussionManager = new DiscussionForumManager(_db);
-                    answer = discussionManager.MarkAsCorrectAnswer(answerId);
-                    return Content(HttpStatusCode.OK, answer);
+                    //answer = discussionManager.MarkAsCorrectAnswer(answerId);
+                    //return Content(HttpStatusCode.OK, answer);
                 }
                 catch
                 {

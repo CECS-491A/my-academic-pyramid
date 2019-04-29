@@ -24,7 +24,6 @@ namespace ServiceLayer.DiscussionForum
             return question;
         }
 
-        //Todo consistency - pass in Q's & A's or Ids
         public Answer PostAnswer(Question question, Answer answer)
         {
             question.Answers.Add(answer);
@@ -91,21 +90,6 @@ namespace ServiceLayer.DiscussionForum
         //    {
         //        return _db.Questions
         //            .Where(q => q.School == school.Name && q.Department == department.Name && q.Class == course.Name)
-        //            .OrderBy(q => q.CreatedDate)
-        //            .ToList();
-        //    }
-        //    catch (Exception)
-        //    {
-        //        return null;
-        //    }
-        //}
-
-        //public List<Question> GetQuestions(School school, Department department, Course course, Teacher teacher)
-        //{
-        //    try
-        //    {
-        //        return _db.Questions
-        //            .Where(q => q.School == school.Name && q.Department == department.Name && q.Class == course.Name && q.Teacher == teacher.Name)
         //            .OrderBy(q => q.CreatedDate)
         //            .ToList();
         //    }
@@ -185,7 +169,6 @@ namespace ServiceLayer.DiscussionForum
             return answer;
         }
 
-        // mark question as closed give points to user with correct answer if there is one
         public Question CloseQuestion(int id)
         {
             var question = GetQuestion(id);
@@ -199,8 +182,6 @@ namespace ServiceLayer.DiscussionForum
                 return question;
         }
 
-        // update spam count
-        // email sys admin if a question or answer reaches spam limit 
         public Question IncreaseQuestionSpamCount(int id)
         {
             var question = GetQuestion(id);
@@ -209,8 +190,6 @@ namespace ServiceLayer.DiscussionForum
             return question;
         }
 
-        // update spam count
-        // email sys admin if a question or answer reaches spam limit 
         public Answer IncreaseAnswerSpamCount(int id)
         {
             var answer = GetAnswer(id);
@@ -242,6 +221,5 @@ namespace ServiceLayer.DiscussionForum
             answer = UpdateAnswer(answer);
             return answer;
         }
-
     }
 }
