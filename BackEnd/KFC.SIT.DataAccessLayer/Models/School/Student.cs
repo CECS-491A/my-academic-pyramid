@@ -1,23 +1,26 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataAccessLayer.Models.School
 {
-    public class Student: User,IEntity
+    public class Student : User, IEntity
     {
-        public Student()
+        public Student(int schoolId, int departmentId)
         {
-            Courses = new List<SchoolTeacherCourseStudent>();
+            SchoolId = schoolId;
+            DepartmentId = departmentId;
+
+            Courses = new List<Course>();
         }
 
-        public Student(int id)
-        {
-            Courses = new List<SchoolTeacherCourseStudent>();
-        }
-
+        [ForeignKey("School")]
         public int SchoolId { set; get; }
+        public virtual School School { set; get; }
+        [ForeignKey("Department")]
         public int DepartmentId { set; get; }
+        public virtual Department Department { set; get; }
 
-        public ICollection<SchoolTeacherCourseStudent> Courses { set; get; }
+        public virtual ICollection<Course> Courses { set; get; }
     }
 }

@@ -29,10 +29,6 @@ namespace DataAccessLayer
         public DbSet<Course> Courses { get; set; }
         public DbSet<Department> Departments { get; set; }
         public DbSet<School> Schools { get; set; }
-        public DbSet<SchoolDepartment> SchoolDepartments { get; set; }
-        public DbSet<SchoolTeacher> SchoolTeachers { get; set; }
-        public DbSet<SchoolTeacherCourse> SchoolTeacherCourses { get; set; }
-        public DbSet<SchoolTeacherCourseStudent> SchoolTeacherCourseStudents { get; set; }
         public DbSet<Student> Students { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
 
@@ -50,6 +46,7 @@ namespace DataAccessLayer
                 .HasOptional(p => p.ParentUser)
                 .WithMany(p => p.ChildUsers)
                 .HasForeignKey(p => p.ParentUser_Id);
+            
 
         }
 

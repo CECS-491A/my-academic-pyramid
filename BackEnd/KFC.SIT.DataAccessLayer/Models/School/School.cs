@@ -5,15 +5,15 @@ namespace DataAccessLayer.Models.School
 {
     public class School : IEntity
     {
-        public School(int id, string name, string contactEmail, string emailDomain)
+        public School(string name,string contactEmail, string emailDomain)
         {
-            Id = id;
             Name = name;
             ContactEmail = contactEmail;
             EmailDomain = emailDomain;
 
-            Teachers = new List<SchoolTeacher>();
-            Departments = new List<SchoolDepartment>();
+            Teachers = new List<Teacher>();
+            Departments = new List<Department>();
+            Students = new List<Student>();
         }
 
 
@@ -26,8 +26,8 @@ namespace DataAccessLayer.Models.School
         [Required]
         public string EmailDomain { set; get; }
 
-        public ICollection<SchoolTeacher> Teachers { set; get; }
-        public ICollection<SchoolDepartment> Departments { set; get; }
+        public virtual ICollection<Teacher> Teachers { set; get; }
+        public virtual ICollection<Department> Departments { set; get; }
         public ICollection<Student> Students { set; get; }
     }
 }
