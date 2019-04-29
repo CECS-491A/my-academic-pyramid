@@ -9,14 +9,16 @@ namespace DataAccessLayer.DTOs
 {
     public class AnswerDTO
     {
-        public int Id { get; set; }
-        public int AccountId { get; set; }
-        public Question Question { get; set; }
-        public string Content { get; set; }
-        public int Helpful { get; set; }
-        public int UnHelpful { get; set; }
-        public bool CorrectAnswer { get; set; }
-        public int Spam { get; set; }
-        public String CreatedDate { get; set; }
+        //public int Id { get; set; }
+        public int PosterId { get; set; }
+        public string PosterUserName { get; set; }
+        // public Question Question { get; set; }
+        public int QuestionID { get; set; }
+        public string Text { get; set; }
+        //public int Helpful { get; set; }
+        //public int UnHelpful { get; set; }
+        //public bool CorrectAnswer { get; set; }
+        //public int Spam { get; set; }
+        //public DateTime CreatedDate { get; set; }
     }
 }

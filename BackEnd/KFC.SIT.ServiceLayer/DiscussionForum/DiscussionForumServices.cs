@@ -5,63 +5,48 @@ using System.Web;
 using System.Data.Entity;
 using DataAccessLayer;
 using DataAccessLayer.Models.DiscussionForum;
+using DataAccessLayer.Models.School;
 
 namespace ServiceLayer.DiscussionForum
 {
     public class DiscussionForumServices
     {
-        public Question PostQuestion(DatabaseContext _db, Question question)
+        private DatabaseContext _db;
+
+        public DiscussionForumServices(DatabaseContext _db)
         {
-            try
-            {
-                _db.Entry(question).State = EntityState.Added;
-                return question;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
+            this._db = _db;
         }
 
-        public Answer PostAnswer(DatabaseContext _db, int questionId, Answer answer)
+        public Question PostQuestion(Question question)
         {
-            try
-            {
-                var question = GetQuestion(_db, questionId);
-                question.Answers.Add(answer);
-                UpdateQuestion(_db, question);
-
-                _db.Entry(answer).State = EntityState.Added;
-                return answer;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
+            _db.Entry(question).State = EntityState.Added;
+            return question;
         }
 
-        public Question GetQuestion(DatabaseContext _db, int id)
+        //Todo consistency - pass in Q's & A's or Ids
+        public Answer PostAnswer(Question question, Answer answer)
         {
-            try
-            {
-                var response = _db.Questions.Find(id);
-                return response;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
+            question.Answers.Add(answer);
+            UpdateQuestion(question);
+                
+            return answer;
+        }
+
+        public Question GetQuestion(int id)
+        {
+            return _db.Questions.Find(id);
         }
 
         //delete later. should be by school 
-        public List<Question> GetQuestions(DatabaseContext _db)
+        public List<Question> GetQuestions()
         {
             try
             {
-                var questions = _db.Questions
-                .OrderBy(q => q.CreatedDate)
-                .ToList();
-                return questions;
+                return _db.Questions
+                    .Where(q => q.IsDraft == false)
+                    .OrderBy(q => q.CreatedDate)
+                    .ToList();
             }
             catch (Exception)
             {
@@ -69,16 +54,15 @@ namespace ServiceLayer.DiscussionForum
             }
         }
 
-        //To-do update with school, department, course, etc. being their own classes 
-        //public List<Question> GetQuestions(DatabaseContext _db, string school)
+        // To-do update to find by school, department, course
+        //public List<Question> GetQuestions(School school)
         //{
         //    try
         //    {
-        //        var questions = _db.Questions
-        //        .Where(q => q.School == school)
-        //        .OrderBy(q => q.CreatedDate)
-        //        .ToList();
-        //        return questions;
+        //return _db.Questions
+        //    .Where(q => q.School == school.Name)
+        //    .OrderBy(q => q.CreatedDate)
+        //    .ToList();
         //    }
         //    catch (Exception)
         //    {
@@ -86,15 +70,14 @@ namespace ServiceLayer.DiscussionForum
         //    }
         //}
 
-        //public List<Question> GetQuestions(DatabaseContext _db, string school, string department)
+        //public List<Question> GetQuestions(School school, Department department)
         //{
         //    try
         //    {
-        //        var questions = _db.Questions
-        //        .Where(q => q.School == school && q.Department == department)
-        //        .OrderBy(q => q.CreatedDate)
-        //        .ToList();
-        //        return questions;
+        //        return _db.Questions
+        //            .Where(q => q.School == school.Name && q.Department == department.Name)
+        //            .OrderBy(q => q.CreatedDate)
+        //            .ToList();
         //    }
         //    catch (Exception)
         //    {
@@ -102,15 +85,14 @@ namespace ServiceLayer.DiscussionForum
         //    }
         //}
 
-        //public List<Question> GetQuestions(DatabaseContext _db, string school, string department, string className)
+        //public List<Question> GetQuestions(School school, Department department, Course course)
         //{
         //    try
         //    {
-        //        var questions = _db.Questions
-        //        .Where(q => q.School == school && q.Department == department && q.Class == className)
-        //        .OrderBy(q => q.CreatedDate)
-        //        .ToList();
-        //        return questions;
+        //        return _db.Questions
+        //            .Where(q => q.School == school.Name && q.Department == department.Name && q.Class == course.Name)
+        //            .OrderBy(q => q.CreatedDate)
+        //            .ToList();
         //    }
         //    catch (Exception)
         //    {
@@ -118,15 +100,14 @@ namespace ServiceLayer.DiscussionForum
         //    }
         //}
 
-        //public List<Question> GetQuestions(DatabaseContext _db, string school, string department, string className, string section)
+        //public List<Question> GetQuestions(School school, Department department, Course course, Teacher teacher)
         //{
         //    try
         //    {
-        //        var questions = _db.Questions
-        //        .Where(q => q.School == school && q.Department == department && q.Class == className && q.Section == section)
-        //        .OrderBy(q => q.CreatedDate)
-        //        .ToList();
-        //        return questions;
+        //        return _db.Questions
+        //            .Where(q => q.School == school.Name && q.Department == department.Name && q.Class == course.Name && q.Teacher == teacher.Name)
+        //            .OrderBy(q => q.CreatedDate)
+        //            .ToList();
         //    }
         //    catch (Exception)
         //    {
@@ -134,12 +115,14 @@ namespace ServiceLayer.DiscussionForum
         //    }
         //}
 
-        public Answer GetAnswer(DatabaseContext _db, int id)
+        public List<Question> GetQuestionDrafts(int posterId)
         {
             try
             {
-                var response = _db.Answers.Find(id);
-                return response;
+                return _db.Questions
+                    .Where(q => q.IsDraft == true && q.PosterId == posterId)
+                    .OrderBy(q => q.CreatedDate)
+                    .ToList();
             }
             catch (Exception)
             {
@@ -147,15 +130,20 @@ namespace ServiceLayer.DiscussionForum
             }
         }
 
-        public List<Answer> GetAnswers(DatabaseContext _db, Question question)
+        public Answer GetAnswer(int id)
         {
+            return _db.Answers.Find(id);
+        }
+
+        public List<Answer> GetAnswers(int id)
+        {
+            Question question = GetQuestion(id);
             try
             {
-                var answers = _db.Answers
+                return _db.Answers
                 .Where(a => a.Question == question)
-                .OrderBy(q => q.CreatedDate)
+                .OrderBy(q => q.HelpfulCount)
                 .ToList();
-                return answers;
             }
             catch (Exception)
             {
@@ -163,76 +151,97 @@ namespace ServiceLayer.DiscussionForum
             }
         }
 
-        public Question UpdateQuestion(DatabaseContext _db, Question question)
+        public Question UpdateQuestion(Question question)
         {
-            try
-            {
-                var result = GetQuestion(_db, question.Id);
-                if (result == null)
-                {
-                    return null;
-                }
-                _db.Entry(question).State = EntityState.Modified;
-                return result;
-            }
-            catch (Exception)
+            _db.Entry(question).State = EntityState.Modified;
+            return question; 
+        }
+
+        public Answer UpdateAnswer(Answer answer)
+        {
+            _db.Entry(answer).State = EntityState.Modified;
+            return answer;
+        }
+
+        public Question DeleteQuestion(int id)
+        {
+            var question = GetQuestion(id);
+            if (question == null)
             {
                 return null;
             }
+            _db.Entry(question).State = EntityState.Deleted;
+            return question;
         }
 
-        public Answer UpdateAnswer(DatabaseContext _db, Answer answer)
+        public Answer DeleteAnswer(int id)
         {
-            try
-            {
-                var result = GetAnswer(_db, answer.Id);
-                if (result == null)
-                {
-                    return null;
-                }
-                _db.Entry(answer).State = EntityState.Modified;
-                return result;
-            }
-            catch (Exception)
+            var answer = GetAnswer(id);
+            if (answer == null)
             {
                 return null;
             }
+            _db.Entry(answer).State = EntityState.Deleted;
+            return answer;
         }
 
-        public Question DeleteQuestion(DatabaseContext _db, int id)
+        // mark question as closed give points to user with correct answer if there is one
+        public Question CloseQuestion(int id)
         {
-            try
+            var question = GetQuestion(id);
+            if (question.IsClosed == false)
             {
-                var question = GetQuestion(_db, id);
-                if (question == null)
-                {
-                    return null;
-                }
-                _db.Entry(question).State = EntityState.Deleted;
+                question.IsClosed = true;
+                question = UpdateQuestion(question);
                 return question;
             }
-            catch (Exception)
-            {
-                return null;
-            }
+            else
+                return question;
         }
 
-        public Answer DeleteAnswer(DatabaseContext _db, int id)
+        // update spam count
+        // email sys admin if a question or answer reaches spam limit 
+        public Question IncreaseQuestionSpamCount(int id)
         {
-            try
-            {
-                var answer = GetAnswer(_db, id);
-                if (answer == null)
-                {
-                    return null;
-                }
-                _db.Entry(answer).State = EntityState.Deleted;
-                return answer;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
+            var question = GetQuestion(id);
+            question.SpamCount++;
+            question = UpdateQuestion(question);
+            return question;
         }
+
+        // update spam count
+        // email sys admin if a question or answer reaches spam limit 
+        public Answer IncreaseAnswerSpamCount(int id)
+        {
+            var answer = GetAnswer(id);
+            answer.SpamCount++;
+            answer = UpdateAnswer(answer);
+            return answer;
+        }
+
+        public Answer IncreaseHelpfulCount(int id)
+        {
+            var answer = GetAnswer(id);
+            answer.HelpfulCount++;
+            answer = UpdateAnswer(answer);
+            return answer;
+        }
+
+        public Answer IncreaseUnHelpfulCount(int id)
+        {
+            var answer = GetAnswer(id);
+            answer.UnHelpfulCount++;
+            answer = UpdateAnswer(answer);
+            return answer;
+        }
+
+        public Answer MarkAnswerAsCorrect(int id)
+        {
+            var answer = GetAnswer(id);
+            answer.IsCorrectAnswer = true;
+            answer = UpdateAnswer(answer);
+            return answer;
+        }
+
     }
 }

@@ -8,12 +8,16 @@ namespace DataAccessLayer.DTOs
 {
     public class QuestionDTO
     {
+        // need Id for updateQuestion not PostQuestion
         public int Id { get; set; }
-        public int AccountId { get; set; }
-        public string Content { get; set; }
+        public int PosterId { get; set; }
+        public string PosterUserName { get; set; }
+        public string Text { get; set; }
         public int MinimumExpForAnswer { get; set; }
-        public bool Draft { get; set; }
-        public int Spam { get; set; }
-        public String CreatedDate { get; set; }
+        public bool IsDraft { get; set; }
+        // not required
+        //public bool IsClosed { get; set; }
+        //public int SpamCount { get; set; }
+        //public String CreatedDate { get; set; }
     }
 }

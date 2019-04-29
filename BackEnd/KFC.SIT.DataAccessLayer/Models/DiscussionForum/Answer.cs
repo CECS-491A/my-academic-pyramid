@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,27 +9,33 @@ namespace DataAccessLayer.Models.DiscussionForum
 {
     public class Answer : IEntity
     {
-        //public Answer()
-        //{
+        public Answer()
+        {
+            HelpfulCount = 0;
+            UnHelpfulCount = 0;
+            SpamCount = 0;
+            IsCorrectAnswer = false;
+            CreatedDate = DateTime.Now;
+        }
 
-        //}
-
-        //[Key]
+        [Key]
         public int Id { get; set; }
 
-        public int AccountId { get; set; }
+        public int PosterId { get; set; }
+
+        public string PosterUserName { get; set; }
 
         public Question Question { get; set; }
 
-        public string Content { get; set; }
+        public string Text { get; set; }
 
-        public int Helpful { get; set; }
+        public int HelpfulCount { get; set; }
 
-        public int UnHelpful { get; set; }
+        public int UnHelpfulCount { get; set; }
 
-        public bool CorrectAnswer { get; set; }
+        public int SpamCount { get; set; }
 
-        public int Spam { get; set; }
+        public bool IsCorrectAnswer { get; set; }
 
         public DateTime CreatedDate { get; set; }
     }

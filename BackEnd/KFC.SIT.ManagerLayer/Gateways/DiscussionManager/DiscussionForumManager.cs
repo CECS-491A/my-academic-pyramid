@@ -6,157 +6,200 @@ using DataAccessLayer;
 using DataAccessLayer.Models;
 using DataAccessLayer.Models.DiscussionForum;
 using ServiceLayer.DiscussionForum;
-using WebAPI.UserManagement;
+using ServiceLayer.UserManagement.UserAccountServices;
 using DataAccessLayer.DTOs;
+using System.Net.Http;
+using System.Net;
 
 namespace ManagerLayer.DiscussionManager
 {
     public class DiscussionForumManager
     {
-        public DiscussionForumManager()
+        DiscussionForumServices _discussionservices;
+        UserManagementServices _usermanagementservices;
+        //EmailService _emailservice; = new EmailService();
+        private DatabaseContext _db;
+
+
+        public DiscussionForumManager(DatabaseContext _db)
         {
+            this._db = _db;
+            this._discussionservices = new DiscussionForumServices(_db);
+            this._usermanagementservices = new UserManagementServices(_db);
+            //this._emailservice = new EmailService();
 
         }
 
-        private const int questionCharMin = 500;
-        private const int questionCharMax = 2000;
-        private const int expGainCorrectAns = 10;
-        private const int expGainHelpfullAns = 2;
-        private const int spamLimit = 3;
-        private int minimumExpToAnswer = 0;
-        DiscussionForumServices discussionservice = new DiscussionForumServices();
-        //EmailService emailservice = new EmailService();
-        UserManager usermanager = new UserManager();
+        // Business Rules constants
+        private const int _questionCharMin = 500;
+        private const int _questionCharMax = 2000;
+        private const int _expGainCorrectAns = 10;
+        private const int _expGainHelpfullAns = 2;
+        private const int _spamLimit = 3;
+        
 
-        //TokenPayLoad
-        //GetPayLoad(Token)
-        //{
-        //}
-
-        //create question in front end and pass that in then 
-        public Question CreateQuestion(QuestionDTO q)
+        public Question PostQuestion(QuestionDTO q)
         {
+            // Validations 
+            if (ValidateQuestionCharLength(q) == false)
+            {
+            }
+            // Any more validations? 
+
+
+            // Create Question after passed in Question is validated
             Question question = new Question
             {
-                AccountId = q.AccountId,
-                Content = q.Content,
+                //PoserId = q.AccountId,
+                //PosterUserName = q.PosterUserName,
+                Text = q.Text,
                 MinimumExpForAnswer = q.MinimumExpForAnswer,
-                Closed = false,
-                Draft = q.Draft,
-                Spam = 0,
-                CreatedDate = DateTime.Now,
+                IsDraft = q.IsDraft,
             };
-            if (ValidateQuestionCharLength(question) == true)
-            {
-                using (var _db = new DatabaseContext())
-                {
-                    question = discussionservice.PostQuestion(_db, question);
-                    return question;
-                }
-            }
-            else
-                return null;
+            return _discussionservices.PostQuestion(question);
         }
 
         // Todo 
-        // check that question is not closed
         // update answer to not editable if answer is posted successfully 
-        public Answer CreateAnswer(AnswerDTO a)
+        public Answer PostAnswer(AnswerDTO a)
         {
+            // Validations
+            User answerer = _usermanagementservices.FindById(a.PosterId);
+            Question question = _discussionservices.GetQuestion(a.QuestionID);
+
+            if (question.IsClosed == false)
+            {
+            }
+
+            if (answerer.Exp < question.MinimumExpForAnswer)
+            {
+            }
+            // More validations? 
+
+
+            
+            // Created Answer after passed in Answer is validated
             Answer answer = new Answer
             {
-                AccountId = a.AccountId,
-                Question = a.Question,
-                Content = a.Content,
-                Helpful = 0,
-                UnHelpful = 0,
-                CorrectAnswer = false,
-                Spam = 0,
-                CreatedDate = DateTime.Now,
+                PosterId = a.PosterId,
+                PosterUserName = a.PosterUserName,
+                Question = question,
+                Text = a.Text,
             };
-            if (ValidateUserHasEnoughExpToAnswer(answer) == true)
-            {
-                using (var _db = new DatabaseContext())
-                {
-                    answer = discussionservice.PostAnswer(_db, answer.Question.Id, answer);
-                    return answer;
-                }
-            }
-            else
-                return null;
+            return _discussionservices.PostAnswer(question, answer);
         }
 
-        // mark question as closed give points to user with correct answer if there is one
-        //public Question CloseQuestion(Question q)
-        //{
 
-        //}
 
         // update spam count
         // email sys admin if a question or answer reaches spam limit 
-        //public Question IncreaseSpamCount(Question q)
-        //{
-
-        //}
+        public Question IncreaseQuestionSpamCount(Question q)
+        {
+            Question question = _discussionservices.GetQuestion(q.Id);
+            //
+            question = _discussionservices.IncreaseQuestionSpamCount(q.Id);
+            if (question.SpamCount == _spamLimit)
+            {
+ //               // call service to email admin because question reached spam limit
+            }
+            return question;
+        }
 
         // update spam count
         // email sys admin if a question or answer reaches spam limit 
-        //public Answer IncreaseSpamCount(Answer a)
-        //{
+        public Answer IncreaseAnswerSpamCount(Answer a)
+        {
+            Answer answer = _discussionservices.GetAnswer(a.Id);
+            //
+            answer = _discussionservices.IncreaseAnswerSpamCount(a.Id);
+            if (answer.SpamCount == _spamLimit)
+            {
+//               // call service to email admin because question reached spam limit
+            }
+            return answer;
+        }
 
-        //}
-
-        // update question content... answers can never be updated
+        // similar to PostQuestion without creating a new Question 
+        // update question content... answers can never be updated 
         // check that question is open 
-        //public Question EditQuestion(Question q)
-        //{
+        public Question EditQuestion(QuestionDTO q)
+        {
+            Question question = _discussionservices.GetQuestion(q.Id);
 
-        //}
+            // Validations 
+            if (question.IsClosed == true) 
+            {
+                // throw exception 
+            }
+            if (ValidateQuestionCharLength(q) == false)
+            {
+                // throw exception 
+            }
+            // Any more validations?
+
+            // Create Question after passed in Question is validated
+            question.Text = q.Text;
+            question.MinimumExpForAnswer = q.MinimumExpForAnswer;
+            question.IsDraft = q.IsDraft;
+            //question.IsClosed = q.IsClosed;
+            return _discussionservices.UpdateQuestion(question);
+        }
 
         // update answer with increased helpful count and update user Exp
-        //public Answer IncreaseHelpfulCount(Answer a)
-        //{
-
-        //}
-
-        // update answer with increased unhelpful count and update user Exp
-        //public Answer IncreaseUnHelpfulCount(Answer a)
-        //{
-
-        //}
-
-        public bool ValidateQuestionCharLength(Question q)
+        public Answer IncreaseHelpfulCount(int id)
         {
-            if (q.Content.Length > 500 && q.Content.Length < 2000)
+            Answer answer = _discussionservices.GetAnswer(id);
+            answer = _discussionservices.IncreaseHelpfulCount(id);
+            // update user exp
+            User user = _usermanagementservices.FindById(answer.PosterId);
+            user.Exp += _expGainHelpfullAns;
+            user = _usermanagementservices.UpdateUser(user);
+            _db.SaveChanges();
+            return answer;
+        }
+
+        // update answer with increased unhelpful count 
+        // don't think UnHulpful affects a user's Exp? 
+        public Answer IncreaseUnHelpfulCount(int id)
+        {
+            Answer answer = _discussionservices.GetAnswer(id);
+            answer = _discussionservices.IncreaseUnHelpfulCount(id);
+            // update user exp
+            //User user = _usermanagementservices.FindById(answer.PosterId);
+            //user.Exp += 2;
+            //user = _usermanagementservices.UpdateUser(user);
+            //_db.SaveChanges();
+            return answer;
+        }
+
+        // 
+        public Answer MarkAsCorrectAnswer(int id)
+        {
+            Answer answer = _discussionservices.GetAnswer(id);
+            Question question = answer.Question;
+            User user = _usermanagementservices.FindById(answer.PosterId);
+            // Validations 
+            if (question.IsClosed == true)
+            {
+                // throw exception 
+            }
+            // more validations? 
+
+            answer = _discussionservices.MarkAnswerAsCorrect(id);
+            question = _discussionservices.CloseQuestion(question.Id);
+            user.Exp += _expGainCorrectAns;
+            user = _usermanagementservices.UpdateUser(user);
+            _db.SaveChanges();
+            return answer;
+
+        }
+
+        public bool ValidateQuestionCharLength(QuestionDTO q)
+        {
+            if (q.Text != null || (q.Text.Length > _questionCharMin && q.Text.Length < _questionCharMax))
                 return true;
             else
                 return false;
         }
-
-        public bool ValidateUserHasEnoughExpToAnswer(Answer a)
-        {
-            User answerer = usermanager.FindUserById(a.AccountId);
-            if (answerer.Exp >= a.Question.MinimumExpForAnswer)
-                return true;
-            else
-                return false;
-        }
-
-
-
-
-
-
-
-
-
-        //Error handling and call services (check that answer isnt already there, and if not then post it)
-        //Then in controller, create a manager that calls the services 
-
-        //Check for concurrency problem when updating both answer and user (mark question as correct answer and update user Exp)
-        //If one fails, both need to rollback 
-
-
-
     }
 }
