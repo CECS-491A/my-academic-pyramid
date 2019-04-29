@@ -6,6 +6,8 @@
 
 <script>
 //import axios from 'axios'
+import AppSession from "@/services/AppSession"
+
 export default {
   data () {
     return {
@@ -21,28 +23,31 @@ export default {
   },
   created() {
     if (this.$route.query.SITtoken != undefined) {
-      sessionStorage.SITtoken = this.$route.query.SITtoken
+      AppSession.updateSession(this.$route.query.SITtoken)
         
-      console.log("In creation")
+      console.log("In creation of Redirect")
+      console.log(AppSession.state.token)
       // try to get userinfo
       this.axios.get(`${this.$hostname}UserManager/GetContextId`, 
                      {headers: {'Accept': 'application/json',
                                 'Content-Type': 'application/json',
-                                'Authorization': `Bearer ${sessionStorage.SITtoken}`}})
+                                'Authorization': `Bearer ${AppSession.state.token}`}})
                 .then(response => {
                     // Get user userid.
-                    sessionStorage.SITuserid = response.data.userid
-                    sessionStorage.SITtoken = response.data.SITtoken
+                    AppSession.updateSession(response.data.SITtoken)
+                    AppSession.setUserId(response.data.userid)
+                    console.log(AppSession.state.userId)
+
                     return this.axios.get(
-                      `${this.$hostname}UserManager/GetUserInfoWithId?id=${sessionStorage.SITuserid}`, 
+                      `${this.$hostname}UserManager/GetUserInfoWithId?id=${AppSession.state.userId}`, 
                       {headers: {'Accept': 'application/json',
                                   'Content-Type': 'application/json',
-                                  'Authorization': `Bearer ${sessionStorage.SITtoken}`}}
+                                  'Authorization': `Bearer ${AppSession.state.token}`}}
                     )
                 })
                 .then(response => {
                   this.userCategory = response.data.User.Category
-                  sessionStorage.SITtoken = response.data.SITtoken
+                  AppSession.updateSession(response.data.SITtoken)
                   this.targetURL = this.DIRECTED_PATHS[this.userCategory]
                   if (this.targetURL != undefined) {
                     this.$router.push(this.targetURL)
