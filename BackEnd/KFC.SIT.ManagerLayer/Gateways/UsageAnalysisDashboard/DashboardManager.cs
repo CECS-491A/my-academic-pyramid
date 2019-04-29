@@ -85,6 +85,11 @@ namespace ManagerLayer.Gateways.UsageAnalysisDashboard
             return featureTime;
         }
 
+        /// <summary>
+        /// Get the list of five features that are used most
+        /// parameter = number of features
+        /// </summary>
+        /// <returns></returns>
         public IDictionary<string, long> GetMostUsedFeature()
         {
             IDictionary<string, long> featureNumUsed = _dashboardService.CountMostUsedFiveFeature(5);

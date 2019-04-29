@@ -17,19 +17,37 @@ namespace NewDemoProject
 
         static void Main(string[] args)
         {
-            //var result = collection.GetAll();
-            //foreach (var re in result)
-            //{
-            //    Console.WriteLine(re.Action + ", " + re.Date.ToString());
-            //}
-            //long[] something2 = (long[]) manager.GetFailedSuccessfulLogIn();
-            //Console.WriteLine(something2[0]);
+            DashboardManager manager = new DashboardManager(url, database);
+            DashboardService service = new DashboardService(url, database);
+            IDictionary<int, long> get = service.CountSuccessfulLogin(12);
+            IDictionary<int, long> get2 = service.CountFailedLogin(12);
+            IDictionary<int, double> get3 = manager.GetAverageSuccessfulLogin();
+            /**
+            Console.WriteLine("succesufl");
+            foreach (var s in get)
+            {
+                Console.WriteLine(s.Key + "," + s.Value);
+            }
+            Console.WriteLine("failed login");
+            foreach (var s in get2)
+            {
+                Console.WriteLine(s.Key + "," + s.Value);
+            }
+            Console.WriteLine("Avg successful login");
+            foreach (var s in get3)
+            {
+                Console.WriteLine(s.Key + "," + s.Value);
+            }
+            **/
+            service.CountUniqueLoggedInUsers(2);
+            IDictionary<string, long> something3 = service.CountMostUsedFiveFeature(2);
+            foreach (var tmp in something3)
+            {
+                Console.WriteLine(tmp);
+            }
+            Console.WriteLine("hi");
 
-            //long[] something = temp.GetSuccessfulLogin();
-            //Console.WriteLine("End");
-            Console.WriteLine("wow");
-   
-            
+
             Console.ReadKey();
         }
     }
