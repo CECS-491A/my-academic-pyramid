@@ -267,6 +267,7 @@ namespace KFC.SIT.WebAPI.Controllers
                 {
 
                 }
+                return Content(HttpStatusCode.ExpectationFailed, "Error");
             }
         }
 
@@ -287,6 +288,8 @@ namespace KFC.SIT.WebAPI.Controllers
                 {
 
                 }
+                return Content(HttpStatusCode.ExpectationFailed, "Error");
+
             }
         }
 
@@ -307,6 +310,8 @@ namespace KFC.SIT.WebAPI.Controllers
                 {
 
                 }
+                return Content(HttpStatusCode.ExpectationFailed, "Error");
+
             }
         }
 
@@ -327,6 +332,8 @@ namespace KFC.SIT.WebAPI.Controllers
                 {
 
                 }
+                return Content(HttpStatusCode.ExpectationFailed, "Error");
+
             }
         }
 
@@ -347,6 +354,8 @@ namespace KFC.SIT.WebAPI.Controllers
                 {
 
                 }
+                return Content(HttpStatusCode.ExpectationFailed, "Error");
+
             }
         }
 
