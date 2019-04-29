@@ -225,6 +225,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="BusinessRules\PasswordCheckingBR.cs" />
+    <Compile Include="Gateways\DiscussionManager\DiscussionForumManager.cs" />
     <Compile Include="Gateways\MessengerManager\MessengerManager.cs" />
     <Compile Include="Constants\RedirectUserUtility.cs" />
     <Compile Include="Gateways\Search\ISearchManager.cs" />
