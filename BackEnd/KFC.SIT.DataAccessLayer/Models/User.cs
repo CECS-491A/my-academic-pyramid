@@ -31,6 +31,7 @@ namespace DataAccessLayer.Models
         public string UserName { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public Nullable<int> Exp { get; set; }
 
         public Nullable<int> CategoryId { get; set; }
         public virtual Category Category { get; set; }
