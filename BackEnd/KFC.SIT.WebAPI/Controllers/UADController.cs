@@ -34,6 +34,7 @@ namespace KFC.SIT.WebAPI.Controllers
         [Route("api/dashboard/fslogin")]
         public long[] GetFSLogin()
         {
+            throw new System.Exception();
             return _dashboardManager.GetFailedSuccessfulLogIn();
         }
 

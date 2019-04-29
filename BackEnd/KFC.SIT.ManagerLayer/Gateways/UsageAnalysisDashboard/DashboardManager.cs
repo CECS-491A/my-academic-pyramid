@@ -41,6 +41,7 @@ namespace ManagerLayer.Gateways.UsageAnalysisDashboard
                     double numSuccessfulLogin = 0;
                     double numFailedLogin = 0;
                     numSuccessfulLogin = successLogin[monthToday];
+
                     if (failedLogin.ContainsKey(monthToday))
                     {
                         numFailedLogin = failedLogin[monthToday];
@@ -86,7 +87,7 @@ namespace ManagerLayer.Gateways.UsageAnalysisDashboard
 
         public IDictionary<string, long> GetMostUsedFeature()
         {
-            IDictionary<string, long> featureNumUsed = _dashboardService.CountMostUsedFiveFeature();
+            IDictionary<string, long> featureNumUsed = _dashboardService.CountMostUsedFiveFeature(5);
             return featureNumUsed;
         }
 
@@ -95,7 +96,7 @@ namespace ManagerLayer.Gateways.UsageAnalysisDashboard
             throw new Exception();
         }
 
-        public long[] GetSuccessfulLogin()
+        public long[] GetSuccessfulLoggedInUsers()
         {
             throw new Exception();
            // long[] numLogin = _dashboardService.CountSuccessfulLogin();

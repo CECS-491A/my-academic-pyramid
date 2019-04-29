@@ -164,12 +164,11 @@ namespace ServiceLayer.DataAnalysisDashboard
         /// Save them into the dictionary and return it
         /// </summary>
         /// <returns></returns>
-        public IDictionary<string, long> CountMostUsedFiveFeature()
+        public IDictionary<string, long> CountMostUsedFiveFeature(int numOfFeature)
         {
             Dictionary<string, long> featureNum = new Dictionary<string, long>();
-            string[] features = { "Feature", "Feature2" };
             var query = CollectionT.Aggregate()
-                        .Match(x => x.Action == features[0] || x.Action == features[1])
+                        .Match(x => MongoDBAction.Feature.Contains(x.Action))
                         .Group(
                 x => x.Action,
                 i => new
@@ -178,13 +177,13 @@ namespace ServiceLayer.DataAnalysisDashboard
                     Feature = i.Select(x => x.Action).First()
                 }
                 )
-                .SortBy(x => x.NumUsed)
-                .Limit(5)
+                .SortByDescending(x => x.NumUsed)
+                .Limit(numOfFeature)
                 .ToList();
 
             foreach (var feature in query)
             {
-                Console.WriteLine(feature.Feature + ", " + featureNum);
+                Console.WriteLine(feature.Feature + ", " + feature.NumUsed);
                 featureNum.Add(feature.Feature, feature.NumUsed);
             }
 
