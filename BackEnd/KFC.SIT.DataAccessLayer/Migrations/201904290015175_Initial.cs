@@ -127,8 +127,11 @@ namespace DataAccessLayer.Migrations
                         FirstName = c.String(nullable: false),
                         MiddleName = c.String(),
                         LastName = c.String(nullable: false),
+                        DepartmentId = c.Int(nullable: false),
                     })
-                .PrimaryKey(t => t.Id);
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.Departments", t => t.DepartmentId, cascadeDelete: false)
+                .Index(t => t.DepartmentId);
             
             CreateTable(
                 "dbo.UserSessions",
@@ -234,6 +237,7 @@ namespace DataAccessLayer.Migrations
             DropForeignKey("dbo.Courses", "DepartmentId", "dbo.Departments");
             DropForeignKey("dbo.TeacherSchools", "School_Id", "dbo.Schools");
             DropForeignKey("dbo.TeacherSchools", "Teacher_Id", "dbo.Teachers");
+            DropForeignKey("dbo.Teachers", "DepartmentId", "dbo.Departments");
             DropForeignKey("dbo.SchoolDepartments", "Department_Id", "dbo.Departments");
             DropForeignKey("dbo.SchoolDepartments", "School_Id", "dbo.Schools");
             DropForeignKey("dbo.Users", "ParentUser_Id", "dbo.Users");
@@ -251,6 +255,7 @@ namespace DataAccessLayer.Migrations
             DropIndex("dbo.ClaimUsers", new[] { "User_Id" });
             DropIndex("dbo.ClaimUsers", new[] { "Claim_Id" });
             DropIndex("dbo.UserSessions", new[] { "UserId" });
+            DropIndex("dbo.Teachers", new[] { "DepartmentId" });
             DropIndex("dbo.Courses", new[] { "TeacherId" });
             DropIndex("dbo.Courses", new[] { "SchoolId" });
             DropIndex("dbo.Courses", new[] { "DepartmentId" });

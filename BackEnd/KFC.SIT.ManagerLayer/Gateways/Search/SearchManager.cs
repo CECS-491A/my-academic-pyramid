@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using DataAccessLayer;
 using DataAccessLayer.DTOs;
+using DataAccessLayer.Models.School;
 using ServiceLayer.Search;
 
 namespace ManagerLayer.Gateways.Search
@@ -22,5 +23,37 @@ namespace ManagerLayer.Gateways.Search
             _searchService = new SearchService(_db, _schoolId);
         }
 
+        // TODO: Make all messages constants
+        public List<SearchDTO> SearchStudents(string searchInput)
+        {
+            if (searchInput is null)
+            {
+                throw new ArgumentNullException("Search Input is Null");
+            }
+
+            var students = _searchService.SearchStudents(searchInput);
+            if (students is null)
+            {
+                throw new ArgumentException("No Students Found");
+            }
+
+            return students;
+        }
+
+        public List<SearchDTO> SearchTeachers(string searchInput)
+        {
+            if(searchInput is null)
+            {
+                throw new ArgumentNullException("Search Input is Null");
+            }
+
+            var teachers = _searchService.SearchTeachers(searchInput);
+            if(teachers is null)
+            {
+                throw new ArgumentException("No Teachers Found");
+            }
+
+            return teachers;
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using DataAccessLayer.Models.School;
+﻿using DataAccessLayer.DTOs;
+using DataAccessLayer.Models.School;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +10,8 @@ namespace ServiceLayer.Search
 {
     public interface ISearchService
     {
-        IQueryable SearchStudents(string searchName);
-        IQueryable SearchTeachers(string searchName);
+        List<SearchDTO> SearchStudents(string searchName);
+        List<SearchDTO> SearchTeachers(string searchName);
         //IEnumerable<Question> SearchQuestions();
     }
 }
