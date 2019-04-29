@@ -10,6 +10,7 @@ using SecurityLayer.Sessions;
 using ManagerLayer.Constants;
 using DataAccessLayer.Models;
 using KFC.SIT.WebAPI.Utility;
+using ManagerLayer.sso;
 
 
 namespace KFC.SIT.WebAPI.Controllers
@@ -18,7 +19,7 @@ namespace KFC.SIT.WebAPI.Controllers
     {
         [HttpPost]
         [EnableCors(origins: "*", headers: "*", methods: "*")]
-        public HttpResponseMessage Login(SSOPayload payload)
+        public IHttpActionResult Login(SSOPayload payload)
         {
             //CreateUsers();
             SessionManager sm = new SessionManager();
@@ -26,9 +27,9 @@ namespace KFC.SIT.WebAPI.Controllers
             string URL_FIRST_PART 
                 = $"{WebAPIConstants.FRONT_END_LOCAL}/Redirect";
             // Assume it's there for now.
-            if (!sm.ValidateSSOPayload(payload))
+            if (!ssoUtil.ValidateSSOPayload(payload))
             {
-                return Request.CreateResponse(HttpStatusCode.Unauthorized);
+                return Unauthorized();
             }
 
             User user = um.FindByUserName(payload.Email);
@@ -54,7 +55,7 @@ namespace KFC.SIT.WebAPI.Controllers
             };
             redirectResponseDictionary["redirectURL"] 
                 = redirectResponseDictionary["redirectURL"] + "?SITtoken=" + token;
-            return Request.CreateResponse(HttpStatusCode.OK, redirectResponseDictionary);
+            return Ok(redirectResponseDictionary);
             
         }
 

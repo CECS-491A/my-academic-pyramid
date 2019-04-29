@@ -104,6 +104,12 @@ namespace WebAPI.UserManagement
         }
 
 
+        public int GetUserId(int ssoId)
+        {
+            // TODO finish this
+            return 0;
+        }
+
         /// <summary>
         /// Method to update user account in database after making changes 
         /// </summary>

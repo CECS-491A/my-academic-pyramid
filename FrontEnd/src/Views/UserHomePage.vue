@@ -6,6 +6,8 @@
 
 <script>
 //import axios from 'axios'
+import AppSession from "@/services/AppSession"
+
 export default {
   name: "UserHomePage",
   data () {
@@ -16,16 +18,18 @@ export default {
   },
 
   created() {
-      this.userid = sessionStorage.SITuserid
+      this.userid = AppSession.state.userId
       // TODO set header
+      console.log(`In created of UserHomePage: ${AppSession.state.token}`)
       this.axios
-          .get(`${this.$hostname}UserManager/GetUserInfoWithId?id=${sessionStorage.SITuserid}`, 
+          .get(`${this.$hostname}UserManager/GetUserInfoWithId?id=${AppSession.state.userId}`, 
                 {headers: {'Accept': 'application/json',
                            'Content-Type': 'application/json',
-                           'Authorization': 'Bearer ' + sessionStorage.SITtoken}})
+                           'Authorization': 'Bearer ' + AppSession.state.token}})
           .then((response) => {
               this.username = response.data.User.UserName
-              sessionStorage.SITtoken = response.data.SITtoken
+              console.log(`Updating session in UserHomPage. New token ${response.data.SITtoken}`)
+              AppSession.updateSession(response.data.SITtoken)
           })
           .catch((error) => {
               // display error

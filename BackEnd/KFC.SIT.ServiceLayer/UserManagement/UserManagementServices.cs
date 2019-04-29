@@ -225,7 +225,13 @@ namespace ServiceLayer.UserManagement.UserAccountServices
             return user;
         }
 
-        
+        public int? FindIdBySSOId(int ssoId)
+        {
+            int? userId = null;
+            //int id = _DbContext.Users.Where(s => s.SSO);
+
+            return userId;
+        }
 
     } // end of class
 }
