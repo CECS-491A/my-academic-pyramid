@@ -10,8 +10,8 @@ namespace DataAccessLayer.DTOs
     public class AnswerDTO
     {
         //public int Id { get; set; }
-        public int PosterId { get; set; }
-        public string PosterUserName { get; set; }
+        public int StudentId { get; set; }
+        public string StudentUserName { get; set; }
         // public Question Question { get; set; }
         public int QuestionID { get; set; }
         public string Text { get; set; }

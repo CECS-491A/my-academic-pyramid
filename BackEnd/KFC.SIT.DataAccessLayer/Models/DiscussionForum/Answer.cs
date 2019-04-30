@@ -21,9 +21,9 @@ namespace DataAccessLayer.Models.DiscussionForum
         [Key]
         public int Id { get; set; }
 
-        public int PosterId { get; set; }
+        public int StudentId { get; set; }
 
-        public string PosterUserName { get; set; }
+        public string StudentUserName { get; set; }
 
         public Question Question { get; set; }
 

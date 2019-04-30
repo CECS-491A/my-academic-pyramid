@@ -35,6 +35,13 @@ namespace ServiceLayer
         public QuestionIsClosedException(string message) : base(message) { }
     }
 
+    public class QuestionUnavailableException : Exception
+    {
+        public QuestionUnavailableException() { }
+
+        public QuestionUnavailableException(string message) : base(message) { }
+    }
+
     public class NotEnoughExpException : Exception
     {
         public NotEnoughExpException() { }

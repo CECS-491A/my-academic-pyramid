@@ -130,7 +130,7 @@ namespace KFC.SIT.WebAPI.Controllers
                 Question question;
                 try
                 {
-                    questionDTO.PosterId = authUserId;
+                    questionDTO.StudentId = authUserId;
                     DiscussionForumManager discussionManager = new DiscussionForumManager(_db);
                     question = discussionManager.PostQuestion(questionDTO);
                     return Content(HttpStatusCode.OK, "Question was posted succesfully.");
@@ -187,7 +187,7 @@ namespace KFC.SIT.WebAPI.Controllers
                 Answer answer;
                 try
                 {
-                    answerDTO.PosterId = authUserId;
+                    answerDTO.StudentId = authUserId;
                     DiscussionForumManager discussionManager = new DiscussionForumManager(_db);
                     answer = discussionManager.PostAnswer(answerDTO);
                 }
@@ -265,6 +265,10 @@ namespace KFC.SIT.WebAPI.Controllers
                 catch (InvalidUserException ex)
                 {
                     return Content(HttpStatusCode.Unauthorized, ex.Message);
+                }
+                catch (QuestionUnavailableException ex)
+                {
+                    return Content(HttpStatusCode.Forbidden, ex.Message);
                 }
             }
         }
