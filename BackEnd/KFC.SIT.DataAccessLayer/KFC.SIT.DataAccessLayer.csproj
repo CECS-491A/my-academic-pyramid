@@ -164,6 +164,10 @@
     <Compile Include="Migrations\201904290827470_AddedSsoIdToUser.Designer.cs">
       <DependentUpon>201904290827470_AddedSsoIdToUser.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201904302228223_QuestionsToSchools_Depts_And_Courses.cs" />
+    <Compile Include="Migrations\201904302228223_QuestionsToSchools_Depts_And_Courses.Designer.cs">
+      <DependentUpon>201904302228223_QuestionsToSchools_Depts_And_Courses.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\Claim.cs" />
@@ -234,6 +238,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201904290827470_AddedSsoIdToUser.resx">
       <DependentUpon>201904290827470_AddedSsoIdToUser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904302228223_QuestionsToSchools_Depts_And_Courses.resx">
+      <DependentUpon>201904302228223_QuestionsToSchools_Depts_And_Courses.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -30,8 +30,8 @@ namespace DataAccessLayer.Models.DiscussionForum
         public int DepartmentId { get; set; }
         [ForeignKey("Course")]
         public int CourseId { get; set; }
-        [ForeignKey("Student")]
-        public int StudentId { get; set; }
+        [ForeignKey("User")]
+        public int UserId { get; set; }
         public string StudentUserName { get; set; }
         // should only be 500 - 2000 chars
         public string Text { get; set; }
@@ -42,7 +42,8 @@ namespace DataAccessLayer.Models.DiscussionForum
         public ICollection<Answer> Answers { get; set; }
         public virtual School.School School { set; get; }
         public virtual Department Department { get; set; }
-        public virtual Course Cource { get; set; }
+        public virtual Course Course { get; set; }
+        public User User { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
     }

@@ -97,7 +97,7 @@ namespace ManagerLayer.DiscussionManager
             Question question = _discussionservices.GetQuestion(questionId);
 
             // Validate
-            if (userId == question.StudentId)
+            if (userId == question.UserId)
             {
                 throw new InvalidUserException("User cannot mark their own question as spam");
             }
@@ -144,7 +144,7 @@ namespace ManagerLayer.DiscussionManager
             {
                 throw new InvalidQuestionLengthException("Question must be between " + _questionCharMin + " and " + _questionCharMax + " characters.");
             }
-            if (userId != question.StudentId)
+            if (userId != question.UserId)
             {
                 throw new InvalidUserException("User cannot edit another user's question");
             }
@@ -209,7 +209,7 @@ namespace ManagerLayer.DiscussionManager
             {
                 throw new QuestionIsClosedException("Question is already closed");
             }
-            if (userId != question.StudentId)
+            if (userId != question.UserId)
             {
                 throw new InvalidUserException("User cannot edit this question");
             }
@@ -227,7 +227,7 @@ namespace ManagerLayer.DiscussionManager
             {
                 throw new QuestionIsClosedException("Question is closed");
             }
-            if (userId != question.StudentId)
+            if (userId != question.UserId)
             {
                 throw new InvalidUserException("User cannot edit this question");
             }
