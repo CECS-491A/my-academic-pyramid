@@ -24,9 +24,6 @@ export default {
   created() {
     if (this.$route.query.SITtoken != undefined) {
       AppSession.updateSession(this.$route.query.SITtoken)
-        
-      console.log("In creation of Redirect")
-      console.log(AppSession.state.token)
       // try to get userinfo
       this.axios.get(`${this.$hostname}UserManager/GetContextId`, 
                      {headers: {'Accept': 'application/json',

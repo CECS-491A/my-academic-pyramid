@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using DataAccessLayer;
 using DataAccessLayer.Models;
@@ -109,7 +110,9 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         /// <returns></returns>
         public User FindById(int id)
         {
-            User user = _DbContext.Set<User>().Find(id);
+            User user = _DbContext.Users.Where(u => u.Id == id)
+                                        .Include(u => u.Category)
+                                        .FirstOrDefault();
             return user;
         }
 
@@ -213,9 +216,7 @@ namespace ServiceLayer.UserManagement.UserAccountServices
             if (existingCategory == null)
             {
                 category.Users.Add(user);
-                
             }
-
             else
             {
                 existingCategory.Users.Add(user);
@@ -225,12 +226,28 @@ namespace ServiceLayer.UserManagement.UserAccountServices
             return user;
         }
 
-        public int? FindIdBySSOId(int ssoId)
+        public int? FindIdBySsoId(Guid ssoId)
         {
             int? userId = null;
-            //int id = _DbContext.Users.Where(s => s.SSO);
+            try
+            {
+                userId = _DbContext.Users.Where(s => s.SsoId == ssoId)
+                                         .Select(s => s.Id)
+                                         .First();
+            }
+            catch(InvalidOperationException)
+            {
+                userId = null;
+            }
 
             return userId;
+        }
+
+        public Category GetCategory(string categoryValue)
+        {
+            // It can be null.
+            return _DbContext.Categories.Where(c => c.Value == categoryValue)
+                                        .FirstOrDefault();
         }
 
     } // end of class

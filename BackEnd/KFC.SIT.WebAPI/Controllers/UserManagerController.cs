@@ -145,7 +145,7 @@ namespace KFC.SIT.WebAPI.Controllers
 
 
         [HttpDelete]    
-        public IHttpActionResult DeleteUser(SSOPayload ssoPayload)
+        public IHttpActionResult DeleteUser(SsoPayload ssoPayload)
         {
             //UserManager umManager = new UserManager();
             //umManager.DeleteUserAccount(umManager.FindUserById(id));

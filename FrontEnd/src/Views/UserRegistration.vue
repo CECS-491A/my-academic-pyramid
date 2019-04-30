@@ -110,14 +110,12 @@ export default {
     },
 
     logoutFunc() {
-      let requestPayload = parseInt(AppSession.state.userid)
-      console.log(AppSession.state.userid)
-      console.log(requestPayload)
+      let requestPayload = parseInt(AppSession.state.userId)
       let headersObject = {
           headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + AppSession.state.userid
+          'Authorization': 'Bearer ' + AppSession.state.token
           }
       }
       let urlLogOut = `${this.$hostname}Logout`
