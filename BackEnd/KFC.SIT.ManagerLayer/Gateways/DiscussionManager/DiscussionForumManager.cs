@@ -44,7 +44,7 @@ namespace ManagerLayer.DiscussionManager
             // Validations 
             if (!ValidateQuestionCharLength(q))
             {
-                throw new InvalidQuestionLengthException("Question length is incorrect");
+                throw new InvalidQuestionLengthException("Question must be between " + _questionCharMin + " and " + _questionCharMax + " characters.");
             }
 
             // Create Question after passed in Question is validated
@@ -92,10 +92,17 @@ namespace ManagerLayer.DiscussionManager
 
         // update spam count
         // email sys admin if a question or answer reaches spam limit 
-        public Question IncreaseQuestionSpamCount(int id)
+        public Question IncreaseQuestionSpamCount(int questionId, int userId)
         {
-            Question question = _discussionservices.GetQuestion(id);
-            question = _discussionservices.IncreaseQuestionSpamCount(id);
+            Question question = _discussionservices.GetQuestion(questionId);
+
+            // Validate
+            if (userId == question.PosterId)
+            {
+                throw new InvalidUserException("User cannot mark their own question as spam");
+            }
+
+            question = _discussionservices.IncreaseQuestionSpamCount(questionId);
             if (question.SpamCount == _spamLimit)
             {
  //               // call service to email admin because question reached spam limit
@@ -105,10 +112,17 @@ namespace ManagerLayer.DiscussionManager
 
         // update spam count
         // email sys admin if a question or answer reaches spam limit 
-        public Answer IncreaseAnswerSpamCount(int id)
+        public Answer IncreaseAnswerSpamCount(int answerId, int userId)
         {
-            Answer answer = _discussionservices.GetAnswer(id);
-            answer = _discussionservices.IncreaseAnswerSpamCount(id);
+            Answer answer = _discussionservices.GetAnswer(answerId);
+
+            // Validate
+            if (userId == answer.PosterId)
+            {
+                throw new InvalidUserException("User cannot mark their own answer as spam");
+            }
+
+            answer = _discussionservices.IncreaseAnswerSpamCount(answerId);
             if (answer.SpamCount == _spamLimit)
             {
 //               // call service to email admin because question reached spam limit
@@ -128,11 +142,11 @@ namespace ManagerLayer.DiscussionManager
             }
             if (!ValidateQuestionCharLength(q))
             {
-                throw new InvalidQuestionLengthException("Question length is incorrect");
+                throw new InvalidQuestionLengthException("Question must be between " + _questionCharMin + " and " + _questionCharMax + " characters.");
             }
             if (userId != question.PosterId)
             {
-                throw new InvalidUserException("User cannot edit this question");
+                throw new InvalidUserException("User cannot edit another user's question");
             }
 
             // Update Question after passed in Question is validated
@@ -144,10 +158,17 @@ namespace ManagerLayer.DiscussionManager
         }
 
         // update answer with increased helpful count and update user Exp
-        public Answer IncreaseHelpfulCount(int id)
+        public Answer IncreaseHelpfulCount(int answerId, int userId)
         {
-            Answer answer = _discussionservices.GetAnswer(id);
-            answer = _discussionservices.IncreaseHelpfulCount(id);
+            Answer answer = _discussionservices.GetAnswer(answerId);
+
+            // Validate
+            if (userId == answer.PosterId)
+            {
+                throw new InvalidUserException("User cannot mark their own answer as helpful");
+            }
+
+            answer = _discussionservices.IncreaseHelpfulCount(answerId);
             // update user exp
             User user = _usermanagementservices.FindById(answer.PosterId);
             user.Exp += _expGainHelpfullAns;
@@ -158,16 +179,38 @@ namespace ManagerLayer.DiscussionManager
 
         // update answer with increased unhelpful count 
         // don't think UnHulpful affects a user's Exp? 
-        public Answer IncreaseUnHelpfulCount(int id)
+        public Answer IncreaseUnHelpfulCount(int answerId, int userId)
         {
-            Answer answer = _discussionservices.GetAnswer(id);
-            answer = _discussionservices.IncreaseUnHelpfulCount(id);
+            Answer answer = _discussionservices.GetAnswer(answerId);
+
+            // Validate
+            if (userId == answer.PosterId)
+            {
+                throw new InvalidUserException("User cannot mark their own answer as unhelpful");
+            }
+
+            answer = _discussionservices.IncreaseUnHelpfulCount(answerId);
             // update user exp
             //User user = _usermanagementservices.FindById(answer.PosterId);
             //user.Exp -= 2;
             //user = _usermanagementservices.UpdateUser(user);
             //_db.SaveChanges();
             return answer;
+        }
+
+        public Question CloseQuestion(int questionId, int userId)
+        {
+            Question question = _discussionservices.GetQuestion(questionId);
+            if (question.IsClosed)
+            {
+                throw new QuestionIsClosedException("Question is already closed");
+            }
+            if (userId != question.PosterId)
+            {
+                throw new InvalidUserException("User cannot edit this question");
+            }
+
+            return _discussionservices.CloseQuestion(questionId);
         }
 
         public Answer MarkAsCorrectAnswer(int id, int userId)
