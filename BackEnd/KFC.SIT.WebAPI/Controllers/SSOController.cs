@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Http;
 using ManagerLayer.sso;
 using WebAPI.UserManagement;
+using DataAccessLayer.DTOs;
 
 namespace KFC.SIT.WebAPI.Controllers
 {
@@ -13,7 +14,7 @@ namespace KFC.SIT.WebAPI.Controllers
     {
         [HttpPost]
         [ActionName("Logout")]
-        public IHttpActionResult Logout(SSOPayload payload)
+        public IHttpActionResult Logout(SsoPayload payload)
         {
             if(!ssoUtil.ValidateSSOPayload(payload))
             {
@@ -22,9 +23,48 @@ namespace KFC.SIT.WebAPI.Controllers
             // Find userid using sso id
             UserManager userManager = new UserManager();
             SessionManager sm = new SessionManager();
-            // TODO finish this.
-            //sm.InvalidateSession();
+            SsoManager ssoManager = new SsoManager();
+            UserDTO userDto = ssoManager.FindUserById(new Guid(payload.SSOUserId));
+            if (userDto == null)
+            {
+                return NotFound();
+            }
 
+            string token = sm.GetSessionToken(userDto.Id);
+            if (token == null)
+            {
+                return Ok();
+            }
+            sm.InvalidateSession(token);
+
+            return Ok();
+        }
+
+        [HttpPost]
+        [ActionName("DeleteUser")]
+        public IHttpActionResult DeleteUser(SsoPayload payload)
+        {
+            if (!ssoUtil.ValidateSSOPayload(payload))
+            {
+                return Unauthorized();
+            }
+            if (payload.SSOUserId == null)
+            {
+                return BadRequest("No SSO user id passed.");
+            }
+            // Find userid using sso id
+            UserManager userManager = new UserManager();
+            SessionManager sm = new SessionManager();
+            SsoManager ssoManager = new SsoManager();
+            ssoManager.DeleteUserBySsoId(new Guid(payload.SSOUserId));
+
+            return Ok();
+        }
+
+        [HttpOptions]
+        [ActionName("HealthCheck")]
+        public IHttpActionResult HealthCheck()
+        {
             return Ok();
         }
     }

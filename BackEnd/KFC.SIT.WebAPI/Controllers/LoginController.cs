@@ -19,13 +19,14 @@ namespace KFC.SIT.WebAPI.Controllers
     {
         [HttpPost]
         [EnableCors(origins: "*", headers: "*", methods: "*")]
-        public IHttpActionResult Login(SSOPayload payload)
+        public IHttpActionResult Login(SsoPayload payload)
         {
             //CreateUsers();
             SessionManager sm = new SessionManager();
             UserManager um = new UserManager();
             string URL_FIRST_PART 
                 = $"{WebAPIConstants.FRONT_END_LOCAL}/Redirect";
+            
             // Assume it's there for now.
             if (!ssoUtil.ValidateSSOPayload(payload))
             {

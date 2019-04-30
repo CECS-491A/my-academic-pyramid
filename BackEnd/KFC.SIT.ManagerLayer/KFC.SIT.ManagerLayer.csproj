@@ -240,7 +240,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Gateways\UserManagement\IUserManagement.cs" />
     <Compile Include="Gateways\UserManagement\UserManager.cs" />
-    <Compile Include="sso\SSOPayload.cs" />
+    <Compile Include="sso\SsoManager.cs" />
+    <Compile Include="sso\SsoPayload.cs" />
     <Compile Include="sso\ssoUtil.cs" />
   </ItemGroup>
   <ItemGroup>

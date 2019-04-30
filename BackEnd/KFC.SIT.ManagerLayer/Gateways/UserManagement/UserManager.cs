@@ -45,15 +45,18 @@ namespace WebAPI.UserManagement
             //{
             //    return null;
             //}
-
-
-            Account user = new Account
+            Category category = _userManagementServices.GetCategory(userDto.Category);
+            if (category == null)
+            {
+                category = new Category(userDto.Category);
+            }
+            User user = new User
             {
                 UserName = userDto.UserName,
                 SsoId = userDto.SsoId,
                 FirstName = userDto.FirstName,
                 LastName = userDto.LastName,
-                Category = new Category(userDto.Category),
+                Category = category
                 //// date and time as it would be in Coordinated Universal Time
                 //CreatedAt = DateTime.Now, // https://stackoverflow.com/questions/62151/datetime-now-vs-datetime-utcnow 
                 //DateOfBirth = DateTime.Parse(userDto.DateOfBirth),
@@ -62,7 +65,8 @@ namespace WebAPI.UserManagement
 
             //Automatically assigning claim to user
             user = AutomaticClaimAssigning(user);
-            user = _userManagementServices.AssignCategory(user, user.Category);
+            // TODO test this.
+            //user = _userManagementServices.AssignCategory(user, new Category(userDto.Category));
 
             var response = _userManagementServices.CreateUser(user);
             try
@@ -105,11 +109,8 @@ namespace WebAPI.UserManagement
         }
 
 
-        public int GetUserId(int ssoId)
-        {
-            // TODO finish this
-            return 0;
-        }
+        
+        
 
         /// <summary>
         /// Method to update user account in database after making changes 
@@ -256,6 +257,23 @@ namespace WebAPI.UserManagement
                 return user;
             }
                    
+        }
+
+        public Account SetCategory(int targetUserId, string categoryStr)
+        {
+            Category categoryToAdd = _userManagementServices.GetCategory(categoryStr);
+            if (categoryToAdd == null)
+            {
+                categoryToAdd = new Category(categoryStr);
+            }
+            Account targetUser = _userManagementServices.FindById(targetUserId);
+            if (targetUser == null)
+            {
+                return null;
+            }
+            _userManagementServices.AssignCategory(targetUser, categoryToAdd);
+
+            return targetUser;
         }
 
         public Account AddClaimAction(int targetedUserId, Claim claim)

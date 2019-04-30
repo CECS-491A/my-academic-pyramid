@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ManagerLayer.sso
 {
-    public class SSOPayload
+    public class SsoPayload
     {
         public string Email { get; set; }
         public string Signature { get; set; }

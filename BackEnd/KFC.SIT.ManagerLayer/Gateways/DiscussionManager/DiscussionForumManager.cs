@@ -10,6 +10,7 @@ using ServiceLayer.UserManagement.UserAccountServices;
 using DataAccessLayer.DTOs;
 using System.Net.Http;
 using System.Net;
+using ServiceLayer;
 
 namespace ManagerLayer.DiscussionManager
 {
@@ -41,11 +42,10 @@ namespace ManagerLayer.DiscussionManager
         public Question PostQuestion(QuestionDTO q)
         {
             // Validations 
-            if (ValidateQuestionCharLength(q) == false)
+            if (!ValidateQuestionCharLength(q))
             {
+                throw new InvalidQuestionLengthException("Question length is incorrect");
             }
-            // Any more validations? 
-
 
             // Create Question after passed in Question is validated
             Question question = new Question
@@ -56,29 +56,27 @@ namespace ManagerLayer.DiscussionManager
                 MinimumExpForAnswer = q.MinimumExpForAnswer,
                 IsDraft = q.IsDraft,
             };
+            // Post Question
             return _discussionservices.PostQuestion(question);
         }
 
-        // Todo 
-        // update answer to not editable if answer is posted successfully 
         public Answer PostAnswer(AnswerDTO a)
         {
             // Validations
             Account answerer = _usermanagementservices.FindById(a.PosterId);
             Question question = _discussionservices.GetQuestion(a.QuestionID);
 
-            if (question.IsClosed == false)
+            if (question.IsClosed)
             {
+                throw new QuestionIsClosedException("Question is closed");
             }
 
             if (answerer.Exp < question.MinimumExpForAnswer)
             {
+                throw new NotEnoughExpException("User does not have enough Exp to answer");
             }
-            // More validations? 
-
-
             
-            // Created Answer after passed in Answer is validated
+            // Creat Answer after passed in Answer is validated
             Answer answer = new Answer
             {
                 PosterId = a.PosterId,
@@ -86,6 +84,7 @@ namespace ManagerLayer.DiscussionManager
                 Question = question,
                 Text = a.Text,
             };
+            // Post Answer
             return _discussionservices.PostAnswer(question, answer);
         }
 
@@ -96,7 +95,6 @@ namespace ManagerLayer.DiscussionManager
         public Question IncreaseQuestionSpamCount(int id)
         {
             Question question = _discussionservices.GetQuestion(id);
-            //
             question = _discussionservices.IncreaseQuestionSpamCount(id);
             if (question.SpamCount == _spamLimit)
             {
@@ -110,7 +108,6 @@ namespace ManagerLayer.DiscussionManager
         public Answer IncreaseAnswerSpamCount(int id)
         {
             Answer answer = _discussionservices.GetAnswer(id);
-            //
             answer = _discussionservices.IncreaseAnswerSpamCount(id);
             if (answer.SpamCount == _spamLimit)
             {
@@ -119,26 +116,26 @@ namespace ManagerLayer.DiscussionManager
             return answer;
         }
 
-        // similar to PostQuestion without creating a new Question 
         // update question content... answers can never be updated 
-        // check that question is open 
         public Question EditQuestion(QuestionDTO q, int userId)
         {
             Question question = _discussionservices.GetQuestion(q.Id);
 
             // Validations 
-            if (question.IsClosed == true) 
+            if (question.IsClosed) 
             {
-                // throw exception 
+                throw new QuestionIsClosedException("Question is closed");
             }
-            if (ValidateQuestionCharLength(q) == false)
+            if (!ValidateQuestionCharLength(q))
             {
-                // throw exception 
+                throw new InvalidQuestionLengthException("Question length is incorrect");
             }
             if (userId != question.PosterId)
-            // Any more validations?
+            {
+                throw new InvalidUserException("User cannot edit this question");
+            }
 
-            // Create Question after passed in Question is validated
+            // Update Question after passed in Question is validated
             question.Text = q.Text;
             question.MinimumExpForAnswer = q.MinimumExpForAnswer;
             question.IsDraft = q.IsDraft;
@@ -167,24 +164,26 @@ namespace ManagerLayer.DiscussionManager
             answer = _discussionservices.IncreaseUnHelpfulCount(id);
             // update user exp
             //User user = _usermanagementservices.FindById(answer.PosterId);
-            //user.Exp += 2;
+            //user.Exp -= 2;
             //user = _usermanagementservices.UpdateUser(user);
             //_db.SaveChanges();
             return answer;
         }
 
-        // 
-        public Answer MarkAsCorrectAnswer(int id)
+        public Answer MarkAsCorrectAnswer(int id, int userId)
         {
             Answer answer = _discussionservices.GetAnswer(id);
             Question question = answer.Question;
             Account user = _usermanagementservices.FindById(answer.PosterId);
             // Validations 
-            if (question.IsClosed == true)
+            if (question.IsClosed)
             {
-                // throw exception 
+                throw new QuestionIsClosedException("Question is closed");
             }
-            // more validations? 
+            if (userId != question.PosterId)
+            {
+                throw new InvalidUserException("User cannot edit this question");
+            }
 
             answer = _discussionservices.MarkAnswerAsCorrect(id);
             question = _discussionservices.CloseQuestion(question.Id);

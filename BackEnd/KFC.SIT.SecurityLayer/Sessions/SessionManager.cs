@@ -150,6 +150,11 @@ namespace SecurityLayer.Sessions
             _sessionServices.InvalidateSession(token);
         }
 
+        public string GetSessionToken(int userId)
+        {
+            return _sessionServices.GetActiveSessionToken(userId);
+        }
+
         private SessionTimeStamp SetTime(Dictionary<string, string> payload)
         {
             if (payload == null)
