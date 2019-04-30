@@ -11,14 +11,7 @@
               <v-tab-item>
                 <v-card height="350px">
                   <v-toolbar color="teal" dark>
-                    <v-list class="pa-0">
-                      <v-list-tile avatar>
-                        <v-list-tile-avatar></v-list-tile-avatar>
-
-                        <v-list-tile-content>
-                          <v-list-tile-title>Chat Messenger</v-list-tile-title>
-                        </v-list-tile-content>
-                      </v-list-tile>
+                    <v-list class="pa-0">                      
                       <v-btn
                         fab
                         medium
@@ -40,12 +33,14 @@
                       v-for="item in conversations"
                       :key="item.Id"
                       :to="item.path"
+                      :color="selectedConversationId!= item.Id ? 'black' : 'blue'" 
                       
                       @click="getMessageInConversation(item.Id)"
                     >
                       <v-list-tile-content>
                         <v-list-tile-title>{{ item.ContactUsername }}</v-list-tile-title>
-                        <v-icon :color="item.HasNewMessage ? 'teal' : 'grey'">chat_bubble</v-icon>
+                        <v-icon :color="item.HasNewMessage && selectedConversationId!= item.Id ? 'red' : 'grey'">chat_bubble</v-icon>
+                        <!-- <v-icon v-if="item.HasNewMessage && this.selectedConversationId!= item.Id">chat_bubble</v-icon> -->
                         <v-list-tile-sub-title>{{item.CreatedDate}}</v-list-tile-sub-title>
                             
                       </v-list-tile-content>
@@ -107,16 +102,40 @@
           </v-flex>
         </v-layout>
       </v-container>
-      <v-dialog v-model="chatDialog" max-width="500px">
+      <v-dialog 
+      v-model="chatDialog" 
+      max-width="500px">
         <v-card>
+          <form ref="chatDialog">
           <v-card-text>
-            <v-text-field label="Recipient Username" v-model="newMessage.contactUsername"></v-text-field>
-            <v-text-field label="Message" v-model="newMessage.messageContent"></v-text-field>
-            <v-alert :value="alert" type="error" transition="scale-transition">{{errorText}}</v-alert>
+              <v-text-field 
+              id ="receiverUsername"
+            label="Receiver Username" 
+            v-model="newMessage.contactUsername"
+            :error-messages="usernameErrors"
+            required
+            @input="$v.newMessage.contactUsername.$touch()"
+            @blur="$v.newMessage.contactUsername.$touch()"
+            ></v-text-field>
+          
+            <v-text-field 
+            id = "inputMessage"
+            label="Message" 
+            v-model="newMessage.messageContent"
+            :error-messages="messageErrors"
+            required
+            @input="$v.newMessage.messageContent.$touch()"
+            @blur="$v.newMessage.messageContent.$touch()"
+            ></v-text-field>
+            <v-alert :value="error" type="error" transition="scale-transition">{{error}}</v-alert>
           </v-card-text>
+          </form>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn flat color="primary" @click="sendMessageWithNewConversation">Submit</v-btn>
+            <v-btn
+            id ="sendNewMsgButton" 
+            flat color="primary" 
+            @click="sendMessageWithNewConversation">Submit</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -127,9 +146,17 @@
 <script>
 import chat from "@/components/Messenger/Chat";
 import friendList from "@/components/Messenger/FriendList";
-
-import { hubConnection } from "signalr-no-jquery";
+import { validationMixin } from "vuelidate";
+import { required, email } from "vuelidate/lib/validators";
 export default {
+  mixins: [validationMixin],
+
+  validations: {
+    newMessage: {
+      contactUsername: {required,email},
+      messageContent: {required}
+    }
+  },
   components: {
     chat,
     friendList
@@ -146,11 +173,31 @@ export default {
       },
 
       selectedConversationId: "",
-
+      error:"",
       alert: false,
-      errorText: null,
-      errorFoundUser: null
+      
     };
+  },
+  computed: {
+    usernameErrors() {
+      const errors = [];
+
+      if (!this.$v.newMessage.contactUsername.$dirty) return errors;
+
+      !this.$v.newMessage.contactUsername.email && errors.push("Must be valid e-mail");
+      
+
+      !this.$v.newMessage.contactUsername.required && errors.push("E-mail is required");
+
+      return errors;
+    },
+    messageErrors(){
+      const errors = [];
+      if (!this.$v.newMessage.messageContent.$dirty) return errors;
+
+      !this.$v.newMessage.messageContent.required && errors.push("Message is required");
+      return errors;
+    }
   },
 
   created() {
@@ -191,7 +238,7 @@ export default {
 
     getMessageInConversation(conversationId) {
       this.$eventBus.$emit("GetMessageInConversation", conversationId),
-        (this.selectedConversationId = conversationId);
+      this.selectedConversationId = conversationId;
     },
 
     
@@ -215,17 +262,24 @@ export default {
             this.chatDialog = false;
             this.selectedConversationId = response.data.message.conversationID,
             this.getAllConversations();
-            this.$eventBus.$emit(
-              "GetMessageInConversation",
-              this.selectedConversationId
-            );
+            // this.$eventBus.$emit(
+            //   "GetMessageInConversation",
+            //   this.selectedConversationId
+            // );
+        
           })
           .catch(err => {
             /* eslint no-console: "off" */
-            console.log(err);
-            this.errorFoundUser = err.data;
-            alert = true;
-          });
+            if(err.response.status == 404 ){
+              this.error = "User with the username does not exist"
+            }
+            else{
+              this.error = err.response.data
+            }
+            
+            this.alert = true;
+          })
+         ;
       } else {
         this.errorText = "A message must be entered!";
       }
@@ -245,7 +299,7 @@ export default {
           "messenger/DeleteConversation?conversationId=" +
           conversationId
       })
-        .then(response => {
+        .then(() => {
           // sessionStorage.SITtoken = response.data.SITtoken
          this.getAllConversations(),
           this.$eventBus.$emit("ClearChatScreen");

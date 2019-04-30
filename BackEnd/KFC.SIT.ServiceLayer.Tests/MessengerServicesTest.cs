@@ -15,14 +15,16 @@ namespace ServiceLayer.Tests
 
     public class MessengerServicesTest
     {
+  
         const int testAuthUserId = 1;
         const int testContactUserId = 2;
-        const int conversationIdForTest = 37;
+        const string testContactUsername = "nguyentrong56@yahoo.com";
+         int conversationIdForTest = 1;
         [Fact]
         public void CreateConversation_ShouldReturnAConversation()
         {
             //Arrange
-            string targetUsername = "nguyentrong56@gmail.com";
+       
 
             Conversation returnConversation = null;
 
@@ -30,16 +32,10 @@ namespace ServiceLayer.Tests
             using (var db = new DatabaseContext())
             {
                 MessengerServices msService = new MessengerServices(db);
-                try
-                {
-                    returnConversation = msService.CreateConversation(testAuthUserId, testContactUserId, targetUsername);
-                    db.SaveChanges();
-                }
 
-                catch (DbUpdateException ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
+                    returnConversation = msService.CreateConversation(testAuthUserId, testContactUserId, testContactUsername);
+                    db.SaveChanges();
+
             }
 
             //Assert
@@ -50,8 +46,7 @@ namespace ServiceLayer.Tests
         public void DeleteConversation_ShouldReturnAConversation()
         {
             //Arrange
-            string targetUsername = "nguyentrong56@gmail.com";
-
+       
             Conversation conversation = null;
             Conversation foundConversation = null;
 
@@ -59,8 +54,9 @@ namespace ServiceLayer.Tests
             using (var db = new DatabaseContext())
             {
                 MessengerServices msService = new MessengerServices(db);
-                conversation = msService.CreateConversation(testAuthUserId, testContactUserId, targetUsername);
+                conversation = msService.CreateConversation(testAuthUserId, testContactUserId, testContactUsername);
                 db.SaveChanges();
+
 
                 conversation = msService.DeleteConversation(conversation.Id);
                 db.SaveChanges();
@@ -83,6 +79,8 @@ namespace ServiceLayer.Tests
             using (var db = new DatabaseContext())
             {
                 MessengerServices msService = new MessengerServices(db);
+                msService.CreateConversation(testAuthUserId, testContactUserId, testContactUsername);
+                db.SaveChanges();
                 conversations = msService.GetAllConversation(testAuthUserId);
                 
             }
@@ -102,6 +100,9 @@ namespace ServiceLayer.Tests
             using (var db = new DatabaseContext())
             {
                 MessengerServices msService = new MessengerServices(db);
+                msService.CreateConversation(testAuthUserId, testContactUserId, testContactUsername);
+                db.SaveChanges();
+             
                 conversation = msService.GetConversationBetweenUsers(testAuthUserId, testContactUserId);
 
             }
@@ -121,7 +122,9 @@ namespace ServiceLayer.Tests
             using (var db = new DatabaseContext())
             {
                 MessengerServices msService = new MessengerServices(db);
-                conversation = msService.GetConversationFromId(conversationIdForTest);
+                var returnConversation = msService.CreateConversation(testAuthUserId, testContactUserId, testContactUsername);
+                db.SaveChanges();
+                conversation = msService.GetConversationFromId(returnConversation.Id);
 
             }
 
@@ -134,13 +137,17 @@ namespace ServiceLayer.Tests
         public void GetContactUserIdFromConversation_ShouldReturnUserId()
         {
             //Arrange 
-            int expected = 0 ;
+            int expected;
+
             int actual;
 
             //Act
             using (var db = new DatabaseContext())
             {
                 MessengerServices msService = new MessengerServices(db);
+                var returnConversation = msService.CreateConversation(testAuthUserId, testContactUserId, testContactUsername);
+                db.SaveChanges();
+                expected = returnConversation.Id;
                 actual = msService.GetContactUserIdFromConversation(conversationIdForTest);
 
             }
@@ -160,7 +167,14 @@ namespace ServiceLayer.Tests
             using (var db = new DatabaseContext())
             {
                 MessengerServices msService = new MessengerServices(db);
-                fr = msService.AddContactFriendList(testAuthUserId, testContactUserId);
+                msService.RemoveUserFromFriendList(testAuthUserId, testContactUserId);
+                db.SaveChanges();
+                bool isFriend = msService.IsFriend(testAuthUserId, testContactUserId);
+                if(!isFriend)
+                {
+                    fr = msService.AddContactFriendList(testAuthUserId, testContactUserId);
+                }
+                
 
                 db.SaveChanges();
 
@@ -182,6 +196,8 @@ namespace ServiceLayer.Tests
             using (var db = new DatabaseContext())
             {
                 MessengerServices msService = new MessengerServices(db);
+                msService.AddContactFriendList(testAuthUserId, testContactUserId);
+                db.SaveChanges();
                 fr = msService.IsFriend(testAuthUserId, testContactUserId);
 
             }
@@ -202,6 +218,8 @@ namespace ServiceLayer.Tests
             using (var db = new DatabaseContext())
             {
                 MessengerServices msService = new MessengerServices(db);
+               
+                msService.AddContactFriendList(testAuthUserId, testContactUserId);
                 friends = msService.GetAllFriendRelationship(testAuthUserId).ToList();
 
             }
@@ -220,7 +238,8 @@ namespace ServiceLayer.Tests
             //Act
             using (var db = new DatabaseContext())
             {
-                MessengerServices msService = new MessengerServices(db);
+                MessengerServices msService = new MessengerServices(db);  
+                msService.AddContactFriendList(testAuthUserId, testContactUserId);
                 var friends = msService.GetAllFriendRelationship(testAuthUserId).ToList();
                 FriendRelationship FriendRelationship = friends.ElementAt(0);
                 msService.RemoveUserFromFriendList(FriendRelationship.UserId, FriendRelationship.FriendId);
@@ -243,13 +262,13 @@ namespace ServiceLayer.Tests
         {
             //Arrange 
             List<Message> messages = null;
-            int conversationId = conversationIdForTest;
-
+  
             //Act
             using (var db = new DatabaseContext())
             {
                 MessengerServices msService = new MessengerServices(db);
-                messages = msService.GetAllMessagesFromConversation(conversationId);
+                
+                messages = msService.GetAllMessagesFromConversation(conversationIdForTest);
 
             }
 
@@ -263,15 +282,14 @@ namespace ServiceLayer.Tests
         {
             //Arrange 
             Message message = null;
-            int conversationId = conversationIdForTest;
-
+            
             //Act
             using (var db = new DatabaseContext())
             {
                 MessengerServices msService = new MessengerServices(db);
                 try
                 {
-                    message = msService.GetMostRecentMessageConversation(conversationId);
+                    message = msService.GetMostRecentMessageConversation(conversationIdForTest);
                 }
 
                 catch (DbUpdateException ex)
@@ -334,37 +352,24 @@ namespace ServiceLayer.Tests
                 CreatedDate = DateTime.Now
             };
             Message returnMessage = null;
+            Message expected = null;
+            Message actual;
 
             //Act
             using (var db = new DatabaseContext())
             {
                 MessengerServices msService = new MessengerServices(db);
-                try
-                {
+ 
                     message = msService.SaveMessageToDatabase(message);
                     db.SaveChanges();
-                }
-
-                catch (DbUpdateException ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-
-                try
-                {
-                    returnMessage = msService.DeleteMessage(message.Id);
+                    var foundMessage =  db.Messages.Where(m => m.MessageContent.Equals("testContent2")).FirstOrDefault();
+                    returnMessage = msService.DeleteMessage(foundMessage.Id);
                     db.SaveChanges();
-                }
-
-                catch (DbUpdateException ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-
+                    actual = db.Messages.Where(m => m.Id == foundMessage.Id).FirstOrDefault();
             }
 
             //Assert
-            Assert.NotNull(returnMessage);
+            Assert.Equal(expected,actual);
         }
 
 

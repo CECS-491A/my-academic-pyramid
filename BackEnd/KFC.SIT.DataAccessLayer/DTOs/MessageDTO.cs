@@ -12,6 +12,7 @@ namespace DataAccessLayer.DTOs
         //
         //public int AuthUsername { get; set; }
         //public int ContactUsername { get; set; }
+        public int Id {get;set;}
 
         public int ConversationId { get; set; }
 

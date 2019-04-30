@@ -108,6 +108,7 @@
     <Compile Include="PasswordChecking\HashFunctions\SHA256HashFunction.cs" />
     <Compile Include="PasswordChecking\SaltFunction\CustomSaltFunction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServiceExceptions\MessengerServiceException.cs" />
     <Compile Include="ServiceExceptions\SignalRMappingException.cs" />
     <Compile Include="Search\ISearchService.cs" />
     <Compile Include="Search\SearchService.cs" />

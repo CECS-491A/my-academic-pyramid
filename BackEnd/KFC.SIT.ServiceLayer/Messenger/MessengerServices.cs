@@ -123,8 +123,9 @@ namespace ServiceLayer.Messenger
                         UserId = authUserId,
                         ContactUserId = targetUserId,
                         ContactUsername = targetUsername,
-                        CreatedDate = DateTime.Now
-                    };
+                        CreatedDate = DateTime.Now,
+                        ModifiedDate = DateTime.Now
+                };
 
                    return _DbContext.Conversations.Add(newConversation);
                       
@@ -148,8 +149,19 @@ namespace ServiceLayer.Messenger
                 
             }
             return null;
-           
+        }
 
+        public Conversation MarkConversationRead(int conversationId)
+        {
+            var conversation = _DbContext.Conversations.Where(c => (c.Id == conversationId)).FirstOrDefault();
+            if (conversation != null)
+            {
+                conversation.HasNewMessage = false;
+                _DbContext.Entry(conversation).State = System.Data.Entity.EntityState.Modified;
+               
+
+            }
+            return conversation;
         }
 
         public Conversation GetConversationFromId(int conversationId)
@@ -213,8 +225,6 @@ namespace ServiceLayer.Messenger
         public FriendRelationship AddContactFriendList(int authUserId, int targetUserId)
         {
 
-           
-
                 if (!IsFriend(authUserId, targetUserId))
                 {
                     var fr = new FriendRelationship
@@ -224,7 +234,6 @@ namespace ServiceLayer.Messenger
                         UserId = authUserId
                     };
                     return _DbContext.FriendRelationships.Add(fr);
-                   
                
                 }
 

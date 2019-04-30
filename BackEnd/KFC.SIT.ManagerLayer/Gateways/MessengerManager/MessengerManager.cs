@@ -10,6 +10,7 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+using static ServiceLayer.ServiceExceptions.MessengerServiceException;
 
 namespace WebAPI.Gateways.Messenger
 {
@@ -30,6 +31,8 @@ namespace WebAPI.Gateways.Messenger
 
         public IEnumerable<Message> GetMessageInConversation(int conversationId)
         {
+            _msServices.MarkConversationRead(conversationId);
+            _DbContext.SaveChanges();
              return _msServices.GetAllMessagesFromConversation(conversationId).AsEnumerable();
 
         }
@@ -115,8 +118,9 @@ namespace WebAPI.Gateways.Messenger
 
                 };
 
-            authUserConversation.HasNewMessage = true;
             targetUserConversation.HasNewMessage = true;
+            authUserConversation.ModifiedDate = DateTime.Now;
+            targetUserConversation.ModifiedDate = DateTime.Now;
 
 
 
@@ -233,31 +237,25 @@ namespace WebAPI.Gateways.Messenger
             var authUser = _umServices.FindById(authUserId);
             var targetUser = _umServices.FindByUsername(targetUserId);
 
+            if(targetUser == null)
+            {
+                throw new MessageReceiverNotFoundException();
+            }
+
            var fs = _msServices.AddContactFriendList(authUserId, targetUser.Id);
 
             if (fs != null)
             {
-                try
-                {
-
                     _DbContext.SaveChanges();
                     return fs;
-                }
-
-                catch (DbUpdateException ex)
-                {
-                    if (ex.InnerException == null)
-                    {
-                        throw ex.InnerException;
-                    }
-                    else
-                    {
-                        throw ex;
-                    }
-                }
             }
 
-            return fs;
+            else
+            {
+                throw new DuplicatedFriendException();
+            }
+
+     
 
         }
 
@@ -276,35 +274,9 @@ namespace WebAPI.Gateways.Messenger
 
         public FriendRelationship RemoveUserFromFriendList(int authUserId, int friendUserId)
         {
-
-            try
-            {
                 var fs = _msServices.RemoveUserFromFriendList(authUserId, friendUserId);
                 _DbContext.SaveChanges();
                 return fs;
-               
-            }
-
-            catch (DbUpdateException ex)
-            {
-                if (ex.InnerException == null)
-                {
-                    throw ex.InnerException;
-                }
-                else
-                {
-                   if (ex.InnerException == null)
-                {
-                    throw ex.InnerException;
-                }
-                else
-                {
-                    throw ex;
-                }
-                }
-            }
-            return null;
-
         }
     }
 }

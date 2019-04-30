@@ -4,6 +4,7 @@
           <v-toolbar color="teal" dark>
             <v-spacer></v-spacer>
             <v-btn
+            id ="addFriendButton"
               fab
               small
               color="red"
@@ -75,28 +76,43 @@
         
 		<v-dialog v-model="addFriendDialog" max-width="500px">
             <v-card>
+              <form ref="form">
               <v-card-text>
-                <v-text-field 
-                label="Friend'username"
+               <v-text-field 
+                label="Friend's username"
                 v-model="addFriendUsername"
+                :error-messages="usernameErrors"
+                required
+              @input="$v.addFriendUsername.$touch()"
+              @blur="$v.addFriendUsername.$touch()"
                 ></v-text-field>
-               
+              
               </v-card-text>
+               </form>
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn flat color="primary" @click="addFriend">Add</v-btn>
               </v-card-actions>
+             
             </v-card>
+             <v-alert :value="error" type="error" transition="scale-transition">{{error}}</v-alert>
+              
           </v-dialog>
   </v-app>
 </template>
 
 <script>
+import { validationMixin } from "vuelidate";
+import { required, email } from "vuelidate/lib/validators";
 export default {
+mixins: [validationMixin],
+  validations: {
+    addFriendUsername: { required, email }
+  },
+   
   data() {
     return {
-      friendList: {
-      },
+      friendList: {},
 
       friendTO: {
         Id: "",
@@ -104,8 +120,31 @@ export default {
       },
 
       addFriendUsername: "",
-      addFriendDialog: false
+      addFriendDialog: false,
+      error:""
+
     };
+  },
+  computed: {
+    usernameErrors() {
+      const errors = [];
+
+      if (!this.$v.addFriendUsername.$dirty) return errors;
+
+      !this.$v.addFriendUsername.email && errors.push("Must be valid e-mail");
+
+      !this.$v.addFriendUsername.required && errors.push("E-mail is required");
+
+      return errors;
+    },
+
+  },
+  watch:{
+    addFriendDialog(){
+     this.addFriendUsername=""
+     this.error=""
+    }
+
   },
 
   created() {
@@ -134,7 +173,9 @@ export default {
     },
 
     async addFriend() {
-      await this.axios({
+      if(this.addFriendUsername)
+      {
+        await this.axios({
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -149,14 +190,17 @@ export default {
       })
         .then(response => {
           //  sessionStorage.SITtoken = response.data.SITtoken,
-          this.addFriendDialog = false
+          this.addFriendDialog = false;
 
           this.friendList.push(response.data.friend);
         })
         .catch(err => {
           /* eslint no-console: "off" */
+            this.error = err.response.data
           console.log(err);
         });
+      }
+      
     },
 
     sendNewMessage(friendUsername) {
@@ -175,7 +219,7 @@ export default {
         url:
           this.$hostname + "messenger/RemoveFriendFromList?friendId=" + friendId
       })
-        .then(response => {
+        .then(() => {
           //sessionStorage.SITtoken = response.data.SITtoken,
           this.loadFriendList();
 

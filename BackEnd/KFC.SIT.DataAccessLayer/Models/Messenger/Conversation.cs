@@ -19,6 +19,7 @@ namespace DataAccessLayer.Models.Messenger
         public string ContactUsername { get; set; }
         public bool HasNewMessage { get; set; }
         public DateTime CreatedDate { get; set ; }
+        public DateTime ModifiedDate { get; set; }
 
         [ForeignKey("UserOfConversation")]
         public int UserId { get; set; }

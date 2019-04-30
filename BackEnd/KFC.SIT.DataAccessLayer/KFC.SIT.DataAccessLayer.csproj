@@ -195,9 +195,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DatabaseContext.cs" />
     <Compile Include="DTOs\ConversationDTO.cs" />
-    <Compile Include="DTOs\FriendContactDTO.cs" />
+    <Compile Include="DTOs\FriendRelationshipDTO.cs" />
+    <Compile Include="DTOs\MessageDTO.cs" />
+    <Compile Include="DTOs\NewConversationMessageDTO.cs" />
     <Compile Include="DTOs\SearchDTO.cs" />
+    <Compile Include="DTOs\StoredMessageDTO.cs" />
     <Compile Include="DTOs\UserDTO.cs" />
     <Compile Include="IEntity.cs" />
     <Compile Include="Logging\OptimizeLogging\ErrorFormat.cs" />
@@ -210,14 +214,13 @@
     <Compile Include="Logging\OptimizeLogging\NLogger.cs" />
     <Compile Include="Logging\OptimizeLogging\TelemetryFormat.cs" />
     <Compile Include="Logging\Models\Repository\TelemetryLogCollection.cs" />
-    <Compile Include="Migrations\201904282230048_Initial.cs" />
-    <Compile Include="Migrations\201904282230048_Initial.Designer.cs">
-      <DependentUpon>201904282230048_Initial.cs</DependentUpon>
+    <Compile Include="Migrations\201904300359498_Initial.cs" />
+    <Compile Include="Migrations\201904300359498_Initial.Designer.cs">
+      <DependentUpon>201904300359498_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\Claim.cs" />
-    <Compile Include="DatabaseContext.cs" />
     <Compile Include="Logging\Models\ErrorLog.cs" />
     <Compile Include="Models\HashSalt.cs" />
     <Compile Include="Models\Messenger\ChatConnectionMapping.cs" />
@@ -273,8 +276,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201904282230048_Initial.resx">
-      <DependentUpon>201904282230048_Initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201904300359498_Initial.resx">
+      <DependentUpon>201904300359498_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

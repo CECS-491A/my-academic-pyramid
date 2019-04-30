@@ -22,7 +22,7 @@ namespace DataAccessLayer.Models
         {
             this.ChildUsers = new HashSet<User>();
             this.Claims = new HashSet<Claim>();
-            this.Students = new List<Student>();
+            //this.Students = new List<Student>();
             //this.Questions = new List<Question>();
         }
 
@@ -66,7 +66,7 @@ namespace DataAccessLayer.Models
 
         public virtual ICollection<FriendRelationship> FriendRelationship { get; set; }
 
-        public virtual ICollection<Student> Students { get; set; }
+        //public virtual ICollection<Student> Students { get; set; }
 
         //public ICollection<Question> Questions;
 

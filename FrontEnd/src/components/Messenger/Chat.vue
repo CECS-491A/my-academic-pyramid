@@ -37,7 +37,6 @@
 </template>
 
 <script>
-import CreateMessage from "@/components/Messenger/CreateMessage";
 // import $ from 'jquery'
 // window.$ = window.jQuery = require("jquery");
 // require('signalr');
@@ -57,7 +56,6 @@ export default {
       currentConversationId: "",
       connection: "",
       hubProxy: "",
-      authUsername: "",
       currentContactUsername: "",
       errorText: "",
 
@@ -150,6 +148,7 @@ export default {
           this.messages = response.data.messages;
           this.currentConversationId = conversationId;
           this.contactUsername = response.data.contactUsername;
+          this.$eventBus.$emit("ReloadChatHistoryList")
           // sessionStorage.SITtoken = response.data.SITtoken
         })
         .catch(err => {
