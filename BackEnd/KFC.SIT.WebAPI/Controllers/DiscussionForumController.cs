@@ -112,7 +112,7 @@ namespace KFC.SIT.WebAPI.Controllers
             else
             {
                 UserManager um = new UserManager();
-                User user = um.FindByUserName(securityContext.UserName);
+                Account user = um.FindByUserName(securityContext.UserName);
                 authUserId = um.FindByUserName(securityContext.UserName).Id;
                 if (user == null)
                 {
@@ -169,7 +169,7 @@ namespace KFC.SIT.WebAPI.Controllers
             else
             {
                 UserManager um = new UserManager();
-                User user = um.FindByUserName(securityContext.UserName);
+                Account user = um.FindByUserName(securityContext.UserName);
                 authUserId = um.FindByUserName(securityContext.UserName).Id;
                 if (user == null)
                 {
@@ -226,7 +226,7 @@ namespace KFC.SIT.WebAPI.Controllers
             else
             {
                 UserManager um = new UserManager();
-                User user = um.FindByUserName(securityContext.UserName);
+                Account user = um.FindByUserName(securityContext.UserName);
                 authUserId = um.FindByUserName(securityContext.UserName).Id;
                 if (user == null)
                 {

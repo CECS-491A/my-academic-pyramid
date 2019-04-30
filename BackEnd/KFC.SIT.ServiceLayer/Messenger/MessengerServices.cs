@@ -120,7 +120,7 @@ namespace ServiceLayer.Messenger
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="targetUser"></param>
-        public void CreateChatHistory(User authUser, User targetUser)
+        public void CreateChatHistory(Account authUser, Account targetUser)
         {
             var foundChatHistoryFromSender = GetContactHistoryBetweenUsers(authUser.Id, targetUser.Id);
             if(foundChatHistoryFromSender == null)
@@ -212,7 +212,7 @@ namespace ServiceLayer.Messenger
         /// </summary>
         /// <param name="addingUser"></param>
         /// <param name="addedUser"></param>
-        public void AddContactFriendList(User addingUser, User addedUser)
+        public void AddContactFriendList(Account addingUser, Account addedUser)
         {
 
             if (addedUser != null)

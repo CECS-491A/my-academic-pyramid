@@ -13,6 +13,6 @@ namespace DataAccessLayer.Models
         public DateTimeOffset ExpirationTime { get; set; }
         [ForeignKey("UserOfSession")]
         public int UserId { get; set; }
-        public virtual User UserOfSession { get; set; }
+        public virtual Account UserOfSession { get; set; }
     }
 }

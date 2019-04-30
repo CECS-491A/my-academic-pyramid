@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using DataAccessLayer;
 using DataAccessLayer.DTOs;
+using DataAccessLayer.Models.Requests;
 using DataAccessLayer.Models.School;
 using ServiceLayer.Search;
+using WebAPI.UserManagement;
 
 namespace ManagerLayer.Gateways.Search
 {
@@ -13,47 +16,111 @@ namespace ManagerLayer.Gateways.Search
     {
 
         private DatabaseContext _db;
-        private readonly int _schoolId;
         private ISearchService _searchService;
 
-        public SearchManager(DatabaseContext db, int schoolId)
+        public SearchManager(DatabaseContext db)
         {
             _db = db;
-            _schoolId = schoolId;
-            _searchService = new SearchService(_db, _schoolId);
+            _searchService = new SearchService(_db);
         }
 
         // TODO: Make all messages constants
-        public List<SearchDTO> SearchStudents(string searchInput)
+        public List<SearchPersonDTO> SearchStudents(SearchRequest request)
         {
-            if (searchInput is null)
+            if(request.AccountEmail is null)
+            {
+                throw new ArgumentNullException("User is not Logged In");
+            }
+            if (request.SearchInput is null)
             {
                 throw new ArgumentNullException("Search Input is Null");
             }
 
-            var students = _searchService.SearchStudents(searchInput);
-            if (students is null)
+            UserManager userManager = new UserManager();
+            var account = userManager.FindByUserName(request.AccountEmail);
+
+            if(account is null)
             {
-                throw new ArgumentException("No Students Found");
+                throw new ArgumentException("User Account Does Not Exist");
             }
 
-            return students;
+            if(account is Student)
+            {
+                var student = account as Student;
+                var studentList = _searchService.SearchStudents(student.SchoolId, request.SearchInput);
+                if (studentList is null)
+                {
+                    throw new ArgumentException("No Students Found");
+                }
+                return studentList;
+            }
+
+            throw new ArgumentException("Not authorized");
         }
 
-        public List<SearchDTO> SearchTeachers(string searchInput)
+        public List<SearchPersonDTO> SearchTeachers(SearchRequest request)
         {
-            if(searchInput is null)
+            if (request.AccountEmail is null)
+            {
+                throw new ArgumentNullException("User is not Logged In");
+            }
+            if (request.SearchInput is null)
             {
                 throw new ArgumentNullException("Search Input is Null");
             }
 
-            var teachers = _searchService.SearchTeachers(searchInput);
-            if(teachers is null)
+            UserManager userManager = new UserManager();
+            var account = userManager.FindByUserName(request.AccountEmail);
+
+            if (account is null)
             {
-                throw new ArgumentException("No Teachers Found");
+                throw new ArgumentException("User Account Does Not Exist");
             }
 
-            return teachers;
+            if (account is Student)
+            {
+                var student = account as Student;
+                var teacherList = _searchService.SearchTeachers(student.SchoolId, request.SearchInput);
+                if (teacherList is null)
+                {
+                    throw new ArgumentException("No Teachers Found");
+                }
+                return teacherList;
+            }
+
+            throw new ArgumentException("Not authorized");
+        }
+
+        public List<Department> GetDepartments(SearchRequest request)
+        {
+            if (request.AccountEmail is null)
+            {
+                throw new ArgumentNullException("User is not Logged In");
+            }
+            if (request.SearchInput is null)
+            {
+                throw new ArgumentNullException("Search Input is Null");
+            }
+
+            UserManager userManager = new UserManager();
+            var account = userManager.FindByUserName(request.AccountEmail);
+
+            if (account is null)
+            {
+                throw new ArgumentException("User Account Does Not Exist");
+            }
+
+            if (account is Student)
+            {
+                var student = account as Student;
+                var departmentList = _searchService.GetDepartments(student.SchoolId);
+                if (departmentList is null || departmentList.Count == 0)
+                {
+                    throw new ArgumentException("No Departments Found");
+                }
+                return departmentList;
+            }
+            throw new ArgumentException("Not authorized");
         }
     }
 }

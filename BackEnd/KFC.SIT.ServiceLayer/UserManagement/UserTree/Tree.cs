@@ -21,7 +21,7 @@ namespace ServiceLayer.UserManagement.UserTree
         /// <param name="user">User to add</param>
         /// <param name="parent">Parent of user</param>
         /// <returns>Whether the user was added.</returns>
-        public bool AddUser(User user, User parent)
+        public bool AddUser(Account user, Account parent)
         {
             // Attempt to find the user and parent in the tree.
             Node userNode = FindUser(user);
@@ -43,7 +43,7 @@ namespace ServiceLayer.UserManagement.UserTree
         /// <param name="user">User to add</param>
         /// <param name="level">Depth of the user</param>
         /// <returns>Whether the user was added</returns>
-        public bool AddUser(User user, int level)
+        public bool AddUser(Account user, int level)
         {
             // Attempt to find the user and parent in the tree
             Node userNode = FindUser(user);
@@ -64,7 +64,7 @@ namespace ServiceLayer.UserManagement.UserTree
         /// </summary>
         /// <param name="user">User to delete</param>
         /// <returns>Whether the user was deleted</returns>
-        public bool DeleteUser(User user)
+        public bool DeleteUser(Account user)
         {
             // Attempt to find user in the tree
             Node node = FindUser(user);
@@ -153,7 +153,7 @@ namespace ServiceLayer.UserManagement.UserTree
         /// <param name="user">User to move</param>
         /// <param name="parent">Parent to move to</param>
         /// <returns>Whether the move was successful</returns>
-        public bool MoveUser(User user, User parent)
+        public bool MoveUser(Account user, Account parent)
         {
             // Delete the user
             DeleteUser(user);
@@ -167,7 +167,7 @@ namespace ServiceLayer.UserManagement.UserTree
         /// <param name="user">User to move</param>
         /// <param name="level">Depth to move to</param>
         /// <returns>Whether the move was successful</returns>
-        public bool MoveUser(User user, int level)
+        public bool MoveUser(Account user, int level)
         {
             // Delete the user
             DeleteUser(user);
@@ -180,7 +180,7 @@ namespace ServiceLayer.UserManagement.UserTree
         /// </summary>
         /// <param name="user">User to find</param>
         /// <returns>The user node if found, null if not found</returns>
-        public Node FindUser(User user)
+        public Node FindUser(Account user)
         {
             // Start search from root node
             return Root.FindUser(user);
@@ -193,7 +193,7 @@ namespace ServiceLayer.UserManagement.UserTree
         /// <param name="user2">second user to compare</param>
         /// <returns>0 if equal, negative if user1's depth is less than user2's,
         /// or positive is user2's depth is less than user1's</returns>
-        public int CompareUserDepth(User user1, User user2)
+        public int CompareUserDepth(Account user1, Account user2)
         {
             // Attempt to find each node in the tree
             Node node1 = FindUser(user1);

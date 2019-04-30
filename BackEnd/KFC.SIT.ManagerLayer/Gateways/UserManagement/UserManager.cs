@@ -35,7 +35,7 @@ namespace WebAPI.UserManagement
         /// Method to create user account
         /// </summary>
         /// <param name="targetedUserName"></param>
-        public User CreateUserAccount(UserDTO userDto)
+        public Account CreateUserAccount(UserDTO userDto)
         {
             //try
             //{
@@ -47,7 +47,7 @@ namespace WebAPI.UserManagement
             //}
 
 
-            User user = new User
+            Account user = new Account
             {
                 UserName = userDto.UserName,
                 SsoId = userDto.SsoId,
@@ -94,7 +94,7 @@ namespace WebAPI.UserManagement
         /// Method to delete self user account or other account
         /// </summary>
         /// <param name="targetedUserName"></param>
-        public int DeleteUserAccount(User user)
+        public int DeleteUserAccount(Account user)
         {
             if (user == null)
             {
@@ -116,7 +116,7 @@ namespace WebAPI.UserManagement
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        public int UpdateUserAccount(User user)
+        public int UpdateUserAccount(Account user)
         {
             if (user == null)
             {
@@ -144,10 +144,10 @@ namespace WebAPI.UserManagement
         /// <param name="childUserName"></param>
         /// <param name="parentUserName"></param>
         /// <returns></returns>
-        public User AssignUserToUser(string childUserName, string parentUserName )
+        public Account AssignUserToUser(string childUserName, string parentUserName )
         {
-            User childUser = FindByUserName(childUserName);
-            User parentUser = FindByUserName(parentUserName);
+            Account childUser = FindByUserName(childUserName);
+            Account parentUser = FindByUserName(parentUserName);
 
             if (childUser == null)
             {
@@ -174,31 +174,19 @@ namespace WebAPI.UserManagement
 
 
         /// <summary>
-        /// Method to find user object using email
-        /// </summary>
-        /// <param name="userEmail"></param>
-        /// <returns></returns>
-        public User FindUserByEmail(String userEmail)
-        {
-            User user = _userManagementServices.FindUserByUserEmail(userEmail);
-            return user;
-        }
-
-
-        /// <summary>
         /// Method to find userobject using id
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public User FindUserById(int id)
+        public Account FindUserById(int id)
         {
-            User user = _userManagementServices.FindById(id);
+            Account user = _userManagementServices.FindById(id);
             return user;
         }
 
         public UserDTO GetUserInfo(int id)
         {
-            User user = FindUserById(id);
+            Account user = FindUserById(id);
             UserDTO userDTO = null;
             if (user != null)
             {
@@ -210,7 +198,6 @@ namespace WebAPI.UserManagement
                     LastName = user.LastName,
                     Category = user.Category.Value,
                     DateOfBirth = user.DateOfBirth.ToLongDateString(),
-                    Email = user.Email,
                     CreatedAt = user.CreatedAt.ToLongDateString()
                 };
             }
@@ -222,9 +209,9 @@ namespace WebAPI.UserManagement
         /// </summary>
         /// <param name="UserName"></param>
         /// <returns></returns>
-        public User FindByUserName(string UserName)
+        public Account FindByUserName(string UserName)
         {
-            User user = _userManagementServices.FindByUsername(UserName);
+            Account user = _userManagementServices.FindByUsername(UserName);
             return user;
         }
 
@@ -232,10 +219,10 @@ namespace WebAPI.UserManagement
         /// Method to get all users in database 
         /// </summary>
         /// <returns></returns>
-        public List<User> GetAllUser()
+        public List<Account> GetAllUser()
         {
             // Call GetAllUser method in userManagementServices 
-            List<User> userList = _userManagementServices.GetAllUser();
+            List<Account> userList = _userManagementServices.GetAllUser();
             return userList;
         }
 
@@ -244,7 +231,7 @@ namespace WebAPI.UserManagement
         /// </summary>
         /// <param name="targetedUserName"></param>
         /// <param name="claim"></param>
-        public User RemoveClaimAction(int targetedUserId, string claimStr)
+        public Account RemoveClaimAction(int targetedUserId, string claimStr)
         {
             // List of required claims needed for AddClaimAction Method
             List<Claim> createUserRequiredClaimTypes = new List<Claim>
@@ -255,7 +242,7 @@ namespace WebAPI.UserManagement
             // Check if the requesting user has the require claims
 
                 // Retrive targeted user exists from database
-                User targetedUser = FindUserById(targetedUserId);
+                Account targetedUser = FindUserById(targetedUserId);
             if (targetedUser == null)
              {
                 return null;
@@ -264,14 +251,14 @@ namespace WebAPI.UserManagement
                 // Check if the requesting user is  at least same level as  the targeted user
             else
             {
-                User user = _userManagementServices.RemoveClaim(targetedUser, claimStr);
+                Account user = _userManagementServices.RemoveClaim(targetedUser, claimStr);
                 UpdateUserAccount(user);
                 return user;
             }
                    
         }
 
-        public User AddClaimAction(int targetedUserId, Claim claim)
+        public Account AddClaimAction(int targetedUserId, Claim claim)
         {
             // TODO finish this. It assigns a list instead of adding a claim.
             // List of required claims needed for AddClaimAction Method
@@ -279,7 +266,7 @@ namespace WebAPI.UserManagement
             // Check if the requesting user has the require claims
 
             // Retrive targeted user exists from database
-            User targetedUser = FindUserById(targetedUserId);
+            Account targetedUser = FindUserById(targetedUserId);
             if (targetedUser == null)
             {
                 return null;
@@ -288,7 +275,7 @@ namespace WebAPI.UserManagement
             // Check if the requesting user is  at least same level as  the targeted user
             else
             {
-                User user = _userManagementServices.AddClaim(targetedUser, claim);
+                Account user = _userManagementServices.AddClaim(targetedUser, claim);
                 UpdateUserAccount(user);
                 return user;
             }
@@ -297,7 +284,7 @@ namespace WebAPI.UserManagement
 
         public List<string> GetClaims(string username)
         {
-            User user = _userManagementServices.FindByUsername(username);
+            Account user = _userManagementServices.FindByUsername(username);
             List<string> claimList = new List<string>();
             foreach(var claim in user.Claims)
             {
@@ -336,7 +323,7 @@ namespace WebAPI.UserManagement
 
         }
 
-        public User AutomaticClaimAssigning(User user)
+        public Account AutomaticClaimAssigning(Account user)
         {
             if (user.Category.Value.Equals("Student"))
             {

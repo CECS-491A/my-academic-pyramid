@@ -64,7 +64,7 @@ namespace ManagerLayer.DiscussionManager
         public Answer PostAnswer(AnswerDTO a)
         {
             // Validations
-            User answerer = _usermanagementservices.FindById(a.PosterId);
+            Account answerer = _usermanagementservices.FindById(a.PosterId);
             Question question = _discussionservices.GetQuestion(a.QuestionID);
 
             if (question.IsClosed == false)
@@ -152,7 +152,7 @@ namespace ManagerLayer.DiscussionManager
             Answer answer = _discussionservices.GetAnswer(id);
             answer = _discussionservices.IncreaseHelpfulCount(id);
             // update user exp
-            User user = _usermanagementservices.FindById(answer.PosterId);
+            Account user = _usermanagementservices.FindById(answer.PosterId);
             user.Exp += _expGainHelpfullAns;
             user = _usermanagementservices.UpdateUser(user);
             _db.SaveChanges();
@@ -178,7 +178,7 @@ namespace ManagerLayer.DiscussionManager
         {
             Answer answer = _discussionservices.GetAnswer(id);
             Question question = answer.Question;
-            User user = _usermanagementservices.FindById(answer.PosterId);
+            Account user = _usermanagementservices.FindById(answer.PosterId);
             // Validations 
             if (question.IsClosed == true)
             {

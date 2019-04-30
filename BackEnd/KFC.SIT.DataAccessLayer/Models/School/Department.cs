@@ -5,6 +5,12 @@ namespace DataAccessLayer.Models.School
 {
     public class Department
     {
+        public Department()
+        {
+            Schools = new List<School>();
+            Students = new List<Student>();
+        }
+
         public Department(string name)
         {
             Name = name;

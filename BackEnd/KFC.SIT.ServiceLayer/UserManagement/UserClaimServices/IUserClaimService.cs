@@ -13,8 +13,8 @@ namespace ServiceLayer.UserManagement.UserClaimServices
     public interface IUserClaimServices
     {
         
-        User AddClaim(User user, Claim claim );
-        User RemoveClaim(User user, string claimStr);
+        Account AddClaim(Account user, Claim claim );
+        Account RemoveClaim(Account user, string claimStr);
         
     }
 }

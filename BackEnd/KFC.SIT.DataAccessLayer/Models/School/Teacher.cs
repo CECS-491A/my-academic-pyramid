@@ -21,6 +21,7 @@ namespace DataAccessLayer.Models.School
             LastName = lastName;
             DepartmentId = departmentId;
             Schools = new List<School>();
+            Courses = new List<Course>();
         }
 
         [Required, Key]
@@ -32,8 +33,9 @@ namespace DataAccessLayer.Models.School
         public string LastName { set; get; }
         [ForeignKey("Department")]
         public int DepartmentId { set; get; }
-        public Department Department { set; get; }
+        public virtual Department Department { set; get; }
 
         public virtual ICollection<School> Schools { set; get; }
+        public virtual ICollection<Course> Courses { set; get; }
     }
 }

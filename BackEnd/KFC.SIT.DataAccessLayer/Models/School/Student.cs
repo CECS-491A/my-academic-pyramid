@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataAccessLayer.Models.School
 {
-    public class Student : User, IEntity
+    public class Student : Account, IEntity
     {
         public Student()
         {

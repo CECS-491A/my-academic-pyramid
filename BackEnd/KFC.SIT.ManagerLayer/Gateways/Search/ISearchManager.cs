@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer.DTOs;
+using DataAccessLayer.Models.Requests;
 using DataAccessLayer.Models.School;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,8 @@ namespace ManagerLayer.Gateways.Search
 {
     public interface ISearchManager
     {
-        List<SearchDTO> SearchStudents(string searchInput);
-        List<SearchDTO> SearchTeachers(string searchInput);
+        List<SearchPersonDTO> SearchStudents(SearchRequest request);
+        List<SearchPersonDTO> SearchTeachers(SearchRequest request);
+        List<Department> GetDepartments(SearchRequest request);
     }
 }

@@ -24,10 +24,10 @@ namespace DataAccessLayer.Models.School
         public virtual Department Department { set; get; }
         [ForeignKey("School")]
         public int SchoolId { set; get; }
-        public School School { set; get; }
+        public virtual School School { set; get; }
         [ForeignKey("Teacher")]
         public int TeacherId { set; get; }
-        public Teacher Teacher { set; get; }
+        public virtual Teacher Teacher { set; get; }
         
         public virtual ICollection<Student> Students { set; get; }
     }
