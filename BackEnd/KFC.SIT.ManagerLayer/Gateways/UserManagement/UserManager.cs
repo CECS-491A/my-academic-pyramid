@@ -37,15 +37,6 @@ namespace WebAPI.UserManagement
         /// <param name="targetedUserName"></param>
         public User CreateUserAccount(UserDTO userDto)
         {
-            //try
-            //{
-            //    var valid = new System.Net.Mail.MailAddress(userDto.UserName); // checks that email is valid
-            //}
-            //catch (Exception)
-            //{
-            //    return null;
-            //}
-
 
             User user = new User
             {
@@ -54,10 +45,6 @@ namespace WebAPI.UserManagement
                 FirstName = userDto.FirstName,
                 LastName = userDto.LastName,
                 Category = new Category(userDto.Category),
-                //// date and time as it would be in Coordinated Universal Time
-                //CreatedAt = DateTime.Now, // https://stackoverflow.com/questions/62151/datetime-now-vs-datetime-utcnow 
-                //DateOfBirth = DateTime.Parse(userDto.DateOfBirth),
-                //Location = userDto.Location,
             };
 
             //Automatically assigning claim to user

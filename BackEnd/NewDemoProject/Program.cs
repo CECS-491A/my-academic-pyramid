@@ -39,7 +39,8 @@ namespace NewDemoProject
                 Console.WriteLine(s.Key + "," + s.Value);
             }
             **/
-            service.CountUniqueLoggedInUsers(2);
+            long sum = service.CountUniqueLoggedInUsers(1);
+            Console.WriteLine("sum:" + sum);
             IDictionary<string, long> something3 = service.CountMostUsedFiveFeature(2);
             foreach (var tmp in something3)
             {

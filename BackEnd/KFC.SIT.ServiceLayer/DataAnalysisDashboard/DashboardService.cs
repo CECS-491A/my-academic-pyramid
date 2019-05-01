@@ -21,12 +21,14 @@ namespace ServiceLayer.DataAnalysisDashboard
 
         private readonly IMongoCollection<TelemetryLog> CollectionT;
         private readonly IMongoCollection<ErrorLog> CollectionE;
+        protected DatabaseContext _DbContext;
 
         protected MongoDBRepo _repo;
 
         public DashboardService(string url, string database)
         {
             _repo = new MongoDBRepo(url, database);
+            _DbContext = new DatabaseContext();
             CollectionT = _repo.Db.GetCollection<TelemetryLog>(_collectionTName);
             CollectionE = _repo.Db.GetCollection<ErrorLog>(_collectionEName);
         }
@@ -118,6 +120,17 @@ namespace ServiceLayer.DataAnalysisDashboard
         }
 
         /// <summary>
+        /// Get the total number of users from SQL database
+        /// </summary>
+        /// <returns></returns>
+        public long CountTotalUsers()
+        {
+            long numOfUsers = _DbContext.Users.LongCount();
+
+            return numOfUsers;
+        }
+
+        /// <summary>
         /// Get the total number of successful logins from CollectionT
         /// </summary>
         /// <returns></returns>
@@ -179,7 +192,7 @@ namespace ServiceLayer.DataAnalysisDashboard
                 )
                 .SortByDescending(x => x.NumUsed)
                 .Limit(numOfFeature)
-                .ToList();
+                .ToList(); 
 
             foreach (var feature in query)
             {
@@ -194,9 +207,8 @@ namespace ServiceLayer.DataAnalysisDashboard
         /// return it
         /// </summary>
         /// <returns></returns>
-        public long[] CountUniqueLoggedInUsers(int chosenMonth)
+        public long CountUniqueLoggedInUsers(int chosenMonth)
         {
-            long[] avgLoginMonth = new long[6];
             var query = CollectionT.Aggregate()
                         .Match(x => x.Action == MongoDBAction.Login)
                         .Group(
@@ -210,14 +222,8 @@ namespace ServiceLayer.DataAnalysisDashboard
                 )
                 .Match(x => x.Month == chosenMonth)
                 .ToList().Count();
-            int sum = query;
-            Console.WriteLine(sum);
-            //foreach (var s in query)
-            //{
-             //   Console.WriteLine(s.User + ",," + s.Name);
-            //}
             
-            return avgLoginMonth;
+            return query;
         }
     }
 }
