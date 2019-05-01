@@ -116,7 +116,7 @@ namespace DataAccessLayer.Migrations
                         AccountId = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Accounts", t => t.AccountId, cascadeDelete: true)
+                .ForeignKey("dbo.Accounts", t => t.AccountId, cascadeDelete: false)
                 .ForeignKey("dbo.Courses", t => new { t.CourseId, t.DepartmentId2 }, cascadeDelete: true)
                 .ForeignKey("dbo.SchoolDepartments", t => new { t.DepartmentId, t.SchoolId2 }, cascadeDelete: true)
                 .ForeignKey("dbo.Schools", t => t.SchoolId, cascadeDelete: true)
@@ -135,7 +135,7 @@ namespace DataAccessLayer.Migrations
                         Name = c.String(nullable: false),
                     })
                 .PrimaryKey(t => new { t.Id, t.DepartmentId })
-                .ForeignKey("dbo.SchoolDepartments", t => new { t.DepartmentId, t.SchoolId }, cascadeDelete: true)
+                .ForeignKey("dbo.SchoolDepartments", t => new { t.DepartmentId, t.SchoolId }, cascadeDelete: false)
                 .Index(t => new { t.DepartmentId, t.SchoolId });
             
             CreateTable(
@@ -147,7 +147,7 @@ namespace DataAccessLayer.Migrations
                     })
                 .PrimaryKey(t => new { t.DepartmentID, t.SchoolId })
                 .ForeignKey("dbo.Departments", t => t.DepartmentID, cascadeDelete: true)
-                .ForeignKey("dbo.Schools", t => t.SchoolId, cascadeDelete: true)
+                .ForeignKey("dbo.Schools", t => t.SchoolId, cascadeDelete: false)
                 .Index(t => t.DepartmentID)
                 .Index(t => t.SchoolId);
             
