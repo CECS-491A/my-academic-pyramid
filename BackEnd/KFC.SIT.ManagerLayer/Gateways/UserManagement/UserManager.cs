@@ -163,7 +163,7 @@ namespace WebAPI.UserManagement
         /// <returns></returns>
         public Account FindUserByEmail(String userEmail)
         {
-            Account user = _userManagementServices.FindUserByUserEmail(userEmail);
+            Account user = _userManagementServices.FindByUsername(userEmail);
             return user;
         }
 

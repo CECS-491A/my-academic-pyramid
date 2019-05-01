@@ -105,7 +105,7 @@ namespace ManagerLayer.DiscussionManager
 
         // update spam count
         // email sys admin if a question or answer reaches spam limit 
-        public Answer IncreaseAnswerSpamCount(int id)
+        public Answer IncreaseAnswerSpamCount(int answerId, int userId)
         {
             Answer answer = _discussionservices.GetAnswer(answerId);
 
@@ -151,7 +151,7 @@ namespace ManagerLayer.DiscussionManager
         }
 
         // update answer with increased helpful count and update user Exp
-        public Answer IncreaseHelpfulCount(int id)
+        public Answer IncreaseHelpfulCount(int answerId, int userId)
         {
             Answer answer = _discussionservices.GetAnswer(answerId);
 
@@ -172,7 +172,7 @@ namespace ManagerLayer.DiscussionManager
 
         // update answer with increased unhelpful count 
         // don't think UnHulpful affects a user's Exp? 
-        public Answer IncreaseUnHelpfulCount(int id)
+        public Answer IncreaseUnHelpfulCount(int answerId, int userId)
         {
             Answer answer = _discussionservices.GetAnswer(answerId);
 

@@ -47,7 +47,7 @@ namespace DataAccessLayer.Models.DiscussionForum
         [ForeignKey("Department"),Column(Order =1)]
         public int DepartmentId { get; set; }
         [ForeignKey("Department"),Column(Order =2)]
-        public int SchoolId2 { get; set; }
+        public int SchoolId2 { get; set; } // ignore
         [ForeignKey("DepartmentId, SchoolId")]
         public School.SchoolDepartment Department { get; set; }
 
