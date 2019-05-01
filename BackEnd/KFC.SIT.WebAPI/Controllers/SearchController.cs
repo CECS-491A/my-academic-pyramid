@@ -62,7 +62,7 @@ namespace KFC.SIT.WebAPI.Controllers
 
         [HttpGet]
         [ActionName("departments")]
-        public IHttpActionResult GetDepartments([FromUri] string AccountEmail)
+        public IHttpActionResult GetDepartments([FromUri] int AccountId)
         {
             if (!ModelState.IsValid)
             {
@@ -75,7 +75,7 @@ namespace KFC.SIT.WebAPI.Controllers
                 using (var _db = new DatabaseContext())
                 {
                     ISearchManager manager = new SearchManager(_db);
-                    return Content(HttpStatusCode.OK, manager.GetDepartments(AccountEmail));
+                    return Content(HttpStatusCode.OK, manager.GetDepartments(AccountId));
                 }
             }
             catch (Exception x) when (x is ArgumentException)

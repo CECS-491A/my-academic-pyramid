@@ -72,15 +72,11 @@ namespace ManagerLayer.Gateways.Search
 
         
 
-        public List<DepartmentDTO> GetDepartments(string AccountEmail)
+        public List<DepartmentDTO> GetDepartments(int accountId)
         {
-            if (AccountEmail is null)
-            {
-                throw new ArgumentNullException("User is not Logged In");
-            }
 
             UserManager userManager = new UserManager();
-            var account = userManager.FindByUserName(AccountEmail);
+            var account = userManager.FindUserById(accountId);
 
             if (account is null)
             {
@@ -104,17 +100,13 @@ namespace ManagerLayer.Gateways.Search
 
         private Student ValidateRequest(SearchRequest request)
         {
-            if (request.AccountEmail is null)
-            {
-                throw new ArgumentNullException("User is not Logged In");
-            }
             if (request.SearchInput is null)
             {
                 throw new ArgumentNullException("Search Input is Null");
             }
 
             UserManager userManager = new UserManager();
-            var account = userManager.FindByUserName(request.AccountEmail);
+            var account = userManager.FindUserById(request.AccountId);
 
             if (account is null)
             {
