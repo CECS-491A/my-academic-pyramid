@@ -138,7 +138,7 @@
     <Compile Include="DTOs\ContactHistoryDTO.cs" />
     <Compile Include="DTOs\ConversationDTO.cs" />
     <Compile Include="DTOs\FriendContactDTO.cs" />
-    <Compile Include="DTOs\SearchDTO.cs" />
+    <Compile Include="DTOs\SearchPersonDTO.cs" />
     <Compile Include="DTOs\QuestionDTO.cs" />
     <Compile Include="DTOs\UserDTO.cs" />
     <Compile Include="IEntity.cs" />
@@ -152,21 +152,9 @@
     <Compile Include="Logging\OptimizeLogging\NLogger.cs" />
     <Compile Include="Logging\OptimizeLogging\TelemetryFormat.cs" />
     <Compile Include="Logging\Models\Repository\TelemetryLogCollection.cs" />
-    <Compile Include="Migrations\201904282230048_Initial.cs" />
-    <Compile Include="Migrations\201904282230048_Initial.Designer.cs">
-      <DependentUpon>201904282230048_Initial.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201904290517308_DiscussionForum.cs" />
-    <Compile Include="Migrations\201904290517308_DiscussionForum.Designer.cs">
-      <DependentUpon>201904290517308_DiscussionForum.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201904290827470_AddedSsoIdToUser.cs" />
-    <Compile Include="Migrations\201904290827470_AddedSsoIdToUser.Designer.cs">
-      <DependentUpon>201904290827470_AddedSsoIdToUser.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201904302228223_QuestionsToSchools_Depts_And_Courses.cs" />
-    <Compile Include="Migrations\201904302228223_QuestionsToSchools_Depts_And_Courses.Designer.cs">
-      <DependentUpon>201904302228223_QuestionsToSchools_Depts_And_Courses.cs</DependentUpon>
+    <Compile Include="Migrations\201905010401077_Initial.cs" />
+    <Compile Include="Migrations\201905010401077_Initial.Designer.cs">
+      <DependentUpon>201905010401077_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Category.cs" />
@@ -183,13 +171,18 @@
     <Compile Include="Models\Messenger\FriendRelationship.cs" />
     <Compile Include="Models\PasswordQA.cs" />
     <Compile Include="Logging\Models\TelemetryLog.cs" />
+    <Compile Include="Models\Requests\SearchRequest.cs" />
+    <Compile Include="Models\Requests\SearchResponse.cs" />
     <Compile Include="Models\School\Course.cs" />
     <Compile Include="Models\School\Department.cs" />
     <Compile Include="Models\School\School.cs" />
+    <Compile Include="Models\School\SchoolDepartment.cs" />
+    <Compile Include="Models\School\SchoolTeacher.cs" />
+    <Compile Include="Models\School\SchoolTeacherCourse.cs" />
     <Compile Include="Models\School\Student.cs" />
     <Compile Include="Models\School\Teacher.cs" />
     <Compile Include="Models\TokenManager.cs" />
-    <Compile Include="Models\User.cs" />
+    <Compile Include="Models\Account.cs" />
     <Compile Include="Models\UserSession.cs" />
     <Compile Include="MongoDBQueryConstants\MongoDBAction.cs" />
     <Compile Include="Program.cs" />
@@ -230,17 +223,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201904282230048_Initial.resx">
-      <DependentUpon>201904282230048_Initial.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904290517308_DiscussionForum.resx">
-      <DependentUpon>201904290517308_DiscussionForum.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904290827470_AddedSsoIdToUser.resx">
-      <DependentUpon>201904290827470_AddedSsoIdToUser.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904302228223_QuestionsToSchools_Depts_And_Courses.resx">
-      <DependentUpon>201904302228223_QuestionsToSchools_Depts_And_Courses.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201905010401077_Initial.resx">
+      <DependentUpon>201905010401077_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

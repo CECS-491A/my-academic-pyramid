@@ -71,7 +71,7 @@ namespace KFC.SIT.WebAPI.Controllers
             else
             {
                 UserManager um = new UserManager();
-                User user = um.FindByUserName(securityContext.UserName);
+                Account user = um.FindByUserName(securityContext.UserName);
                 authUserId = um.FindByUserName(securityContext.UserName).Id;
                 var contactList = messengerManager.GetAllContactHistory(authUserId);
                 var contactListDTO = new List<ContactHistoryDTO>();
@@ -284,7 +284,7 @@ namespace KFC.SIT.WebAPI.Controllers
             else
             {
                 um = new UserManager();
-                User user = um.FindByUserName(securityContext.UserName);
+                Account user = um.FindByUserName(securityContext.UserName);
                 authUserId = um.FindByUserName(securityContext.UserName).Id;
                 if (user == null)
                 {
@@ -364,7 +364,7 @@ namespace KFC.SIT.WebAPI.Controllers
             else
             {
                 UserManager um = new UserManager();
-                User user = um.FindByUserName(securityContext.UserName);
+                Account user = um.FindByUserName(securityContext.UserName);
                 authUserId = um.FindByUserName(securityContext.UserName).Id;
                 //string updatedToken = sm.RefreshSession(securityContext.Token);
 
@@ -410,7 +410,7 @@ namespace KFC.SIT.WebAPI.Controllers
             else
             {
                 UserManager um = new UserManager();
-                User user = um.FindByUserName(securityContext.UserName);
+                Account user = um.FindByUserName(securityContext.UserName);
                 authUserId = um.FindByUserName(securityContext.UserName).Id;
               
             }
@@ -483,7 +483,7 @@ namespace KFC.SIT.WebAPI.Controllers
             else
             {
                 UserManager um = new UserManager();
-                User user = um.FindByUserName(securityContext.UserName);
+                Account user = um.FindByUserName(securityContext.UserName);
                 authUserId = um.FindByUserName(securityContext.UserName).Id;
                 if (user == null)
                 {
@@ -552,7 +552,7 @@ namespace KFC.SIT.WebAPI.Controllers
             else
             {
                 UserManager um = new UserManager();
-                User user = um.FindByUserName(securityContext.UserName);
+                Account user = um.FindByUserName(securityContext.UserName);
                 authUserId = um.FindByUserName(securityContext.UserName).Id;
                 try
                 {
@@ -619,7 +619,7 @@ namespace KFC.SIT.WebAPI.Controllers
             else
             {
                 UserManager um = new UserManager();
-                User user = um.FindByUserName(securityContext.UserName);
+                Account user = um.FindByUserName(securityContext.UserName);
                 authUserId = um.FindByUserName(securityContext.UserName).Id;
                 try
                 {

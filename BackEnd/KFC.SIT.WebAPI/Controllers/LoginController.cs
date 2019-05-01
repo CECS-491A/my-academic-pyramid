@@ -33,7 +33,7 @@ namespace KFC.SIT.WebAPI.Controllers
                 return Unauthorized();
             }
 
-            User user = um.FindByUserName(payload.Email);
+            Account user = um.FindByUserName(payload.Email);
             if (user == null)
             {
                 UserDTO userDto = new UserDTO()

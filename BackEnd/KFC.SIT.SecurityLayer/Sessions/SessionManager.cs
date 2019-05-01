@@ -182,7 +182,7 @@ namespace SecurityLayer.Sessions
         private Dictionary<string, string> GeneratePayload(int userid)
         {
             Dictionary<string, string> payload = new Dictionary<string, string>();
-            User user = _userManager.FindUserById(userid);
+            Account user = _userManager.FindUserById(userid);
             if (user == null)
             {
                 throw new ArgumentException(

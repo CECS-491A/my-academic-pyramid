@@ -33,7 +33,7 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         /// Create user account method
         /// </summary>
         /// <param name="user"></param>
-        public User CreateUser(User user)
+        public Account CreateUser(Account user)
         {
             if (user == null)
             {
@@ -54,7 +54,7 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         /// Delete user account  
         /// </summary>
         /// <param name="user"></param>
-        public User DeleteUser(User user)
+        public Account DeleteUser(Account user)
         {
             if (user == null)
             {
@@ -75,7 +75,7 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         /// Update user account method 
         /// </summary>
         /// <param name="user"></param>
-        public User UpdateUser(User user)
+        public Account UpdateUser(Account user)
         {
             if (user == null)
             {
@@ -93,32 +93,21 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         }
 
         /// <summary>
-        /// Find user by providing a user name
-        /// </summary>
-        /// <param name="userName"></param>
-        /// <returns></returns>
-        public User FindUserByUserEmail(string userEmail)
-        {
-            User user = _DbContext.Set<User>().FirstOrDefault(u => u.Email == userEmail);
-            return user;
-        }
-
-        /// <summary>
         /// Find user by Id
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public User FindById(int id)
+        public Account FindById(int id)
         {
-            User user = _DbContext.Users.Where(u => u.Id == id)
+            Account user = _DbContext.Users.Where(u => u.Id == id)
                                         .Include(u => u.Category)
                                         .FirstOrDefault();
             return user;
         }
 
-        public User FindByUsername(String username)
+        public Account FindByUsername(String username)
         {
-            User user = _DbContext.Set<User>().Where( u => u.UserName.Equals(username)).FirstOrDefault();
+            Account user = _DbContext.Set<Account>().Where( u => u.UserName.Equals(username)).FirstOrDefault();
             return user;
         }
 
@@ -126,9 +115,9 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         /// Return list of users in database
         /// </summary>
         /// <returns></returns>
-        public List<User> GetAllUser()
+        public List<Account> GetAllUser()
         {
-            List<User> list = _DbContext.Set<User>().ToList();
+            List<Account> list = _DbContext.Set<Account>().ToList();
             if (list != null)
             {
                 return list;
@@ -145,9 +134,9 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        public bool Contain(User user)
+        public bool Contain(Account user)
         {
-            List<User> list = GetAllUser();
+            List<Account> list = GetAllUser();
             if (list.Contains(user))
             {
                 return true;
@@ -163,7 +152,7 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         /// </summary>
         /// <param name="user"></param>
         /// <param name="claim"></param>
-        public User RemoveClaim(User user, string claimStr)
+        public Account RemoveClaim(Account user, string claimStr)
         {
             if (claimStr == null)
             {
@@ -194,7 +183,7 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         /// </summary>
         /// <param name="user"></param>
         /// <param name="claim"></param>
-        public User AddClaim(User user, Claim claim)
+        public Account AddClaim(Account user, Claim claim)
         {
             Claim existingClaim = _DbContext.Claims.FirstOrDefault(c => c.Value == claim.Value);
             if(existingClaim == null)
@@ -210,7 +199,7 @@ namespace ServiceLayer.UserManagement.UserAccountServices
             return user;
         }
 
-        public User AssignCategory(User user, Category category)
+        public Account AssignCategory(Account user, Category category)
         {
             Category existingCategory = _DbContext.Categories.FirstOrDefault(c => c.Value == category.Value);
             if (existingCategory == null)

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataAccessLayer.Models.DiscussionForum
 {
@@ -20,9 +21,17 @@ namespace DataAccessLayer.Models.DiscussionForum
 
         [Key]
         public int Id { get; set; }
+
+        [ForeignKey("Question")]
+        public int QuestionId { get; set; }
+        public virtual Question Question { get; set; }
+
+        [ForeignKey("Account")]
+        public int AccountId { get; set; }
+        public virtual Account Account { get; set; }
+
         public int UserId { get; set; }
         public string UserName { get; set; }
-        public Question Question { get; set; }
         public string Text { get; set; }
         public int HelpfulCount { get; set; }
         public int UnHelpfulCount { get; set; }
