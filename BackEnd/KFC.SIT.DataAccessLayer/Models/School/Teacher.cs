@@ -4,24 +4,21 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataAccessLayer.Models.School
 {
-    public class Teacher
+    public class Teacher: IEntity
     {
-        public Teacher(string firstName, string middleName, string lastName, int departmentId)
+        public Teacher(string firstName, string middleName, string lastName)
         {
             FirstName = firstName;
             MiddleName = middleName;
             LastName = lastName;
-            DepartmentId = departmentId;
-            Schools = new List<School>();
+            Schools = new List<SchoolTeacher>();
         }
 
-        public Teacher(string firstName, string lastName, int departmentId)
+        public Teacher(string firstName, string lastName)
         {
             FirstName = firstName;
             LastName = lastName;
-            DepartmentId = departmentId;
-            Schools = new List<School>();
-            Courses = new List<Course>();
+            Schools = new List<SchoolTeacher>();
         }
 
         [Required, Key]
@@ -31,11 +28,7 @@ namespace DataAccessLayer.Models.School
         public string MiddleName { set; get; }
         [Required]
         public string LastName { set; get; }
-        [ForeignKey("Department")]
-        public int DepartmentId { set; get; }
-        public virtual Department Department { set; get; }
 
-        public virtual ICollection<School> Schools { set; get; }
-        public virtual ICollection<Course> Courses { set; get; }
+        public virtual ICollection<SchoolTeacher> Schools { set; get; }
     }
 }

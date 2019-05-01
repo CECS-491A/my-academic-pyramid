@@ -152,30 +152,6 @@
     <Compile Include="Logging\OptimizeLogging\NLogger.cs" />
     <Compile Include="Logging\OptimizeLogging\TelemetryFormat.cs" />
     <Compile Include="Logging\Models\Repository\TelemetryLogCollection.cs" />
-    <Compile Include="Migrations\201904290015175_Initial.cs" />
-    <Compile Include="Migrations\201904290015175_Initial.Designer.cs">
-      <DependentUpon>201904290015175_Initial.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201904290517308_DiscussionForum.cs" />
-    <Compile Include="Migrations\201904290517308_DiscussionForum.Designer.cs">
-      <DependentUpon>201904290517308_DiscussionForum.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201904290827470_AddedSsoIdToUser.cs" />
-    <Compile Include="Migrations\201904290827470_AddedSsoIdToUser.Designer.cs">
-      <DependentUpon>201904290827470_AddedSsoIdToUser.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201904291626062_DepartmentTeacher-relationship.cs" />
-    <Compile Include="Migrations\201904291626062_DepartmentTeacher-relationship.Designer.cs">
-      <DependentUpon>201904291626062_DepartmentTeacher-relationship.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201904292107309_User-delete-email-add-middleName.cs" />
-    <Compile Include="Migrations\201904292107309_User-delete-email-add-middleName.Designer.cs">
-      <DependentUpon>201904292107309_User-delete-email-add-middleName.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201904292109215_change-User-to-Account.cs" />
-    <Compile Include="Migrations\201904292109215_change-User-to-Account.Designer.cs">
-      <DependentUpon>201904292109215_change-User-to-Account.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\Claim.cs" />
@@ -196,6 +172,9 @@
     <Compile Include="Models\School\Course.cs" />
     <Compile Include="Models\School\Department.cs" />
     <Compile Include="Models\School\School.cs" />
+    <Compile Include="Models\School\SchoolDepartment.cs" />
+    <Compile Include="Models\School\SchoolTeacher.cs" />
+    <Compile Include="Models\School\SchoolTeacherCourse.cs" />
     <Compile Include="Models\School\Student.cs" />
     <Compile Include="Models\School\Teacher.cs" />
     <Compile Include="Models\TokenManager.cs" />
@@ -238,26 +217,6 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201904290015175_Initial.resx">
-      <DependentUpon>201904290015175_Initial.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904290517308_DiscussionForum.resx">
-      <DependentUpon>201904290517308_DiscussionForum.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904290827470_AddedSsoIdToUser.resx">
-      <DependentUpon>201904290827470_AddedSsoIdToUser.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904291626062_DepartmentTeacher-relationship.resx">
-      <DependentUpon>201904291626062_DepartmentTeacher-relationship.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904292107309_User-delete-email-add-middleName.resx">
-      <DependentUpon>201904292107309_User-delete-email-add-middleName.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904292109215_change-User-to-Account.resx">
-      <DependentUpon>201904292109215_change-User-to-Account.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

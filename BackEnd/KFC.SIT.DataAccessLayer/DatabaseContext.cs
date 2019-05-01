@@ -36,6 +36,9 @@ namespace DataAccessLayer
         public DbSet<School> Schools { get; set; }
         public DbSet<Student> Students { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
+        public DbSet<SchoolDepartment> SchoolDepartments { get; set; }
+        public DbSet<SchoolTeacher> SchoolTeachers { get; set; }
+        public DbSet<SchoolTeacherCourse> SchoolTeacherCourses { get; set; }
 
         public DatabaseContext () :base ("name=LocalTest")
         {
@@ -52,7 +55,6 @@ namespace DataAccessLayer
                 .WithMany(p => p.ChildUsers)
                 .HasForeignKey(p => p.ParentUser_Id);
             
-
         }
 
 

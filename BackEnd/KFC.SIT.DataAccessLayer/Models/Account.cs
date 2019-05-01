@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using DataAccessLayer.Models.Messenger;
 using DataAccessLayer.Models.School;
+using DataAccessLayer.Models.DiscussionForum;
 
 namespace DataAccessLayer.Models
 {    
@@ -23,7 +24,8 @@ namespace DataAccessLayer.Models
             this.ChildUsers = new HashSet<Account>();
             this.Claims = new HashSet<Claim>();
             this.Students = new List<Student>();
-            //this.Questions = new List<Question>();
+            this.Questions = new List<Question>();
+            this.Answers = new List<Answer>();
         }
 
         [Key]
@@ -72,7 +74,9 @@ namespace DataAccessLayer.Models
 
         public virtual ICollection<Student> Students { get; set; }
 
-        //public ICollection<Question> Questions;
+        public virtual ICollection<Question> Questions { get; set; }
+        public virtual ICollection<Answer> Answers { get; set; }
+        
 
         /// <summary>
         /// Override Equals method.  The UserName of each User is unique.

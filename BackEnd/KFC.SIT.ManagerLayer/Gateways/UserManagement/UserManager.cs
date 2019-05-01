@@ -50,7 +50,7 @@ namespace WebAPI.UserManagement
             {
                 category = new Category(userDto.Category);
             }
-            User user = new User
+            Account user = new Account
             {
                 UserName = userDto.UserName,
                 SsoId = userDto.SsoId,

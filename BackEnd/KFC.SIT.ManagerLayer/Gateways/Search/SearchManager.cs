@@ -21,7 +21,7 @@ namespace ManagerLayer.Gateways.Search
         public SearchManager(DatabaseContext db)
         {
             _db = db;
-            _searchService = new SearchService(_db);
+            //_searchService = new SearchService(_db);
         }
 
         // TODO: Make all messages constants
@@ -44,16 +44,16 @@ namespace ManagerLayer.Gateways.Search
                 throw new ArgumentException("User Account Does Not Exist");
             }
 
-            if(account is Student)
-            {
-                var student = account as Student;
-                var studentList = _searchService.SearchStudents(student.SchoolId, request.SearchInput);
-                if (studentList is null)
-                {
-                    throw new ArgumentException("No Students Found");
-                }
-                return studentList;
-            }
+            //if(account is Student)
+            //{
+            //    var student = account as Student;
+            //    var studentList = _searchService.SearchStudents(student.SchoolId, request.SearchInput);
+            //    if (studentList is null)
+            //    {
+            //        throw new ArgumentException("No Students Found");
+            //    }
+            //    return studentList;
+            //}
 
             throw new ArgumentException("Not authorized");
         }
@@ -77,16 +77,16 @@ namespace ManagerLayer.Gateways.Search
                 throw new ArgumentException("User Account Does Not Exist");
             }
 
-            if (account is Student)
-            {
-                var student = account as Student;
-                var teacherList = _searchService.SearchTeachers(student.SchoolId, request.SearchInput);
-                if (teacherList is null)
-                {
-                    throw new ArgumentException("No Teachers Found");
-                }
-                return teacherList;
-            }
+            //if (account is Student)
+            //{
+            //    var student = account as Student;
+            //    var teacherList = _searchService.SearchTeachers(student.SchoolId, request.SearchInput);
+            //    if (teacherList is null)
+            //    {
+            //        throw new ArgumentException("No Teachers Found");
+            //    }
+            //    return teacherList;
+            //}
 
             throw new ArgumentException("Not authorized");
         }
@@ -110,16 +110,16 @@ namespace ManagerLayer.Gateways.Search
                 throw new ArgumentException("User Account Does Not Exist");
             }
 
-            if (account is Student)
-            {
-                var student = account as Student;
-                var departmentList = _searchService.GetDepartments(student.SchoolId);
-                if (departmentList is null || departmentList.Count == 0)
-                {
-                    throw new ArgumentException("No Departments Found");
-                }
-                return departmentList;
-            }
+            //if (account is Student)
+            //{
+            //    var student = account as Student;
+            //    var departmentList = _searchService.GetDepartments(student.SchoolId);
+            //    if (departmentList is null || departmentList.Count == 0)
+            //    {
+            //        throw new ArgumentException("No Departments Found");
+            //    }
+            //    return departmentList;
+            //}
             throw new ArgumentException("Not authorized");
         }
     }
