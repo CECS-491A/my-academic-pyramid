@@ -1,7 +1,5 @@
 import Vue from 'vue'
 import Vuetify from 'vuetify'
-//import Vuechart from 'vue-chartjs'
-//import Chart from 'chart.js'
 import Router from 'vue-router'
 import 'vuetify/dist/vuetify.min.css'
 import Home from '@/Views/Home'
@@ -17,11 +15,8 @@ import Redirect from '@/Views/Redirect'
 import UsageAnalysisDashboard from '@/Views/UsageAnalysisDashboard'
 import DiscussionForum from '@/Views/DiscussionForum'
 
-
 Vue.use(Router)
 Vue.use(Vuetify)
-//Vue.use(Vuechart)
-//Vue.use(Chart)
 
 export default new Router({
   base: process.env.BASE_URL,
