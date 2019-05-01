@@ -63,7 +63,7 @@ namespace ManagerLayer.DiscussionManager
         public Answer PostAnswer(AnswerDTO a)
         {
             // Validations
-            User answerer = _usermanagementservices.FindById(a.UserId);
+            Account answerer = _usermanagementservices.FindById(a.UserId);
             Question question = _discussionservices.GetQuestion(a.QuestionID);
 
             if (question.IsClosed)
@@ -97,7 +97,7 @@ namespace ManagerLayer.DiscussionManager
             Question question = _discussionservices.GetQuestion(questionId);
 
             // Validate
-            if (userId == question.UserId)
+            if (userId == question.AccountId)
             {
                 throw new InvalidUserException("User cannot mark their own question as spam");
             }
@@ -144,7 +144,7 @@ namespace ManagerLayer.DiscussionManager
             {
                 throw new InvalidQuestionLengthException("Question must be between " + _questionCharMin + " and " + _questionCharMax + " characters.");
             }
-            if (userId != question.UserId)
+            if (userId != question.AccountId)
             {
                 throw new InvalidUserException("User cannot edit another user's question");
             }
@@ -174,7 +174,7 @@ namespace ManagerLayer.DiscussionManager
 
             answer = _discussionservices.IncreaseHelpfulCount(answerId);
             // update user exp
-            User user = _usermanagementservices.FindById(answer.UserId);
+            Account user = _usermanagementservices.FindById(answer.UserId);
             user.Exp += _expGainHelpfullAns;
             user = _usermanagementservices.UpdateUser(user);
             _db.SaveChanges();
@@ -209,7 +209,7 @@ namespace ManagerLayer.DiscussionManager
             {
                 throw new QuestionIsClosedException("Question is already closed");
             }
-            if (userId != question.UserId)
+            if (userId != question.AccountId)
             {
                 throw new InvalidUserException("User cannot edit this question");
             }
@@ -221,13 +221,13 @@ namespace ManagerLayer.DiscussionManager
         {
             Answer answer = _discussionservices.GetAnswer(id);
             Question question = answer.Question;
-            User user = _usermanagementservices.FindById(answer.UserId);
+            Account user = _usermanagementservices.FindById(answer.UserId);
             // Validations 
             if (question.IsClosed)
             {
                 throw new QuestionIsClosedException("Question is closed");
             }
-            if (userId != question.UserId)
+            if (userId != question.AccountId)
             {
                 throw new InvalidUserException("User cannot edit this question");
             }

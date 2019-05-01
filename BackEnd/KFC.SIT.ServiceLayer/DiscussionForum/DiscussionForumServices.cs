@@ -99,12 +99,12 @@ namespace ServiceLayer.DiscussionForum
         //    }
         //}
 
-        public List<Question> GetQuestionDrafts(int posterId)
+        public List<Question> GetQuestionDrafts(int accountId)
         {
             try
             {
                 return _db.Questions
-                    .Where(q => q.IsDraft == true && q.UserId == posterId)
+                    .Where(q => q.IsDraft == true && q.AccountId == accountId)
                     .OrderBy(q => q.CreatedDate)
                     .ToList();
             }
@@ -114,9 +114,9 @@ namespace ServiceLayer.DiscussionForum
             }
         }
 
-        public Answer GetAnswer(int id)
+        public Answer GetAnswer(int answerId)
         {
-            return _db.Answers.Find(id);
+            return _db.Answers.Find(answerId);
         }
 
         public List<Answer> GetAnswers(int id)

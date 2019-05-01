@@ -115,7 +115,7 @@ namespace KFC.SIT.WebAPI.Controllers
             //else
             //{
                 UserManager um = new UserManager();
-                User user = um.FindByUserName(securityContext.UserName);
+                Account user = um.FindByUserName(securityContext.UserName);
                 if (user == null)
                 {
                     return Unauthorized();
@@ -174,7 +174,7 @@ namespace KFC.SIT.WebAPI.Controllers
             //else
             //{
                 UserManager um = new UserManager();
-                User user = um.FindByUserName(securityContext.UserName);
+                Account user = um.FindByUserName(securityContext.UserName);
                 if (user == null)
                 {
                     return Unauthorized();
@@ -235,7 +235,7 @@ namespace KFC.SIT.WebAPI.Controllers
             //else
             //{
                 UserManager um = new UserManager();
-                User user = um.FindByUserName(securityContext.UserName);
+                Account user = um.FindByUserName(securityContext.UserName);
                 if (user == null)
                 {
                     return Unauthorized();
@@ -305,7 +305,7 @@ namespace KFC.SIT.WebAPI.Controllers
             else
             {
                 UserManager um = new UserManager();
-                User user = um.FindByUserName(securityContext.UserName);
+                Account user = um.FindByUserName(securityContext.UserName);
                 if (user == null)
                 {
                     return Unauthorized();
@@ -365,7 +365,7 @@ namespace KFC.SIT.WebAPI.Controllers
             else
             {
                 UserManager um = new UserManager();
-                User user = um.FindByUserName(securityContext.UserName);
+                Account user = um.FindByUserName(securityContext.UserName);
                 if (user == null)
                 {
                     return Unauthorized();
@@ -425,7 +425,7 @@ namespace KFC.SIT.WebAPI.Controllers
             else
             {
                 UserManager um = new UserManager();
-                User user = um.FindByUserName(securityContext.UserName);
+                Account user = um.FindByUserName(securityContext.UserName);
                 if (user == null)
                 {
                     return Unauthorized();
@@ -490,7 +490,7 @@ namespace KFC.SIT.WebAPI.Controllers
             else
             {
                 UserManager um = new UserManager();
-                User user = um.FindByUserName(securityContext.UserName);
+                Account user = um.FindByUserName(securityContext.UserName);
                 if (user == null)
                 {
                     return Unauthorized();
@@ -550,7 +550,7 @@ namespace KFC.SIT.WebAPI.Controllers
             else
             {
                 UserManager um = new UserManager();
-                User user = um.FindByUserName(securityContext.UserName);
+                Account user = um.FindByUserName(securityContext.UserName);
                 if (user == null)
                 {
                     return Unauthorized();
@@ -612,7 +612,7 @@ namespace KFC.SIT.WebAPI.Controllers
             else
             {
                 UserManager um = new UserManager();
-                User user = um.FindByUserName(securityContext.UserName);
+                Account user = um.FindByUserName(securityContext.UserName);
                 if (user == null)
                 {
                     return Unauthorized();
