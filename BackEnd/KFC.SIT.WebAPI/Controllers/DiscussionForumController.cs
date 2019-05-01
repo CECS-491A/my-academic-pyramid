@@ -130,7 +130,7 @@ namespace KFC.SIT.WebAPI.Controllers
                 Question question;
                 try
                 {
-                    questionDTO.StudentId = authUserId;
+                    questionDTO.UserId = authUserId;
                     DiscussionForumManager discussionManager = new DiscussionForumManager(_db);
                     question = discussionManager.PostQuestion(questionDTO);
                     return Content(HttpStatusCode.OK, "Question was posted succesfully.");
@@ -187,7 +187,7 @@ namespace KFC.SIT.WebAPI.Controllers
                 Answer answer;
                 try
                 {
-                    answerDTO.StudentId = authUserId;
+                    answerDTO.UserId = authUserId;
                     DiscussionForumManager discussionManager = new DiscussionForumManager(_db);
                     answer = discussionManager.PostAnswer(answerDTO);
                 }

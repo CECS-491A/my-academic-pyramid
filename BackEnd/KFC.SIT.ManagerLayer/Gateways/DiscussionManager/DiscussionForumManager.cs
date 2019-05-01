@@ -63,7 +63,7 @@ namespace ManagerLayer.DiscussionManager
         public Answer PostAnswer(AnswerDTO a)
         {
             // Validations
-            User answerer = _usermanagementservices.FindById(a.StudentId);
+            User answerer = _usermanagementservices.FindById(a.UserId);
             Question question = _discussionservices.GetQuestion(a.QuestionID);
 
             if (question.IsClosed)
@@ -79,8 +79,8 @@ namespace ManagerLayer.DiscussionManager
             // Creat Answer after passed in Answer is validated
             Answer answer = new Answer
             {
-                StudentId = a.StudentId,
-                StudentUserName = a.StudentUserName,
+                UserId = a.UserId,
+                UserName = a.UserName,
                 Question = question,
                 Text = a.Text,
             };
@@ -117,7 +117,7 @@ namespace ManagerLayer.DiscussionManager
             Answer answer = _discussionservices.GetAnswer(answerId);
 
             // Validate
-            if (userId == answer.StudentId)
+            if (userId == answer.UserId)
             {
                 throw new InvalidUserException("User cannot mark their own answer as spam");
             }
@@ -167,14 +167,14 @@ namespace ManagerLayer.DiscussionManager
             Answer answer = _discussionservices.GetAnswer(answerId);
 
             // Validate
-            if (userId == answer.StudentId)
+            if (userId == answer.UserId)
             {
                 throw new InvalidUserException("User cannot mark their own answer as helpful");
             }
 
             answer = _discussionservices.IncreaseHelpfulCount(answerId);
             // update user exp
-            User user = _usermanagementservices.FindById(answer.StudentId);
+            User user = _usermanagementservices.FindById(answer.UserId);
             user.Exp += _expGainHelpfullAns;
             user = _usermanagementservices.UpdateUser(user);
             _db.SaveChanges();
@@ -188,7 +188,7 @@ namespace ManagerLayer.DiscussionManager
             Answer answer = _discussionservices.GetAnswer(answerId);
 
             // Validate
-            if (userId == answer.StudentId)
+            if (userId == answer.UserId)
             {
                 throw new InvalidUserException("User cannot mark their own answer as unhelpful");
             }
@@ -221,7 +221,7 @@ namespace ManagerLayer.DiscussionManager
         {
             Answer answer = _discussionservices.GetAnswer(id);
             Question question = answer.Question;
-            User user = _usermanagementservices.FindById(answer.StudentId);
+            User user = _usermanagementservices.FindById(answer.UserId);
             // Validations 
             if (question.IsClosed)
             {
