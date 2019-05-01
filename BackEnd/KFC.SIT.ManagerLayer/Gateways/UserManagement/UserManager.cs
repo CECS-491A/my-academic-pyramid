@@ -22,7 +22,7 @@ namespace WebAPI.UserManagement
 
         /// <summary>
         /// Constructor that accept a username of account and initiaize the UserManagementServices
-        /// User Account has to exist in database 
+        /// User Account has to exist in database
         /// </summary>
         /// <param name="requestingUserName"></param>
         public UserManager()
@@ -37,14 +37,6 @@ namespace WebAPI.UserManagement
         /// <param name="targetedUserName"></param>
         public Account CreateUserAccount(UserDTO userDto)
         {
-            //try
-            //{
-            //    var valid = new System.Net.Mail.MailAddress(userDto.UserName); // checks that email is valid
-            //}
-            //catch (Exception)
-            //{
-            //    return null;
-            //}
             Category category = _userManagementServices.GetCategory(userDto.Category);
             if (category == null)
             {
@@ -57,10 +49,6 @@ namespace WebAPI.UserManagement
                 FirstName = userDto.FirstName,
                 LastName = userDto.LastName,
                 Category = category
-                //// date and time as it would be in Coordinated Universal Time
-                //CreatedAt = DateTime.Now, // https://stackoverflow.com/questions/62151/datetime-now-vs-datetime-utcnow 
-                //DateOfBirth = DateTime.Parse(userDto.DateOfBirth),
-                //Location = userDto.Location,
             };
 
             //Automatically assigning claim to user
@@ -91,7 +79,7 @@ namespace WebAPI.UserManagement
                 }
                 throw raise;
             }
-           
+
         }
 
         /// <summary>
@@ -108,12 +96,8 @@ namespace WebAPI.UserManagement
             return _DbContext.SaveChanges();
         }
 
-
-        
-        
-
         /// <summary>
-        /// Method to update user account in database after making changes 
+        /// Method to update user account in database after making changes
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
@@ -138,9 +122,8 @@ namespace WebAPI.UserManagement
             }
         }
 
-
         /// <summary>
-        /// Method to assign a user to be a child of another user. The purpose is to achive a hierachy structure of users 
+        /// Method to assign a user to be a child of another user. The purpose is to achive a hierachy structure of users
         /// </summary>
         /// <param name="childUserName"></param>
         /// <param name="parentUserName"></param>
@@ -158,14 +141,14 @@ namespace WebAPI.UserManagement
             {
                 return null;
             }
-            else 
+            else
             {
                 if (childUser.Id == parentUser.ParentUser_Id)
                 {
                     parentUser.ParentUser_Id = null;
                 }
                 childUser.ParentUser_Id = parentUser.Id;
-              
+
                 UpdateUserAccount(childUser);
                 UpdateUserAccount(parentUser);
 
@@ -173,6 +156,16 @@ namespace WebAPI.UserManagement
             }
         }
 
+        /// <summary>
+        /// Method to find user object using email
+        /// </summary>
+        /// <param name="userEmail"></param>
+        /// <returns></returns>
+        public Account FindUserByEmail(String userEmail)
+        {
+            Account user = _userManagementServices.FindUserByUserEmail(userEmail);
+            return user;
+        }
 
         /// <summary>
         /// Method to find userobject using id
@@ -217,12 +210,12 @@ namespace WebAPI.UserManagement
         }
 
         /// <summary>
-        /// Method to get all users in database 
+        /// Method to get all users in database
         /// </summary>
         /// <returns></returns>
         public List<Account> GetAllUser()
         {
-            // Call GetAllUser method in userManagementServices 
+            // Call GetAllUser method in userManagementServices
             List<Account> userList = _userManagementServices.GetAllUser();
             return userList;
         }
@@ -247,7 +240,7 @@ namespace WebAPI.UserManagement
             if (targetedUser == null)
              {
                 return null;
-               
+
              }
                 // Check if the requesting user is  at least same level as  the targeted user
             else
@@ -256,7 +249,7 @@ namespace WebAPI.UserManagement
                 UpdateUserAccount(user);
                 return user;
             }
-                   
+
         }
 
         public Account SetCategory(int targetUserId, string categoryStr)
@@ -311,7 +304,6 @@ namespace WebAPI.UserManagement
             return claimList;
         }
 
-
         //
         /// <summary>
         /// Method to verify password when user login. Entered password will be hashed using input from user plus the salt value
@@ -323,7 +315,7 @@ namespace WebAPI.UserManagement
         /// <returns></returns>
         public static bool VerifyPassword(string enteredPassword, string storedHash, string storedSalt)
         {
- 
+
             byte[] bytes = System.Text.Encoding.UTF8.GetBytes(enteredPassword + storedSalt);
 
             SHA256 sha = new SHA256Cng(); // Hash function
@@ -374,7 +366,7 @@ namespace WebAPI.UserManagement
                 _userManagementServices.AddClaim(user, new Claim("CanAlterStudentAccountUAC"));
                 _DbContext.SaveChanges();
             }
-            
+
             else if (user.Category.Value.Equals("SystemAdmin"))
             {
                 _userManagementServices.AddClaim(user, new Claim("EnableOrDisableAdminAccount"));
@@ -384,11 +376,9 @@ namespace WebAPI.UserManagement
                 _DbContext.SaveChanges();
             }
 
-
             return user;
 
         }
-
 
     }
 }

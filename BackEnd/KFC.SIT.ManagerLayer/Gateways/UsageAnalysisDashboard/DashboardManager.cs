@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using DataAccessLayer;
 using ServiceLayer.DataAnalysisDashboard;
 
 namespace ManagerLayer.Gateways.UsageAnalysisDashboard
@@ -101,14 +102,27 @@ namespace ManagerLayer.Gateways.UsageAnalysisDashboard
             throw new Exception();
         }
 
+        /// <summary>
+        /// Get the list of logged in users and number of total users 
+        /// </summary>
+        /// <returns></returns>
         public long[] GetSuccessfulLoggedInUsers()
         {
-            throw new Exception();
-           // long[] numLogin = _dashboardService.CountSuccessfulLogin();
-           // return numLogin;
+            int duration = 6;
+            long[] successfulLoggedInUsers = new long[duration + 1];
+            long numTotalUser = _dashboardService.CountTotalUsers();
+            int monthToday = DateTime.Today.Month;
+
+            successfulLoggedInUsers[0] = numTotalUser;
+            for (int i = 1; i < duration + 1; i++)
+            {
+                successfulLoggedInUsers[i] = _dashboardService.CountUniqueLoggedInUsers(monthToday);
+                monthToday--;
+                if (monthToday == 0) { monthToday = 12; }
+            }
+
+            return successfulLoggedInUsers;
         }
-
-
 
     }
 }

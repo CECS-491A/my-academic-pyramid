@@ -22,10 +22,6 @@ namespace DataAccessLayer.Models.DiscussionForum
         [Key]
         public int Id { get; set; }
 
-        public int PosterId { get; set; }
-
-        public string PosterUserName { get; set; }
-
         [ForeignKey("Question")]
         public int QuestionId { get; set; }
         public virtual Question Question { get; set; }
@@ -34,16 +30,13 @@ namespace DataAccessLayer.Models.DiscussionForum
         public int AccountId { get; set; }
         public virtual Account Account { get; set; }
 
+        public int UserId { get; set; }
+        public string UserName { get; set; }
         public string Text { get; set; }
-
         public int HelpfulCount { get; set; }
-
         public int UnHelpfulCount { get; set; }
-
         public int SpamCount { get; set; }
-
         public bool IsCorrectAnswer { get; set; }
-
         public DateTime CreatedDate { get; set; }
     }
 }

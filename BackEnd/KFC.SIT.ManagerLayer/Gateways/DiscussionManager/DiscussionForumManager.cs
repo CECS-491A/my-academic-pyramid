@@ -63,7 +63,7 @@ namespace ManagerLayer.DiscussionManager
         public Answer PostAnswer(AnswerDTO a)
         {
             // Validations
-            Account answerer = _usermanagementservices.FindById(a.PosterId);
+            Account answerer = _usermanagementservices.FindById(a.UserId);
             Question question = _discussionservices.GetQuestion(a.QuestionID);
 
             if (question.IsClosed)
@@ -79,8 +79,8 @@ namespace ManagerLayer.DiscussionManager
             // Creat Answer after passed in Answer is validated
             Answer answer = new Answer
             {
-                PosterId = a.PosterId,
-                PosterUserName = a.PosterUserName,
+                UserId = a.UserId,
+                UserName = a.UserName,
                 Question = question,
                 Text = a.Text,
             };
@@ -107,8 +107,15 @@ namespace ManagerLayer.DiscussionManager
         // email sys admin if a question or answer reaches spam limit 
         public Answer IncreaseAnswerSpamCount(int id)
         {
-            Answer answer = _discussionservices.GetAnswer(id);
-            answer = _discussionservices.IncreaseAnswerSpamCount(id);
+            Answer answer = _discussionservices.GetAnswer(answerId);
+
+            // Validate
+            if (userId == answer.UserId)
+            {
+                throw new InvalidUserException("User cannot mark their own answer as spam");
+            }
+
+            answer = _discussionservices.IncreaseAnswerSpamCount(answerId);
             if (answer.SpamCount == _spamLimit)
             {
 //               // call service to email admin because question reached spam limit
@@ -146,10 +153,17 @@ namespace ManagerLayer.DiscussionManager
         // update answer with increased helpful count and update user Exp
         public Answer IncreaseHelpfulCount(int id)
         {
-            Answer answer = _discussionservices.GetAnswer(id);
-            answer = _discussionservices.IncreaseHelpfulCount(id);
+            Answer answer = _discussionservices.GetAnswer(answerId);
+
+            // Validate
+            if (userId == answer.UserId)
+            {
+                throw new InvalidUserException("User cannot mark their own answer as helpful");
+            }
+
+            answer = _discussionservices.IncreaseHelpfulCount(answerId);
             // update user exp
-            Account user = _usermanagementservices.FindById(answer.PosterId);
+            Account user = _usermanagementservices.FindById(answer.UserId);
             user.Exp += _expGainHelpfullAns;
             user = _usermanagementservices.UpdateUser(user);
             _db.SaveChanges();
@@ -160,8 +174,15 @@ namespace ManagerLayer.DiscussionManager
         // don't think UnHulpful affects a user's Exp? 
         public Answer IncreaseUnHelpfulCount(int id)
         {
-            Answer answer = _discussionservices.GetAnswer(id);
-            answer = _discussionservices.IncreaseUnHelpfulCount(id);
+            Answer answer = _discussionservices.GetAnswer(answerId);
+
+            // Validate
+            if (userId == answer.UserId)
+            {
+                throw new InvalidUserException("User cannot mark their own answer as unhelpful");
+            }
+
+            answer = _discussionservices.IncreaseUnHelpfulCount(answerId);
             // update user exp
             //User user = _usermanagementservices.FindById(answer.PosterId);
             //user.Exp -= 2;
@@ -174,7 +195,7 @@ namespace ManagerLayer.DiscussionManager
         {
             Answer answer = _discussionservices.GetAnswer(id);
             Question question = answer.Question;
-            Account user = _usermanagementservices.FindById(answer.PosterId);
+            Account user = _usermanagementservices.FindById(answer.UserId);
             // Validations 
             if (question.IsClosed)
             {
