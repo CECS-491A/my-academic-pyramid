@@ -13,8 +13,8 @@ namespace DataAccessLayer.DTOs
         public int SchoolId { get; set; }
         public int DepartmentId { get; set; }
         public int CourseId { get; set; }
-        public int StudentId { get; set; }
-        public string StudentUserName { get; set; }
+        public int UserId { get; set; }
+        public string UserName { get; set; }
         public string Text { get; set; }
         public int MinimumExpForAnswer { get; set; }
         public bool IsDraft { get; set; }

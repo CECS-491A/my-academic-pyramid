@@ -20,23 +20,14 @@ namespace DataAccessLayer.Models.DiscussionForum
 
         [Key]
         public int Id { get; set; }
-
-        public int StudentId { get; set; }
-
-        public string StudentUserName { get; set; }
-
+        public int UserId { get; set; }
+        public string UserName { get; set; }
         public Question Question { get; set; }
-
         public string Text { get; set; }
-
         public int HelpfulCount { get; set; }
-
         public int UnHelpfulCount { get; set; }
-
         public int SpamCount { get; set; }
-
         public bool IsCorrectAnswer { get; set; }
-
         public DateTime CreatedDate { get; set; }
     }
 }
