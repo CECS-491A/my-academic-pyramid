@@ -87,16 +87,14 @@
           </template>
         </v-list>
 
-        <template v-slot:no-data>
-            <v-alert
-                :value="errorMessage"
-                id="error"
-                type="error"
-                transition="scale-transition"
-            >
-                {{errorMessage}}
-            </v-alert>
-        </template>
+        <v-alert
+            :value="errorMessage"
+            id="errorMessage"
+            type="error"
+            transition="scale-transition"
+        >
+            {{errorMessage}}
+        </v-alert>
     </div>
   </v-container>
 
