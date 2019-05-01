@@ -22,7 +22,7 @@ namespace WebAPI.UserManagement
 
         /// <summary>
         /// Constructor that accept a username of account and initiaize the UserManagementServices
-        /// User Account has to exist in database 
+        /// User Account has to exist in database
         /// </summary>
         /// <param name="requestingUserName"></param>
         public UserManager()
@@ -37,19 +37,36 @@ namespace WebAPI.UserManagement
         /// <param name="targetedUserName"></param>
         public User CreateUserAccount(UserDTO userDto)
         {
-
+            //try
+            //{
+            //    var valid = new System.Net.Mail.MailAddress(userDto.UserName); // checks that email is valid
+            //}
+            //catch (Exception)
+            //{
+            //    return null;
+            //}
+            Category category = _userManagementServices.GetCategory(userDto.Category);
+            if (category == null)
+            {
+                category = new Category(userDto.Category);
+            }
             User user = new User
             {
                 UserName = userDto.UserName,
                 SsoId = userDto.SsoId,
                 FirstName = userDto.FirstName,
                 LastName = userDto.LastName,
-                Category = new Category(userDto.Category),
+                Category = category
+                //// date and time as it would be in Coordinated Universal Time
+                //CreatedAt = DateTime.Now, // https://stackoverflow.com/questions/62151/datetime-now-vs-datetime-utcnow
+                //DateOfBirth = DateTime.Parse(userDto.DateOfBirth),
+                //Location = userDto.Location,
             };
 
             //Automatically assigning claim to user
             user = AutomaticClaimAssigning(user);
-            user = _userManagementServices.AssignCategory(user, user.Category);
+            // TODO test this.
+            //user = _userManagementServices.AssignCategory(user, new Category(userDto.Category));
 
             var response = _userManagementServices.CreateUser(user);
             try
@@ -74,7 +91,7 @@ namespace WebAPI.UserManagement
                 }
                 throw raise;
             }
-           
+
         }
 
         /// <summary>
@@ -92,14 +109,11 @@ namespace WebAPI.UserManagement
         }
 
 
-        public int GetUserId(int ssoId)
-        {
-            // TODO finish this
-            return 0;
-        }
+
+
 
         /// <summary>
-        /// Method to update user account in database after making changes 
+        /// Method to update user account in database after making changes
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
@@ -126,7 +140,7 @@ namespace WebAPI.UserManagement
 
 
         /// <summary>
-        /// Method to assign a user to be a child of another user. The purpose is to achive a hierachy structure of users 
+        /// Method to assign a user to be a child of another user. The purpose is to achive a hierachy structure of users
         /// </summary>
         /// <param name="childUserName"></param>
         /// <param name="parentUserName"></param>
@@ -144,14 +158,14 @@ namespace WebAPI.UserManagement
             {
                 return null;
             }
-            else 
+            else
             {
                 if (childUser.Id == parentUser.ParentUser_Id)
                 {
                     parentUser.ParentUser_Id = null;
                 }
                 childUser.ParentUser_Id = parentUser.Id;
-              
+
                 UpdateUserAccount(childUser);
                 UpdateUserAccount(parentUser);
 
@@ -216,12 +230,12 @@ namespace WebAPI.UserManagement
         }
 
         /// <summary>
-        /// Method to get all users in database 
+        /// Method to get all users in database
         /// </summary>
         /// <returns></returns>
         public List<User> GetAllUser()
         {
-            // Call GetAllUser method in userManagementServices 
+            // Call GetAllUser method in userManagementServices
             List<User> userList = _userManagementServices.GetAllUser();
             return userList;
         }
@@ -246,7 +260,7 @@ namespace WebAPI.UserManagement
             if (targetedUser == null)
              {
                 return null;
-               
+
              }
                 // Check if the requesting user is  at least same level as  the targeted user
             else
@@ -255,7 +269,24 @@ namespace WebAPI.UserManagement
                 UpdateUserAccount(user);
                 return user;
             }
-                   
+
+        }
+
+        public User SetCategory(int targetUserId, string categoryStr)
+        {
+            Category categoryToAdd = _userManagementServices.GetCategory(categoryStr);
+            if (categoryToAdd == null)
+            {
+                categoryToAdd = new Category(categoryStr);
+            }
+            User targetUser = _userManagementServices.FindById(targetUserId);
+            if (targetUser == null)
+            {
+                return null;
+            }
+            _userManagementServices.AssignCategory(targetUser, categoryToAdd);
+
+            return targetUser;
         }
 
         public User AddClaimAction(int targetedUserId, Claim claim)
@@ -305,7 +336,7 @@ namespace WebAPI.UserManagement
         /// <returns></returns>
         public static bool VerifyPassword(string enteredPassword, string storedHash, string storedSalt)
         {
- 
+
             byte[] bytes = System.Text.Encoding.UTF8.GetBytes(enteredPassword + storedSalt);
 
             SHA256 sha = new SHA256Cng(); // Hash function
@@ -338,7 +369,17 @@ namespace WebAPI.UserManagement
 
                 //Discussion Forum's claims
                 _userManagementServices.AddClaim(user, new Claim("CanPostQuestion"));
-                _userManagementServices.AddClaim(user, new Claim("CanReceiveQuestion"));
+                _userManagementServices.AddClaim(user, new Claim("CanSeeQuestion"));
+                _userManagementServices.AddClaim(user, new Claim("CanCloseQuestion"));
+                _userManagementServices.AddClaim(user, new Claim("CanPostAnswer"));
+                _userManagementServices.AddClaim(user, new Claim("CanSeeAnswer"));
+                _userManagementServices.AddClaim(user, new Claim("CanMarkQuestionAsSpam"));
+                _userManagementServices.AddClaim(user, new Claim("CanMarkAnswerAsSpam"));
+                _userManagementServices.AddClaim(user, new Claim("CanMarkAnswerAsHelpful"));
+                _userManagementServices.AddClaim(user, new Claim("CanMarkAnswerAsUnHelpful"));
+                _userManagementServices.AddClaim(user, new Claim("CanMarkAnswerAsCorrect"));
+
+
 
                 //User Management's claims
                 _userManagementServices.AddClaim(user, new Claim("CanCreateOwnStudentAccount"));
@@ -356,7 +397,7 @@ namespace WebAPI.UserManagement
                 _userManagementServices.AddClaim(user, new Claim("CanAlterStudentAccountUAC"));
                 _DbContext.SaveChanges();
             }
-            
+
             else if (user.Category.Value.Equals("SystemAdmin"))
             {
                 _userManagementServices.AddClaim(user, new Claim("EnableOrDisableAdminAccount"));

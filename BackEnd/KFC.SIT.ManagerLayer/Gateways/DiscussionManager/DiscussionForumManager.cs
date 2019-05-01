@@ -10,6 +10,7 @@ using ServiceLayer.UserManagement.UserAccountServices;
 using DataAccessLayer.DTOs;
 using System.Net.Http;
 using System.Net;
+using ServiceLayer;
 
 namespace ManagerLayer.DiscussionManager
 {
@@ -41,11 +42,10 @@ namespace ManagerLayer.DiscussionManager
         public Question PostQuestion(QuestionDTO q)
         {
             // Validations 
-            if (ValidateQuestionCharLength(q) == false)
+            if (!ValidateQuestionCharLength(q))
             {
+                throw new InvalidQuestionLengthException("Question must be between " + _questionCharMin + " and " + _questionCharMax + " characters.");
             }
-            // Any more validations? 
-
 
             // Create Question after passed in Question is validated
             Question question = new Question
@@ -56,36 +56,35 @@ namespace ManagerLayer.DiscussionManager
                 MinimumExpForAnswer = q.MinimumExpForAnswer,
                 IsDraft = q.IsDraft,
             };
+            // Post Question
             return _discussionservices.PostQuestion(question);
         }
 
-        // Todo 
-        // update answer to not editable if answer is posted successfully 
         public Answer PostAnswer(AnswerDTO a)
         {
             // Validations
-            User answerer = _usermanagementservices.FindById(a.PosterId);
+            User answerer = _usermanagementservices.FindById(a.UserId);
             Question question = _discussionservices.GetQuestion(a.QuestionID);
 
-            if (question.IsClosed == false)
+            if (question.IsClosed)
             {
+                throw new QuestionIsClosedException("Question is closed");
             }
 
             if (answerer.Exp < question.MinimumExpForAnswer)
             {
+                throw new NotEnoughExpException("User does not have enough Exp to answer");
             }
-            // More validations? 
-
-
             
-            // Created Answer after passed in Answer is validated
+            // Creat Answer after passed in Answer is validated
             Answer answer = new Answer
             {
-                PosterId = a.PosterId,
-                PosterUserName = a.PosterUserName,
+                UserId = a.UserId,
+                UserName = a.UserName,
                 Question = question,
                 Text = a.Text,
             };
+            // Post Answer
             return _discussionservices.PostAnswer(question, answer);
         }
 
@@ -93,11 +92,17 @@ namespace ManagerLayer.DiscussionManager
 
         // update spam count
         // email sys admin if a question or answer reaches spam limit 
-        public Question IncreaseQuestionSpamCount(int id)
+        public Question IncreaseQuestionSpamCount(int questionId, int userId)
         {
-            Question question = _discussionservices.GetQuestion(id);
-            //
-            question = _discussionservices.IncreaseQuestionSpamCount(id);
+            Question question = _discussionservices.GetQuestion(questionId);
+
+            // Validate
+            if (userId == question.UserId)
+            {
+                throw new InvalidUserException("User cannot mark their own question as spam");
+            }
+
+            question = _discussionservices.IncreaseQuestionSpamCount(questionId);
             if (question.SpamCount == _spamLimit)
             {
  //               // call service to email admin because question reached spam limit
@@ -107,11 +112,17 @@ namespace ManagerLayer.DiscussionManager
 
         // update spam count
         // email sys admin if a question or answer reaches spam limit 
-        public Answer IncreaseAnswerSpamCount(int id)
+        public Answer IncreaseAnswerSpamCount(int answerId, int userId)
         {
-            Answer answer = _discussionservices.GetAnswer(id);
-            //
-            answer = _discussionservices.IncreaseAnswerSpamCount(id);
+            Answer answer = _discussionservices.GetAnswer(answerId);
+
+            // Validate
+            if (userId == answer.UserId)
+            {
+                throw new InvalidUserException("User cannot mark their own answer as spam");
+            }
+
+            answer = _discussionservices.IncreaseAnswerSpamCount(answerId);
             if (answer.SpamCount == _spamLimit)
             {
 //               // call service to email admin because question reached spam limit
@@ -119,26 +130,30 @@ namespace ManagerLayer.DiscussionManager
             return answer;
         }
 
-        // similar to PostQuestion without creating a new Question 
         // update question content... answers can never be updated 
-        // check that question is open 
         public Question EditQuestion(QuestionDTO q, int userId)
         {
             Question question = _discussionservices.GetQuestion(q.Id);
 
             // Validations 
-            if (question.IsClosed == true) 
+            if (question.IsClosed) 
             {
-                // throw exception 
+                throw new QuestionIsClosedException("Question is closed");
             }
-            if (ValidateQuestionCharLength(q) == false)
+            if (!ValidateQuestionCharLength(q))
             {
-                // throw exception 
+                throw new InvalidQuestionLengthException("Question must be between " + _questionCharMin + " and " + _questionCharMax + " characters.");
             }
-            if (userId != question.PosterId)
-            // Any more validations?
+            if (userId != question.UserId)
+            {
+                throw new InvalidUserException("User cannot edit another user's question");
+            }
+            if (question.Answers.Count > 0)
+            {
+                throw new QuestionUnavailableException("Question cannot be edited after an answer has been posted");
+            }
 
-            // Create Question after passed in Question is validated
+            // Update Question after passed in Question is validated
             question.Text = q.Text;
             question.MinimumExpForAnswer = q.MinimumExpForAnswer;
             question.IsDraft = q.IsDraft;
@@ -147,12 +162,19 @@ namespace ManagerLayer.DiscussionManager
         }
 
         // update answer with increased helpful count and update user Exp
-        public Answer IncreaseHelpfulCount(int id)
+        public Answer IncreaseHelpfulCount(int answerId, int userId)
         {
-            Answer answer = _discussionservices.GetAnswer(id);
-            answer = _discussionservices.IncreaseHelpfulCount(id);
+            Answer answer = _discussionservices.GetAnswer(answerId);
+
+            // Validate
+            if (userId == answer.UserId)
+            {
+                throw new InvalidUserException("User cannot mark their own answer as helpful");
+            }
+
+            answer = _discussionservices.IncreaseHelpfulCount(answerId);
             // update user exp
-            User user = _usermanagementservices.FindById(answer.PosterId);
+            User user = _usermanagementservices.FindById(answer.UserId);
             user.Exp += _expGainHelpfullAns;
             user = _usermanagementservices.UpdateUser(user);
             _db.SaveChanges();
@@ -161,30 +183,54 @@ namespace ManagerLayer.DiscussionManager
 
         // update answer with increased unhelpful count 
         // don't think UnHulpful affects a user's Exp? 
-        public Answer IncreaseUnHelpfulCount(int id)
+        public Answer IncreaseUnHelpfulCount(int answerId, int userId)
         {
-            Answer answer = _discussionservices.GetAnswer(id);
-            answer = _discussionservices.IncreaseUnHelpfulCount(id);
+            Answer answer = _discussionservices.GetAnswer(answerId);
+
+            // Validate
+            if (userId == answer.UserId)
+            {
+                throw new InvalidUserException("User cannot mark their own answer as unhelpful");
+            }
+
+            answer = _discussionservices.IncreaseUnHelpfulCount(answerId);
             // update user exp
             //User user = _usermanagementservices.FindById(answer.PosterId);
-            //user.Exp += 2;
+            //user.Exp -= 2;
             //user = _usermanagementservices.UpdateUser(user);
             //_db.SaveChanges();
             return answer;
         }
 
-        // 
-        public Answer MarkAsCorrectAnswer(int id)
+        public Question CloseQuestion(int questionId, int userId)
+        {
+            Question question = _discussionservices.GetQuestion(questionId);
+            if (question.IsClosed)
+            {
+                throw new QuestionIsClosedException("Question is already closed");
+            }
+            if (userId != question.UserId)
+            {
+                throw new InvalidUserException("User cannot edit this question");
+            }
+
+            return _discussionservices.CloseQuestion(questionId);
+        }
+
+        public Answer MarkAsCorrectAnswer(int id, int userId)
         {
             Answer answer = _discussionservices.GetAnswer(id);
             Question question = answer.Question;
-            User user = _usermanagementservices.FindById(answer.PosterId);
+            User user = _usermanagementservices.FindById(answer.UserId);
             // Validations 
-            if (question.IsClosed == true)
+            if (question.IsClosed)
             {
-                // throw exception 
+                throw new QuestionIsClosedException("Question is closed");
             }
-            // more validations? 
+            if (userId != question.UserId)
+            {
+                throw new InvalidUserException("User cannot edit this question");
+            }
 
             answer = _discussionservices.MarkAnswerAsCorrect(id);
             question = _discussionservices.CloseQuestion(question.Id);

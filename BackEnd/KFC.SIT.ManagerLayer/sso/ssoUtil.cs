@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ServiceLayer.UserManagement.UserAccountServices;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
@@ -11,7 +12,7 @@ namespace ManagerLayer.sso
     {
         private const string SHARED_SSO_SECRET
             = "D078F2AFC7E59885F3B6D5196CE9DB716ED459467182A19E04B6261BBC8E36EE";
-        public static bool ValidateSSOPayload(SSOPayload payload)
+        public static bool ValidateSSOPayload(SsoPayload payload)
         {
             string payloadStr = $"ssoUserId={payload.SSOUserId};" +
                                 $"email={payload.Email};" +
@@ -26,5 +27,6 @@ namespace ManagerLayer.sso
             );
             return calculatedSignatureStr.Equals(payload.Signature);
         }
+
     }
 }
