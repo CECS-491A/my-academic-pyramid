@@ -104,16 +104,16 @@ namespace KFC.SIT.WebAPI.Controllers
                 securityContext
             );
             // TODO get this from table in database.
-            List<string> requiredClaims = new List<string>()
-            {
-                "CanPostQuestion"
-            };
-            if (!authorizationManager.CheckClaims(requiredClaims))
-            {
-                return Unauthorized();
-            }
-            else
-            {
+            //List<string> requiredClaims = new List<string>()
+            //{
+            //    "CanPostQuestion"
+            //};
+            //if (!authorizationManager.CheckClaims(requiredClaims))
+            //{
+            //    return Unauthorized();
+            //}
+            //else
+            //{
                 UserManager um = new UserManager();
                 User user = um.FindByUserName(securityContext.UserName);
                 if (user == null)
@@ -121,7 +121,7 @@ namespace KFC.SIT.WebAPI.Controllers
                     return Unauthorized();
                 }
                 authUserId = um.FindByUserName(securityContext.UserName).Id;
-            }
+            //}
 
 
 
@@ -163,16 +163,16 @@ namespace KFC.SIT.WebAPI.Controllers
                 securityContext
             );
             // TODO get this from table in database.
-            List<string> requiredClaims = new List<string>()
-            {
-                "CanPostAnswer"
-            };
-            if (!authorizationManager.CheckClaims(requiredClaims))
-            {
-                return Unauthorized();
-            }
-            else
-            {
+            //List<string> requiredClaims = new List<string>()
+            //{
+            //    "CanPostAnswer"
+            //};
+            //if (!authorizationManager.CheckClaims(requiredClaims))
+            //{
+            //    return Unauthorized();
+            //}
+            //else
+            //{
                 UserManager um = new UserManager();
                 User user = um.FindByUserName(securityContext.UserName);
                 if (user == null)
@@ -180,7 +180,7 @@ namespace KFC.SIT.WebAPI.Controllers
                     return Unauthorized();
                 }
                 authUserId = um.FindByUserName(securityContext.UserName).Id;
-            }
+            //}
 
             using (var _db = new DatabaseContext())
             {
@@ -224,16 +224,16 @@ namespace KFC.SIT.WebAPI.Controllers
                 securityContext
             );
             // TODO get this from table in database.
-            List<string> requiredClaims = new List<string>()
-            {
-                "CanPostQuestion"
-            };
-            if (!authorizationManager.CheckClaims(requiredClaims))
-            {
-                return Unauthorized();
-            }
-            else
-            {
+            //List<string> requiredClaims = new List<string>()
+            //{
+            //    "CanPostQuestion"
+            //};
+            //if (!authorizationManager.CheckClaims(requiredClaims))
+            //{
+            //    return Unauthorized();
+            //}
+            //else
+            //{
                 UserManager um = new UserManager();
                 User user = um.FindByUserName(securityContext.UserName);
                 if (user == null)
@@ -241,7 +241,7 @@ namespace KFC.SIT.WebAPI.Controllers
                     return Unauthorized();
                 }
                 authUserId = um.FindByUserName(securityContext.UserName).Id;
-            }
+            //}
 
 
 

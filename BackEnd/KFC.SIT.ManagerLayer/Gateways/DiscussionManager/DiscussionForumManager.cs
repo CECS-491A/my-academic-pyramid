@@ -80,7 +80,7 @@ namespace ManagerLayer.DiscussionManager
             Answer answer = new Answer
             {
                 UserId = a.UserId,
-                UserName = a.UserName,
+                //UserName = a.UserName,
                 Question = question,
                 Text = a.Text,
             };
@@ -243,7 +243,7 @@ namespace ManagerLayer.DiscussionManager
 
         public bool ValidateQuestionCharLength(QuestionDTO q)
         {
-            if (q.Text != null || (q.Text.Length > _questionCharMin && q.Text.Length < _questionCharMax))
+            if (q.Text != null && (q.Text.Length > _questionCharMin && q.Text.Length < _questionCharMax))
                 return true;
             else
                 return false;

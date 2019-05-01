@@ -125,9 +125,9 @@ namespace ServiceLayer.DiscussionForum
             try
             {
                 return _db.Answers
-                .Where(a => a.Question == question)
-                .OrderBy(q => q.HelpfulCount)
-                .ToList();
+                    .Where(a => a.Question == question)
+                    .OrderBy(a => a.HelpfulCount)
+                    .ToList();
             }
             catch (Exception)
             {
