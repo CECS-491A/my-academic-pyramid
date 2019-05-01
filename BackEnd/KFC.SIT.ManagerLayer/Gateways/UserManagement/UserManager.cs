@@ -37,14 +37,6 @@ namespace WebAPI.UserManagement
         /// <param name="targetedUserName"></param>
         public User CreateUserAccount(UserDTO userDto)
         {
-            //try
-            //{
-            //    var valid = new System.Net.Mail.MailAddress(userDto.UserName); // checks that email is valid
-            //}
-            //catch (Exception)
-            //{
-            //    return null;
-            //}
             Category category = _userManagementServices.GetCategory(userDto.Category);
             if (category == null)
             {
@@ -57,10 +49,6 @@ namespace WebAPI.UserManagement
                 FirstName = userDto.FirstName,
                 LastName = userDto.LastName,
                 Category = category
-                //// date and time as it would be in Coordinated Universal Time
-                //CreatedAt = DateTime.Now, // https://stackoverflow.com/questions/62151/datetime-now-vs-datetime-utcnow
-                //DateOfBirth = DateTime.Parse(userDto.DateOfBirth),
-                //Location = userDto.Location,
             };
 
             //Automatically assigning claim to user
@@ -108,10 +96,6 @@ namespace WebAPI.UserManagement
             return _DbContext.SaveChanges();
         }
 
-
-
-
-
         /// <summary>
         /// Method to update user account in database after making changes
         /// </summary>
@@ -137,7 +121,6 @@ namespace WebAPI.UserManagement
                 return 0;
             }
         }
-
 
         /// <summary>
         /// Method to assign a user to be a child of another user. The purpose is to achive a hierachy structure of users
@@ -173,7 +156,6 @@ namespace WebAPI.UserManagement
             }
         }
 
-
         /// <summary>
         /// Method to find user object using email
         /// </summary>
@@ -184,7 +166,6 @@ namespace WebAPI.UserManagement
             User user = _userManagementServices.FindUserByUserEmail(userEmail);
             return user;
         }
-
 
         /// <summary>
         /// Method to find userobject using id
@@ -324,7 +305,6 @@ namespace WebAPI.UserManagement
             return claimList;
         }
 
-
         //
         /// <summary>
         /// Method to verify password when user login. Entered password will be hashed using input from user plus the salt value
@@ -407,11 +387,9 @@ namespace WebAPI.UserManagement
                 _DbContext.SaveChanges();
             }
 
-
             return user;
 
         }
-
 
     }
 }
