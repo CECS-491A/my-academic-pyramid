@@ -22,7 +22,7 @@ namespace DataAccessLayer.Models
 
         public Claim()
         {
-            this.Users = new HashSet<User>();
+            this.Users = new HashSet<Account>();
         }
         /// <summary>
         /// Overload constructor that take value of claim
@@ -31,7 +31,7 @@ namespace DataAccessLayer.Models
         public Claim(String value)
         {
             Value = value;
-            this.Users = new HashSet<User>();
+            this.Users = new HashSet<Account>();
         }
 
        
@@ -42,7 +42,7 @@ namespace DataAccessLayer.Models
 
         //Claim Value
         public string Value { get; set; }
-        public virtual ICollection <User> Users{ get; set; }
+        public virtual ICollection <Account> Users{ get; set; }
 
     }
 }

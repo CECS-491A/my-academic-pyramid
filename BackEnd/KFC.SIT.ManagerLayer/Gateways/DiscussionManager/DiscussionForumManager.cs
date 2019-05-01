@@ -44,7 +44,7 @@ namespace ManagerLayer.DiscussionManager
             // Validations 
             if (!ValidateQuestionCharLength(q))
             {
-                throw new InvalidQuestionLengthException("Question must be between " + _questionCharMin + " and " + _questionCharMax + " characters.");
+                throw new InvalidQuestionLengthException("Question length is incorrect");
             }
 
             // Create Question after passed in Question is validated
@@ -63,7 +63,7 @@ namespace ManagerLayer.DiscussionManager
         public Answer PostAnswer(AnswerDTO a)
         {
             // Validations
-            User answerer = _usermanagementservices.FindById(a.UserId);
+            Account answerer = _usermanagementservices.FindById(a.UserId);
             Question question = _discussionservices.GetQuestion(a.QuestionID);
 
             if (question.IsClosed)
@@ -92,17 +92,10 @@ namespace ManagerLayer.DiscussionManager
 
         // update spam count
         // email sys admin if a question or answer reaches spam limit 
-        public Question IncreaseQuestionSpamCount(int questionId, int userId)
+        public Question IncreaseQuestionSpamCount(int id)
         {
-            Question question = _discussionservices.GetQuestion(questionId);
-
-            // Validate
-            if (userId == question.UserId)
-            {
-                throw new InvalidUserException("User cannot mark their own question as spam");
-            }
-
-            question = _discussionservices.IncreaseQuestionSpamCount(questionId);
+            Question question = _discussionservices.GetQuestion(id);
+            question = _discussionservices.IncreaseQuestionSpamCount(id);
             if (question.SpamCount == _spamLimit)
             {
  //               // call service to email admin because question reached spam limit
@@ -142,15 +135,11 @@ namespace ManagerLayer.DiscussionManager
             }
             if (!ValidateQuestionCharLength(q))
             {
-                throw new InvalidQuestionLengthException("Question must be between " + _questionCharMin + " and " + _questionCharMax + " characters.");
+                throw new InvalidQuestionLengthException("Question length is incorrect");
             }
-            if (userId != question.UserId)
+            if (userId != question.PosterId)
             {
-                throw new InvalidUserException("User cannot edit another user's question");
-            }
-            if (question.Answers.Count > 0)
-            {
-                throw new QuestionUnavailableException("Question cannot be edited after an answer has been posted");
+                throw new InvalidUserException("User cannot edit this question");
             }
 
             // Update Question after passed in Question is validated
@@ -174,7 +163,7 @@ namespace ManagerLayer.DiscussionManager
 
             answer = _discussionservices.IncreaseHelpfulCount(answerId);
             // update user exp
-            User user = _usermanagementservices.FindById(answer.UserId);
+            Account user = _usermanagementservices.FindById(answer.UserId);
             user.Exp += _expGainHelpfullAns;
             user = _usermanagementservices.UpdateUser(user);
             _db.SaveChanges();
@@ -202,32 +191,17 @@ namespace ManagerLayer.DiscussionManager
             return answer;
         }
 
-        public Question CloseQuestion(int questionId, int userId)
-        {
-            Question question = _discussionservices.GetQuestion(questionId);
-            if (question.IsClosed)
-            {
-                throw new QuestionIsClosedException("Question is already closed");
-            }
-            if (userId != question.UserId)
-            {
-                throw new InvalidUserException("User cannot edit this question");
-            }
-
-            return _discussionservices.CloseQuestion(questionId);
-        }
-
         public Answer MarkAsCorrectAnswer(int id, int userId)
         {
             Answer answer = _discussionservices.GetAnswer(id);
             Question question = answer.Question;
-            User user = _usermanagementservices.FindById(answer.UserId);
+            Account user = _usermanagementservices.FindById(answer.UserId);
             // Validations 
             if (question.IsClosed)
             {
                 throw new QuestionIsClosedException("Question is closed");
             }
-            if (userId != question.UserId)
+            if (userId != question.PosterId)
             {
                 throw new InvalidUserException("User cannot edit this question");
             }

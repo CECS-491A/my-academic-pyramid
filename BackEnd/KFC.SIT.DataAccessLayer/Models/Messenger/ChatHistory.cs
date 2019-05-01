@@ -19,7 +19,7 @@ namespace DataAccessLayer.Models.Messenger
 
         [ForeignKey("UserOfChatHistory")]
         public int UserId { get; set; }
-        public virtual User UserOfChatHistory { get; set; }
+        public virtual Account UserOfChatHistory { get; set; }
 
        
 

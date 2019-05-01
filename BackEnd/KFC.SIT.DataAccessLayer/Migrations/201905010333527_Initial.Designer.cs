@@ -7,13 +7,13 @@ namespace DataAccessLayer.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class QuestionsToSchools_Depts_And_Courses : IMigrationMetadata
+    public sealed partial class Initial : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(QuestionsToSchools_Depts_And_Courses));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Initial));
         
         string IMigrationMetadata.Id
         {
-            get { return "201904302228223_QuestionsToSchools_Depts_And_Courses"; }
+            get { return "201905010333527_Initial"; }
         }
         
         string IMigrationMetadata.Source

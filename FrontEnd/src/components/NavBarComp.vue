@@ -6,6 +6,9 @@
       <v-spacer></v-spacer>
       <v-btn to="/" flat>Home</v-btn>
       <v-btn v-if="!sessionState.token" to="Login" flat>Login</v-btn>
+      <v-btn icon v-if="sessionState.token" to="Search" flat>
+        <v-icon>search</v-icon>
+      </v-btn>
       <v-btn v-if="sessionState.token" to="Publish" flat>Publish</v-btn>
       <v-btn v-if="sessionState.token" to="Logging" flat>Logging</v-btn>
       <v-btn v-if="sessionState.token" to="UserManagement" flat>UM</v-btn>

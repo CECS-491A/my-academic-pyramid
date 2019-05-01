@@ -25,7 +25,7 @@ namespace ManagerLayer.sso
             int? userId = _userManagementServices.FindIdBySsoId(ssoId);
             if (userId != null)
             {
-                User userToDelete = _userManagementServices.FindById((int)userId);
+                Account userToDelete = _userManagementServices.FindById((int)userId);
                 deletedUser = new UserDTO()
                 {
                     Id = userToDelete.Id,
@@ -50,7 +50,7 @@ namespace ManagerLayer.sso
             int? userId = _userManagementServices.FindIdBySsoId(ssoId);
             if (userId != null)
             {
-                User foundUser = _userManagementServices.FindById((int)userId);
+                Account foundUser = _userManagementServices.FindById((int)userId);
                 foundUserDto = new UserDTO()
                 {
                     Id = foundUser.Id,
@@ -59,7 +59,6 @@ namespace ManagerLayer.sso
                     LastName = foundUser.LastName,
                     Category = foundUser.Category.Value,
                     DateOfBirth = foundUser.DateOfBirth.ToLongDateString(),
-                    Email = foundUser.Email,
                     CreatedAt = foundUser.CreatedAt.ToLongDateString()
                 };
             }

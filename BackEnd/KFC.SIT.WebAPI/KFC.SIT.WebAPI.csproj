@@ -247,6 +247,7 @@
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\LogoutController.cs" />
     <Compile Include="Controllers\MessengerController.cs" />
+    <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\SSOController.cs" />
     <Compile Include="Controllers\UADController.cs" />
     <Compile Include="Controllers\UserManagerController.cs" />
