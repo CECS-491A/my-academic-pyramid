@@ -137,6 +137,8 @@
     <Compile Include="DTOs\AnswerDTO.cs" />
     <Compile Include="DTOs\ContactHistoryDTO.cs" />
     <Compile Include="DTOs\ConversationDTO.cs" />
+    <Compile Include="DTOs\DepartmentDTO.cs" />
+    <Compile Include="DTOs\ForumPostDTO.cs" />
     <Compile Include="DTOs\FriendContactDTO.cs" />
     <Compile Include="DTOs\SearchPersonDTO.cs" />
     <Compile Include="DTOs\QuestionDTO.cs" />
@@ -155,6 +157,10 @@
     <Compile Include="Migrations\201905010401077_Initial.cs" />
     <Compile Include="Migrations\201905010401077_Initial.Designer.cs">
       <DependentUpon>201905010401077_Initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201905010531161_schoolteacher-add-departmentid.cs" />
+    <Compile Include="Migrations\201905010531161_schoolteacher-add-departmentid.Designer.cs">
+      <DependentUpon>201905010531161_schoolteacher-add-departmentid.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Category.cs" />
@@ -225,6 +231,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201905010401077_Initial.resx">
       <DependentUpon>201905010401077_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905010531161_schoolteacher-add-departmentid.resx">
+      <DependentUpon>201905010531161_schoolteacher-add-departmentid.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

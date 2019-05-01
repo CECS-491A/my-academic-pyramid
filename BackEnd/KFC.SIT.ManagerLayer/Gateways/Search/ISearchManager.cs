@@ -11,8 +11,7 @@ namespace ManagerLayer.Gateways.Search
 {
     public interface ISearchManager
     {
-        List<SearchPersonDTO> SearchStudents(SearchRequest request);
-        List<SearchPersonDTO> SearchTeachers(SearchRequest request);
-        List<Department> GetDepartments(SearchRequest request);
+        dynamic Search (SearchRequest request, int category);
+        List<DepartmentDTO> GetDepartments(string request);
     }
 }
