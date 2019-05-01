@@ -150,7 +150,7 @@ export default {
     methods: {
         search: function() {
             this.loading = true;
-            this.userId = sessionStorage.SITuserId;
+            
             
             if (this.SearchInput.length === 0){
                 this.errorMessage = "Search Input Cannot Be Blank";
@@ -195,7 +195,6 @@ export default {
             })
         },
         getDepartments: function(){
-            this.userId =  sessionStorage.getItem() "krystalleon10@gmail.com";
             this.errorMessage = "";
 
             const url = 'http://localhost:59364/api/search/departments/'
@@ -223,6 +222,7 @@ export default {
         }    
     },
     beforeMount(){
+        this.userId = sessionStorage.SITuserId;
         this.getDepartments()
     },
 }
