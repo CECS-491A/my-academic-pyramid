@@ -141,7 +141,7 @@ export default {
                 ForumPosts: [],
                 Message: ''
             },
-            userEmail: '',
+            userId: '',
             errorMessage: null,
             loading: false,
             useTable: false
@@ -150,7 +150,7 @@ export default {
     methods: {
         search: function() {
             this.loading = true;
-            this.userEmail = "krystalleon10@gmail.com";
+            this.userId = sessionStorage.SITuserId;
             
             if (this.SearchInput.length === 0){
                 this.errorMessage = "Search Input Cannot Be Blank";
@@ -168,12 +168,12 @@ export default {
                 this.useTable = false;
             }
 
-            const url = 'http://localhost:59364/api/search/input'
+            const url = 'https://api.kfc-sso.com/api/search/input'
             
             axios
             .get(url, {
                 params:{
-                    AccountEmail: this.userEmail,
+                    AccountId: this.userId,
                     SearchCategory: this.category,
                     SearchDepartment: this.department,
                     SearchInput: this.SearchInput
@@ -195,14 +195,14 @@ export default {
             })
         },
         getDepartments: function(){
-            this.userEmail = "krystalleon10@gmail.com";
+            this.userId =  sessionStorage.getItem() "krystalleon10@gmail.com";
             this.errorMessage = "";
 
             const url = 'http://localhost:59364/api/search/departments/'
             axios
             .get(url, {
                 params:{
-                    AccountEmail: this.userEmail,
+                    AccountEmail: this.userId,
                 },
                 headers: { "Content-Type": "application/json" }
                 
