@@ -16,7 +16,10 @@ namespace KFC.SIT.WebAPI.Controllers
         [ActionName("Logout")]
         public IHttpActionResult Logout(SsoPayload payload)
         {
-            if(!ssoUtil.ValidateSSOPayload(payload))
+            if(!SignatureService.IsValidClientRequest(
+                    payload.SSOUserId, payload.Email, long.Parse(payload.Timestamp),
+                    payload.Signature
+                ))
             {
                 return Unauthorized();
             }
@@ -44,7 +47,10 @@ namespace KFC.SIT.WebAPI.Controllers
         [ActionName("DeleteUser")]
         public IHttpActionResult DeleteUser(SsoPayload payload)
         {
-            if (!ssoUtil.ValidateSSOPayload(payload))
+            if (!SignatureService.IsValidClientRequest(
+                    payload.SSOUserId, payload.Email, long.Parse(payload.Timestamp),
+                    payload.Signature
+                ))
             {
                 return Unauthorized();
             }
