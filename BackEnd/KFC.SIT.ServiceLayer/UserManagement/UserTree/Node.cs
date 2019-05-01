@@ -12,19 +12,19 @@ namespace Service_Layer.UserManagement.UserTree
         public Node()
         {
             Children = new List<Node>();
-            User = new User();
+            User = new Account();
             Parent = null;
         }
 
         public Node(string userName)
         {
             Children = new List<Node> ();
-            User = new User();
+            User = new Account();
             User.UserName = userName;
             Parent = null;
         }
 
-        public User User { get; set; }
+        public Account User { get; set; }
 
         public List<Node> Children { get; set; }
 
@@ -35,7 +35,7 @@ namespace Service_Layer.UserManagement.UserTree
         /// </summary>
         /// <param name="user">User to add</param>
         /// <returns>Whether the user add was successful</returns>
-        public bool AddChild(User user)
+        public bool AddChild(Account user)
         {
             // Create a user node
             Node child = new Node(user.UserName)
@@ -100,7 +100,7 @@ namespace Service_Layer.UserManagement.UserTree
         /// </summary>
         /// <param name="user">User to find</param>
         /// <returns>User node if found, null if not found</returns>
-        public Node FindUser(User user)
+        public Node FindUser(Account user)
         {
             // Current node matches the user
             if(user.Equals(User))
@@ -179,7 +179,7 @@ namespace Service_Layer.UserManagement.UserTree
         /// </summary>
         /// <param name="user">User to check</param>
         /// <returns>Whether node is a parent</returns>
-        public bool IsDirectParentOf(User user)
+        public bool IsDirectParentOf(Account user)
         {
             // Compare each child with user
             foreach(Node child in Children)

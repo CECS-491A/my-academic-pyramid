@@ -89,7 +89,7 @@ namespace SecurityLayer.Authorization.AuthorizationManagers
         /// <param name="callingUser"></param> can't be null or it will throw an exception.
         /// <param name="targetedUser"></param> can't be null or it will throw an exception.
         /// <returns> true/false </returns>
-        public bool HasHigherPrivilege(User callingUser, User targetedUser)
+        public bool HasHigherPrivilege(Account callingUser, Account targetedUser)
         {
             if (callingUser == null)
             {
@@ -122,7 +122,7 @@ namespace SecurityLayer.Authorization.AuthorizationManagers
         /// </summary>
         /// <param name="user"></param> can't be null or it will throw an exception
         /// <returns> level </returns>
-        public int FindHeight(User user)
+        public int FindHeight(Account user)
         {
             if (user == null)
             {

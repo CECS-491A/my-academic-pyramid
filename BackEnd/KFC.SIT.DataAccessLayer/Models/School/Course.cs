@@ -7,32 +7,33 @@ namespace DataAccessLayer.Models.School
 {
     public class Course
     {
-        public Course(string name, int schoolId, int departmentId, int teacherId)
+        public Course()
+        {
+            Questions = new List<Question>();
+            Teachers = new List<SchoolTeacherCourse>();
+        }
+
+        public Course(string name, int schoolId, int departmentId)
         {
             Name = name;
             SchoolId = schoolId;
             DepartmentId = departmentId;
-            TeacherId = teacherId;
-            Students = new List<Student>();
             Questions = new List<Question>();
+            Teachers = new List<SchoolTeacherCourse>();
         }
 
-        [Required, Key]
+        [Required, Key, Column(Order = 0)]
         public int Id { set; get; }
         [Required]
         public string Name { set; get; }
-        [ForeignKey("Department")]
-        public int DepartmentId { set; get; }
-        public virtual Department Department { set; get; }
-        [ForeignKey("School")]
+        [ForeignKey("SchoolDepartment"),Column(Order = 2)]
         public int SchoolId { set; get; }
-        public School School { set; get; }
-        [ForeignKey("Teacher")]
-        public int TeacherId { set; get; }
-        public Teacher Teacher { set; get; }
-        
-        public virtual ICollection<Student> Students { set; get; }
-        public virtual ICollection<Question> Questions { set; get; }
+        [Key,ForeignKey("SchoolDepartment"), Column(Order = 1)]
+        public int DepartmentId { set; get; }
+        [ForeignKey("SchoolId, DepartmentId")]
+        public virtual SchoolDepartment SchoolDepartment { set; get; }
 
+        public virtual ICollection<SchoolTeacherCourse> Teachers { get; set; }
+        public virtual ICollection<Question> Questions { get; set; }
     }
 }

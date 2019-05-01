@@ -30,7 +30,7 @@ namespace KFC.SIT.WebAPI.Controllers
         public IQueryable<UserDTO> GetAllUsers()
         {
             UserManager umManager = new UserManager();
-            List<User> userList = umManager.GetAllUser();
+            List<Account> userList = umManager.GetAllUser();
 
             List<UserDTO> list = new List<UserDTO>();
             foreach (var user in userList)
@@ -136,7 +136,7 @@ namespace KFC.SIT.WebAPI.Controllers
         public IHttpActionResult EditUser([FromBody] UserDTO userDto)
         {
             UserManager umManager = new UserManager();
-            User foundUser = umManager.FindUserById(userDto.Id);
+            Account foundUser = umManager.FindUserById(userDto.Id);
             foundUser.UserName = userDto.UserName;
             foundUser.FirstName = userDto.FirstName;
             foundUser.LastName = userDto.LastName;

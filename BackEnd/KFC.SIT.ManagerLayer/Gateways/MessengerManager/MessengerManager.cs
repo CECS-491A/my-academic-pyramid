@@ -148,7 +148,7 @@ namespace WebAPI.Gateways.Messenger
         /// <param name="authUserId"></param>
         /// <param name="targetUserId"></param>
         /// <returns></returns>
-        public User AddUserFriendList(int authUserId, string targetUserId)
+        public Account AddUserFriendList(int authUserId, string targetUserId)
         {
             var authUser = _umServices.FindById(authUserId);
             var targetUser = _umServices.FindByUsername(targetUserId);
