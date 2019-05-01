@@ -15,16 +15,14 @@ using DataAccessLayer.Models;
 using ManagerLayer.DiscussionManager;
 using DataAccessLayer.DTOs;
 using DataAccessLayer;
-using ServiceLayer;
 using ServiceLayer.DiscussionForum;
-using System.Data.Entity.Infrastructure;
 
 namespace KFC.SIT.WebAPI.Controllers
 {
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class DiscussionForumController : ApiController
     {
-        private bool securityPass = false;
+        private bool securityPass = true;
         private int authUserId;
 
 
@@ -92,12 +90,12 @@ namespace KFC.SIT.WebAPI.Controllers
              );
             if (securityContext == null)
             {
-                return Unauthorized();
+                securityPass = false;
             }
             SessionManager sm = new SessionManager();
             if (!sm.ValidateSession(securityContext.Token))
             {
-                return Unauthorized();
+                securityPass = false;
             }
 
             AuthorizationManager authorizationManager = new AuthorizationManager(
@@ -106,39 +104,37 @@ namespace KFC.SIT.WebAPI.Controllers
             // TODO get this from table in database.
             List<string> requiredClaims = new List<string>()
             {
-                "CanPostQuestion"
+                //"CanPostQuestion"
             };
             if (!authorizationManager.CheckClaims(requiredClaims))
             {
-                return Unauthorized();
+                securityPass = false;
             }
             else
             {
                 UserManager um = new UserManager();
                 Account user = um.FindByUserName(securityContext.UserName);
+                authUserId = um.FindByUserName(securityContext.UserName).Id;
                 if (user == null)
                 {
-                    return Unauthorized();
+                    securityPass = false;
                 }
-                authUserId = um.FindByUserName(securityContext.UserName).Id;
             }
-
-
 
             using (var _db = new DatabaseContext())
             {
                 Question question;
                 try
                 {
-                    questionDTO.StudentId = authUserId;
+                    questionDTO.PosterId = authUserId;
                     DiscussionForumManager discussionManager = new DiscussionForumManager(_db);
                     question = discussionManager.PostQuestion(questionDTO);
-                    return Content(HttpStatusCode.OK, "Question was posted succesfully.");
                 }
-                catch (InvalidQuestionLengthException ex)
+                catch
                 {
-                    return Content(HttpStatusCode.BadRequest, ex.Message);
+
                 }
+                return Content(HttpStatusCode.OK, "Question was posted succesfully.");
             }
         }
 
@@ -151,12 +147,12 @@ namespace KFC.SIT.WebAPI.Controllers
              );
             if (securityContext == null)
             {
-                return Unauthorized();
+                securityPass = false;
             }
             SessionManager sm = new SessionManager();
             if (!sm.ValidateSession(securityContext.Token))
             {
-                return Unauthorized();
+                securityPass = false;
             }
 
             AuthorizationManager authorizationManager = new AuthorizationManager(
@@ -165,21 +161,21 @@ namespace KFC.SIT.WebAPI.Controllers
             // TODO get this from table in database.
             List<string> requiredClaims = new List<string>()
             {
-                "CanPostAnswer"
+                //"CanPostAnswer"
             };
             if (!authorizationManager.CheckClaims(requiredClaims))
             {
-                return Unauthorized();
+                securityPass = false;
             }
             else
             {
                 UserManager um = new UserManager();
                 Account user = um.FindByUserName(securityContext.UserName);
+                authUserId = um.FindByUserName(securityContext.UserName).Id;
                 if (user == null)
                 {
-                    return Unauthorized();
+                    securityPass = false;
                 }
-                authUserId = um.FindByUserName(securityContext.UserName).Id;
             }
 
             using (var _db = new DatabaseContext())
@@ -187,17 +183,13 @@ namespace KFC.SIT.WebAPI.Controllers
                 Answer answer;
                 try
                 {
-                    answerDTO.StudentId = authUserId;
+                    answerDTO.PosterId = authUserId;
                     DiscussionForumManager discussionManager = new DiscussionForumManager(_db);
                     answer = discussionManager.PostAnswer(answerDTO);
                 }
-                catch (QuestionIsClosedException ex)
+                catch
                 {
-                    return Content(HttpStatusCode.Forbidden, ex.Message);
-                }
-                catch (NotEnoughExpException ex)
-                {
-                    return Content(HttpStatusCode.Conflict, ex.Message);
+
                 }
                 return Content(HttpStatusCode.OK, "Answer was posted succesfully.");
             }
@@ -212,12 +204,12 @@ namespace KFC.SIT.WebAPI.Controllers
              );
             if (securityContext == null)
             {
-                return Unauthorized();
+                securityPass = false;
             }
             SessionManager sm = new SessionManager();
             if (!sm.ValidateSession(securityContext.Token))
             {
-                return Unauthorized();
+                securityPass = false;
             }
 
             AuthorizationManager authorizationManager = new AuthorizationManager(
@@ -226,24 +218,22 @@ namespace KFC.SIT.WebAPI.Controllers
             // TODO get this from table in database.
             List<string> requiredClaims = new List<string>()
             {
-                "CanPostQuestion"
+                //"CanPostQuestion"
             };
             if (!authorizationManager.CheckClaims(requiredClaims))
             {
-                return Unauthorized();
+                securityPass = false;
             }
             else
             {
                 UserManager um = new UserManager();
                 Account user = um.FindByUserName(securityContext.UserName);
+                authUserId = um.FindByUserName(securityContext.UserName).Id;
                 if (user == null)
                 {
-                    return Unauthorized();
+                    securityPass = false;
                 }
-                authUserId = um.FindByUserName(securityContext.UserName).Id;
             }
-
-
 
             using (var _db = new DatabaseContext())
             {
@@ -252,24 +242,12 @@ namespace KFC.SIT.WebAPI.Controllers
                 {
                     DiscussionForumManager discussionManager = new DiscussionForumManager(_db);
                     question = discussionManager.EditQuestion(questionDTO, authUserId);
-                    return Content(HttpStatusCode.OK, "Question was posted succesfully.");
                 }
-                catch (QuestionIsClosedException ex)
+                catch
                 {
-                    return Content(HttpStatusCode.Forbidden, ex.Message);
+
                 }
-                catch (InvalidQuestionLengthException ex)
-                {
-                    return Content(HttpStatusCode.BadRequest, ex.Message);
-                }
-                catch (InvalidUserException ex)
-                {
-                    return Content(HttpStatusCode.Unauthorized, ex.Message);
-                }
-                catch (QuestionUnavailableException ex)
-                {
-                    return Content(HttpStatusCode.Forbidden, ex.Message);
-                }
+                return Content(HttpStatusCode.OK, "Question was posted succesfully.");
             }
         }
 
@@ -277,59 +255,20 @@ namespace KFC.SIT.WebAPI.Controllers
         [ActionName("IncreaseQuestionSpamCount")]
         public IHttpActionResult IncreaseQuestionSpamCount(int questionId)
         {
-            SecurityContext securityContext = SecurityContextBuilder.CreateSecurityContext(
-                 Request.Headers
-             );
-            if (securityContext == null)
-            {
-                return Unauthorized();
-            }
-            SessionManager sm = new SessionManager();
-            if (!sm.ValidateSession(securityContext.Token))
-            {
-                return Unauthorized();
-            }
-
-            AuthorizationManager authorizationManager = new AuthorizationManager(
-                securityContext
-            );
-            // TODO get this from table in database.
-            List<string> requiredClaims = new List<string>()
-            {
-                "CanMarkQuestionAsSpam"
-            };
-            if (!authorizationManager.CheckClaims(requiredClaims))
-            {
-                return Unauthorized();
-            }
-            else
-            {
-                UserManager um = new UserManager();
-                User user = um.FindByUserName(securityContext.UserName);
-                if (user == null)
-                {
-                    return Unauthorized();
-                }
-                authUserId = um.FindByUserName(securityContext.UserName).Id;
-            }
-
             using (var _db = new DatabaseContext())
             {
                 Question question;
                 try
                 {
                     DiscussionForumManager discussionManager = new DiscussionForumManager(_db);
-                    question = discussionManager.IncreaseQuestionSpamCount(questionId, authUserId);
+                    question = discussionManager.IncreaseQuestionSpamCount(questionId);
                     return Content(HttpStatusCode.OK, question);
                 }
-                catch (ArgumentNullException)
+                catch
                 {
-                    return Content(HttpStatusCode.BadRequest, "Answer does not exist");
+
                 }
-                catch (InvalidUserException ex)
-                {
-                    return Content(HttpStatusCode.Unauthorized, ex.Message);
-                }
+                return Content(HttpStatusCode.ExpectationFailed, "Error");
             }
         }
 
@@ -337,59 +276,21 @@ namespace KFC.SIT.WebAPI.Controllers
         [ActionName("IncreaseAnswerSpamCount")]
         public IHttpActionResult IncreaseAnswerSpamCount(int answerId)
         {
-            SecurityContext securityContext = SecurityContextBuilder.CreateSecurityContext(
-                 Request.Headers
-             );
-            if (securityContext == null)
-            {
-                return Unauthorized();
-            }
-            SessionManager sm = new SessionManager();
-            if (!sm.ValidateSession(securityContext.Token))
-            {
-                return Unauthorized();
-            }
-
-            AuthorizationManager authorizationManager = new AuthorizationManager(
-                securityContext
-            );
-            // TODO get this from table in database.
-            List<string> requiredClaims = new List<string>()
-            {
-                "CanMarkAnswerAsSpam"
-            };
-            if (!authorizationManager.CheckClaims(requiredClaims))
-            {
-                return Unauthorized();
-            }
-            else
-            {
-                UserManager um = new UserManager();
-                User user = um.FindByUserName(securityContext.UserName);
-                if (user == null)
-                {
-                    return Unauthorized();
-                }
-                authUserId = um.FindByUserName(securityContext.UserName).Id;
-            }
-
             using (var _db = new DatabaseContext())
             {
                 Answer answer;
                 try
                 {
                     DiscussionForumManager discussionManager = new DiscussionForumManager(_db);
-                    answer = discussionManager.IncreaseAnswerSpamCount(answerId, authUserId);
+                    answer = discussionManager.IncreaseAnswerSpamCount(answerId);
                     return Content(HttpStatusCode.OK, answer);
                 }
-                catch (ArgumentNullException)
+                catch
                 {
-                    return Content(HttpStatusCode.BadRequest, "Answer does not exist");
+
                 }
-                catch (InvalidUserException ex)
-                {
-                    return Content(HttpStatusCode.Unauthorized, ex.Message);
-                }
+                return Content(HttpStatusCode.ExpectationFailed, "Error");
+
             }
         }
 
@@ -397,64 +298,21 @@ namespace KFC.SIT.WebAPI.Controllers
         [ActionName("IncreaseAnswerHelpfulCount")]
         public IHttpActionResult IncreaseAnswerHelpfulCount(int answerId)
         {
-            SecurityContext securityContext = SecurityContextBuilder.CreateSecurityContext(
-                 Request.Headers
-             );
-            if (securityContext == null)
-            {
-                return Unauthorized();
-            }
-            SessionManager sm = new SessionManager();
-            if (!sm.ValidateSession(securityContext.Token))
-            {
-                return Unauthorized();
-            }
-
-            AuthorizationManager authorizationManager = new AuthorizationManager(
-                securityContext
-            );
-            // TODO get this from table in database.
-            List<string> requiredClaims = new List<string>()
-            {
-                "CanMarkAnswerAsHelpful"
-            };
-            if (!authorizationManager.CheckClaims(requiredClaims))
-            {
-                return Unauthorized();
-            }
-            else
-            {
-                UserManager um = new UserManager();
-                User user = um.FindByUserName(securityContext.UserName);
-                if (user == null)
-                {
-                    return Unauthorized();
-                }
-                authUserId = um.FindByUserName(securityContext.UserName).Id;
-            }
-
             using (var _db = new DatabaseContext())
             {
                 Answer answer;
                 try
                 {
                     DiscussionForumManager discussionManager = new DiscussionForumManager(_db);
-                    answer = discussionManager.IncreaseHelpfulCount(answerId, authUserId);
+                    answer = discussionManager.IncreaseHelpfulCount(answerId);
                     return Content(HttpStatusCode.OK, answer);
                 }
-                catch (ArgumentNullException)
-                {
-                    return Content(HttpStatusCode.BadRequest, "Answer does not exist");
-                }
-                catch (InvalidUserException ex)
-                {
-                    return Content(HttpStatusCode.Unauthorized, ex.Message);
-                }
-                catch (DbUpdateConcurrencyException)
+                catch
                 {
 
-                    return Content(HttpStatusCode.InternalServerError, "There was an error on the server");
                 }
+                return Content(HttpStatusCode.ExpectationFailed, "Error");
+
             }
         }
 
@@ -462,59 +320,21 @@ namespace KFC.SIT.WebAPI.Controllers
         [ActionName("IncreaseAnswerUnHelpfulCount")]
         public IHttpActionResult IncreaseAnswerUnHelpfulCount(int answerId)
         {
-            SecurityContext securityContext = SecurityContextBuilder.CreateSecurityContext(
-                 Request.Headers
-             );
-            if (securityContext == null)
-            {
-                return Unauthorized();
-            }
-            SessionManager sm = new SessionManager();
-            if (!sm.ValidateSession(securityContext.Token))
-            {
-                return Unauthorized();
-            }
-
-            AuthorizationManager authorizationManager = new AuthorizationManager(
-                securityContext
-            );
-            // TODO get this from table in database.
-            List<string> requiredClaims = new List<string>()
-            {
-                "CanMarkAnswerAsUnHelpful"
-            };
-            if (!authorizationManager.CheckClaims(requiredClaims))
-            {
-                return Unauthorized();
-            }
-            else
-            {
-                UserManager um = new UserManager();
-                User user = um.FindByUserName(securityContext.UserName);
-                if (user == null)
-                {
-                    return Unauthorized();
-                }
-                authUserId = um.FindByUserName(securityContext.UserName).Id;
-            }
-
             using (var _db = new DatabaseContext())
             {
                 Answer answer;
                 try
                 {
                     DiscussionForumManager discussionManager = new DiscussionForumManager(_db);
-                    answer = discussionManager.IncreaseUnHelpfulCount(answerId, authUserId);
+                    answer = discussionManager.IncreaseUnHelpfulCount(answerId);
                     return Content(HttpStatusCode.OK, answer);
                 }
-                catch (ArgumentNullException)
+                catch
                 {
-                    return Content(HttpStatusCode.BadRequest, "Answer does not exist");
+
                 }
-                catch (InvalidUserException ex)
-                {
-                    return Content(HttpStatusCode.Unauthorized, ex.Message);
-                }
+                return Content(HttpStatusCode.ExpectationFailed, "Error");
+
             }
         }
 
@@ -522,61 +342,20 @@ namespace KFC.SIT.WebAPI.Controllers
         [ActionName("CloseQuestion")]
         public IHttpActionResult CloseQuestion(int questionId)
         {
-            SecurityContext securityContext = SecurityContextBuilder.CreateSecurityContext(
-                Request.Headers
-            );
-            if (securityContext == null)
-            {
-                return Unauthorized();
-            }
-            SessionManager sm = new SessionManager();
-            if (!sm.ValidateSession(securityContext.Token))
-            {
-                return Unauthorized();
-            }
-
-            AuthorizationManager authorizationManager = new AuthorizationManager(
-                securityContext
-            );
-            // TODO get this from table in database.
-            List<string> requiredClaims = new List<string>()
-            {
-                "CanCloseQuestion"
-            };
-            if (!authorizationManager.CheckClaims(requiredClaims))
-            {
-                return Unauthorized();
-            }
-            else
-            {
-                UserManager um = new UserManager();
-                User user = um.FindByUserName(securityContext.UserName);
-                if (user == null)
-                {
-                    return Unauthorized();
-                }
-                authUserId = um.FindByUserName(securityContext.UserName).Id;
-            }
-
-
             using (var _db = new DatabaseContext())
             {
                 Question question;
                 try
                 {
-                    DiscussionForumManager discussionServices = new DiscussionForumManager(_db);
-                    question = discussionServices.CloseQuestion(questionId, authUserId);
+                    DiscussionForumServices discussionServices = new DiscussionForumServices(_db);
+                    question = discussionServices.CloseQuestion(questionId);
                     return Content(HttpStatusCode.OK, question);
                 }
-                catch (QuestionIsClosedException ex)
+                catch
                 {
-                    return Content(HttpStatusCode.BadRequest, ex.Message);
-                }
-                catch (InvalidUserException ex)
-                {
-                    return Content(HttpStatusCode.Unauthorized, ex.Message);
-                }
 
+                }
+                return Content(HttpStatusCode.ExpectationFailed, "Error");
             }
         }
 
@@ -584,41 +363,7 @@ namespace KFC.SIT.WebAPI.Controllers
         [ActionName("MarkAsCorrectAnswer")]
         public IHttpActionResult MarkAsCorrectAnswer(int answerId)
         {
-            SecurityContext securityContext = SecurityContextBuilder.CreateSecurityContext(
-                Request.Headers
-            );
-            if (securityContext == null)
-            {
-                return Unauthorized();
-            }
-            SessionManager sm = new SessionManager();
-            if (!sm.ValidateSession(securityContext.Token))
-            {
-                return Unauthorized();
-            }
-
-            AuthorizationManager authorizationManager = new AuthorizationManager(
-                securityContext
-            );
-            // TODO get this from table in database.
-            List<string> requiredClaims = new List<string>()
-            {
-                "CanMarkAnswerAsCorrect"
-            };
-            if (!authorizationManager.CheckClaims(requiredClaims))
-            {
-                return Unauthorized();
-            }
-            else
-            {
-                UserManager um = new UserManager();
-                User user = um.FindByUserName(securityContext.UserName);
-                if (user == null)
-                {
-                    return Unauthorized();
-                }
-                authUserId = um.FindByUserName(securityContext.UserName).Id;
-            }
+            //Todo get userId
 
             using (var _db = new DatabaseContext())
             {
@@ -626,27 +371,17 @@ namespace KFC.SIT.WebAPI.Controllers
                 try
                 {
                     DiscussionForumManager discussionManager = new DiscussionForumManager(_db);
-                    answer = discussionManager.MarkAsCorrectAnswer(answerId, authUserId);
-                    return Content(HttpStatusCode.OK, answer);
+                    //answer = discussionManager.MarkAsCorrectAnswer(answerId);
+                    //return Content(HttpStatusCode.OK, answer);
                 }
-                catch (ArgumentNullException)
-                {
-                    return Content(HttpStatusCode.BadRequest, "Answer does not exist");
-                }
-                catch (QuestionIsClosedException ex)
-                {
-                    return Content(HttpStatusCode.Forbidden, ex.Message);
-                }
-                catch (InvalidUserException ex)
-                {
-                    return Content(HttpStatusCode.Unauthorized, ex.Message);
-                }
-                catch (DbUpdateConcurrencyException)
+                catch
                 {
 
-                    return Content(HttpStatusCode.InternalServerError, "There was an error on the server");
                 }
+                return Content(HttpStatusCode.ExpectationFailed, "Error");
+
             }
         }
+
     }
 }

@@ -10,11 +10,8 @@ namespace DataAccessLayer.DTOs
     {
         // need Id for updateQuestion not PostQuestion
         public int Id { get; set; }
-        public int SchoolId { get; set; }
-        public int DepartmentId { get; set; }
-        public int CourseId { get; set; }
-        public int StudentId { get; set; }
-        public string StudentUserName { get; set; }
+        public int PosterId { get; set; }
+        public string PosterUserName { get; set; }
         public string Text { get; set; }
         public int MinimumExpForAnswer { get; set; }
         public bool IsDraft { get; set; }
