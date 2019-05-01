@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using DataAccessLayer.Models.DiscussionForum;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -13,6 +14,7 @@ namespace DataAccessLayer.Models.School
             DepartmentId = departmentId;
             TeacherId = teacherId;
             Students = new List<Student>();
+            Questions = new List<Question>();
         }
 
         [Required, Key]
@@ -30,5 +32,7 @@ namespace DataAccessLayer.Models.School
         public Teacher Teacher { set; get; }
         
         public virtual ICollection<Student> Students { set; get; }
+        public virtual ICollection<Question> Questions { set; get; }
+
     }
 }

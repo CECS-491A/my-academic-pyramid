@@ -15,6 +15,7 @@ import UserRegistration from '@/Views/UserRegistration'
 import UserHomePage from '@/Views/UserHomePage'
 import Redirect from '@/Views/Redirect'
 import UsageAnalysisDashboard from '@/Views/UsageAnalysisDashboard'
+import DiscussionForum from '@/Views/DiscussionForum'
 
 
 Vue.use(Router)
@@ -81,6 +82,11 @@ export default new Router({
     path: "/Dashboard",
     name: "Dashboard",
     component: UsageAnalysisDashboard
+  },
+  {
+    path: "/DiscussionForum",
+    name: "DiscussionForum",
+    component: DiscussionForum
   }
   ]
 })
