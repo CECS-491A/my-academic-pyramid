@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using DataAccessLayer.Models.Messenger;
 using DataAccessLayer.Models.School;
+using DataAccessLayer.Models.DiscussionForum;
 
 namespace DataAccessLayer.Models
 {    
@@ -72,7 +73,7 @@ namespace DataAccessLayer.Models
 
         public virtual ICollection<Student> Students { get; set; }
 
-        //public ICollection<Question> Questions;
+        public ICollection<Question> Questions;
 
         /// <summary>
         /// Override Equals method.  The UserName of each User is unique.

@@ -356,7 +356,17 @@ namespace WebAPI.UserManagement
 
                 //Discussion Forum's claims
                 _userManagementServices.AddClaim(user, new Claim("CanPostQuestion"));
-                _userManagementServices.AddClaim(user, new Claim("CanReceiveQuestion"));
+                _userManagementServices.AddClaim(user, new Claim("CanSeeQuestion"));
+                _userManagementServices.AddClaim(user, new Claim("CanCloseQuestion"));
+                _userManagementServices.AddClaim(user, new Claim("CanPostAnswer"));
+                _userManagementServices.AddClaim(user, new Claim("CanSeeAnswer"));
+                _userManagementServices.AddClaim(user, new Claim("CanMarkQuestionAsSpam"));
+                _userManagementServices.AddClaim(user, new Claim("CanMarkAnswerAsSpam"));
+                _userManagementServices.AddClaim(user, new Claim("CanMarkAnswerAsHelpful"));
+                _userManagementServices.AddClaim(user, new Claim("CanMarkAnswerAsUnHelpful"));
+                _userManagementServices.AddClaim(user, new Claim("CanMarkAnswerAsCorrect"));
+
+
 
                 //User Management's claims
                 _userManagementServices.AddClaim(user, new Claim("CanCreateOwnStudentAccount"));

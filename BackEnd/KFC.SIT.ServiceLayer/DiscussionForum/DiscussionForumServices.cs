@@ -104,7 +104,7 @@ namespace ServiceLayer.DiscussionForum
             try
             {
                 return _db.Questions
-                    .Where(q => q.IsDraft == true && q.PosterId == posterId)
+                    .Where(q => q.IsDraft == true && q.UserId == posterId)
                     .OrderBy(q => q.CreatedDate)
                     .ToList();
             }
