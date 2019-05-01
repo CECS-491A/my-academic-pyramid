@@ -37,7 +37,7 @@ namespace DataAccessLayer
         public DbSet<Student> Students { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
 
-        public DatabaseContext () :base ("name=LocalTest")
+        public DatabaseContext () :base ("name=MYAPConnectionString")
         {
             //Database.SetInitializer(new DropCreateDatabaseAlways<DatabaseContext>());
 

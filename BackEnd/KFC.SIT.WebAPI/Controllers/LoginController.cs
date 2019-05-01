@@ -25,10 +25,13 @@ namespace KFC.SIT.WebAPI.Controllers
             SessionManager sm = new SessionManager();
             UserManager um = new UserManager();
             string URL_FIRST_PART 
-                = $"{WebAPIConstants.FRONT_END_LOCAL}/Redirect";
+                = $"{WebAPIConstants.FRONT_END_PRODUCTION}/#/Redirect";
             
             // Assume it's there for now.
-            if (!ssoUtil.ValidateSSOPayload(payload))
+            if (!SignatureService.IsValidClientRequest(
+                    payload.SSOUserId, payload.Email, long.Parse(payload.Timestamp), 
+                    payload.Signature
+                ))
             {
                 return Unauthorized();
             }
@@ -50,14 +53,8 @@ namespace KFC.SIT.WebAPI.Controllers
             }
             string token = sm.CreateSession(user.Id);
 
-            Dictionary<string, string> redirectResponseDictionary
-                = new Dictionary<string, string>()
-            {
-                {"redirectURL", URL_FIRST_PART }
-            };
-            redirectResponseDictionary["redirectURL"] 
-                = redirectResponseDictionary["redirectURL"] + "?SITtoken=" + token;
-            return Ok(redirectResponseDictionary);
+            string redirectUrl = URL_FIRST_PART + "?SITtoken=" + token;
+            return Redirect(redirectUrl);
             
         }
 

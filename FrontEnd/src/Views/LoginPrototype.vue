@@ -54,14 +54,13 @@ export default {
               let temp = JSON.parse(tempStr);
               temp['headers']  = {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Origin': "http://localhost:8080"
               }
               const url = `${this.$hostname}Login`;
               axios.post(url, temp)
-                   .then(response => {
-                       this.registrationUrl = response.data["redirectURL"]
-                       this.indexToCut = this.registrationUrl.search(this.redirectViewName)
-                       this.$router.push(this.registrationUrl.substr(this.indexToCut))
+                   .then(reponse => {
+                     this.$router.push(`/${this.redirectViewName}`)
                    })
                    .catch(err => console.log("There was error. " + err));
               
