@@ -8,7 +8,7 @@
       </div>
       <div class="column">
         <h3>Bar Chart</h3>
-        <chartjs-bar></chartjs-bar>
+        <bar-chart></bar-chart>
       </div>
     </div>
     <div class="columns">
@@ -24,17 +24,17 @@
   </section>
 </template>
 
-
 <script>
+  import LineChart from '@/components/Dashboard/ExampleKevin'
+  import AVG from '@/components/Dashboard/AvgSuccessfulLoginBarChart'
+  import Re from '@/components/Dashboard/Reactive'
+
   export default {
-    name: 'VueCharts',
+    name: 'VueChartJS',
     components: {
-    },
-    data () {
-      return {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-        dataset: [65, 59, 80, 81, 56, 55, 40]
-      }
+      LineChart,
+      AVG,
+      Re
     }
   }
 </script>

@@ -17,22 +17,22 @@
       </v-btn>
     </v-toolbar>
   
-    <v-navigation-drawer app v-model="drawer" class="info">
+    <v-navigation-drawer app v-model="drawer">
       <v-layout column align-center>
         <v-flex class="mt-5">
           <v-avatar size="100">
             <img src="./assets/Vong.jpg">
           </v-avatar>
-          <p class="white--text subheading mt-1">Professor Vong</p>
+          <p class="purple--text subheading mt-1">Professor Vong</p>
         </v-flex>
       </v-layout>
       <v-list>
         <v-list-tile v-for="link in links" :key="link.text" router :to="link.route">
           <v-list-tile-action>
-            <v-icon class="white--text">{{link.icon}}</v-icon>
+            <v-icon class="purple--text">{{link.icon}}</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <v-list-tile-title class="white--text">{{link.text}}</v-list-tile-title>
+            <v-list-tile-title class="purple--text">{{link.text}}</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
       </v-list>
@@ -54,15 +54,15 @@ export default {
       links: [
         { icon: 'home', text: 'Home', route: '/'},
         { icon: 'face', text: 'Login', route: '/login'},
+        { icon: 'search', text: 'Search', route: '/'},
         { icon: 'dashboard', text: 'Dashboard', route: '/Dashboard'},
-        { icon: 'person', text: 'UM', route: '/UserManagement'},
+        { icon: 'person', text: 'User Management', route: '/UserManagement'},
         { icon: 'chat', text: 'Chat', route: '/Chat'},
         { icon: 'restore', text: 'Logging', route: '/Logging'},
         { icon: 'launch', text: 'Publish', route: '/publish'},
-        { icon: 'forum', text: 'DiscussionForum', route: '/DiscussionForum'},
-        { icon: 'account_box', text: 'UserRegistration', route: '/UserRegistration'},
-        { icon: 'contacts', text: 'UserHomePage', route: '/UserHomePage'}
-
+        { icon: 'forum', text: 'Discussion Forum', route: '/DiscussionForum'},
+        { icon: 'account_box', text: 'User Registration', route: '/UserRegistration'},
+        { icon: 'contacts', text: 'User HomePage', route: '/UserHomePage'}
       ]
     }
   }

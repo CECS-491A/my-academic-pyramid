@@ -13,7 +13,7 @@ import UserRegistration from '@/Views/UserRegistration'
 import UserHomePage from '@/Views/UserHomePage'
 import Redirect from '@/Views/Redirect'
 import UsageAnalysisDashboard from '@/Views/UsageAnalysisDashboard'
-// import Search from '@/Views/Search'
+//import Search from '@/Views/Search'
 
 Vue.use(Router)
 Vue.use(Vuetify)
@@ -78,10 +78,10 @@ export default new Router({
     name: "Dashboard",
     component: UsageAnalysisDashboard
   },
-  // {
-  //   path: "/Search",
-  //   name: "Search",
-  //   component: Search
-  // }
+  //{
+  //  path: "/Search",
+  //  name: "Search",
+  //  component: Search
+  //}
   ]
 })
