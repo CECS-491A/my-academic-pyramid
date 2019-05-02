@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using DataAccessLayer;
 using ServiceLayer.DataAnalysisDashboard;
 
 namespace ManagerLayer.Gateways.UsageAnalysisDashboard
@@ -41,6 +42,7 @@ namespace ManagerLayer.Gateways.UsageAnalysisDashboard
                     double numSuccessfulLogin = 0;
                     double numFailedLogin = 0;
                     numSuccessfulLogin = successLogin[monthToday];
+
                     if (failedLogin.ContainsKey(monthToday))
                     {
                         numFailedLogin = failedLogin[monthToday];
@@ -84,9 +86,14 @@ namespace ManagerLayer.Gateways.UsageAnalysisDashboard
             return featureTime;
         }
 
+        /// <summary>
+        /// Get the list of five features that are used most
+        /// parameter = number of features
+        /// </summary>
+        /// <returns></returns>
         public IDictionary<string, long> GetMostUsedFeature()
         {
-            IDictionary<string, long> featureNumUsed = _dashboardService.CountMostUsedFiveFeature();
+            IDictionary<string, long> featureNumUsed = _dashboardService.CountMostUsedFiveFeature(5);
             return featureNumUsed;
         }
 
@@ -95,14 +102,27 @@ namespace ManagerLayer.Gateways.UsageAnalysisDashboard
             throw new Exception();
         }
 
-        public long[] GetSuccessfulLogin()
+        /// <summary>
+        /// Get the list of logged in users and number of total users 
+        /// </summary>
+        /// <returns></returns>
+        public long[] GetSuccessfulLoggedInUsers()
         {
-            throw new Exception();
-           // long[] numLogin = _dashboardService.CountSuccessfulLogin();
-           // return numLogin;
+            int duration = 6;
+            long[] successfulLoggedInUsers = new long[duration + 1];
+            long numTotalUser = _dashboardService.CountTotalUsers();
+            int monthToday = DateTime.Today.Month;
+
+            successfulLoggedInUsers[0] = numTotalUser;
+            for (int i = 1; i < duration + 1; i++)
+            {
+                successfulLoggedInUsers[i] = _dashboardService.CountUniqueLoggedInUsers(monthToday);
+                monthToday--;
+                if (monthToday == 0) { monthToday = 12; }
+            }
+
+            return successfulLoggedInUsers;
         }
-
-
 
     }
 }

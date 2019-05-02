@@ -10,7 +10,8 @@ using SecurityLayer.Sessions;
 using ManagerLayer.Constants;
 using DataAccessLayer.Models;
 using KFC.SIT.WebAPI.Utility;
-
+using ManagerLayer.sso;
+using System;
 
 namespace KFC.SIT.WebAPI.Controllers
 { 
@@ -18,25 +19,30 @@ namespace KFC.SIT.WebAPI.Controllers
     {
         [HttpPost]
         [EnableCors(origins: "*", headers: "*", methods: "*")]
-        public HttpResponseMessage Login(SSOPayload payload)
+        public IHttpActionResult Login(SsoPayload payload)
         {
             //CreateUsers();
             SessionManager sm = new SessionManager();
             UserManager um = new UserManager();
             string URL_FIRST_PART 
-                = $"{WebAPIConstants.FRONT_END_LOCAL}/Redirect";
+                = $"{WebAPIConstants.FRONT_END_LOCAL}/#/Redirect";
+            
             // Assume it's there for now.
-            if (!sm.ValidateSSOPayload(payload))
+            if (!SignatureService.IsValidClientRequest(
+                    payload.SSOUserId, payload.Email, long.Parse(payload.Timestamp), 
+                    payload.Signature
+                ))
             {
-                return Request.CreateResponse(HttpStatusCode.Unauthorized);
+                return Unauthorized();
             }
 
-            User user = um.FindByUserName(payload.Email);
+            Account user = um.FindByUserName(payload.Email);
             if (user == null)
             {
                 UserDTO userDto = new UserDTO()
                 {
                     UserName = payload.Email,
+                    SsoId = new Guid(payload.SSOUserId),
                     Email = payload.Email,
                     Category = "NewUser"
                 };
@@ -47,15 +53,19 @@ namespace KFC.SIT.WebAPI.Controllers
             }
             string token = sm.CreateSession(user.Id);
 
-            Dictionary<string, string> redirectResponseDictionary
-                = new Dictionary<string, string>()
+            string redirectUrl = URL_FIRST_PART + "?SITtoken=" + token;
+            // For production
+            //return Redirect(redirectUrl);
+
+            // Local only
+            Dictionary<string, string> redirectResponseDictionary = new Dictionary<string, string>()
             {
-                {"redirectURL", URL_FIRST_PART }
+                { "redirectURL", URL_FIRST_PART }
             };
-            redirectResponseDictionary["redirectURL"] 
-                = redirectResponseDictionary["redirectURL"] + "?SITtoken=" + token;
-            return Request.CreateResponse(HttpStatusCode.OK, redirectResponseDictionary);
-            
+            redirectResponseDictionary["redirectURL"]
+                         = redirectResponseDictionary["redirectURL"] + "?SITtoken=" + token;
+            return Ok(redirectResponseDictionary);
+
         }
 
         private void CreateUsers()

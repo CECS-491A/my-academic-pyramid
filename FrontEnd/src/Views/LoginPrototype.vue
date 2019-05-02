@@ -34,7 +34,7 @@ export default {
       payloadStr: "{\"email\": \"julianpoyo+22@gmail.com\"," 
                     + "\"ssoUserId\": \"0743cd2c-fec3-4b79-a5b6-a6c52a752c71\","
                     + "\"timestamp\": \"1552766624957\","
-                    + "\"signature\": \"4T5Csu2U9OozqN66Us+pEc5ODcBwPs1ldaq2fmBqtfo=\"}",
+                    + "\"signature\": \"oHYeBm2ZGnYnQ+o+gX/iMn5KI5TNSr/XptaTovJBJfM=\"}",
       registrationUrl: "",
       redirectViewName: "Redirect",
       indexToCut: -1
@@ -54,16 +54,19 @@ export default {
               let temp = JSON.parse(tempStr);
               temp['headers']  = {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Origin': "http://localhost:8081"
               }
               const url = `${this.$hostname}Login`;
               axios.post(url, temp)
+                  //  .then(reponse => {
+                  //    this.$router.push(`/${this.redirectViewName}`)
+                  //  })
                    .then(response => {
-                       this.registrationUrl = response.data["redirectURL"]
-                       this.indexToCut = this.registrationUrl.search(this.redirectViewName)
-                       this.$router.push(this.registrationUrl.substr(this.indexToCut))
+                        this.registrationUrl = response.data["redirectURL"]
+                        this.indexToCut = this.registrationUrl.search(this.redirectViewName)
+                        this.$router.push(this.registrationUrl.substr(this.indexToCut))
                    })
-                   .catch(err => console.log("There was error. " + err.response));
+                   .catch(err => console.log("There was error. " + err))
               
             }
             catch(e) {

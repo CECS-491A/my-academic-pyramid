@@ -99,8 +99,10 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exceptions.cs" />
     <Compile Include="DataAnalysisDashboard\DashboardService.cs" />
     <Compile Include="HttpClients\IHttpClient.cs" />
+    <Compile Include="DiscussionForum\DiscussionForumServices.cs" />
     <Compile Include="Messenger\ChatConnectionMapping.cs" />
     <Compile Include="Messenger\IMessengerServices.cs" />
     <Compile Include="Messenger\MessengerServices.cs" />

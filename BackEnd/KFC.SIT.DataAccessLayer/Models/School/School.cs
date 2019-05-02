@@ -1,19 +1,27 @@
-﻿using System.Collections.Generic;
+﻿using DataAccessLayer.Models.DiscussionForum;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace DataAccessLayer.Models.School
 {
     public class School : IEntity
     {
+        public School()
+        {
+            Teachers = new List<SchoolTeacher>();
+            Departments = new List<SchoolDepartment>();
+            Questions = new List<Question>();
+        }
+
         public School(string name,string contactEmail, string emailDomain)
         {
             Name = name;
             ContactEmail = contactEmail;
             EmailDomain = emailDomain;
 
-            Teachers = new List<Teacher>();
-            Departments = new List<Department>();
-            Students = new List<Student>();
+            Teachers = new List<SchoolTeacher>();
+            Departments = new List<SchoolDepartment>();
+            Questions = new List<Question>();
         }
 
 
@@ -26,8 +34,8 @@ namespace DataAccessLayer.Models.School
         [Required]
         public string EmailDomain { set; get; }
 
-        public virtual ICollection<Teacher> Teachers { set; get; }
-        public virtual ICollection<Department> Departments { set; get; }
-        public ICollection<Student> Students { set; get; }
+        public virtual ICollection<SchoolTeacher> Teachers { set; get; }
+        public virtual ICollection<SchoolDepartment> Departments { set; get; }
+        public virtual ICollection<Question> Questions { set; get; }
     }
 }

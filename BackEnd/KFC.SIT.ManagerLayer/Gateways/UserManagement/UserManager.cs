@@ -22,7 +22,7 @@ namespace WebAPI.Gateways.UserManagement
 
         /// <summary>
         /// Constructor that accept a username of account and initiaize the UserManagementServices
-        /// User Account has to exist in database 
+        /// User Account has to exist in database
         /// </summary>
         /// <param name="requestingUserName"></param>
         public UserManager()
@@ -35,33 +35,26 @@ namespace WebAPI.Gateways.UserManagement
         /// Method to create user account
         /// </summary>
         /// <param name="targetedUserName"></param>
-        public User CreateUserAccount(UserDTO userDto)
+        public Account CreateUserAccount(UserDTO userDto)
         {
-            //try
-            //{
-            //    var valid = new System.Net.Mail.MailAddress(userDto.UserName); // checks that email is valid
-            //}
-            //catch (Exception)
-            //{
-            //    return null;
-            //}
-
-
-            User user = new User
+            Category category = _userManagementServices.GetCategory(userDto.Category);
+            if (category == null)
+            {
+                category = new Category(userDto.Category);
+            }
+            Account user = new Account
             {
                 UserName = userDto.UserName,
+                SsoId = userDto.SsoId,
                 FirstName = userDto.FirstName,
                 LastName = userDto.LastName,
-                Category = new Category(userDto.Category),
-                //// date and time as it would be in Coordinated Universal Time
-                //CreatedAt = DateTime.Now, // https://stackoverflow.com/questions/62151/datetime-now-vs-datetime-utcnow 
-                //DateOfBirth = DateTime.Parse(userDto.DateOfBirth),
-                //Location = userDto.Location,
+                Category = category
             };
 
             //Automatically assigning claim to user
             user = AutomaticClaimAssigning(user);
-            user = _userManagementServices.AssignCategory(user, user.Category);
+            // TODO test this.
+            //user = _userManagementServices.AssignCategory(user, new Category(userDto.Category));
 
             var response = _userManagementServices.CreateUser(user);
             try
@@ -69,31 +62,18 @@ namespace WebAPI.Gateways.UserManagement
                 _DbContext.SaveChanges();
                 return response;
             }
-            catch (System.Data.Entity.Validation.DbEntityValidationException dbEx)
+            catch (DbEntityValidationException)
             {
-                Exception raise = dbEx;
-                foreach (var validationErrors in dbEx.EntityValidationErrors)
-                {
-                    foreach (var validationError in validationErrors.ValidationErrors)
-                    {
-                        string message = string.Format("{0}:{1}",
-                            validationErrors.Entry.Entity.ToString(),
-                            validationError.ErrorMessage);
-                        // raise a new exception nesting
-                        // the current instance as InnerException
-                        raise = new InvalidOperationException(message, raise);
-                    }
-                }
-                throw raise;
+                return null;
             }
-           
+
         }
 
         /// <summary>
         /// Method to delete self user account or other account
         /// </summary>
         /// <param name="targetedUserName"></param>
-        public int DeleteUserAccount(User user)
+        public int DeleteUserAccount(Account user)
         {
             if (user == null)
             {
@@ -103,13 +83,12 @@ namespace WebAPI.Gateways.UserManagement
             return _DbContext.SaveChanges();
         }
 
-
         /// <summary>
-        /// Method to update user account in database after making changes 
+        /// Method to update user account in database after making changes
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        public int UpdateUserAccount(User user)
+        public int UpdateUserAccount(Account user)
         {
             if (user == null)
             {
@@ -124,23 +103,20 @@ namespace WebAPI.Gateways.UserManagement
             {
                 // catch error
                 // rollback changes
-                _DbContext.Entry(response).CurrentValues.SetValues(_DbContext.Entry(response).OriginalValues);
-                _DbContext.Entry(response).State = System.Data.Entity.EntityState.Unchanged;
                 return 0;
             }
         }
 
-
         /// <summary>
-        /// Method to assign a user to be a child of another user. The purpose is to achive a hierachy structure of users 
+        /// Method to assign a user to be a child of another user. The purpose is to achive a hierachy structure of users
         /// </summary>
         /// <param name="childUserName"></param>
         /// <param name="parentUserName"></param>
         /// <returns></returns>
-        public User AssignUserToUser(string childUserName, string parentUserName )
+        public Account AssignUserToUser(string childUserName, string parentUserName )
         {
-            User childUser = FindByUserName(childUserName);
-            User parentUser = FindByUserName(parentUserName);
+            Account childUser = FindByUserName(childUserName);
+            Account parentUser = FindByUserName(parentUserName);
 
             if (childUser == null)
             {
@@ -150,14 +126,14 @@ namespace WebAPI.Gateways.UserManagement
             {
                 return null;
             }
-            else 
+            else
             {
                 if (childUser.Id == parentUser.ParentUser_Id)
                 {
                     parentUser.ParentUser_Id = null;
                 }
                 childUser.ParentUser_Id = parentUser.Id;
-              
+
                 UpdateUserAccount(childUser);
                 UpdateUserAccount(parentUser);
 
@@ -165,33 +141,31 @@ namespace WebAPI.Gateways.UserManagement
             }
         }
 
-
         /// <summary>
         /// Method to find user object using email
         /// </summary>
         /// <param name="userEmail"></param>
         /// <returns></returns>
-        public User FindUserByEmail(String userEmail)
+        public Account FindUserByEmail(String userEmail)
         {
-            User user = _userManagementServices.FindUserByUserEmail(userEmail);
+            Account user = _userManagementServices.FindByUsername(userEmail);
             return user;
         }
-
 
         /// <summary>
         /// Method to find userobject using id
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public User FindUserById(int id)
+        public Account FindUserById(int id)
         {
-            User user = _userManagementServices.FindById(id);
+            Account user = _userManagementServices.FindById(id);
             return user;
         }
 
         public UserDTO GetUserInfo(int id)
         {
-            User user = FindUserById(id);
+            Account user = FindUserById(id);
             UserDTO userDTO = null;
             if (user != null)
             {
@@ -203,7 +177,6 @@ namespace WebAPI.Gateways.UserManagement
                     LastName = user.LastName,
                     Category = user.Category.Value,
                     DateOfBirth = user.DateOfBirth.ToLongDateString(),
-                    Email = user.Email,
                     CreatedAt = user.CreatedAt.ToLongDateString()
                 };
             }
@@ -215,20 +188,20 @@ namespace WebAPI.Gateways.UserManagement
         /// </summary>
         /// <param name="UserName"></param>
         /// <returns></returns>
-        public User FindByUserName(string UserName)
+        public Account FindByUserName(string UserName)
         {
-            User user = _userManagementServices.FindByUsername(UserName);
+            Account user = _userManagementServices.FindByUsername(UserName);
             return user;
         }
 
         /// <summary>
-        /// Method to get all users in database 
+        /// Method to get all users in database
         /// </summary>
         /// <returns></returns>
-        public List<User> GetAllUser()
+        public List<Account> GetAllUser()
         {
-            // Call GetAllUser method in userManagementServices 
-            List<User> userList = _userManagementServices.GetAllUser();
+            // Call GetAllUser method in userManagementServices
+            List<Account> userList = _userManagementServices.GetAllUser();
             return userList;
         }
 
@@ -237,7 +210,7 @@ namespace WebAPI.Gateways.UserManagement
         /// </summary>
         /// <param name="targetedUserName"></param>
         /// <param name="claim"></param>
-        public User RemoveClaimAction(int targetedUserId, string claimStr)
+        public Account RemoveClaimAction(int targetedUserId, string claimStr)
         {
             // List of required claims needed for AddClaimAction Method
             List<Claim> createUserRequiredClaimTypes = new List<Claim>
@@ -248,23 +221,41 @@ namespace WebAPI.Gateways.UserManagement
             // Check if the requesting user has the require claims
 
                 // Retrive targeted user exists from database
-                User targetedUser = FindUserById(targetedUserId);
+                Account targetedUser = FindUserById(targetedUserId);
             if (targetedUser == null)
              {
                 return null;
-               
+
              }
                 // Check if the requesting user is  at least same level as  the targeted user
             else
             {
-                User user = _userManagementServices.RemoveClaim(targetedUser, claimStr);
+                Account user = _userManagementServices.RemoveClaim(targetedUser, claimStr);
                 UpdateUserAccount(user);
                 return user;
             }
-                   
+
         }
 
-        public User AddClaimAction(int targetedUserId, Claim claim)
+        public Account SetCategory(int targetUserId, string categoryStr)
+        {
+            Category categoryToAdd = _userManagementServices.GetCategory(categoryStr);
+            if (categoryToAdd == null)
+            {
+                categoryToAdd = new Category(categoryStr);
+            }
+            Account targetUser = _userManagementServices.FindById(targetUserId);
+            if (targetUser == null)
+            {
+                return null;
+            }
+            _userManagementServices.AssignCategory(targetUser, categoryToAdd);
+
+            _DbContext.SaveChanges();
+            return targetUser;
+        }
+
+        public Account AddClaimAction(int targetedUserId, Claim claim)
         {
             // TODO finish this. It assigns a list instead of adding a claim.
             // List of required claims needed for AddClaimAction Method
@@ -272,7 +263,7 @@ namespace WebAPI.Gateways.UserManagement
             // Check if the requesting user has the require claims
 
             // Retrive targeted user exists from database
-            User targetedUser = FindUserById(targetedUserId);
+            Account targetedUser = FindUserById(targetedUserId);
             if (targetedUser == null)
             {
                 return null;
@@ -281,7 +272,7 @@ namespace WebAPI.Gateways.UserManagement
             // Check if the requesting user is  at least same level as  the targeted user
             else
             {
-                User user = _userManagementServices.AddClaim(targetedUser, claim);
+                Account user = _userManagementServices.AddClaim(targetedUser, claim);
                 UpdateUserAccount(user);
                 return user;
             }
@@ -290,7 +281,7 @@ namespace WebAPI.Gateways.UserManagement
 
         public List<string> GetClaims(string username)
         {
-            User user = _userManagementServices.FindByUsername(username);
+            Account user = _userManagementServices.FindByUsername(username);
             List<string> claimList = new List<string>();
             foreach(var claim in user.Claims)
             {
@@ -298,7 +289,6 @@ namespace WebAPI.Gateways.UserManagement
             }
             return claimList;
         }
-
 
         //
         /// <summary>
@@ -311,7 +301,7 @@ namespace WebAPI.Gateways.UserManagement
         /// <returns></returns>
         public static bool VerifyPassword(string enteredPassword, string storedHash, string storedSalt)
         {
- 
+
             byte[] bytes = System.Text.Encoding.UTF8.GetBytes(enteredPassword + storedSalt);
 
             SHA256 sha = new SHA256Cng(); // Hash function
@@ -329,7 +319,7 @@ namespace WebAPI.Gateways.UserManagement
 
         }
 
-        public User AutomaticClaimAssigning(User user)
+        public Account AutomaticClaimAssigning(Account user)
         {
             if (user.Category.Value.Equals("Student"))
             {
@@ -362,7 +352,7 @@ namespace WebAPI.Gateways.UserManagement
                 _userManagementServices.AddClaim(user, new Claim("CanAlterStudentAccountUAC"));
                 _DbContext.SaveChanges();
             }
-            
+
             else if (user.Category.Value.Equals("SystemAdmin"))
             {
                 _userManagementServices.AddClaim(user, new Claim("EnableOrDisableAdminAccount"));
@@ -372,11 +362,9 @@ namespace WebAPI.Gateways.UserManagement
                 _DbContext.SaveChanges();
             }
 
-
             return user;
 
         }
-
 
     }
 }

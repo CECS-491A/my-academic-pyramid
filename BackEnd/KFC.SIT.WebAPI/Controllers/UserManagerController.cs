@@ -16,6 +16,7 @@ using System.Web.Http.Cors;
 using KFC.SIT.WebAPI.Utility;
 using SecurityLayer.Authorization;
 using SecurityLayer.Authorization.AuthorizationManagers;
+using ManagerLayer.sso;
 
 namespace KFC.SIT.WebAPI.Controllers
 {
@@ -28,7 +29,7 @@ namespace KFC.SIT.WebAPI.Controllers
         public IQueryable<UserDTO> GetAllUsers()
         {
             UserManager umManager = new UserManager();
-            List<User> userList = umManager.GetAllUser();
+            List<Account> userList = umManager.GetAllUser();
 
             List<UserDTO> list = new List<UserDTO>();
             foreach (var user in userList)
@@ -134,7 +135,7 @@ namespace KFC.SIT.WebAPI.Controllers
         public IHttpActionResult EditUser([FromBody] UserDTO userDto)
         {
             UserManager umManager = new UserManager();
-            User foundUser = umManager.FindUserById(userDto.Id);
+            Account foundUser = umManager.FindUserById(userDto.Id);
             foundUser.UserName = userDto.UserName;
             foundUser.FirstName = userDto.FirstName;
             foundUser.LastName = userDto.LastName;
@@ -143,7 +144,7 @@ namespace KFC.SIT.WebAPI.Controllers
 
 
         [HttpDelete]    
-        public IHttpActionResult DeleteUser(SSOPayload ssoPayload)
+        public IHttpActionResult DeleteUser(SsoPayload ssoPayload)
         {
             //UserManager umManager = new UserManager();
             //umManager.DeleteUserAccount(umManager.FindUserById(id));

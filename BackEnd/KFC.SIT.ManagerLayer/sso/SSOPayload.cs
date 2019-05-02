@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SecurityLayer.Sessions
+namespace ManagerLayer.sso
 {
-    public class SSOPayload
+    public class SsoPayload
     {
         public string Email { get; set; }
         public string Signature { get; set; }

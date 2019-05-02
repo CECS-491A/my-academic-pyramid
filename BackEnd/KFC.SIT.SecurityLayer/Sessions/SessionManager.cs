@@ -16,9 +16,7 @@ namespace SecurityLayer.Sessions
         private JWTokenManager _jwtManager;
         private SessionServices _sessionServices;
         private UserManager _userManager;
-        private const double ACTIVE_SESSION_DURATION = 480.0;
-        private const string SHARED_SSO_SECRET 
-            = "D078F2AFC7E59885F3B6D5196CE9DB716ED459467182A19E04B6261BBC8E36EE";
+        private const double ACTIVE_SESSION_DURATION = 60.0;
 
         public SessionManager()
         {
@@ -54,21 +52,7 @@ namespace SecurityLayer.Sessions
             return token;
         }
 
-        public bool ValidateSSOPayload(SSOPayload payload)
-        {
-            string payloadStr = $"ssoUserId={payload.SSOUserId};" +
-                                $"email={payload.Email};" +
-                                $"timestamp={payload.Timestamp};";
-            byte[] keyBytes = Encoding.UTF8.GetBytes(SHARED_SSO_SECRET);
-            byte[] payloadBytes = Encoding.UTF8.GetBytes(payloadStr);
-            HMACSHA256 hmac = new HMACSHA256(keyBytes);
-
-            byte[] calculatedSignatureBytes = hmac.ComputeHash(payloadBytes);
-            string calculatedSignatureStr = System.Convert.ToBase64String(
-                calculatedSignatureBytes
-            );
-            return calculatedSignatureStr.Equals(payload.Signature);
-        }
+        
 
         public bool ValidateSession(string token)
         {
@@ -166,6 +150,11 @@ namespace SecurityLayer.Sessions
             _sessionServices.InvalidateSession(token);
         }
 
+        public string GetSessionToken(int userId)
+        {
+            return _sessionServices.GetActiveSessionToken(userId);
+        }
+
         private SessionTimeStamp SetTime(Dictionary<string, string> payload)
         {
             if (payload == null)
@@ -193,7 +182,7 @@ namespace SecurityLayer.Sessions
         private Dictionary<string, string> GeneratePayload(int userid)
         {
             Dictionary<string, string> payload = new Dictionary<string, string>();
-            User user = _userManager.FindUserById(userid);
+            Account user = _userManager.FindUserById(userid);
             if (user == null)
             {
                 throw new ArgumentException(

@@ -15,7 +15,7 @@ namespace DataAccessLayer.Models.Messenger
         //public bool isOnline { get;set; }
         [ForeignKey("UserOfRelationship")]
         public int UserId { get; set; }
-        public virtual User UserOfRelationship { get; set; }
+        public virtual Account UserOfRelationship { get; set; }
 
        
     }

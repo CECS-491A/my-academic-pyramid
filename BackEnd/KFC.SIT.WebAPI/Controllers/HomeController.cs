@@ -66,7 +66,7 @@ namespace KFC.SIT.WebAPI.Controllers
             DatabaseContext db = new DatabaseContext();
             SessionManager sm = new SessionManager();
             UserManager um = new UserManager();
-            User user = um.FindByUserName(username);
+            Account user = um.FindByUserName(username);
             if (user == null)
             {
                 return "User with that username not found";

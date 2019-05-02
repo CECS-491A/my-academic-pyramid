@@ -10,7 +10,7 @@ namespace DataAccessLayer.MongoDBQueryConstants
     {
         public static string Login = "Login";
         public static string Logout = "Logout";
-        public static string Feature = "Feature";
+        public static string[] Feature = { "Login", "Feature", "Feature2", "Feature3", "Feature4", "Feature5" };
 
     }
 }

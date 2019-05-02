@@ -23,19 +23,19 @@ namespace KFC.SIT.WebAPI.Controllers.Controllers
 
         // POST api/<controller>
         [HttpPost]
-        public HttpResponseMessage Post(RegistrationData registrationData)
+        public IHttpActionResult Post(RegistrationData registrationData)
         {
             SecurityContext securityContext = SecurityContextBuilder.CreateSecurityContext(
                 Request.Headers
             );
             if (securityContext == null)
             {
-                return Request.CreateResponse(HttpStatusCode.Unauthorized);
+                return Unauthorized();
             }
             SessionManager sm = new SessionManager();
             if (!sm.ValidateSession(securityContext.Token))
             {
-                return Request.CreateResponse(HttpStatusCode.Unauthorized);
+                return Unauthorized();
             }
             
             AuthorizationManager authorizationManager = new AuthorizationManager(
@@ -48,22 +48,22 @@ namespace KFC.SIT.WebAPI.Controllers.Controllers
             };
             if (!authorizationManager.CheckClaims(requiredClaims))
             {
-                return Request.CreateResponse(HttpStatusCode.Unauthorized);
+                return Unauthorized();
             }
             else
             {
                 UserManager um = new UserManager();
-                User user = um.FindByUserName(securityContext.UserName);
+                Account user = um.FindByUserName(securityContext.UserName);
                 if (user == null)
                 {
-                    return Request.CreateErrorResponse(HttpStatusCode.NotFound, "User doesn't exist");
+                    return NotFound();
                 }
                 user.FirstName = registrationData.FirstName;
                 user.LastName = registrationData.LastName;
                 // TODO test this.
                 user.DateOfBirth = registrationData.DateOfBirth;
-                user.Category = new Category("Student");
                 um.UpdateUserAccount(user);
+                um.SetCategory(user.Id, "Student");
                 um.RemoveClaimAction(user.Id, "CanRegister");
                 um.AutomaticClaimAssigning(user);
                 string updatedToken = sm.RefreshSessionUpdatedPayload(
@@ -74,7 +74,7 @@ namespace KFC.SIT.WebAPI.Controllers.Controllers
                 {
                     { "SITtoken", updatedToken}
                 };
-                return Request.CreateResponse(HttpStatusCode.OK, responseContent);
+                return Ok(responseContent);
             }
         }
 

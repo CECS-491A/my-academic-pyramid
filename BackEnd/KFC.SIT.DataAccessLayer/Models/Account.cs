@@ -12,25 +12,32 @@ using System;
 using System.Collections.Generic;
 using DataAccessLayer.Models.Messenger;
 using DataAccessLayer.Models.School;
+using DataAccessLayer.Models.DiscussionForum;
 
 namespace DataAccessLayer.Models
 {    
-    public partial class User : IEntity 
+    public partial class Account : IEntity 
     {
 
-        public User()
+        public Account()
         {
-            this.ChildUsers = new HashSet<User>();
+            this.ChildUsers = new HashSet<Account>();
             this.Claims = new HashSet<Claim>();
-            //this.Students = new List<Student>();
-            //this.Questions = new List<Question>();
+            this.Students = new List<Student>();
+            this.Questions = new List<Question>();
+            this.Answers = new List<Answer>();
         }
 
         [Key]
         public int Id { get; set; }
+        [Required]
         public string UserName { get; set; }
+        [Required]
+        public Guid SsoId { get; set; }
         public string FirstName { get; set; }
+        public string MiddleName { get; set; }
         public string LastName { get; set; }
+        public Nullable<int> Exp { get; set; }
 
         public Nullable<int> CategoryId { get; set; }
         public virtual Category Category { get; set; }
@@ -38,7 +45,6 @@ namespace DataAccessLayer.Models
         [Required, Column(TypeName = "datetime2"), DataType(DataType.DateTime)]
         public DateTime DateOfBirth { get; set; }
       
-        public string Email { get; set; }
         //[Required, Column(TypeName = "datetime2"), DataType(DataType.DateTime)]
         //public DateTime UpdatedAt { get; set; }
         [Column(TypeName = "datetime2"), DataType(DataType.DateTime)]
@@ -51,11 +57,11 @@ namespace DataAccessLayer.Models
         /// <summary>
         /// Children users below user.
         /// </summary>
-        public virtual ICollection<User> ChildUsers { get; set; }
+        public virtual ICollection<Account> ChildUsers { get; set; }
         /// <summary>
         /// Parent user above user.
         /// </summary>
-        public virtual User ParentUser { get; set; }
+        public virtual Account ParentUser { get; set; }
 
         public virtual ICollection<Claim> Claims { get; set; }
 
@@ -68,7 +74,9 @@ namespace DataAccessLayer.Models
 
         //public virtual ICollection<Student> Students { get; set; }
 
-        //public ICollection<Question> Questions;
+        public virtual ICollection<Question> Questions { get; set; }
+        public virtual ICollection<Answer> Answers { get; set; }
+        
 
         /// <summary>
         /// Override Equals method.  The UserName of each User is unique.
@@ -77,7 +85,7 @@ namespace DataAccessLayer.Models
         /// <returns>Whether Users are equal or not</returns>
         public override bool Equals(object obj)
         {
-            var user = obj as User;
+            var user = obj as Account;
             if(user == null)
             {
                 return false;

@@ -30,7 +30,7 @@ namespace ManagerLayer.Tests
                     //Location = "Long Beach",
                     Email = "Arturo1@gmail.com",
                 });
-                User createdUser = UM.FindUserByEmail("Arturo1@gmail.com");
+                Account createdUser = UM.FindUserByEmail("Arturo1@gmail.com");
                 if (createdUser != null)
                 {
                     actual = true;
@@ -96,7 +96,7 @@ namespace ManagerLayer.Tests
         {
             // Arrange
             UserManager UM = new UserManager();
-            User createdUser = UM.CreateUserAccount(new UserDTO
+            Account createdUser = UM.CreateUserAccount(new UserDTO
             {
                 UserName = "User",
                 FirstName = "Kevin",
@@ -113,7 +113,7 @@ namespace ManagerLayer.Tests
             try
             {
                 UM.DeleteUserAccount(createdUser);
-                User shouldBeNull = UM.FindUserByEmail("Artur1o@gmail.com");
+                Account shouldBeNull = UM.FindUserByEmail("Artur1o@gmail.com");
                 if (shouldBeNull == null)
                 {
                     actual = true;
@@ -139,7 +139,7 @@ namespace ManagerLayer.Tests
         {
             // Arrange
             UserManager UM = new UserManager();
-            User createdUser = UM.CreateUserAccount(new UserDTO
+            Account createdUser = UM.CreateUserAccount(new UserDTO
             {
                 UserName = "SystemAdmin5",
                 FirstName = "Arturo",
@@ -173,7 +173,7 @@ namespace ManagerLayer.Tests
         {
             // Arrange
             UserManager UM = new UserManager();
-            User createdUser = UM.CreateUserAccount(new UserDTO
+            Account createdUser = UM.CreateUserAccount(new UserDTO
             {
                 UserName = "Prof",
                 FirstName = "Luis",
@@ -192,7 +192,7 @@ namespace ManagerLayer.Tests
             try
             {
                 UM.UpdateUserAccount(createdUser);
-                User user = UM.FindUserByEmail(newEmail);
+                Account user = UM.FindUserByEmail(newEmail);
                 if (user == createdUser)
                 {
                     actual = true;
@@ -216,7 +216,7 @@ namespace ManagerLayer.Tests
         {
             // Arrange
             UserManager UM = new UserManager();
-            User createdUser = UM.CreateUserAccount(new UserDTO
+            Account createdUser = UM.CreateUserAccount(new UserDTO
             {
                 UserName = "User",
                 FirstName = "Kry",
@@ -249,7 +249,7 @@ namespace ManagerLayer.Tests
         {
             // Arrange
             UserManager UM = new UserManager();
-            User createdChildUser = UM.CreateUserAccount(new UserDTO
+            Account createdChildUser = UM.CreateUserAccount(new UserDTO
             {
                 UserName = "User",
                 FirstName = "Arturo",
@@ -259,7 +259,7 @@ namespace ManagerLayer.Tests
                 //Location = "Long Beach",
                 Email = "Arturo@gmail.com",
             });
-            User createdParentUser = UM.CreateUserAccount(new UserDTO
+            Account createdParentUser = UM.CreateUserAccount(new UserDTO
             {
                 UserName = "SystemAdmin",
                 FirstName = "ArturoSon",
@@ -275,7 +275,7 @@ namespace ManagerLayer.Tests
             // Act
             try
             {
-                User returnedUser = UM.AssignUserToUser(createdChildUser.UserName, createdParentUser.UserName);
+                Account returnedUser = UM.AssignUserToUser(createdChildUser.UserName, createdParentUser.UserName);
                 if (returnedUser != null)
                 {
                     actual = true;
@@ -299,7 +299,7 @@ namespace ManagerLayer.Tests
         {
             // Arrange
             UserManager UM = new UserManager();
-            User createdChildUser = UM.CreateUserAccount(new UserDTO
+            Account createdChildUser = UM.CreateUserAccount(new UserDTO
             {
                 UserName = "User",
                 FirstName = "Arturo",
@@ -309,7 +309,7 @@ namespace ManagerLayer.Tests
                 //Location = "Long Beach",
                 Email = "Arturo@gmail.com",
             });
-            User createdParentUser = UM.CreateUserAccount(new UserDTO
+            Account createdParentUser = UM.CreateUserAccount(new UserDTO
             {
                 UserName = "SystemAdmin",
                 FirstName = "ArturoSon",
@@ -326,7 +326,7 @@ namespace ManagerLayer.Tests
             // Act
             try
             {
-                User shouldBeNull = UM.AssignUserToUser(createdChildUser.UserName, createdParentUser.UserName);
+                Account shouldBeNull = UM.AssignUserToUser(createdChildUser.UserName, createdParentUser.UserName);
                 if (shouldBeNull == null)
                 {
                     actual = true;
@@ -350,7 +350,7 @@ namespace ManagerLayer.Tests
         {
             // Arrange
             UserManager UM = new UserManager();
-            User createdChildUser = UM.CreateUserAccount(new UserDTO
+            Account createdChildUser = UM.CreateUserAccount(new UserDTO
             {
                 UserName = "User",
                 FirstName = "Arturo",
@@ -360,7 +360,7 @@ namespace ManagerLayer.Tests
                 //Location = "Long Beach",
                 Email = "Arturo@gmail.com",
             });
-            User createdParentUser = UM.CreateUserAccount(new UserDTO
+            Account createdParentUser = UM.CreateUserAccount(new UserDTO
             {
                 UserName = "SystemAdmin",
                 FirstName = "ArturoSon",
@@ -377,7 +377,7 @@ namespace ManagerLayer.Tests
             // Act
             try
             {
-                User shouldBeNull = UM.AssignUserToUser(createdChildUser.UserName, createdParentUser.UserName);
+                Account shouldBeNull = UM.AssignUserToUser(createdChildUser.UserName, createdParentUser.UserName);
                 if (shouldBeNull == null)
                 {
                     actual = true;
@@ -401,7 +401,7 @@ namespace ManagerLayer.Tests
         {
             // Arrange
             UserManager UM = new UserManager();
-            User createdUser = UM.CreateUserAccount(new UserDTO
+            Account createdUser = UM.CreateUserAccount(new UserDTO
             {
                 UserName = "Admin",
                 FirstName = "Kevin",
@@ -417,7 +417,7 @@ namespace ManagerLayer.Tests
             // Act
             try
             {
-                User foundUser = UM.FindUserByEmail("BTS@gmail.com");
+                Account foundUser = UM.FindUserByEmail("BTS@gmail.com");
                 if (createdUser == foundUser)
                 {
                     actual = true;
@@ -440,7 +440,7 @@ namespace ManagerLayer.Tests
         {
             // Arrange
             UserManager UM = new UserManager();
-            User createdUser = UM.CreateUserAccount(new UserDTO
+            Account createdUser = UM.CreateUserAccount(new UserDTO
             {
                 UserName = "SystemAdmin",
                 FirstName = "Arturo",
@@ -456,7 +456,7 @@ namespace ManagerLayer.Tests
             // Act
             try
             {
-                User foundUser = UM.FindUserByEmail("ArturoLuis@gmail.com");
+                Account foundUser = UM.FindUserByEmail("ArturoLuis@gmail.com");
                 if (createdUser == foundUser)
                 {
                     actual = false;
@@ -480,7 +480,7 @@ namespace ManagerLayer.Tests
         {
             // Arrange
             UserManager UM = new UserManager();
-            User createdUser = UM.CreateUserAccount(new UserDTO
+            Account createdUser = UM.CreateUserAccount(new UserDTO
             {
                 UserName = "SystemAdmin",
                 FirstName = "Arturo",
@@ -497,7 +497,7 @@ namespace ManagerLayer.Tests
             // Act
             try
             {
-                User foundUser = UM.FindUserByEmail("ArturoKevin2@gmail.com");
+                Account foundUser = UM.FindUserByEmail("ArturoKevin2@gmail.com");
                 if (foundUser == null)
                 {
                     actual = true;
@@ -521,7 +521,7 @@ namespace ManagerLayer.Tests
         {
             // Arrange
             UserManager UM = new UserManager();
-            User createdUser = UM.CreateUserAccount(new UserDTO
+            Account createdUser = UM.CreateUserAccount(new UserDTO
             {
                 Id = 100,
                 UserName = "SystemAdmin",
@@ -538,7 +538,7 @@ namespace ManagerLayer.Tests
             // Act
             try
             {
-                User foundUser = UM.FindUserById(100);
+                Account foundUser = UM.FindUserById(100);
                 if (foundUser == createdUser)
                 {
                     actual = true;
@@ -562,7 +562,7 @@ namespace ManagerLayer.Tests
         {
             // Arrange
             UserManager UM = new UserManager();
-            User createdUser = UM.CreateUserAccount(new UserDTO
+            Account createdUser = UM.CreateUserAccount(new UserDTO
             {
                 Id = 100,
                 UserName = "SystemAdmin",
@@ -580,7 +580,7 @@ namespace ManagerLayer.Tests
             // Act
             try
             {
-                User foundUser = UM.FindUserById(100);
+                Account foundUser = UM.FindUserById(100);
                 if (foundUser == null)
                 {
                     actual = true;
@@ -604,7 +604,7 @@ namespace ManagerLayer.Tests
         {
             // Arrange
             UserManager UM = new UserManager();
-            User createdUser = UM.CreateUserAccount(new UserDTO
+            Account createdUser = UM.CreateUserAccount(new UserDTO
             {
                 Id = 100,
                 UserName = "SystemAdmin2",
@@ -621,7 +621,7 @@ namespace ManagerLayer.Tests
             // Act
             try
             {
-                User foundUser = UM.FindByUserName("SystemAdmin2");
+                Account foundUser = UM.FindByUserName("SystemAdmin2");
                 if (foundUser == createdUser)
                 {
                     actual = true;
@@ -645,7 +645,7 @@ namespace ManagerLayer.Tests
         {
             // Arrange
             UserManager UM = new UserManager();
-            User createdUser = UM.CreateUserAccount(new UserDTO
+            Account createdUser = UM.CreateUserAccount(new UserDTO
             {
                 Id = 100,
                 UserName = "User",
@@ -663,7 +663,7 @@ namespace ManagerLayer.Tests
             // Act
             try
             {
-                User foundUser = UM.FindByUserName(createdUser.UserName);
+                Account foundUser = UM.FindByUserName(createdUser.UserName);
                 if (foundUser == null)
                 {
                     actual = true;
@@ -687,7 +687,7 @@ namespace ManagerLayer.Tests
         {
             // Arrange
             UserManager UM = new UserManager();
-            User createdUser = UM.CreateUserAccount(new UserDTO
+            Account createdUser = UM.CreateUserAccount(new UserDTO
             {
                 Id = 100,
                 UserName = "User",
@@ -715,7 +715,7 @@ namespace ManagerLayer.Tests
             // Act
             try
             {
-                List<User> userList = UM.GetAllUser();
+                List<Account> userList = UM.GetAllUser();
                 if (userList.Contains(createdUser) && userList.Count == 2)
                 {
                     actual = true;
@@ -743,7 +743,7 @@ namespace ManagerLayer.Tests
         {
             // Arrange
             UserManager UM = new UserManager();
-            User createdUser = UM.CreateUserAccount(new UserDTO
+            Account createdUser = UM.CreateUserAccount(new UserDTO
             {
                 Id = 100,
                 UserName = "User",
@@ -773,7 +773,7 @@ namespace ManagerLayer.Tests
             // Act
             try
             {
-                List<User> userList = UM.GetAllUser();
+                List<Account> userList = UM.GetAllUser();
                 if (userList.Contains(createdUser) && userList.Count == 2)
                 {
                     actual = true;
@@ -798,7 +798,7 @@ namespace ManagerLayer.Tests
         {
             // Arrange
             UserManager UM = new UserManager();
-            User createdUser = UM.CreateUserAccount(new UserDTO
+            Account createdUser = UM.CreateUserAccount(new UserDTO
             {
                 Id = 100,
                 UserName = "User",
@@ -828,7 +828,7 @@ namespace ManagerLayer.Tests
             // Act
             try
             {
-                List<User> userList = UM.GetAllUser();
+                List<Account> userList = UM.GetAllUser();
                 if (userList.Contains(createdUser) && userList.Count == 2)
                 {
                     actual = true;
@@ -853,7 +853,7 @@ namespace ManagerLayer.Tests
         {
             // Arrange
             UserManager UM = new UserManager();
-            User createdUser = UM.CreateUserAccount(new UserDTO
+            Account createdUser = UM.CreateUserAccount(new UserDTO
             {
                 Id = 100,
                 UserName = "User",
@@ -883,7 +883,7 @@ namespace ManagerLayer.Tests
             // Act
             try
             {
-                List<User> userList = UM.GetAllUser();
+                List<Account> userList = UM.GetAllUser();
                 if (userList.Contains(createdUser) && userList.Count == 2)
                 {
                     actual = true;
@@ -908,7 +908,7 @@ namespace ManagerLayer.Tests
         {
             // Arrange
             UserManager UM = new UserManager();
-            User createdUser = UM.CreateUserAccount(new UserDTO
+            Account createdUser = UM.CreateUserAccount(new UserDTO
             {
                 Id = 100,
                 UserName = "User",
@@ -938,7 +938,7 @@ namespace ManagerLayer.Tests
             // Act
             try
             {
-                List<User> userList = UM.GetAllUser();
+                List<Account> userList = UM.GetAllUser();
                 if (userList.Contains(createdUser) && userList.Count == 2)
                 {
                     actual = true;
@@ -963,7 +963,7 @@ namespace ManagerLayer.Tests
         {
             // Arrange
             UserManager UM = new UserManager();
-            User createdUser = UM.CreateUserAccount(new UserDTO
+            Account createdUser = UM.CreateUserAccount(new UserDTO
             {
                 Id = 100,
                 UserName = "User",
@@ -993,7 +993,7 @@ namespace ManagerLayer.Tests
             // Act
             try
             {
-                List<User> userList = UM.GetAllUser();
+                List<Account> userList = UM.GetAllUser();
                 if (userList.Contains(createdUser) && userList.Count == 2)
                 {
                     actual = true;
@@ -1018,7 +1018,7 @@ namespace ManagerLayer.Tests
         {
             // Arrange
             UserManager UM = new UserManager();
-            User createdUser = UM.CreateUserAccount(new UserDTO
+            Account createdUser = UM.CreateUserAccount(new UserDTO
             {
                 Id = 100,
                 UserName = "User",
@@ -1048,7 +1048,7 @@ namespace ManagerLayer.Tests
             // Act
             try
             {
-                List<User> userList = UM.GetAllUser();
+                List<Account> userList = UM.GetAllUser();
                 if (userList.Contains(createdUser) && userList.Count == 2)
                 {
                     actual = true;

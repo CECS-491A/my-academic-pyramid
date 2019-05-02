@@ -7,12 +7,12 @@ namespace DataAccessLayer.Models
         public Category()
         {
             
-            this.Users = new HashSet<User>();
+            this.Users = new HashSet<Account>();
         }
         public Category(string value)
         {
             Value = value;
-            this.Users = new HashSet<User>();
+            this.Users = new HashSet<Account>();
         }
 
         //Category Id
@@ -24,6 +24,6 @@ namespace DataAccessLayer.Models
 
         //Collection of Users that used for one-many relationship with user class 
        
-        public ICollection<User> Users { get; set; }
+        public ICollection<Account> Users { get; set; }
     }
 }

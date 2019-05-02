@@ -11,8 +11,8 @@ namespace SecurityLayer.Authorization.AuthorizationManagers
     {
        
         bool CheckClaims(List<Claim> requiredClaimTypes);
-        bool HasHigherPrivilege(User callingUser, User targetedUser);
-        int  FindHeight(User user);
+        bool HasHigherPrivilege(Account callingUser, Account targetedUser);
+        int  FindHeight(Account user);
 
     }
 }

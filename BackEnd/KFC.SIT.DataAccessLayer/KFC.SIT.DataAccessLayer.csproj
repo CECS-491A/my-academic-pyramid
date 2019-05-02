@@ -195,13 +195,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DatabaseContext.cs" />
+    <Compile Include="DTOs\AnswerDTO.cs" />
+    <Compile Include="DTOs\ContactHistoryDTO.cs" />
     <Compile Include="DTOs\ConversationDTO.cs" />
-    <Compile Include="DTOs\FriendRelationshipDTO.cs" />
-    <Compile Include="DTOs\MessageDTO.cs" />
-    <Compile Include="DTOs\NewConversationMessageDTO.cs" />
-    <Compile Include="DTOs\SearchDTO.cs" />
-    <Compile Include="DTOs\StoredMessageDTO.cs" />
+    <Compile Include="DTOs\DepartmentDTO.cs" />
+    <Compile Include="DTOs\ForumPostDTO.cs" />
+    <Compile Include="DTOs\FriendContactDTO.cs" />
+    <Compile Include="DTOs\SearchPersonDTO.cs" />
+    <Compile Include="DTOs\QuestionDTO.cs" />
     <Compile Include="DTOs\UserDTO.cs" />
     <Compile Include="IEntity.cs" />
     <Compile Include="Logging\OptimizeLogging\ErrorFormat.cs" />
@@ -214,14 +215,22 @@
     <Compile Include="Logging\OptimizeLogging\NLogger.cs" />
     <Compile Include="Logging\OptimizeLogging\TelemetryFormat.cs" />
     <Compile Include="Logging\Models\Repository\TelemetryLogCollection.cs" />
-    <Compile Include="Migrations\201904300359498_Initial.cs" />
-    <Compile Include="Migrations\201904300359498_Initial.Designer.cs">
-      <DependentUpon>201904300359498_Initial.cs</DependentUpon>
+    <Compile Include="Migrations\201905010401077_Initial.cs" />
+    <Compile Include="Migrations\201905010401077_Initial.Designer.cs">
+      <DependentUpon>201905010401077_Initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201905010531161_schoolteacher-add-departmentid.cs" />
+    <Compile Include="Migrations\201905010531161_schoolteacher-add-departmentid.Designer.cs">
+      <DependentUpon>201905010531161_schoolteacher-add-departmentid.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\Claim.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="DatabaseContext.cs" />
     <Compile Include="Logging\Models\ErrorLog.cs" />
+    <Compile Include="Models\DiscussionForum\Answer.cs" />
+    <Compile Include="Models\DiscussionForum\Question.cs" />
     <Compile Include="Models\HashSalt.cs" />
     <Compile Include="Models\Messenger\ChatConnectionMapping.cs" />
     <Compile Include="Models\Messenger\Conversation.cs" />
@@ -229,13 +238,18 @@
     <Compile Include="Models\Messenger\Message.cs" />
     <Compile Include="Models\PasswordQA.cs" />
     <Compile Include="Logging\Models\TelemetryLog.cs" />
+    <Compile Include="Models\Requests\SearchRequest.cs" />
+    <Compile Include="Models\Requests\SearchResponse.cs" />
     <Compile Include="Models\School\Course.cs" />
     <Compile Include="Models\School\Department.cs" />
     <Compile Include="Models\School\School.cs" />
+    <Compile Include="Models\School\SchoolDepartment.cs" />
+    <Compile Include="Models\School\SchoolTeacher.cs" />
+    <Compile Include="Models\School\SchoolTeacherCourse.cs" />
     <Compile Include="Models\School\Student.cs" />
     <Compile Include="Models\School\Teacher.cs" />
     <Compile Include="Models\TokenManager.cs" />
-    <Compile Include="Models\User.cs" />
+    <Compile Include="Models\Account.cs" />
     <Compile Include="Models\UserSession.cs" />
     <Compile Include="MongoDBQueryConstants\MongoDBAction.cs" />
     <Compile Include="Program.cs" />
@@ -276,8 +290,11 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201904300359498_Initial.resx">
-      <DependentUpon>201904300359498_Initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201905010401077_Initial.resx">
+      <DependentUpon>201905010401077_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905010531161_schoolteacher-add-departmentid.resx">
+      <DependentUpon>201905010531161_schoolteacher-add-departmentid.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

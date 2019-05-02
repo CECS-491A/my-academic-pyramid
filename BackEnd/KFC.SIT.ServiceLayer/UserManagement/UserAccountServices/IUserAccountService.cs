@@ -10,10 +10,9 @@ namespace ServiceLayer.UserManagement.UserAccountServices
     /// </summary>
     public interface IUserAccountServices
     {
-        User CreateUser(User user);
-        User DeleteUser(User user);
-        User UpdateUser(User user);
-        User FindUserByUserEmail(string userEmail);
-        User FindById(int id);
+        Account CreateUser(Account user);
+        Account DeleteUser(Account user);
+        Account UpdateUser(Account user);
+        Account FindById(int id);
     }
 }
