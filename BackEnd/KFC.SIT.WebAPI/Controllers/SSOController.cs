@@ -67,7 +67,7 @@ namespace KFC.SIT.WebAPI.Controllers
             return Ok();
         }
 
-        [HttpOptions]
+        [HttpGet]
         [ActionName("HealthCheck")]
         public IHttpActionResult HealthCheck()
         {

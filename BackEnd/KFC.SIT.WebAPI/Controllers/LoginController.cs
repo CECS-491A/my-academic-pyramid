@@ -54,8 +54,18 @@ namespace KFC.SIT.WebAPI.Controllers
             string token = sm.CreateSession(user.Id);
 
             string redirectUrl = URL_FIRST_PART + "?SITtoken=" + token;
-            return Redirect(redirectUrl);
-            
+            // For production
+            //return Redirect(redirectUrl);
+
+            // Local only
+            Dictionary<string, string> redirectResponseDictionary = new Dictionary<string, string>()
+            {
+                { "redirectURL", URL_FIRST_PART }
+            };
+            redirectResponseDictionary["redirectURL"]
+                         = redirectResponseDictionary["redirectURL"] + "?SITtoken=" + token;
+            return Ok(redirectResponseDictionary);
+
         }
 
         private void CreateUsers()
