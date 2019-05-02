@@ -62,22 +62,9 @@ namespace WebAPI.UserManagement
                 _DbContext.SaveChanges();
                 return response;
             }
-            catch (System.Data.Entity.Validation.DbEntityValidationException dbEx)
+            catch (DbEntityValidationException)
             {
-                Exception raise = dbEx;
-                foreach (var validationErrors in dbEx.EntityValidationErrors)
-                {
-                    foreach (var validationError in validationErrors.ValidationErrors)
-                    {
-                        string message = string.Format("{0}:{1}",
-                            validationErrors.Entry.Entity.ToString(),
-                            validationError.ErrorMessage);
-                        // raise a new exception nesting
-                        // the current instance as InnerException
-                        raise = new InvalidOperationException(message, raise);
-                    }
-                }
-                throw raise;
+                return null;
             }
 
         }
@@ -116,8 +103,6 @@ namespace WebAPI.UserManagement
             {
                 // catch error
                 // rollback changes
-                _DbContext.Entry(response).CurrentValues.SetValues(_DbContext.Entry(response).OriginalValues);
-                _DbContext.Entry(response).State = System.Data.Entity.EntityState.Unchanged;
                 return 0;
             }
         }
