@@ -4,7 +4,7 @@ using System.Web.Http;
 using System.Web.Http.Cors;
 using DataAccessLayer;
 using DataAccessLayer.DTOs;
-using WebAPI.UserManagement;
+using WebAPI.Gateways.UserManagement;
 using SecurityLayer.Sessions;
 using DataAccessLayer.Models;
 

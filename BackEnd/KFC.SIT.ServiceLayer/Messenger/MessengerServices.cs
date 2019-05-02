@@ -11,7 +11,7 @@ namespace ServiceLayer.Messenger
     /// <summary>
     /// Class that provide services for Chat Messengger's functionality
     /// </summary>
-    public class MessengerServices
+    public class MessengerServices : IMessengerServices
     {
         protected DatabaseContext _DbContext;
 
@@ -79,9 +79,6 @@ namespace ServiceLayer.Messenger
         }
 
 
-
-
-
         /// <summary>
         /// Method to retrieve all chat history 
         /// </summary>
@@ -98,10 +95,7 @@ namespace ServiceLayer.Messenger
                 return _DbContext.Conversations.Where(c => c.UserId == authUserId && c.ContactUserId == targetUserId)
                                                                .FirstOrDefault();
 
-            
         }
-
-
 
 
         /// <summary>
@@ -135,8 +129,6 @@ namespace ServiceLayer.Messenger
 
         /// <summary>
         /// Method to delete chat history record between 2 users
-        /// The actual messages will not be delete. 
-        /// This method should be combine with DeleteMessageFromDatabase method to completely delete messages
         /// </summary>
         /// <param name="senderId"></param>
         /// <param name="targetUserId"></param>
@@ -151,6 +143,11 @@ namespace ServiceLayer.Messenger
             return null;
         }
 
+        /// <summary>
+        /// If an conversation receive a new message, this function will go to the conversation and change boolean HasNewMessage to true
+        /// </summary>
+        /// <param name="conversationId"></param>
+        /// <returns></returns>
         public Conversation MarkConversationRead(int conversationId)
         {
             var conversation = _DbContext.Conversations.Where(c => (c.Id == conversationId)).FirstOrDefault();
@@ -164,16 +161,31 @@ namespace ServiceLayer.Messenger
             return conversation;
         }
 
+        /// <summary>
+        /// Get conversation object from conversation Id
+        /// </summary>
+        /// <param name="conversationId"></param>
+        /// <returns></returns>
         public Conversation GetConversationFromId(int conversationId)
         {
             return _DbContext.Conversations.Where(c => c.Id == conversationId).FirstOrDefault();
         }
 
+        /// <summary>
+        /// Get contact user id in a conversation 
+        /// </summary>
+        /// <param name="conversationId"></param>
+        /// <returns></returns>
         public int GetContactUserIdFromConversation(int conversationId)
         {
             return _DbContext.Conversations.Where(c => c.Id == conversationId).FirstOrDefault().ContactUserId ;
         }
 
+        /// <summary>
+        /// Get contact username from a conversation 
+        /// </summary>
+        /// <param name="conversationId"></param>
+        /// <returns></returns>
         public string GetContactUsernameFromConversation(int conversationId)
         {
             return _DbContext.Conversations.Where(c => c.Id == conversationId).FirstOrDefault().ContactUsername;
@@ -239,12 +251,8 @@ namespace ServiceLayer.Messenger
 
             return null;
 
-
             }
-         
-        
-
-
+ 
         /// <summary>
         /// Method return all user's friends
         /// </summary>

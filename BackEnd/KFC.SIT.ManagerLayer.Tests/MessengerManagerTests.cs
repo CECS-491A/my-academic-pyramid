@@ -20,15 +20,22 @@ namespace ManagerLayer.Tests
 
 
         [Fact]
-        public void GetMessageInConversation_ShouldReturnConversation()
+        public void GetAllMessageInConversation_ShouldReturnConversation()
         {
-            //Arrange
+            // Arrange
+            Message newMessage = new Message
+            {
+                MessageContent = "testContent3"
+            };
+
             List<Message> messages = null;
+
 
             //Act
 
             MessengerManager msManager = new MessengerManager();
-            messages = msManager.GetMessageInConversation(conversationIdForTest).ToList();
+            var createdMessage = msManager.SaveMessageToDatabase(newMessage, testAuthUserId, testContactUserId);
+            messages = msManager.GetMessageInConversation(createdMessage.ConversationId).ToList();
 
             //Assert
             Assert.NotEmpty(messages);
@@ -37,13 +44,20 @@ namespace ManagerLayer.Tests
         [Fact]
         public void GetRecentMessageInConversation_ShouldReturnAMessage()
         {
-            //Arrange
-            Message message = null;
+            // Arrange
+            Message newMessage = new Message
+            {
+                MessageContent = "testContent3"
+            };
+
+            Message message ;
+
 
             //Act
 
             MessengerManager msManager = new MessengerManager();
-            message = msManager.GetRecentMessageBetweenUser(conversationIdForTest);
+            var createdMessage = msManager.SaveMessageToDatabase(newMessage, testAuthUserId, testContactUserId);
+            message = msManager.GetRecentMessageBetweenUser(createdMessage.ConversationId);
 
             //Assert
             Assert.NotNull(message);
@@ -146,6 +160,7 @@ namespace ManagerLayer.Tests
 
             //Act
             MessengerManager messengerManager = new MessengerManager();
+            messengerManager.RemoveUserFromFriendList(testAuthUserId, testContactUserId);
             friendUser = messengerManager.AddUserFriendList(testAuthUserId, testContactUsername);
 
             //Assert
@@ -167,15 +182,22 @@ namespace ManagerLayer.Tests
         }
 
         [Fact]
-        public void RemoveUserFromFriendList_FindDeletedFriendShouldReturnNull()
+        public void RemoveUserFromFriendList_ShouldReturnFriendRelationship()
         {
             //Arrange
             FriendRelationship fs = null;
 
             //Act
             MessengerManager messengerManager = new MessengerManager();
-            var newFriendRelationship = messengerManager.AddUserFriendList(testAuthUserId, testContactUsername);
-            fs = messengerManager.RemoveUserFromFriendList(newFriendRelationship.UserId, newFriendRelationship.FriendId);
+            messengerManager.AddUserFriendList(testAuthUserId, testContactUsername);
+
+            using (DatabaseContext db = new DatabaseContext())
+            {
+                var foundRelationship = db.FriendRelationships.Where(f => f.UserId == testAuthUserId && f.FriendId == testContactUserId).FirstOrDefault();
+                fs = messengerManager.RemoveUserFromFriendList(foundRelationship.UserId, foundRelationship.FriendId);
+            }
+                
+            
 
             //Assert
             Assert.NotNull(fs);

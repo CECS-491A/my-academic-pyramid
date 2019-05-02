@@ -1,13 +1,14 @@
 <template>
   <div id="chatApp">
+    <!-- Create a chat toolbar with 2 tab -->
     <v-app id="chat">
       <v-container fluid grid-list-xl>
         <v-layout row wrap>
           <v-flex xs12 md4>
             <v-tabs left color="cyan" dark icons-and-text>
               <v-tabs-slider color="green"></v-tabs-slider>
+              <!-- Create first tab that hold chat history c -->
               <v-tab id="chatHistory">Chat History</v-tab>
-
               <v-tab-item>
                 <v-card height="350px">
                   <v-toolbar color="teal" dark>
@@ -19,39 +20,39 @@
                         bottom
                         right
                         absolute
-                        @click="chatDialog = !chatDialog"
+                        @click="newMessageDialog = !newMessageDialog"
                       >
                         <v-icon>edit</v-icon>
                       </v-btn>
                     </v-list>
                   </v-toolbar>
-
+                  <!-- Create list for conversation. Current selected conversation will have blue color-->
                   <v-list two-line>
                     <v-divider></v-divider>
-
                     <v-list-tile
                       v-for="item in conversations"
                       :key="item.Id"
-                      :to="item.path"
                       :color="selectedConversationId!= item.Id ? 'black' : 'blue'" 
-                      
                       @click="getMessageInConversation(item.Id)"
                     >
                       <v-list-tile-content>
-                        <v-list-tile-title>{{ item.ContactUsername }}</v-list-tile-title>
+                        <v-list-tile-title>
+                          {{ item.ContactUsername }}</v-list-tile-title>
                         <v-icon :color="item.HasNewMessage && selectedConversationId!= item.Id ? 'red' : 'grey'">chat_bubble</v-icon>
-                        <!-- <v-icon v-if="item.HasNewMessage && this.selectedConversationId!= item.Id">chat_bubble</v-icon> -->
                         <v-list-tile-sub-title>{{item.CreatedDate}}</v-list-tile-sub-title>
-                            
                       </v-list-tile-content>
+
+                      <!-- Create an floating window containing a button to delete conversation -->
                       <v-list-tile-action>
-                        <v-menu bottom left>
+                        <v-menu
+                        max-height="100px"
+                         bottom right>
                           <template v-slot:activator="{ on }">
                             <v-btn dark icon v-on="on" color="black">
                               <v-icon>more_vert</v-icon>
                             </v-btn>
                           </template>
-                          <v-card>
+                          <v-card >
                             <v-list>
                               <v-list-tile avatar>
                                 <v-list-tile-avatar>
@@ -64,6 +65,7 @@
                                   <v-list-tile-sub-title></v-list-tile-sub-title>
                                 </v-list-tile-content>
 
+                                <!-- Create a button to delete conversation -->
                                 <v-list-tile-action>
                                   <v-btn icon @click="DeleteConversation(item.Id)">
                                     <v-icon>delete</v-icon>
@@ -71,15 +73,6 @@
                                 </v-list-tile-action>
                               </v-list-tile>
                             </v-list>
-
-                            <v-divider></v-divider>
-
-                            <v-card-actions>
-                              <v-spacer></v-spacer>
-
-                              <v-btn flat @click="menu = false">Cancel</v-btn>
-                              <v-btn color="primary" flat @click="menu = false">Save</v-btn>
-                            </v-card-actions>
                           </v-card>
                         </v-menu>
                       </v-list-tile-action>
@@ -88,8 +81,8 @@
                 </v-card>
               </v-tab-item>
 
+              <!-- Make friend list as second tab -->
               <v-tab id="friendList">Friend List</v-tab>
-
               <v-tab-item>
                 <friendList></friendList>
               </v-tab-item>
@@ -97,16 +90,19 @@
           </v-flex>
           <v-flex xs12 md6>
             <v-card class="elevation-12">
-              <chat></chat>
+              <chatBox></chatBox>
             </v-card>
           </v-flex>
         </v-layout>
       </v-container>
+
+      <!-- Create a dialog used to start a new conversation -->
       <v-dialog 
-      v-model="chatDialog" 
+      v-model="newMessageDialog" 
       max-width="500px">
         <v-card>
-          <form ref="chatDialog">
+          <form ref="newMessageDialog">
+            <!-- Create text field for receiver username -->
           <v-card-text>
               <v-text-field 
               id ="receiverUsername"
@@ -118,6 +114,7 @@
             @blur="$v.newMessage.contactUsername.$touch()"
             ></v-text-field>
           
+          <!-- Another text field for message -->
             <v-text-field 
             id = "inputMessage"
             label="Message" 
@@ -127,11 +124,14 @@
             @input="$v.newMessage.messageContent.$touch()"
             @blur="$v.newMessage.messageContent.$touch()"
             ></v-text-field>
+            <!-- Show error  -->
             <v-alert :value="error" type="error" transition="scale-transition">{{error}}</v-alert>
           </v-card-text>
           </form>
           <v-card-actions>
             <v-spacer></v-spacer>
+
+            <!-- Create a button to send message -->
             <v-btn
             id ="sendNewMsgButton" 
             flat color="primary" 
@@ -144,13 +144,14 @@
 </template>
 
 <script>
-import chat from "@/components/Messenger/Chat";
+import chatBox from "@/components/Messenger/ChatBox";
 import friendList from "@/components/Messenger/FriendList";
 import { validationMixin } from "vuelidate";
 import { required, email } from "vuelidate/lib/validators";
 export default {
   mixins: [validationMixin],
 
+// Validation for receiver username and message text file
   validations: {
     newMessage: {
       contactUsername: {required,email},
@@ -158,22 +159,25 @@ export default {
     }
   },
   components: {
-    chat,
+    chatBox,
     friendList
   },
   data() {
     return {
-      drawer: true,
       conversations: [],
-      right: null,
-      chatDialog: false,
+      newMessageDialog: false,
       newMessage: {
         contactUsername: "",
         messageContent: ""
       },
 
+      // Variable that hold the current selected conversation
       selectedConversationId: "",
+
+      // Hold the returned message error from api 
       error:"",
+
+      // Used to trigger the alert 
       alert: false,
       
     };
@@ -199,23 +203,30 @@ export default {
       return errors;
     }
   },
+  watch:{
+    selectedConversationId(){
+      this.$eventBus.$emit("GetMessageInConversation", this.selectedConversationId)
+    }
 
+  },
   created() {
-    
-      this.getAllConversations(),
+      this.getAllConversations(),     // Retrieve all conversation at initial
+
+      // Listen for the send message action from friend list component
       this.$eventBus.$on("SendMessageFromFriendList", friendUsername => {
-        (this.newMessage.contactUsername = friendUsername),
-          (this.chatDialog = true);
+        
+        this.newMessage.contactUsername = friendUsername, // Set the receiver username received from friendlist component
+        this.newMessageDialog = true; // Show newMessageDialog
       });
 
+      // Listen to reload the conversation panels from friendlist component
     this.$eventBus.$on("ReloadChatHistoryList", () => {
       this.getAllConversations();
     });
   },
   methods: {
-   
 
-    async getAllConversations() {
+    async getAllConversations() { // Method to get all conversation from back end
       await this.axios({
         headers: {
           Accept: "application/json",
@@ -226,7 +237,7 @@ export default {
         crossDomain: true,
         url: this.$hostname + "messenger/GetAllConversation"
       })
-        .then(response => {
+        .then(response => { // Populate the conversations data with response data 
           this.conversations = response.data.conversations;
           //sessionStorage.SITtoken = response.data.SITtoken
         })
@@ -236,13 +247,12 @@ export default {
         });
     },
 
-    getMessageInConversation(conversationId) {
-      this.$eventBus.$emit("GetMessageInConversation", conversationId),
+    // Method to get all message in a conversation.
+    getMessageInConversation(conversationId) { 
       this.selectedConversationId = conversationId;
     },
 
-    
-
+    // Start a new conversation and send message
     async sendMessageWithNewConversation() {
       if (this.newMessage.messageContent) {
         await this.axios({
@@ -258,14 +268,11 @@ export default {
         })
           .then(response => {
             //sessionStorage.SITtoken = response.data.SITtoken
-            this.errorText = null;
-            this.chatDialog = false;
-            this.selectedConversationId = response.data.message.conversationID,
+            this.newMessageDialog = false;
+            this.selectedConversationId = response.data.message.ConversationId,
             this.getAllConversations();
-            // this.$eventBus.$emit(
-            //   "GetMessageInConversation",
-            //   this.selectedConversationId
-            // );
+            this.$eventBus.$emit("GetMessageInConversation", this.selectedConversationId)
+           
         
           })
           .catch(err => {
@@ -276,15 +283,12 @@ export default {
             else{
               this.error = err.response.data
             }
-            
             this.alert = true;
           })
-         ;
-      } else {
-        this.errorText = "A message must be entered!";
       }
     },
 
+    // To delete a conversation
     async DeleteConversation(conversationId) {
       await this.axios({
         headers: {

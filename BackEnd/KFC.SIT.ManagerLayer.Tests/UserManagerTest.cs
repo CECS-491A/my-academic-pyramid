@@ -2,7 +2,7 @@
 using DataAccessLayer.Models;
 using System;
 using System.Collections.Generic;
-using WebAPI.UserManagement;
+using WebAPI.Gateways.UserManagement;
 using Xunit;
 
 namespace ManagerLayer.Tests

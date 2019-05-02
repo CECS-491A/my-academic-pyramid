@@ -14,7 +14,7 @@ namespace ServiceLayer.UserManagement.UserAccountServices
     /// Support create user, delete user, update user, find user by id, find user by username,  get all user
     /// Support add claim, remove claim
     /// </summary>
-    public class UserManagementServices : IUserAccountServices, IUserClaimServices
+    public class UserManagementServices : IUserAccountServices, IUserClaimServices, IUserManagementServices
     {
 
         protected DatabaseContext _DbContext;

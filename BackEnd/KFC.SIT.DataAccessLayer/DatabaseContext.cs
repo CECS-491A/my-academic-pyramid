@@ -16,13 +16,16 @@ namespace DataAccessLayer
 
         public DbSet<Category> Categories { get; set; }
 
-        //Set of Conservations
+        // Set of Conservations
         public DbSet<Conversation> Conversations { get; set; }
         
+        // Set of Messages in conversation
         public DbSet<Message> Messages {get;set;}
 
+        // Set of friends in a friendlist
         public DbSet<FriendRelationship>FriendRelationships { get; set; }
 
+        // Set of SignalR connection Id
         public DbSet<ChatConnectionMapping> ChatConnectionMappings { get; set; }
 
          //School Tables
@@ -32,7 +35,7 @@ namespace DataAccessLayer
         public DbSet<Student> Students { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
 
-        public DatabaseContext () :base ("name=MYAPConnectionString")
+        public DatabaseContext () :base ("name=LocalTest")
         {
             //Database.SetInitializer(new DropCreateDatabaseAlways<DatabaseContext>());
 

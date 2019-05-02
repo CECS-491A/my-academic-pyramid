@@ -133,29 +133,6 @@ namespace ServiceLayer.Tests
 
         }
 
-        [Fact]
-        public void GetContactUserIdFromConversation_ShouldReturnUserId()
-        {
-            //Arrange 
-            int expected;
-
-            int actual;
-
-            //Act
-            using (var db = new DatabaseContext())
-            {
-                MessengerServices msService = new MessengerServices(db);
-                var returnConversation = msService.CreateConversation(testAuthUserId, testContactUserId, testContactUsername);
-                db.SaveChanges();
-                expected = returnConversation.Id;
-                actual = msService.GetContactUserIdFromConversation(conversationIdForTest);
-
-            }
-
-            //Assert
-            Assert.NotEqual(expected, actual);
-
-        }
 
         [Fact]
         public void AddContactToFriendList_ShouldReturnFriendRelationship()
@@ -220,6 +197,7 @@ namespace ServiceLayer.Tests
                 MessengerServices msService = new MessengerServices(db);
                
                 msService.AddContactFriendList(testAuthUserId, testContactUserId);
+                db.SaveChanges();
                 friends = msService.GetAllFriendRelationship(testAuthUserId).ToList();
 
             }
@@ -240,15 +218,13 @@ namespace ServiceLayer.Tests
             {
                 MessengerServices msService = new MessengerServices(db);  
                 msService.AddContactFriendList(testAuthUserId, testContactUserId);
+                db.SaveChanges();
                 var friends = msService.GetAllFriendRelationship(testAuthUserId).ToList();
                 FriendRelationship FriendRelationship = friends.ElementAt(0);
                 msService.RemoveUserFromFriendList(FriendRelationship.UserId, FriendRelationship.FriendId);
                 db.SaveChanges();
 
                 DeletedFriend = db.FriendRelationships.Where(f => f.UserId == FriendRelationship.UserId && f.FriendId == FriendRelationship.FriendId).FirstOrDefault();
-
-
-
             }
 
             //Assert
@@ -267,8 +243,21 @@ namespace ServiceLayer.Tests
             using (var db = new DatabaseContext())
             {
                 MessengerServices msService = new MessengerServices(db);
-                
-                messages = msService.GetAllMessagesFromConversation(conversationIdForTest);
+                var conversation = msService.CreateConversation(testAuthUserId, testContactUserId, testContactUsername);
+                db.SaveChanges();
+                Message message = new Message
+                {
+                    ConversationOfMessage = conversation,
+                    OutgoingMessage = true,
+                    MessageContent = "testContent2",
+                    CreatedDate = DateTime.Now
+                };
+
+                message = msService.SaveMessageToDatabase(message);
+                db.SaveChanges();
+
+                var foundConversation = db.Conversations.Where(c => c.UserId == testAuthUserId && c.ContactUserId == testContactUserId).FirstOrDefault();
+                messages = msService.GetAllMessagesFromConversation(conversation.Id);
 
             }
 
@@ -281,26 +270,33 @@ namespace ServiceLayer.Tests
         public void GetRecentMessageFromConversation_ShouldReturnAMessage()
         {
             //Arrange 
-            Message message = null;
+            Message expected = null;
             
             //Act
             using (var db = new DatabaseContext())
             {
                 MessengerServices msService = new MessengerServices(db);
-                try
+                var conversation = msService.CreateConversation(testAuthUserId, testContactUserId, testContactUsername);
+                db.SaveChanges();
+                var  message = new Message
                 {
-                    message = msService.GetMostRecentMessageConversation(conversationIdForTest);
-                }
+                    ConversationOfMessage = conversation,
+                    OutgoingMessage = true,
+                    MessageContent = "testContent2",
+                    CreatedDate = DateTime.Now
+                };
 
-                catch (DbUpdateException ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
+                message = msService.SaveMessageToDatabase(message);
+                db.SaveChanges();
+                var foundConversation = db.Conversations.Where(c => c.UserId == testAuthUserId && c.ContactUserId == testContactUserId).FirstOrDefault();
+
+                expected = msService.GetMostRecentMessageConversation(foundConversation.Id);
+
 
             }
 
             //Assert
-            Assert.NotNull(message);
+            Assert.NotNull(expected);
 
         }
 
@@ -344,32 +340,32 @@ namespace ServiceLayer.Tests
         public void DeleteMessage_ShouldReturnAMessage()
         {
             //Arrange
-            Message message = new Message
-            {
-                ConversationId = conversationIdForTest,
-                OutgoingMessage = true,
-                MessageContent = "testContent2",
-                CreatedDate = DateTime.Now
-            };
             Message returnMessage = null;
-            Message expected = null;
-            Message actual;
 
             //Act
             using (var db = new DatabaseContext())
             {
                 MessengerServices msService = new MessengerServices(db);
- 
-                    message = msService.SaveMessageToDatabase(message);
-                    db.SaveChanges();
-                    var foundMessage =  db.Messages.Where(m => m.MessageContent.Equals("testContent2")).FirstOrDefault();
-                    returnMessage = msService.DeleteMessage(foundMessage.Id);
-                    db.SaveChanges();
-                    actual = db.Messages.Where(m => m.Id == foundMessage.Id).FirstOrDefault();
-            }
+                var conversation = msService.CreateConversation(testAuthUserId, testContactUserId, testContactUsername);
+                db.SaveChanges();
+                Message message = new Message
+                {
+                    ConversationOfMessage = conversation,
+                    OutgoingMessage = true,
+                    MessageContent = "testContent2",
+                    CreatedDate = DateTime.Now
+                };
 
-            //Assert
-            Assert.Equal(expected,actual);
+                message = msService.SaveMessageToDatabase(message);
+                db.SaveChanges();
+                var foundMessage = db.Messages.Where(m => m.MessageContent.Equals("testContent2")).FirstOrDefault();
+                returnMessage = msService.DeleteMessage(foundMessage.Id);
+                db.SaveChanges();
+
+
+                //Assert
+                Assert.NotNull(returnMessage);
+            }
         }
 
 

@@ -12,7 +12,7 @@ using WebAPI.Signalr;
 using System.Net.Http;
 using DataAccessLayer.DTOs;
 using System.Collections.Generic;
-using WebAPI.UserManagement;
+using WebAPI.Gateways.UserManagement;
 using SecurityLayer.Authorization;
 using KFC.SIT.WebAPI.Utility;
 using SecurityLayer.Sessions;
@@ -32,11 +32,11 @@ namespace KFC.SIT.WebAPI.Controllers
     public class MessengerController : ApiController
     {
 
-        private MessengerManager messengerManager;
-        private int authUserId;
+        private MessengerManager _messengerManager;
+        private int _authUserId;
         public MessengerController()
         {
-            messengerManager = new MessengerManager();
+            _messengerManager = new MessengerManager();
         }
 
         /// <summary>
@@ -84,10 +84,10 @@ namespace KFC.SIT.WebAPI.Controllers
                 UserManager um = new UserManager();
 
                 //Get auth User Id from auth username
-                authUserId = um.FindByUserName(securityContext.UserName).Id;
+                _authUserId = um.FindByUserName(securityContext.UserName).Id;
 
                 //Return all conversations of Auth User
-                var conversationList = messengerManager.GetAllConversations(authUserId);
+                var conversationList = _messengerManager.GetAllConversations(_authUserId);
 
                 //From here, create conversation transfer objects to send to front end
                 if (conversationList != null)
@@ -115,6 +115,11 @@ namespace KFC.SIT.WebAPI.Controllers
 
         }
 
+        /// <summary>
+        /// Delete a coversation using conversation Id
+        /// </summary>
+        /// <param name="conversationId"></param>
+        /// <returns></returns>
         [HttpDelete]
         [ActionName("DeleteConversation")]
         public IHttpActionResult DeleteConversation(int conversationId)
@@ -153,14 +158,14 @@ namespace KFC.SIT.WebAPI.Controllers
             {
                 UserManager um = new UserManager();
                 //Find auth user Id from auth username
-                authUserId = um.FindByUserName(securityContext.UserName).Id;
+                _authUserId = um.FindByUserName(securityContext.UserName).Id;
 
                 try
                 {
                     //string updatedToken = sm.RefreshSession(securityContext.Token);
 
                     //Delete conversation using conversationId
-                    var conversation = messengerManager.DeleteConversation(conversationId);
+                    var conversation = _messengerManager.DeleteConversation(conversationId);
                     return Ok(new { conversation = conversation }/*new { SITtoken = updatedToken}*/);
                 }
 
@@ -219,19 +224,19 @@ namespace KFC.SIT.WebAPI.Controllers
                 var authUsername = securityContext.UserName;
 
                 //Find auth user Id from auth username
-                authUserId = um.FindByUserName(authUsername).Id;
+                _authUserId = um.FindByUserName(authUsername).Id;
 
                 // Get conversation from conversation Id
-                var conversation = messengerManager.GetConversationFromId(conversationId);
+                var conversation = _messengerManager.GetConversationFromId(conversationId);
 
                 // Get contact username in the conversation 
-                var contactUsername = messengerManager.GetContactUsernameFromConversation(conversationId);
+                var contactUsername = _messengerManager.GetContactUsernameFromConversation(conversationId);
 
                 //Temporary username used to decide which username to display in the message 
                 var temPUsername = "";
 
                 //Get all messages in the conversation
-                var messageList = messengerManager.GetMessageInConversation(conversationId);
+                var messageList = _messengerManager.GetMessageInConversation(conversationId);
                 if (messageList != null)
                 {
                     // Create list of messageDTO for transfer
@@ -258,6 +263,8 @@ namespace KFC.SIT.WebAPI.Controllers
                             Id = m.Id,
                             SenderUsername = temPUsername,
                             MessageContent = m.MessageContent,
+                            OutgoingMessage = m.OutgoingMessage,
+                            CreatedDate = m.CreatedDate
 
                         });
                     }
@@ -271,6 +278,11 @@ namespace KFC.SIT.WebAPI.Controllers
 
         }
 
+        /// <summary>
+        /// Get the most recent message from a conversation
+        /// </summary>
+        /// <param name="conversationId2"></param>
+        /// <returns></returns>
         [HttpGet]
         [ActionName("GetRecentMessage")]
         public IHttpActionResult GetRecentMessageWithUser(int conversationId2)
@@ -312,14 +324,14 @@ namespace KFC.SIT.WebAPI.Controllers
                 var authUsername = securityContext.UserName;
 
                 //Get conversation between auth user and contact user
-                var conversation = messengerManager.GetConversationFromId(conversationId2);
+                var conversation = _messengerManager.GetConversationFromId(conversationId2);
                 if(conversation != null)
                 {
                     //Get contact user name
                     var contactUsername = conversation.ContactUsername;
 
                     //Return the most recent message from the conversation 
-                    var recentMessage = messengerManager.GetRecentMessageBetweenUser(conversationId2);
+                    var recentMessage = _messengerManager.GetRecentMessageBetweenUser(conversationId2);
                     var senderUsername = "";
 
 
@@ -345,6 +357,7 @@ namespace KFC.SIT.WebAPI.Controllers
                             ConversationId = conversationId2,
                             SenderUsername = senderUsername,
                             MessageContent = recentMessage.MessageContent,
+                            CreatedDate = recentMessage.CreatedDate
 
                         };
 
@@ -360,6 +373,11 @@ namespace KFC.SIT.WebAPI.Controllers
         }
 
 
+        /// <summary>
+        /// Look up user Id by username
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
         [HttpGet]
         [ActionName("GetUserIdWithUsername")]
         public IHttpActionResult GetUserIdWithUsername(string username)
@@ -410,6 +428,10 @@ namespace KFC.SIT.WebAPI.Controllers
 
         }
 
+        /// <summary>
+        /// Return  user id and username of authenticated user
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [ActionName("GetAuthUserIdAndUsername")]
         public IHttpActionResult GetAuthUserIdAndUsername()
@@ -446,11 +468,11 @@ namespace KFC.SIT.WebAPI.Controllers
             {
                 UserManager um = new UserManager();
                 User user = um.FindByUserName(securityContext.UserName);
-                authUserId = user.Id;
+                _authUserId = user.Id;
                 var authUsername = user.UserName;
                 //string updatedToken = sm.RefreshSession(securityContext.Token);
 
-                return Ok(new { authUserId = authUserId, authUsername = authUsername/*SITtoken = updatedToken*/ });
+                return Ok(new { authUserId = _authUserId, authUsername = authUsername/*SITtoken = updatedToken*/ });
             }
 
 
@@ -458,6 +480,11 @@ namespace KFC.SIT.WebAPI.Controllers
         }
 
 
+        /// <summary>
+        /// Send a message within a current conversation chat box
+        /// </summary>
+        /// <param name="messageDTO"></param>
+        /// <returns></returns>
         [HttpPost]
         [ActionName("SendMessageExistingConversation")]
         //[ActionName("SendMessageExistingConversation")]
@@ -499,10 +526,10 @@ namespace KFC.SIT.WebAPI.Controllers
                 UserManager um = new UserManager();
 
                 //Get auth user Id from security context
-                authUserId = um.FindByUserName(securityContext.UserName).Id;
+                _authUserId = um.FindByUserName(securityContext.UserName).Id;
 
                 // Get contactUserId from the conversation
-                var contactId = messengerManager.GetContactUserIdFromConversation(messageDTO.ConversationId);
+                var contactId = _messengerManager.GetContactUserIdFromConversation(messageDTO.ConversationId);
                 var authUsername = securityContext.UserName;
                 //Map the messageDTO from front end to message object to save in the system
                 var message = new Message
@@ -513,57 +540,63 @@ namespace KFC.SIT.WebAPI.Controllers
                     CreatedDate = DateTime.Now
                 };
 
-                //Save the message to database
+                //Save the message to database    
                 try
                 {
-                    messengerManager.SaveMessageToDatabase(message, authUserId, contactId);
+                    var returnMessage = _messengerManager.SaveMessageToDatabase(message, _authUserId, contactId);
+
+                    // Create a messageDTO include in the response to the auth user
+                    var StoredMessageDTO = new StoredMessageDTO
+                    {
+
+                        OutgoingMessage = true,
+                        SenderUsername = authUsername,
+                        MessageContent = returnMessage.MessageContent,
+                        CreatedDate = returnMessage.CreatedDate,
+
+                    };
+
+                    // Set up SignalR Hub to broadcast the FetchMessage command in receiver
+                    var myHub = GlobalHost.ConnectionManager.GetHubContext<MessengerHub>();
+
+                    // Get the message receiver's connection ID to broadcast FetchMessage command to
+                    // Lookup by contactId
+                    var connectionIDList = _messengerManager.GetConnectionIdWithUserId(contactId);
+                    if (connectionIDList != null)
+                    {
+                        // When message is saved to database, it will be saved to both auth user's conversation and receiver's conversation
+                        //Get the conversation id of the conversation that just receive the new message from auth user.
+                        //This conversation is the one belongs to receiver/.
+                        int conversationIdToFetchMessage = _messengerManager.GetConversationBetweenUsers(contactId, _authUserId).Id;
+
+                        //Then broadcast that conversation id to the recever only using connection Id
+                        //Then the receiver will know the which conversation that has new message ,and fetch the message
+                        foreach (ChatConnectionMapping cM in connectionIDList)
+                        {
+
+                            //ask the front end client to fetch the message from the conversation with given conversation Id
+                            var result = myHub.Clients.Client(cM.ConnectionId).FetchMessages(conversationIdToFetchMessage);
+
+                        }
+                        // string updatedToken = sm.RefreshSession(securityContext.Token);
+                    }
+
+                    return Ok(new { message = StoredMessageDTO }/*new { SITtoken = updatedToken }*/);
                 }
                 catch (DbUpdateException ex)
                 {
                     return Content(HttpStatusCode.InternalServerError, "There is an error when saving message to database");
                 }
-
-                // Set up SignalR Hub to broadcast the FetchMessage command in receiver
-                var myHub = GlobalHost.ConnectionManager.GetHubContext<MessengerHub>();
-
-                // Get the message receiver's connection ID to broadcast FetchMessage command to
-                // Lookup by contactId
-                var connectionIDList = messengerManager.GetConnectionIdWithUserId(contactId);
-                if (connectionIDList != null)
-                {
-                    // When message is saved to database, it will be saved to both auth user's conversation and receiver's conversation
-                    //Get the conversation id of the conversation that just receive the new message from auth user.
-                    //This conversation is the one belongs to receiver/.
-                    int conversationIdToFetchMessage = messengerManager.GetConversationBetweenUsers(contactId, authUserId).Id;
-
-                    //Then broadcast that conversation id to the recever only using connection Id
-                    //Then the receiver will know the which conversation that has new message ,and fetch the message
-                    foreach (ChatConnectionMapping cM in connectionIDList)
-                    {
-
-                        //ask the front end client to fetch the message from the conversation with given conversation Id
-                        var result = myHub.Clients.Client(cM.ConnectionId).FetchMessages(conversationIdToFetchMessage);
-
-                    }
-                    // string updatedToken = sm.RefreshSession(securityContext.Token);
-                }
-
-                // Create a messageDTO include in the response to the auth user
-                var StoredMessageDTO = new StoredMessageDTO
-                {
-                    SenderUsername = authUsername,
-                    MessageContent = messageDTO.MessageContent,
-
-                };
-
-                return Ok(new { message = StoredMessageDTO }/*new { SITtoken = updatedToken }*/);
             }
 
         }
 
 
-
-
+        /// <summary>
+        /// Start a new conversation with new message
+        /// </summary>
+        /// <param name="newConversationMessageDTO"></param>
+        /// <returns></returns>
         [HttpPost]
         [ActionName("SendMessageWithNewConversation")]
         //[ActionName("SendMessageExistingConversation")]
@@ -601,7 +634,8 @@ namespace KFC.SIT.WebAPI.Controllers
             else
             {
                 // Find auth user id from auth user name 
-                authUserId = um.FindByUserName(securityContext.UserName).Id;
+                _authUserId = um.FindByUserName(securityContext.UserName).Id;
+                var authUsername = securityContext.UserName;
 
                 // Find contact user name
                 var contactUser = um.FindByUserName(newConversationMessageDTO.ContactUsername);
@@ -621,7 +655,7 @@ namespace KFC.SIT.WebAPI.Controllers
                     // Save message to database
                     try
                     {
-                        returnMessage =  messengerManager.SaveMessageToDatabase(message, authUserId, contactUser.Id);
+                        returnMessage =  _messengerManager.SaveMessageToDatabase(message, _authUserId, contactUser.Id);
 
                     }
 
@@ -635,7 +669,7 @@ namespace KFC.SIT.WebAPI.Controllers
 
                     // Get the message receiver's connection ID to broadcast FetchMessage command to
                     // Lookup by contactId
-                    var connectionIDList = messengerManager.GetConnectionIdWithUserId(contactUser.Id);
+                    var connectionIDList = _messengerManager.GetConnectionIdWithUserId(contactUser.Id);
 
                     
                     if (connectionIDList != null)
@@ -643,7 +677,7 @@ namespace KFC.SIT.WebAPI.Controllers
                         // When message is saved to database, it will be saved to both auth user's conversation and receiver's conversation
                         //Get the conversation id of the conversation that just receive the new message from auth user.
                         //This conversation is the one belongs to receiver/.
-                        int conversationIdToFetchMessage = messengerManager.GetConversationBetweenUsers(contactUser.Id, authUserId).Id;
+                        int conversationIdToFetchMessage = _messengerManager.GetConversationBetweenUsers(contactUser.Id, _authUserId).Id;
 
                         //Then broadcast that conversation id to the recever only using connection Id
                         //Then the receiver will know the which conversation that has new message ,and fetch the message
@@ -656,13 +690,28 @@ namespace KFC.SIT.WebAPI.Controllers
                         // string updatedToken = sm.RefreshSession(securityContext.Token);
 
                     }
-                    return Ok(new { message = message }/*new { SITtoken = updatedToken }*/);
+
+                    var StoredMessageDTO = new StoredMessageDTO
+                    {
+                        ConversationId = returnMessage.ConversationId,
+                        OutgoingMessage = true,
+                        SenderUsername = authUsername,
+                        MessageContent = returnMessage.MessageContent,
+                        CreatedDate = returnMessage.CreatedDate,
+
+                    };
+                    return Ok(new { message = StoredMessageDTO }/*new { SITtoken = updatedToken }*/);
                 }
                 return Content(HttpStatusCode.NotFound, "Receiver does not exist to receive message");
             }
         }
 
 
+        /// <summary>
+        /// Add a new user to friendlist using contact's username
+        /// </summary>
+        /// <param name="addedUsername"></param>
+        /// <returns></returns>
         [HttpPost]
         [ActionName("AddFriend")]
         public IHttpActionResult AddFriendContactList(string addedUsername)
@@ -702,12 +751,12 @@ namespace KFC.SIT.WebAPI.Controllers
                 UserManager um = new UserManager();
 
                 // Get authUserId from auth username 
-                authUserId = um.FindByUserName(securityContext.UserName).Id;
+                _authUserId = um.FindByUserName(securityContext.UserName).Id;
                 FriendRelationship friendRelationship = null;
                 try
                 {
                     // Try to add friend
-                    friendRelationship = messengerManager.AddUserFriendList(authUserId, addedUsername);
+                    friendRelationship = _messengerManager.AddUserFriendList(_authUserId, addedUsername);
 
                 }
 
@@ -744,6 +793,10 @@ namespace KFC.SIT.WebAPI.Controllers
 
         }
 
+        /// <summary>
+        /// Get all friends in the friendlist
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [ActionName("GetFriendList")]
         public IHttpActionResult GetFriendList()
@@ -785,10 +838,10 @@ namespace KFC.SIT.WebAPI.Controllers
                 UserManager um = new UserManager();
 
                 // Get authUserId from auth username 
-                authUserId = um.FindByUserName(securityContext.UserName).Id;
+                _authUserId = um.FindByUserName(securityContext.UserName).Id;
 
                 // Get all friends in the friendlist
-                var friendList = messengerManager.GetAllFriendRelationships(authUserId);
+                var friendList = _messengerManager.GetAllFriendRelationships(_authUserId);
                 if (friendList != null)
                 {
                     // From here is creating list of friend to return to the UI for render
@@ -815,6 +868,11 @@ namespace KFC.SIT.WebAPI.Controllers
 
         }
 
+        /// <summary>
+        /// Delete a friend in a friend list
+        /// </summary>
+        /// <param name="friendId"></param>
+        /// <returns></returns>
         [HttpDelete]
         [ActionName("RemoveFriendFromList")]
         public IHttpActionResult DeleteFriend(int friendId)
@@ -855,13 +913,13 @@ namespace KFC.SIT.WebAPI.Controllers
                 UserManager um = new UserManager();
 
                 // Get authUserId from auth username 
-                authUserId = um.FindByUserName(securityContext.UserName).Id;
+                _authUserId = um.FindByUserName(securityContext.UserName).Id;
                 try
                 {
                     //string updatedToken = sm.RefreshSession(securityContext.Token);
 
                     // Try to remove a user from the friendlist
-                    messengerManager.RemoveUserFromFriendList(authUserId, friendId);
+                    _messengerManager.RemoveUserFromFriendList(_authUserId, friendId);
                     return Ok(/*new { SITtoken = updatedToken }*/);
                 }
                 catch (DbUpdateException ex)

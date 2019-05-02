@@ -102,6 +102,7 @@
     <Compile Include="DataAnalysisDashboard\DashboardService.cs" />
     <Compile Include="HttpClients\IHttpClient.cs" />
     <Compile Include="Messenger\ChatConnectionMapping.cs" />
+    <Compile Include="Messenger\IMessengerServices.cs" />
     <Compile Include="Messenger\MessengerServices.cs" />
     <Compile Include="PasswordChecking\HashFunctions\IHashFunction.cs" />
     <Compile Include="HttpClients\HttpClientString.cs" />
@@ -112,6 +113,7 @@
     <Compile Include="ServiceExceptions\SignalRMappingException.cs" />
     <Compile Include="Search\ISearchService.cs" />
     <Compile Include="Search\SearchService.cs" />
+    <Compile Include="UserManagement\IUserManagementServices.cs" />
     <Compile Include="UserManagement\UserManagementServices.cs" />
     <Compile Include="UserManagement\UserTree\Node.cs" />
     <Compile Include="UserManagement\UserTree\Tree.cs" />

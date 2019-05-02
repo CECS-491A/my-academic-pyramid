@@ -10,7 +10,7 @@ import Logging from '@/Views/Logging'
 import Login from '@/Views/Login'
 import UserManagement from '@/Views/UserManagement'
 import LoginPrototype from '@/Views/LoginPrototype'
-import ChatContainer from '@/Views/ChatContainer'
+import Chat from '@/Views/Chat'
 import UserRegistration from '@/Views/UserRegistration'
 import UserHomePage from '@/Views/UserHomePage'
 import Redirect from '@/Views/Redirect'
@@ -60,7 +60,7 @@ export default new Router({
   {
     path: '/Chat',
     name: 'Chat',
-    component: ChatContainer
+    component: Chat
   },
   {
     path: "/UserRegistration",

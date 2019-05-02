@@ -5,7 +5,7 @@ using System.Text;
 using SecurityLayer.utility;
 using System.Security.Cryptography;
 using Newtonsoft.Json;
-using WebAPI.UserManagement;
+using WebAPI.Gateways.UserManagement;
 using DataAccessLayer.Models;
 
 namespace SecurityLayer.Sessions
