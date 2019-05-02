@@ -204,7 +204,7 @@ namespace ServiceLayer.UserManagement.UserAccountServices
             Category existingCategory = _DbContext.Categories.FirstOrDefault(c => c.Value == category.Value);
             if (existingCategory == null)
             {
-                category.Users.Add(user);
+                user.Category = category;
             }
             else
             {

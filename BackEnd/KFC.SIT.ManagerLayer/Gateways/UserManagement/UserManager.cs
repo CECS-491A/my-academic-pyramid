@@ -251,6 +251,7 @@ namespace WebAPI.UserManagement
             }
             _userManagementServices.AssignCategory(targetUser, categoryToAdd);
 
+            _DbContext.SaveChanges();
             return targetUser;
         }
 
