@@ -11,9 +11,9 @@
           labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
           datasets: [
             {
-              label: 'Data One',
-              backgroundColor: '#f87979',
-              pointBackgroundColor: 'white',
+              label: 'Average Successful Login',
+              backgroundColor: "rgba(54, 162, 235, 0.6)",
+              pointBackgroundColor: 'green',
               borderWidth: 1,
               pointBorderColor: '#249EBF',
               //Data to be represented on y-axis
@@ -45,6 +45,17 @@
           maintainAspectRatio: false
         }
       }
+    },
+    // TODO need to fix 
+    fetchDataset() {
+      this.axios
+        .get(this.$hostname + "UserManager/", {
+          headers: { "Content-Type": "application/Json" }
+        })
+        .then(response => {
+          this.data = response.data;
+          //console.log(response.data);
+        })
     },
     mounted () {
       //renderChart function renders the chart with the datacollection and options object.

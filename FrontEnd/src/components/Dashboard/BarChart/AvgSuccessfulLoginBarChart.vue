@@ -1,10 +1,9 @@
 <script>
-  //Importing Line class from the vue-chartjs wrapper
-  import { Line } from 'vue-chartjs'
-
+  //Importing Bar class from the vue-chartjs wrapper
+  import { Bar } from 'vue-chartjs'
   //Exporting this so it can be used in other components
   export default {
-    extends: Line,
+    extends: Bar,
     data () {
       return {
         datacollection: {
@@ -13,7 +12,7 @@
           datasets: [
             {
               label: 'Data One',
-              backgroundColor: '#f87979',
+              backgroundColor: "rgba(75, 192, 192, 0.6)",
               pointBackgroundColor: 'white',
               borderWidth: 1,
               pointBorderColor: '#249EBF',
