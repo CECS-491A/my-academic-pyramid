@@ -62,12 +62,14 @@
 
 <style>
 .dashboard h1 {
-  font-size: 60px;
-  color:#212733;
+  font-size: 50px;
+  color:#000000;
   margin: auto;
+  margin-left: 20px;
+  padding: 15px 0;
 }
 .Chart {
-  background:lightyellow;
+  background:white;
   border-radius: 15px;
   box-shadow: 0px 2px 15px rgba(25, 25, 25, 0.27);
   margin:  25px 0;
@@ -76,6 +78,7 @@
 
 .Chart h3 {
   margin-top: 0;
+  margin-left: 20px;
   padding: 15px 0;
   font-size:20px;
   color:  rgba(255, 0,0, 0.5);
