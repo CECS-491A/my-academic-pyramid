@@ -5,7 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Http;
 using ManagerLayer.sso;
-using WebAPI.UserManagement;
+using WebAPI.Gateways.UserManagement;
 using DataAccessLayer.DTOs;
 
 namespace KFC.SIT.WebAPI.Controllers

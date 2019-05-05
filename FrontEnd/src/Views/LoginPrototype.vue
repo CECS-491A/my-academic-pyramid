@@ -58,14 +58,14 @@ export default {
               }
               const url = `${this.$hostname}Login`;
               axios.post(url, temp)
-                  //  .then(reponse => {
-                  //    this.$router.push(`/${this.redirectViewName}`)
-                  //  })
-                   .then(response => {
-                        this.registrationUrl = response.data["redirectURL"]
-                        this.indexToCut = this.registrationUrl.search(this.redirectViewName)
-                        this.$router.push(this.registrationUrl.substr(this.indexToCut))
+                   .then(reponse => {
+                     this.$router.push(`/${this.redirectViewName}`)
                    })
+                  //  .then(response => {
+                  //       this.registrationUrl = response.data["redirectURL"]
+                  //       this.indexToCut = this.registrationUrl.search(this.redirectViewName)
+                  //       this.$router.push(this.registrationUrl.substr(this.indexToCut))
+                  //  })
                    .catch(err => console.log("There was error. " + err))
               
             }

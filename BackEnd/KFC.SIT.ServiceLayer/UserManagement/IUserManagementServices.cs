@@ -1,20 +1,22 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using DataAccessLayer.Models;
 
 namespace ServiceLayer.UserManagement.UserAccountServices
 {
     public interface IUserManagementServices
     {
-        User AddClaim(User user, Claim claim);
-        User AssignCategory(User user, Category category);
-        bool Contain(User user);
-        User CreateUser(User user);
-        User DeleteUser(User user);
-        User FindById(int id);
-        User FindByUsername(string username);
-        User FindUserByUserEmail(string userEmail);
-        List<User> GetAllUser();
-        User RemoveClaim(User user, string claimStr);
-        User UpdateUser(User user);
+        Account AddClaim(Account user, Claim claim);
+        Account AssignCategory(Account user, Category category);
+        bool Contain(Account user);
+        Account CreateUser(Account user);
+        Account DeleteUser(Account user);
+        Account FindById(int id);
+        Account FindByUsername(string username);
+        int? FindIdBySsoId(Guid ssoId);
+        List<Account> GetAllUser();
+        Category GetCategory(string categoryValue);
+        Account RemoveClaim(Account user, string claimStr);
+        Account UpdateUser(Account user);
     }
 }

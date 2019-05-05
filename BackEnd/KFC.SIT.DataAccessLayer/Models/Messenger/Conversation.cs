@@ -23,7 +23,7 @@ namespace DataAccessLayer.Models.Messenger
 
         [ForeignKey("UserOfConversation")]
         public int UserId { get; set; }
-        public User UserOfConversation { get; set; }
+        public Account UserOfConversation { get; set; }
 
 
 

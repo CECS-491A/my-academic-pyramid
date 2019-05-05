@@ -168,48 +168,48 @@ namespace ManagerLayer.Tests
             Assert.Equal(expected, actual);
         }
 
-        [Fact]
-        public void UserManager_UpdateUserAccount_ShouldUpdateUser()
-        {
+        //[Fact]
+        //public void UserManager_UpdateUserAccount_ShouldUpdateUser()
+        //{
             // Arrange
-            UserManager UM = new UserManager();
-            Account createdUser = UM.CreateUserAccount(new UserDTO
-            {
-                UserName = "Prof",
-                FirstName = "Luis",
-                LastName = "IDK",
-                //BirthDate = DateTime.UtcNow,
-                //RawPassword = "PasswordArturo",
-                //Location = "Long Beach",
-                Email = "Luis@gmail.com",
-            });
-            string newEmail = "Naruto@gmail.com";
-            createdUser.Email = newEmail;
-            bool expected = true;
-            bool actual;
+        //    UserManager UM = new UserManager();
+        //    Account createdUser = UM.CreateUserAccount(new UserDTO
+        //    {
+        //        UserName = "Prof",
+        //        FirstName = "Luis",
+        //        LastName = "IDK",
+        //        //BirthDate = DateTime.UtcNow,
+        //        //RawPassword = "PasswordArturo",
+        //        //Location = "Long Beach",
+        //        Email = "Luis@gmail.com",
+        //    });
+        //    string newEmail = "Naruto@gmail.com";
+        //    createdUser.Email = newEmail;
+        //    bool expected = true;
+        //    bool actual;
 
-            // Act
-            try
-            {
-                UM.UpdateUserAccount(createdUser);
-                Account user = UM.FindUserByEmail(newEmail);
-                if (user == createdUser)
-                {
-                    actual = true;
-                }
-                else
-                {
-                    actual = false;
-                }
-            }
-            catch (ArgumentNullException)
-            {
-                actual = false;
-            }
-            // Assert
-            Assert.Equal(expected, actual);
+        //    // Act
+        //    try
+        //    {
+        //        UM.UpdateUserAccount(createdUser);
+        //        Account user = UM.FindUserByEmail(newEmail);
+        //        if (user == createdUser)
+        //        {
+        //            actual = true;
+        //        }
+        //        else
+        //        {
+        //            actual = false;
+        //        }
+        //    }
+        //    catch (ArgumentNullException)
+        //    {
+        //        actual = false;
+        //    }
+        //    // Assert
+        //    Assert.Equal(expected, actual);
 
-        }
+        //}
 
         [Fact]
         public void UserManager_UpdateUserAccount_UserNotFound_ShouldReturnZero()

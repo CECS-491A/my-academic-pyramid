@@ -14,6 +14,7 @@
                   <v-toolbar color="teal" dark>
                     <v-list class="pa-0">                      
                       <v-btn
+                      id = 'newMsgButton'
                         fab
                         medium
                         color="red"
@@ -280,8 +281,8 @@ export default {
             if(err.response.status == 404 ){
               this.error = "User with the username does not exist"
             }
-            else{
-              this.error = err.response.data
+            else if(err.response.status == 409){
+              this.error = "You cannot send message to yourself"
             }
             this.alert = true;
           })

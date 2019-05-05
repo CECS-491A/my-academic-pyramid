@@ -196,13 +196,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DTOs\AnswerDTO.cs" />
-    <Compile Include="DTOs\ContactHistoryDTO.cs" />
     <Compile Include="DTOs\ConversationDTO.cs" />
     <Compile Include="DTOs\DepartmentDTO.cs" />
     <Compile Include="DTOs\ForumPostDTO.cs" />
-    <Compile Include="DTOs\FriendContactDTO.cs" />
+    <Compile Include="DTOs\FriendRelationshipDTO.cs" />
+    <Compile Include="DTOs\MessageDTO.cs" />
+    <Compile Include="DTOs\NewConversationMessageDTO.cs" />
     <Compile Include="DTOs\SearchPersonDTO.cs" />
     <Compile Include="DTOs\QuestionDTO.cs" />
+    <Compile Include="DTOs\StoredMessageDTO.cs" />
     <Compile Include="DTOs\UserDTO.cs" />
     <Compile Include="IEntity.cs" />
     <Compile Include="Logging\OptimizeLogging\ErrorFormat.cs" />
@@ -222,6 +224,10 @@
     <Compile Include="Migrations\201905010531161_schoolteacher-add-departmentid.cs" />
     <Compile Include="Migrations\201905010531161_schoolteacher-add-departmentid.Designer.cs">
       <DependentUpon>201905010531161_schoolteacher-add-departmentid.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201905022249279_UpdateMessengerModel.cs" />
+    <Compile Include="Migrations\201905022249279_UpdateMessengerModel.Designer.cs">
+      <DependentUpon>201905022249279_UpdateMessengerModel.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Category.cs" />
@@ -295,6 +301,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201905010531161_schoolteacher-add-departmentid.resx">
       <DependentUpon>201905010531161_schoolteacher-add-departmentid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905022249279_UpdateMessengerModel.resx">
+      <DependentUpon>201905022249279_UpdateMessengerModel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

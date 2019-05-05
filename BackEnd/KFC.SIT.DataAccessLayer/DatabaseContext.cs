@@ -43,7 +43,7 @@ namespace DataAccessLayer
         public DbSet<SchoolTeacher> SchoolTeachers { get; set; }
         public DbSet<SchoolTeacherCourse> SchoolTeacherCourses { get; set; }
 
-        public DatabaseContext () :base ("name=LocalTests")
+        public DatabaseContext () :base ("name=MYAPConnectionString")
         {
             //Database.SetInitializer(new DropCreateDatabaseAlways<DatabaseContext>());
 

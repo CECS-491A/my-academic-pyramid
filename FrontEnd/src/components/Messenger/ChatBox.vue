@@ -92,7 +92,7 @@ export default {
   },
   created() {
     this.getAuthUserIdAndUsername(),
-    this.connection = hubConnection("http://localhost:59364/");
+    this.connection = hubConnection(this.$signalRHostName);
     this.hubProxy = this.connection.createHubProxy("MessengerHub");
 
     // SignalR Hub listener from backend to fetch the message in a conversation with given conversationId
@@ -244,4 +244,5 @@ export default {
   height: 300px;
   overflow-y: auto;
 }
+
 </style>

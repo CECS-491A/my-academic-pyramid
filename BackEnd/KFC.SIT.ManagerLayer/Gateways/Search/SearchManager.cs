@@ -8,7 +8,7 @@ using DataAccessLayer.DTOs;
 using DataAccessLayer.Models.Requests;
 using DataAccessLayer.Models.School;
 using ServiceLayer.Search;
-using WebAPI.UserManagement;
+using WebAPI.Gateways.UserManagement;
 
 namespace ManagerLayer.Gateways.Search
 {

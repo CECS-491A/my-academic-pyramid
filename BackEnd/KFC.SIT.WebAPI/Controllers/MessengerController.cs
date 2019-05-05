@@ -467,7 +467,7 @@ namespace KFC.SIT.WebAPI.Controllers
             else
             {
                 UserManager um = new UserManager();
-                User user = um.FindByUserName(securityContext.UserName);
+                Account user = um.FindByUserName(securityContext.UserName);
                 _authUserId = user.Id;
                 var authUsername = user.UserName;
                 //string updatedToken = sm.RefreshSession(securityContext.Token);
@@ -642,7 +642,7 @@ namespace KFC.SIT.WebAPI.Controllers
                 Message returnMessage;
               
                 
-                if (contactUser != null)
+                if (contactUser != null && contactUser.Id != _authUserId)
                 {
                     // Map the message to store in database 
                     var message = new Message
@@ -702,7 +702,17 @@ namespace KFC.SIT.WebAPI.Controllers
                     };
                     return Ok(new { message = StoredMessageDTO }/*new { SITtoken = updatedToken }*/);
                 }
-                return Content(HttpStatusCode.NotFound, "Receiver does not exist to receive message");
+                else if (contactUser == null)
+                {
+                    return Content(HttpStatusCode.NotFound, "Receiver does not exist to receive message");
+                }
+
+                else if (contactUser.Id == _authUserId)
+                {
+                    return Content(HttpStatusCode.Conflict, "You cannot send message to yourself");
+                }
+                return Content(HttpStatusCode.InternalServerError, "There is an error");
+
             }
         }
 

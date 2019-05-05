@@ -16,7 +16,7 @@ namespace SecurityLayer.Sessions
         private JWTokenManager _jwtManager;
         private SessionServices _sessionServices;
         private UserManager _userManager;
-        private const double ACTIVE_SESSION_DURATION = 60.0;
+        private const double ACTIVE_SESSION_DURATION = 1440.0;
 
         public SessionManager()
         {

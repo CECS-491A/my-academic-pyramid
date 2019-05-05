@@ -11,10 +11,10 @@ import 'chart.js'
 import 'hchs-vue-charts'
 
 
-
-
-//Vue.prototype.$hostname = "https://api.myacademicpyramid.com/api/"
-Vue.prototype.$hostname = "http://localhost:59364/api/"
+Vue.prototype.$hostname = "https://api.myacademicpyramid.com/api/"
+//Vue.prototype.$hostname = "http://localhost:59364/api/"
+Vue.prototype.$signalRHostName = "https://api.myacademicpyramid.com/"
+//Vue.prototype.$signalRHostName = "http://localhost:59364/"
 Vue.prototype.$eventBus = new Vue()
 Vue.config.productionTip = false
 Vue.use(VueAxios, axios)
