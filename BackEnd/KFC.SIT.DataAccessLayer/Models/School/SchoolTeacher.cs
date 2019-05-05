@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Models.School
 {
-    public class SchoolTeacher
+    public class SchoolTeacher : IEntity
     {
         public SchoolTeacher()
         {
@@ -17,17 +17,23 @@ namespace DataAccessLayer.Models.School
 
         public SchoolTeacher(int schoolId, int teacherId)
         {
-            SchoolId = schoolId;
+            SchoolId = SchoolDepartment.SchoolId;
             TeacherId = teacherId;
             Courses = new List<SchoolTeacherCourse>();
         }
 
-        [Key,ForeignKey("School"), Column(Order = 0)]
+        [Key]
+        public int Id { get; set; }
+
+        //[ForeignKey("School")]
         public int SchoolId { get; set; }
-        public virtual School School { get; set; }
-        [Key,ForeignKey("Teacher"), Column(Order = 1)]
+        //public virtual School School { get; set; }
+        [ForeignKey("Teacher")]
         public int TeacherId { get; set; }
         public virtual Teacher Teacher { get; set; }
+        [ForeignKey("SchoolDepartment")]
+        public int SchoolDepartmentId { get; set; }
+        public virtual SchoolDepartment SchoolDepartment { get; set; }
 
         public virtual ICollection<SchoolTeacherCourse> Courses { get; set; }
     }

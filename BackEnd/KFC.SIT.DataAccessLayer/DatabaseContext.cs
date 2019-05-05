@@ -26,8 +26,12 @@ namespace DataAccessLayer
 
         public DbSet<ChatConnectionMapping> ChatConnectionMappings { get; set; }
 
+        // Discussion Forum
         public DbSet<Question> Questions { get; set; }
-
+        //public DbSet<SchoolQuestion> SchoolQuestions { get; set; }
+        //public DbSet<DepartmentQuestion> DepartmentQuestions { get; set; }
+        //public DbSet<CourseQuestion> CourseQuestions { get; set; }
+        //public DbSet<DraftQuestion> DraftQuestions { get; set; }
         public DbSet<Answer> Answers { get; set; }
 
         // School Tables
