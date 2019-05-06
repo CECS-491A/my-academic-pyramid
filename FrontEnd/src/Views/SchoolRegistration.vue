@@ -6,7 +6,25 @@
         <v-toolbar>
           <v-toolbar-title>Create User</v-toolbar-title>
         </v-toolbar>
-        <v-card-text>
+		<v-tabs left color="cyan" dark icons-and-text>
+	<v-tabs-slider color="green"></v-tabs-slider>
+	<v-tab id="JSONfile">File Upload </v-tab>
+	<v-tab-item>
+		_<v-card-title primary-title>
+            <div>
+              <h3 class="headline mb-0">File Content</h3>
+              <div> {{ school.SchoolName }} </div>
+			  
+            </div>
+          </v-card-title>
+
+
+    <FileReader @load="text = $event"></FileReader>
+			  {{school.SchoolName}}
+	</v-tab-item>
+	<v-tab id="ManualEnter">Enter manually</v-tab>
+	<v-tab-item>
+		   <v-card-text>
           <form>
             <v-text-field
               id="schoolName"
@@ -40,20 +58,9 @@
          
 
 			
-<v-tabs left color="cyan" dark icons-and-text>
-	<v-tabs-slider color="green"></v-tabs-slider>
-	<v-tab id="JSONfile">File Upload </v-tab>
-	<v-tab-item>
-	</v-tab-item>
-	<v-tab id="ManualEnter">Enter manually</v-tab>
-	<v-tab-item>
-		<courseTable></courseTable>
-			<teacherTable></teacherTable>
-	</v-tab-item>
-</v-tabs>
+
             <div v-for="item in teachers"
 			:key="item.FirstName">
-			test
 			{{item.FirstName}}
 			{{item.LastName}}
 			{{item.MiddleName}}
@@ -78,6 +85,11 @@
             <v-btn @click="clear">clear</v-btn>
           </form>
         </v-card-text>
+		<courseTable></courseTable>
+			<teacherTable></teacherTable>
+	</v-tab-item>
+</v-tabs>
+     
       </v-card>
     </v-app>
   </div>
@@ -92,6 +104,7 @@ import { validationMixin } from "vuelidate";
 import { required, maxLength, email } from "vuelidate/lib/validators";
 import courseTable from "@/components/SchoolRegistration/CourseTable";
 import teacherTable from "@/components/SchoolRegistration/TeacherTable";
+import FileReader from "@/components/SchoolRegistration/FileReader";
 
 export default {
   mixins: [validationMixin],
@@ -105,7 +118,8 @@ export default {
   },
   components:{
 	  courseTable,
-	  teacherTable
+	  teacherTable,
+	  FileReader
   },
 
   data: () => ({
@@ -134,7 +148,9 @@ export default {
       MiddleName: "",
       LastName: "",
       DepartmentName: ""
-    }]
+	}],
+	
+	text:""
   }),
 
   computed: {
@@ -176,12 +192,19 @@ export default {
   watch: {
     DateOfBirth(val) {
       val && setTimeout(() => (this.$refs.picker.activePicker = "YEAR"));
-    }
+	},
+	text(){
+		this.convertData()
+	}
   },
   methods: {
     submitData() {
      
+  },
+  convertData(){
+	  this.data = JSON.parse(this.text)
   }
+
   }
 };
 </script>
