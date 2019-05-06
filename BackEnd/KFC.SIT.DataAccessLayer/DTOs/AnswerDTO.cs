@@ -7,18 +7,34 @@ using DataAccessLayer.Models.DiscussionForum;
 
 namespace DataAccessLayer.DTOs
 {
-    public class AnswerDTO
+    public class AnswerCreateRequestDTO
     {
-        //public int Id { get; set; }
-        public int UserId { get; set; }
-        public string UserName { get; set; }
-        // public Question Question { get; set; }
-        public int QuestionID { get; set; }
+        public int QuestionId { get; set; }
+        public int AccountId { get; set; }
         public string Text { get; set; }
-        //public int Helpful { get; set; }
-        //public int UnHelpful { get; set; }
-        //public bool CorrectAnswer { get; set; }
-        //public int Spam { get; set; }
-        //public DateTime CreatedDate { get; set; }
+    }
+
+    public class AnswerResponseDTO
+    {
+        public int AnswerId { get; set; }
+        public int QuestionId { get; set; }
+        public int AccountId { get; set; }
+        public string AccountName { get; set; }
+        public string Text { get; set; }
+        public int HelpfulCount { get; set; }
+        public int UnHelpfulCount { get; set; }
+        public int SpamCount { get; set; }
+        public bool IsCorrectAnswer { get; set; }
+        public DateTime CreatedDate { get; set; }
+
+
+        //public Answer Answer { get; set; }
+        //public string AccountName { get; set; }
+
+        //public AnswerDTOResponse(Answer answer, string accountName)
+        //{
+        //    Answer = answer;
+        //    AccountName = accountName;
+        //}
     }
 }

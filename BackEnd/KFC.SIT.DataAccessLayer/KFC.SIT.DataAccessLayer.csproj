@@ -217,9 +217,9 @@
     <Compile Include="Logging\OptimizeLogging\NLogger.cs" />
     <Compile Include="Logging\OptimizeLogging\TelemetryFormat.cs" />
     <Compile Include="Logging\Models\Repository\TelemetryLogCollection.cs" />
-    <Compile Include="Migrations\201905010401077_Initial.cs" />
-    <Compile Include="Migrations\201905010401077_Initial.Designer.cs">
-      <DependentUpon>201905010401077_Initial.cs</DependentUpon>
+    <Compile Include="Migrations\201905052101179_Initial.cs" />
+    <Compile Include="Migrations\201905052101179_Initial.Designer.cs">
+      <DependentUpon>201905052101179_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\201905010531161_schoolteacher-add-departmentid.cs" />
     <Compile Include="Migrations\201905010531161_schoolteacher-add-departmentid.Designer.cs">
@@ -236,7 +236,13 @@
     <Compile Include="DatabaseContext.cs" />
     <Compile Include="Logging\Models\ErrorLog.cs" />
     <Compile Include="Models\DiscussionForum\Answer.cs" />
+    <Compile Include="Models\DiscussionForum\CourseQuestion.cs" />
+    <Compile Include="Models\DiscussionForum\DepartmentQuestion.cs" />
+    <Compile Include="Models\DiscussionForum\IQuestion.cs" />
+    <Compile Include="Models\DiscussionForum\PostedQuestion.cs" />
     <Compile Include="Models\DiscussionForum\Question.cs" />
+    <Compile Include="Models\DiscussionForum\DraftQuestion.cs" />
+    <Compile Include="Models\DiscussionForum\SchoolQuestion.cs" />
     <Compile Include="Models\HashSalt.cs" />
     <Compile Include="Models\Messenger\ChatConnectionMapping.cs" />
     <Compile Include="Models\Messenger\Conversation.cs" />
@@ -296,8 +302,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201905010401077_Initial.resx">
-      <DependentUpon>201905010401077_Initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201905052101179_Initial.resx">
+      <DependentUpon>201905052101179_Initial.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201905010531161_schoolteacher-add-departmentid.resx">
       <DependentUpon>201905010531161_schoolteacher-add-departmentid.cs</DependentUpon>

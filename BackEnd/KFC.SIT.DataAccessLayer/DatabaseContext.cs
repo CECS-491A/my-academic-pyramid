@@ -29,8 +29,12 @@ namespace DataAccessLayer
         // Set of SignalR connection Id
         public DbSet<ChatConnectionMapping> ChatConnectionMappings { get; set; }
 
+        // Discussion Forum
         public DbSet<Question> Questions { get; set; }
-
+        //public DbSet<SchoolQuestion> SchoolQuestions { get; set; }
+        //public DbSet<DepartmentQuestion> DepartmentQuestions { get; set; }
+        //public DbSet<CourseQuestion> CourseQuestions { get; set; }
+        //public DbSet<DraftQuestion> DraftQuestions { get; set; }
         public DbSet<Answer> Answers { get; set; }
 
         // School Tables
@@ -43,7 +47,7 @@ namespace DataAccessLayer
         public DbSet<SchoolTeacher> SchoolTeachers { get; set; }
         public DbSet<SchoolTeacherCourse> SchoolTeacherCourses { get; set; }
 
-        public DatabaseContext () :base ("name=MYAPConnectionString")
+        public DatabaseContext () :base ("name=LocalTest")
         {
             //Database.SetInitializer(new DropCreateDatabaseAlways<DatabaseContext>());
 

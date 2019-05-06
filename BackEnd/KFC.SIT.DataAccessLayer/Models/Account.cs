@@ -25,6 +25,10 @@ namespace DataAccessLayer.Models
             this.Claims = new HashSet<Claim>();
             this.Students = new List<Student>();
             this.Questions = new List<Question>();
+            //this.DraftQuestions = new List<DraftQuestion>();
+            //this.SchoolQuestions = new List<SchoolQuestion>();
+            //this.DepartmentQuestions = new List<DepartmentQuestion>();
+            //this.CourseQuestions = new List<CourseQuestion>();
             this.Answers = new List<Answer>();
         }
 
@@ -75,6 +79,10 @@ namespace DataAccessLayer.Models
         public virtual ICollection<Student> Students { get; set; }
 
         public virtual ICollection<Question> Questions { get; set; }
+        //public virtual ICollection<SchoolQuestion> SchoolQuestions { get; set; }
+        //public virtual ICollection<DepartmentQuestion> DepartmentQuestions { get; set; }
+        //public virtual ICollection<CourseQuestion> CourseQuestions { get; set; }
+        //public virtual ICollection<DraftQuestion> DraftQuestions { get; set; }
         public virtual ICollection<Answer> Answers { get; set; }
         
 

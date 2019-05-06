@@ -35,6 +35,20 @@ namespace ServiceLayer
         public QuestionIsClosedException(string message) : base(message) { }
     }
 
+    //public class QuestionDraftExecption : Exception
+    //{
+    //    public QuestionDraftExecption() { }
+
+    //    public QuestionDraftExecption(string message) : base(message) { }
+    //}
+
+    public class QuestionUnavailableException : Exception
+    {
+        public QuestionUnavailableException() { }
+
+        public QuestionUnavailableException(string message) : base(message) { }
+    }
+
     public class NotEnoughExpException : Exception
     {
         public NotEnoughExpException() { }
@@ -42,10 +56,10 @@ namespace ServiceLayer
         public NotEnoughExpException(string message) : base(message) { }
     }
 
-    public class InvalidUserException : Exception
+    public class InvalidAccountException : Exception
     {
-        public InvalidUserException() { }
+        public InvalidAccountException() { }
 
-        public InvalidUserException(string message) : base(message) { }
+        public InvalidAccountException(string message) : base(message) { }
     }
 }
