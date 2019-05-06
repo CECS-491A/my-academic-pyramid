@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -6,6 +7,10 @@ namespace DataAccessLayer.Models.School
 {
     public class Teacher: IEntity
     {
+        public Teacher()
+        {
+            Schools = new List<SchoolTeacher>();
+        }
         public Teacher(string firstName, string middleName, string lastName)
         {
             FirstName = firstName;
@@ -28,7 +33,6 @@ namespace DataAccessLayer.Models.School
         public string MiddleName { set; get; }
         [Required]
         public string LastName { set; get; }
-
         public virtual ICollection<SchoolTeacher> Schools { set; get; }
     }
 }

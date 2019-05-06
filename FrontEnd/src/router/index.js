@@ -8,12 +8,13 @@ import Logging from '@/Views/Logging'
 import Login from '@/Views/Login'
 import UserManagement from '@/Views/UserManagement'
 import LoginPrototype from '@/Views/LoginPrototype'
-import ChatContainer from '@/Views/ChatContainer'
+import Chat from '@/Views/Chat'
 import UserRegistration from '@/Views/UserRegistration'
 import UserHomePage from '@/Views/UserHomePage'
 import Redirect from '@/Views/Redirect'
 import UsageAnalysisDashboard from '@/Views/UsageAnalysisDashboard'
-import Search from '@/Views/Search'
+import SchoolRegistration from '@/Views/SchoolRegistration'
+//import Search from '@/Views/Search'
 
 Vue.use(Router)
 Vue.use(Vuetify)
@@ -56,7 +57,7 @@ export default new Router({
   {
     path: '/Chat',
     name: 'Chat',
-    component: ChatContainer
+    component: Chat
   },
   {
     path: "/UserRegistration",
@@ -79,9 +80,14 @@ export default new Router({
     component: UsageAnalysisDashboard
   },
   {
-    path: "/Search",
-    name: "Search",
-    component: Search
+    path: "/SchoolRegistration",
+    name: "SchoolRegistration",
+    component: SchoolRegistration
   }
+  //{
+  //  path: "/Search",
+  //  name: "Search",
+  //  component: Search
+  //}
   ]
 })

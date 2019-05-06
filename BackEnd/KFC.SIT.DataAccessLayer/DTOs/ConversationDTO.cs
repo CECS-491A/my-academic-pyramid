@@ -6,12 +6,18 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.DTOs
 {
+    /// <summary>
+    /// This DTO is used to map with backend coversation model  and transfered to the front end
+    /// </summary>
     public class ConversationDTO
     {
-        public string SenderUsername { get; set; }
-        public string ReceiverUsername{ get; set; }
+        public int Id { get; set; }
 
-        public string MessageContent { get; set; }
-        public DateTime CreatedDate { get; set; }
+        // Contact username will be looked up using contact id in conversation model
+        public string ContactUsername{ get; set; }
+
+        // Used to mark if the conversation receive a new message
+        public bool HasNewMessage { get; set; }
+        public string CreatedDate { get; set; }
     }
 }

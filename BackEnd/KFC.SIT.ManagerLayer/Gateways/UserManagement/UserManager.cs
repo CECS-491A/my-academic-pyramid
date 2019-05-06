@@ -9,7 +9,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Data.Entity.Validation;
 
-namespace WebAPI.UserManagement
+namespace WebAPI.Gateways.UserManagement
 {
     public class UserManager
     {
@@ -62,22 +62,9 @@ namespace WebAPI.UserManagement
                 _DbContext.SaveChanges();
                 return response;
             }
-            catch (System.Data.Entity.Validation.DbEntityValidationException dbEx)
+            catch (DbEntityValidationException)
             {
-                Exception raise = dbEx;
-                foreach (var validationErrors in dbEx.EntityValidationErrors)
-                {
-                    foreach (var validationError in validationErrors.ValidationErrors)
-                    {
-                        string message = string.Format("{0}:{1}",
-                            validationErrors.Entry.Entity.ToString(),
-                            validationError.ErrorMessage);
-                        // raise a new exception nesting
-                        // the current instance as InnerException
-                        raise = new InvalidOperationException(message, raise);
-                    }
-                }
-                throw raise;
+                return null;
             }
 
         }
@@ -116,8 +103,6 @@ namespace WebAPI.UserManagement
             {
                 // catch error
                 // rollback changes
-                _DbContext.Entry(response).CurrentValues.SetValues(_DbContext.Entry(response).OriginalValues);
-                _DbContext.Entry(response).State = System.Data.Entity.EntityState.Unchanged;
                 return 0;
             }
         }
@@ -266,6 +251,7 @@ namespace WebAPI.UserManagement
             }
             _userManagementServices.AssignCategory(targetUser, categoryToAdd);
 
+            _DbContext.SaveChanges();
             return targetUser;
         }
 
@@ -348,7 +334,9 @@ namespace WebAPI.UserManagement
 
                 //Discussion Forum's claims
                 _userManagementServices.AddClaim(user, new Claim("CanPostQuestion"));
-                _userManagementServices.AddClaim(user, new Claim("CanReceiveQuestion"));
+                _userManagementServices.AddClaim(user, new Claim("CanSeeQuestion"));
+                _userManagementServices.AddClaim(user, new Claim("CanPostAnswer"));
+                _userManagementServices.AddClaim(user, new Claim("CanSeeAnswer"));
 
                 //User Management's claims
                 _userManagementServices.AddClaim(user, new Claim("CanCreateOwnStudentAccount"));

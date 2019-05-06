@@ -10,7 +10,8 @@ namespace DataAccessLayer.Models.School
         {
             Teachers = new List<SchoolTeacher>();
             Departments = new List<SchoolDepartment>();
-            Questions = new List<Question>();
+            //SchoolQuestions = new List<SchoolQuestion>();
+            Questions = new List<SchoolQuestion>();
         }
 
         public School(string name,string contactEmail, string emailDomain)
@@ -21,7 +22,7 @@ namespace DataAccessLayer.Models.School
 
             Teachers = new List<SchoolTeacher>();
             Departments = new List<SchoolDepartment>();
-            Questions = new List<Question>();
+            Questions = new List<SchoolQuestion>();
         }
 
 
@@ -36,6 +37,6 @@ namespace DataAccessLayer.Models.School
 
         public virtual ICollection<SchoolTeacher> Teachers { set; get; }
         public virtual ICollection<SchoolDepartment> Departments { set; get; }
-        public virtual ICollection<Question> Questions { set; get; }
+        public virtual ICollection<SchoolQuestion> Questions { set; get; }
     }
 }

@@ -1,4 +1,4 @@
-﻿using DataAccessLayer;
+﻿﻿using DataAccessLayer;
 using DataAccessLayer.DTOs;
 using DataAccessLayer.Models;
 using DataAccessLayer.Models.Requests;
@@ -27,11 +27,11 @@ namespace KFC.SIT.WebAPI.Controllers
                 return Content(HttpStatusCode.PreconditionFailed, new SearchResponse("Invalid Request"));
             }
 
-            try
-            {
-                using (var _db = new DatabaseContext())
-                {
-                    ISearchManager manager = new SearchManager(_db);
+           try
+           {
+               using (var _db = new DatabaseContext())
+               {
+                   ISearchManager manager = new SearchManager(_db);
 
                     var results = new SearchResponse(manager.Search(request));
                     return Content(HttpStatusCode.OK, results);
@@ -48,32 +48,32 @@ namespace KFC.SIT.WebAPI.Controllers
         }
         
 
-        [HttpGet]
-        [ActionName("departments")]
-        public IHttpActionResult GetDepartments([FromUri] int AccountId)
-        {
-            if (!ModelState.IsValid)
-            {
-                // 412 Response
-                return Content(HttpStatusCode.PreconditionFailed, new SearchResponse("Invalid Request"));
-            }
+       [HttpGet]
+       [ActionName("departments")]
+       public IHttpActionResult GetDepartments([FromUri] int AccountId)
+       {
+           if (!ModelState.IsValid)
+           {
+               // 412 Response
+               return Content(HttpStatusCode.PreconditionFailed, new SearchResponse("Invalid Request"));
+           }
 
-            try
-            {
-                using (var _db = new DatabaseContext())
-                {
-                    ISearchManager manager = new SearchManager(_db);
-                    return Content(HttpStatusCode.OK, manager.GetDepartments(AccountId));
-                }
-            }
-            catch (Exception x) when (x is ArgumentException)
-            {
-                return Content(HttpStatusCode.BadRequest, new SearchResponse(x.Message));
-            }
-            catch (Exception x)
-            {
-                return Content(HttpStatusCode.InternalServerError, new SearchResponse(x.Message));
-            }
-        }
-    }
+           try
+           {
+               using (var _db = new DatabaseContext())
+               {
+                   ISearchManager manager = new SearchManager(_db);
+                   return Content(HttpStatusCode.OK, manager.GetDepartments(AccountId));
+               }
+           }
+           catch (Exception x) when (x is ArgumentException)
+           {
+               return Content(HttpStatusCode.BadRequest, new SearchResponse(x.Message));
+           }
+           catch (Exception x)
+           {
+               return Content(HttpStatusCode.InternalServerError, new SearchResponse(x.Message));
+           }
+       }
+   }
 }

@@ -17,17 +17,24 @@ namespace DataAccessLayer
 
         public DbSet<Category> Categories { get; set; }
 
-        //Set of Conservations
+        // Set of Conservations
         public DbSet<Conversation> Conversations { get; set; }
         
-        public DbSet<ChatHistory> ChatHistory {get;set;}
+        // Set of Messages in conversation
+        public DbSet<Message> Messages {get;set;}
 
+        // Set of friends in a friendlist
         public DbSet<FriendRelationship>FriendRelationships { get; set; }
 
+        // Set of SignalR connection Id
         public DbSet<ChatConnectionMapping> ChatConnectionMappings { get; set; }
 
+        // Discussion Forum
         public DbSet<Question> Questions { get; set; }
-
+        //public DbSet<SchoolQuestion> SchoolQuestions { get; set; }
+        //public DbSet<DepartmentQuestion> DepartmentQuestions { get; set; }
+        //public DbSet<CourseQuestion> CourseQuestions { get; set; }
+        //public DbSet<DraftQuestion> DraftQuestions { get; set; }
         public DbSet<Answer> Answers { get; set; }
 
         // School Tables
@@ -56,6 +63,7 @@ namespace DataAccessLayer
                 .HasForeignKey(p => p.ParentUser_Id);
             
         }
+
 
 
     }

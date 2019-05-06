@@ -11,14 +11,14 @@ using DataAccessLayer.Models.DiscussionForum;
 
 namespace ServiceLayer.Search
 {
-    public class SearchService : ISearchService
-    {
-        private DatabaseContext _db;
+   public class SearchService : ISearchService
+   {
+       private DatabaseContext _db;
 
-        public SearchService(DatabaseContext db)
-        {
-            _db = db;
-        }
+       public SearchService(DatabaseContext db)
+       {
+           _db = db;
+       }
 
         public List<SearchPersonDTO> GetStudents(Expression<Func<Student, bool>> predicate)
         {
@@ -75,20 +75,20 @@ namespace ServiceLayer.Search
         }
         
 
-        public List<DepartmentDTO> GetDepartments(int schoolId)
-        {
-            return _db.SchoolDepartments
-                .Where(sd => sd.SchoolId == schoolId)
-                .Select(sd => new DepartmentDTO { id = sd.DepartmentID, text = sd.Department.Name, value = sd.DepartmentID })
-                .OrderBy(sd => sd.text)
-                .ToList();
-        }
+       public List<DepartmentDTO> GetDepartments(int schoolId)
+       {
+           return _db.SchoolDepartments
+               .Where(sd => sd.SchoolId == schoolId)
+               .Select(sd => new DepartmentDTO { id = sd.DepartmentID, text = sd.Department.Name, value = sd.DepartmentID })
+               .OrderBy(sd => sd.text)
+               .ToList();
+       }
 
-        public Student FindStudentByAccountId(int id)
-        {
-            return _db.Students
-                .Where(s => s.AccountId == id)
-                .FirstOrDefault();
-        }
-    }
+       public Student FindStudentByAccountId(int id)
+       {
+           return _db.Students
+               .Where(s => s.AccountId == id)
+               .FirstOrDefault();
+       }
+   }
 }

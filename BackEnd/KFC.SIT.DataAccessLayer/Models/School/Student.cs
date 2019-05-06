@@ -11,25 +11,22 @@ namespace DataAccessLayer.Models.School
             Courses = new List<SchoolTeacherCourse>();
         }
 
-        public Student(int accountId, int schoolId, int departmentId)
+        public Student(int accountId, int schoolDepartmentId)
         {
             AccountId = accountId;
-            SchoolId = schoolId;
-            DepartmentId = departmentId;
+            SchoolDepartmentId = schoolDepartmentId;
             Courses = new List<SchoolTeacherCourse>();
         }
         
-        [Key, Column(Order =0)]
+        [Key]
         public int Id { set; get; }
+
         [ForeignKey("Account")]
         public int AccountId { set; get; }
         public virtual Account Account { set; get; }
 
-        [ForeignKey("SchoolDepartment"),Column(Order =2)]
-        public int SchoolId { get; set; }
-        [ForeignKey("SchoolDepartment"),Column(Order = 1)]
-        public int DepartmentId { get; set; }
-        [ForeignKey("DepartmentId, SchoolId")]
+        [ForeignKey("SchoolDepartment")]
+        public int SchoolDepartmentId { get; set; }
         public virtual SchoolDepartment SchoolDepartment { get; set; }
         
         public virtual ICollection<SchoolTeacherCourse> Courses { get; set; }

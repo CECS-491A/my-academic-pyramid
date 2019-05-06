@@ -228,6 +228,7 @@
     <Compile Include="Gateways\DiscussionManager\DiscussionForumManager.cs" />
     <Compile Include="Gateways\MessengerManager\MessengerManager.cs" />
     <Compile Include="Constants\RedirectUserUtility.cs" />
+    <Compile Include="Gateways\SchoolRegistration\SchoolRegistrationManager.cs" />
     <Compile Include="Gateways\Search\ISearchManager.cs" />
     <Compile Include="Gateways\Search\SearchManager.cs" />
     <Compile Include="Gateways\UsageAnalysisDashboard\DashboardManager.cs" />
@@ -240,6 +241,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Gateways\UserManagement\IUserManagement.cs" />
     <Compile Include="Gateways\UserManagement\UserManager.cs" />
+    <Compile Include="sso\SignatureService.cs" />
     <Compile Include="sso\SsoManager.cs" />
     <Compile Include="sso\SsoPayload.cs" />
     <Compile Include="sso\ssoUtil.cs" />

@@ -9,7 +9,7 @@ using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using MongoDB.Bson;
 using System.Threading.Tasks;
-using DataAccessLayer.MongoDBQueryConstants;
+using DataAccessLayer.UADConstants;
 using System.Collections;
 
 namespace ServiceLayer.DataAnalysisDashboard
@@ -177,7 +177,7 @@ namespace ServiceLayer.DataAnalysisDashboard
         /// Save them into the dictionary and return it
         /// </summary>
         /// <returns></returns>
-        public IDictionary<string, long> CountMostUsedFiveFeature(int numOfFeature)
+        public IDictionary<string, long> CountMostUsedFeature(int numOfFeature)
         {
             Dictionary<string, long> featureNum = new Dictionary<string, long>();
             var query = CollectionT.Aggregate()
