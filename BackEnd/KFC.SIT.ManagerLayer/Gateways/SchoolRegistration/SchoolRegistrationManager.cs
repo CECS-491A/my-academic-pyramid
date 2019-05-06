@@ -92,9 +92,9 @@ namespace ManagerLayer.Gateways.SchoolRegistration
                             }
                             var newSchoolTeacher = new SchoolTeacher
                             {
-                                School = foundSchool,
+                               
                                 Teacher = foundTeacher,
-                                Department = foundSchoolDepartment
+                                SchoolDepartment = foundSchoolDepartment
                             };
 
                             foundSchoolTeacher = schoolRegServ.CreateSchoolTeacher(newSchoolTeacher);
@@ -104,17 +104,17 @@ namespace ManagerLayer.Gateways.SchoolRegistration
 
                     //foreach (CourseDTO c in courseDTOs)
                     //{
-                    //    var foundSchoolTeacher = db.SchoolTeachers.Where(st => st.School.Name.Equals(c.SchoolName) &&st.Teacher.FirstName.Equals(c.TeacherFirstName)
-                    //                                                                  && st.Teacher.LastName.Equals(c.TeacherLastName)).FirstOrDefault();
-                    //    var foundCourse = db.Courses.Where(sd => sd.Name.Equals(c.CourseName)).FirstOrDefault();
+                    //    var foundschoolteacher = db.SchoolTeachers.Where(st => st.SchoolDepartment..equals(c.schoolname) && st.teacher.firstname.equals(c.teacherfirstname)
+                    //                                                                  && st.teacher.lastname.equals(c.teacherlastname)).firstordefault();
+                    //    var foundcourse = db.Courses.Where(sd => sd.name.equals(c.coursename)).firstordefault();
 
-                    //    var newSchoolTeacherCourse = new SchoolTeacherCourse
+                    //    var newschoolteachercourse = new schoolteachercourse
                     //    {
-                    //        SchoolTeacher = foundSchoolTeacher,
-                    //        Course = foundCourse
+                    //        schoolteacher = foundschoolteacher,
+                    //        course = foundcourse
 
                     //    };
-                    //    schoolRegServ.CreateSchoolTeacherCourse(newSchoolTeacherCourse);
+                    //    schoolregserv.createschoolteachercourse(newschoolteachercourse);
                     //}
 
 
