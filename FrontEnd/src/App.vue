@@ -64,7 +64,7 @@ export default {
       links: [
         { name: 'Home', icon: 'home', text: 'Home', route: '/'},
         { name: 'Login',icon: 'face', text: 'Login', route: '/login'},
-        { name: 'Search', icon: 'search', text: 'Search', route: '/'},
+        { name: 'Search', icon: 'search', text: 'Search', route: '/Search'},
         { name: 'Dashboard', icon: 'dashboard', text: 'Dashboard', route: '/Dashboard'},
         { name: 'UserManagement', icon: 'person', text: 'User Management', route: '/UserManagement'},
         { name: 'Chat', icon: 'chat', text: 'Chat', route: '/Chat'},

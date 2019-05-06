@@ -45,7 +45,7 @@
             :headers="tableHeaders"
             :items="data.People"
             :expand="expand"
-            item-key="Id"
+            item-key="AccountId"
             v-if="useTable"
         >
             <v-progress-linear v-slot:progress color="blue" indeterminate v-if="loading"></v-progress-linear>
@@ -54,13 +54,15 @@
                 <td>{{ props.item.FirstName }}</td>
                 <td>{{ props.item.MiddleName }}</td>
                 <td>{{ props.item.LastName }}</td>
-                <td>{{ props.item.Department }}</td>
+                <td>{{ props.item.DepartmentName }}</td>
+                <td>{{ props.item.SchoolName }}</td>
                 </tr>
             </template>
             <template v-slot:expand="props">
-                <v-card flat>
-                    <v-card-text>{{data.People.Courses}}</v-card-text>
+                <v-card flat v-if="!hasProfile">
+                    <v-card-text>Courses: {{props.item.Courses.toString()}}</v-card-text>
                 </v-card>
+                <v-btn v-if="hasProfile" color="blue">Profile</v-btn>
             </template>
         
         </v-data-table>
@@ -92,6 +94,7 @@
             id="errorMessage"
             type="error"
             transition="scale-transition"
+            color="red"
         >
             {{errorMessage}}
         </v-alert>
@@ -103,13 +106,14 @@
 
 <script>
 import axios from 'axios'
+import { POINT_CONVERSION_COMPRESSED } from 'constants';
 export default {
     name: "Search",
     data () {
         return {
             openSearch: '',
             SearchInput: '',
-            category: null,
+            category: 0,
             categories: [
                 {
                     id: 0,
@@ -127,14 +131,15 @@ export default {
                     value: 2
                 }
             ],
-            department: '',
+            department: 0,
             departments: [],
             expand: false,
             tableHeaders: [
                 { text: 'First Name', value: 'FirstName' },
                 { text: 'Middle Name', value: 'MiddleName' },
                 { text: 'Last Name', value: 'LastName' },
-                { text: 'Department', value: 'Department' }
+                { text: 'Department', value: 'DepartmentName' },
+                { text: 'School', value: 'SchoolName'}
             ],
             data: {
                 People: [],
@@ -143,8 +148,9 @@ export default {
             },
             userId: '',
             errorMessage: null,
-            loading: false,
-            useTable: false
+            loading: true,
+            useTable: false,
+            hasProfile: false
         }
     },
     methods: {
@@ -161,8 +167,13 @@ export default {
             if(this.category === null){
                 this.errorMessage = "A Category Must Be Chosen";
             }
-            else if(this.category === 0 || this.category === 1){
+            else if(this.category === 0){
                 this.useTable = true;
+                this.hasProfile = true;
+            }
+            else if(this.category === 1){
+                this.useTable = true;
+                this.hasProfile = false;
             }
             else if(this.category === 2){
                 this.useTable = false;
@@ -182,10 +193,15 @@ export default {
                 
             })
             .then(response =>{
-                this.data = response.data
+                this.data = response.data;
+                this.data.People.forEach(person => {
+                    if(person.Courses == null){
+                        person.Courses = 'None';
+                    }
+                });
             })
-            .catch(searchError =>{
-                this.errorMessage = searchError.response.data.Message
+            .catch(error =>{
+                this.errorMessage = error.response.data.Message
             })
             .finally(() => {
                 this.loading = false;
@@ -212,15 +228,15 @@ export default {
                     this.departments = [{id: 0, text: "ALL", value: 0 }].concat(this.departments)
                 }
             })
-            .catch(searchError =>{
-                this.errorMessage = searchError.response.data.Message
+            .catch(error =>{
+                this.errorMessage = error.response.data.Message
             })
             
-        }    
+        }
     },
     beforeMount(){
         this.userId = sessionStorage.SITuserId;
-        this.userId = "3"
+        this.userId = "5"
         this.getDepartments()
     },
 }

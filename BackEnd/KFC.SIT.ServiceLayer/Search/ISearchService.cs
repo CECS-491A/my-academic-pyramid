@@ -14,7 +14,7 @@ namespace ServiceLayer.Search
     {
         List<SearchPersonDTO> GetStudents(Expression<Func<Student, bool>> predicate);
         List<SearchPersonDTO> GetTeachers(Expression<Func<SchoolTeacher, bool>> predicate);
-        List<SearchForumPostDTO> GetForumPosts(Expression<Func<Question, bool>> predicate);
+        //List<SearchForumPostDTO> GetForumPosts(Expression<Func<Question, bool>> predicate);
 
         Student FindStudentByAccountId(int id);
         List<DepartmentDTO> GetDepartments(int schoolId);

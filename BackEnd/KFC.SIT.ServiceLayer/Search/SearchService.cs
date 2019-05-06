@@ -26,11 +26,12 @@ namespace ServiceLayer.Search
                 .Where(predicate)
                 .Select(s => new SearchPersonDTO
                 {
-                    Id = s.Id,
+                    AccountId = s.Id,
                     FirstName = s.Account.FirstName,
                     MiddleName = s.Account.MiddleName,
                     LastName = s.Account.LastName,
-                    Department = s.SchoolDepartment.Department.Name
+                    SchoolName = s.SchoolDepartment.School.Name,
+                    DepartmentName = s.SchoolDepartment.Department.Name
                 })
                 .ToList();
         }
@@ -42,11 +43,12 @@ namespace ServiceLayer.Search
                 .Where(predicate)
                 .Select(t => new SearchPersonDTO
                 {
-                    Id = t.TeacherId,
+                    AccountId = t.TeacherId,
                     FirstName = t.Teacher.FirstName,
                     MiddleName = t.Teacher.MiddleName,
                     LastName = t.Teacher.LastName,
-                    Department = t.Department.Department.Name,
+                    SchoolName = t.SchoolDepartment.School.Name,
+                    DepartmentName = t.SchoolDepartment.Department.Name,
                     Courses = t.Courses.Select(c => c.Course.Name).ToList()
                 })
                 .ToList();
@@ -60,9 +62,9 @@ namespace ServiceLayer.Search
                 {
                     postId = q.Id,
                     title = (q.Account.FirstName + " " + q.Account.MiddleName + " " + q.Account.LastName),
-                    headline = "" + q.Department.Department.Name,
+                    //headline = "" + q.Department.Department.Name,
                     subtitle = q.Text,
-                    action = q.CreatedDate.ToString(),
+                    //action = q.CreatedDate.ToString(),
                     //answers = q.Answers.Select(a => new ForumPostDTO
                     //{
                     //    postId = a.Id,

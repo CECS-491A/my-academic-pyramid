@@ -11,7 +11,7 @@ using DataAccessLayer.Models.Requests;
 using DataAccessLayer.Models.School;
 using ServiceLayer;
 using ServiceLayer.Search;
-using WebAPI.UserManagement;
+using WebAPI.Gateways.UserManagement;
 
 namespace ManagerLayer.Gateways.Search
 {
@@ -49,15 +49,15 @@ namespace ManagerLayer.Gateways.Search
                         return _searchService.GetStudents(studentPredicate);
                     }
                     // Filter by school
-                    if(request.SearchDepartment == 0)
+                    studentPredicate = studentPredicate.And(s => s.SchoolDepartment.SchoolId == student.SchoolDepartment.SchoolId);
+                    if (request.SearchDepartment == 0)
                     {
-                        studentPredicate = studentPredicate.And(s => s.SchoolId == student.SchoolId);
                         return _searchService.GetStudents(studentPredicate);
                     }
                     // Filter by department
-                    if(request.SearchCourse == 0)
+                    studentPredicate = studentPredicate.And(s => s.SchoolDepartment.DepartmentID == request.SearchDepartment);
+                    if (request.SearchCourse == 0)
                     {
-                        studentPredicate = studentPredicate.And(s => s.DepartmentId == request.SearchDepartment);
                         return _searchService.GetStudents(studentPredicate);
                     }
                     break;
@@ -76,43 +76,43 @@ namespace ManagerLayer.Gateways.Search
                         return _searchService.GetTeachers(teacherPredicate);
                     }
                     // Filter by school
+                    teacherPredicate = teacherPredicate.And(st => st.SchoolDepartment.SchoolId == student.SchoolDepartment.SchoolId);
                     if (request.SearchDepartment == 0)
                     {
-                        teacherPredicate = teacherPredicate.And(st => st.SchoolId == student.SchoolId);
                         return _searchService.GetTeachers(teacherPredicate);
                     }
                     // Filter by department
+                    teacherPredicate = teacherPredicate.And(st => st.SchoolDepartment.DepartmentID == request.SearchDepartment);
                     if (request.SearchCourse == 0)
                     {
-                        teacherPredicate = teacherPredicate.And(st => st.DepartmentId == request.SearchDepartment);
                         return _searchService.GetTeachers(teacherPredicate);
                     }
                     break;
 
                 // Search Discussion Forum Posts
                 case 2:
-                    var forumPostPredicate = PredicateBuilder.True<Question>();
+                    //var forumPostPredicate = PredicateBuilder.True<PostedQuestion>();
 
-                    // Match students' names with the search input
-                    forumPostPredicate = forumPostPredicate.And(q => q.Text.Contains(request.SearchInput));
+                    //// Match students' names with the search input
+                    //forumPostPredicate = forumPostPredicate.And(q => q.Text.Contains(request.SearchInput));
 
-                    // User logged in is not a student
-                    if (student is null)
-                    {
-                        return _searchService.GetForumPosts(forumPostPredicate);
-                    }
-                    // Filter by school
-                    if (request.SearchDepartment == 0)
-                    {
-                        forumPostPredicate = forumPostPredicate.And(q => q.SchoolId == student.SchoolId);
-                        return _searchService.GetForumPosts(forumPostPredicate);
-                    }
-                    // Filter by department
-                    if (request.SearchCourse == 0)
-                    {
-                        forumPostPredicate = forumPostPredicate.And(q => q.DepartmentId == request.SearchDepartment);
-                        return _searchService.GetForumPosts(forumPostPredicate);
-                    }
+                    //// User logged in is not a student
+                    //if (student is null)
+                    //{
+                    //    return _searchService.GetForumPosts(forumPostPredicate);
+                    //}
+                    //// Filter by school
+                    //if (request.SearchDepartment == 0)
+                    //{
+                    //    forumPostPredicate = forumPostPredicate.And(q => q.SchoolId == student.SchoolDepartment.SchoolId);
+                    //    return _searchService.GetForumPosts(forumPostPredicate);
+                    //}
+                    //// Filter by department
+                    //if (request.SearchCourse == 0)
+                    //{
+                    //    forumPostPredicate = forumPostPredicate.And(q => q.DepartmentId == request.SearchDepartment);
+                    //    return _searchService.GetForumPosts(forumPostPredicate);
+                    //}
                     break;
             }
             
@@ -139,7 +139,7 @@ namespace ManagerLayer.Gateways.Search
                 throw new ArgumentException("User is not a student");
             }
 
-            var departmentList = _searchService.GetDepartments(student.SchoolId);
+            var departmentList = _searchService.GetDepartments(student.SchoolDepartment.DepartmentID);
             if (departmentList is null)
             {
                 throw new ArgumentException("No Departments Found");
