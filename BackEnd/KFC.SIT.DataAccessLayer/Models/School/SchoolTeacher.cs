@@ -17,7 +17,7 @@ namespace DataAccessLayer.Models.School
 
         public SchoolTeacher(int schoolId, int teacherId)
         {
-            SchoolId = SchoolDepartment.SchoolId;
+            //SchoolId = SchoolDepartment.SchoolId;
             TeacherId = teacherId;
             Courses = new List<SchoolTeacherCourse>();
         }
@@ -26,7 +26,7 @@ namespace DataAccessLayer.Models.School
         public int Id { get; set; }
 
         //[ForeignKey("School")]
-        public int SchoolId { get; set; }
+        //public int SchoolId { get; set; }
         //public virtual School School { get; set; }
         [ForeignKey("Teacher")]
         public int TeacherId { get; set; }

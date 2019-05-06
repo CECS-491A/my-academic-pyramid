@@ -59,28 +59,12 @@ namespace ManagerLayer.Gateways.SchoolRegistration
                     
                    
 
-                    foreach (CourseDTO c in courseDTOs)
-                    {
-                        if(c.DepartmentName == foundDepartment.Name)
-                        {
-                            var foundCourse = schoolRegServ.FindCourse(c.CourseName);
-                            if(foundCourse == null)
-                            {
-                                var newCourse = new Course
-                                {
-                                    Name = c.CourseName,
-                                    SchoolDepartment = foundSchoolDepartment,
-                                };
-                                foundCourse = schoolRegServ.CreateCourse(newCourse);
-                            }
-                        }
-                        db.SaveChanges();
-                    }
+                   
 
                     foreach (TeacherDTO t in teacherDTOs)
                     {
                         var foundTeacher = schoolRegServ.FindTeacher(t.FirstName, t.LastName);
-                        SchoolTeacher foundSchoolTeacher = null;
+                        
                         if (t.DepartmentName.Equals(foundDepartment.Name) )
                         {
                             
@@ -90,32 +74,56 @@ namespace ManagerLayer.Gateways.SchoolRegistration
 
                                 foundTeacher = schoolRegServ.CreateTeacher(newTeacher);
                             }
-                            var newSchoolTeacher = new SchoolTeacher
+                            
+                            SchoolTeacher foundSchoolTeacher = schoolRegServ.FindSchoolTeacher(foundSchool.Name, foundDepartment.Name, foundTeacher.FirstName, foundTeacher.LastName);
+                            if(foundSchoolTeacher == null)
                             {
-                               
-                                Teacher = foundTeacher,
-                                SchoolDepartment = foundSchoolDepartment
-                            };
+                                var newSchoolTeacher = new SchoolTeacher
+                                {
 
-                            foundSchoolTeacher = schoolRegServ.CreateSchoolTeacher(newSchoolTeacher);
+                                    Teacher = foundTeacher,
+                                    SchoolDepartment = foundSchoolDepartment
+                                };
+                                foundSchoolTeacher = schoolRegServ.CreateSchoolTeacher(newSchoolTeacher);
+                            }
+
+                            foreach (CourseDTO c in courseDTOs)
+                            {
+                                if (c.DepartmentName.Equals(foundDepartment.Name) &&
+                                    c.TeacherFirstName.Equals(foundTeacher.FirstName) &&
+                                    c.TeacherLastName.Equals(foundTeacher.LastName))
+                                {
+                                    var foundCourse = schoolRegServ.FindCourse(c.CourseName);
+                                    if (foundCourse == null)
+                                    {
+                                        var newCourse = new Course
+                                        {
+                                            Name = c.CourseName,
+                                            SchoolDepartment = foundSchoolDepartment
+
+                                        };
+
+                                        foundCourse = schoolRegServ.CreateCourse(newCourse);
+                                    }
+                                    var newSchoolTeacherCourse = new SchoolTeacherCourse
+                                    {
+                                        SchoolTeacher = foundSchoolTeacher,
+                                        Course = foundCourse
+
+                                    };
+                                    schoolRegServ.CreateSchoolTeacherCourse(newSchoolTeacherCourse);
+                                }
+                            }
+                               
+                                
+
+                             
+
 
                         }             
                     }
 
-                    //foreach (CourseDTO c in courseDTOs)
-                    //{
-                    //    var foundschoolteacher = db.SchoolTeachers.Where(st => st.SchoolDepartment..equals(c.schoolname) && st.teacher.firstname.equals(c.teacherfirstname)
-                    //                                                                  && st.teacher.lastname.equals(c.teacherlastname)).firstordefault();
-                    //    var foundcourse = db.Courses.Where(sd => sd.name.equals(c.coursename)).firstordefault();
-
-                    //    var newschoolteachercourse = new schoolteachercourse
-                    //    {
-                    //        schoolteacher = foundschoolteacher,
-                    //        course = foundcourse
-
-                    //    };
-                    //    schoolregserv.createschoolteachercourse(newschoolteachercourse);
-                    //}
+                   
 
 
                 }

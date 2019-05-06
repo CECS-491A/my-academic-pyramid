@@ -69,6 +69,26 @@ namespace ServiceLayer.SchoolRegistration
                                                        && sd.Department.Name.Equals(departmentName)).FirstOrDefault();
         }
 
+        public SchoolTeacher FindSchoolTeacher(string schoolName, string departmentName, string teacherFName, string teacherLName)
+        {
+            return _DbContext.SchoolTeachers.Where(sd => sd.SchoolDepartment.School.Name.Equals(schoolName)
+                                                       && sd.SchoolDepartment.Department.Name.Equals(departmentName)
+                                                       && sd.Teacher.FirstName.Equals(teacherFName)
+                                                        && sd.Teacher.LastName.Equals(teacherLName)
+                                                       ).FirstOrDefault();
+        }
+
+        public SchoolTeacherCourse FindSchoolTeacherCourse(string schoolName, string departmentName, string teacherFName, string teacherLName, string courseName)
+        {
+            return _DbContext.SchoolTeacherCourses.Where(sd => sd.SchoolTeacher.SchoolDepartment.School.Name.Equals(schoolName)
+                                                       && sd.SchoolTeacher.SchoolDepartment.Department.Name.Equals(departmentName)
+                                                       && sd.SchoolTeacher.Teacher.FirstName.Equals(teacherFName)
+                                                        && sd.SchoolTeacher.Teacher.FirstName.Equals(teacherLName)
+                                                        && sd.Course.Name.Equals(courseName)
+                                                       ).FirstOrDefault();
+        }
+
+
         public Course FindCourse (String courseName)
         {
             return _DbContext.Courses.Where(s => s.Name.Equals(courseName)).FirstOrDefault();

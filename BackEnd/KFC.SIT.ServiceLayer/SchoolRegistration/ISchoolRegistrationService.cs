@@ -15,6 +15,7 @@ namespace ServiceLayer.SchoolRegistration
         Course FindCourse(string courseName);
         Department FindDepartment(string departmentName);
         SchoolDepartment FindSchoolDepartment(string schoolName, string departmentName);
+        SchoolTeacher FindSchoolTeacher(string schoolName, string departmentName, string teacherFName, string teacherLName);
         School FindSchool(string schoolName);
         Teacher FindTeacher(string teacherFirstName, string teacherLastname);
     }
