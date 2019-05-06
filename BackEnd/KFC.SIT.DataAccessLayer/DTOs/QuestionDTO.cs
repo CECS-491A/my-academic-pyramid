@@ -73,16 +73,16 @@ namespace DataAccessLayer.DTOs
         //public int SchoolId { get; set; }
         public string SchoolName { get; set; }
         //public int DepartmentId { get; set; }
-        public string DepartmentName { get; set; }
+ //       public string DepartmentName { get; set; }
         //public int CourseId { get; set; }
-        public string CourseName { get; set; }
+ //       public string CourseName { get; set; }
         public int AccountId { get; set; }
         public string AccountName { get; set; }
         public string Text { get; set; }
         public int MinimumExpForAnswer { get; set; }
         public bool IsClosed { get; set;}
         public int SpamCount { get; set; }
-        public int AnswerCount { get; set; }
+ //       public int AnswerCount { get; set; }
         //public bool IsDraft { get; set; }
 
         //public QuestionDTOResponse(Question question, string accountName)

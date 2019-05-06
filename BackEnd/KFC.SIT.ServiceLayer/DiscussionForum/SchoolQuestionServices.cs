@@ -7,9 +7,14 @@
 //using DataAccessLayer.DTOs;
 //using DataAccessLayer.Models.DiscussionForum;
 
+
+//// Fix services for each
+//// Update migration to include all types of questions in DBcontext
+//// Go from there 
+
 //namespace ServiceLayer.DiscussionForum
 //{
-//    public class SchoolQuestionServices : IQuestionServices<SchoolQuestion>, INotADraftQuestionServices<SchoolQuestion>
+//    public class SchoolQuestionServices : IQuestionServices<SchoolQuestion>, IPostedQuestionServices<SchoolQuestion>
 //    {
 //        private DatabaseContext _db;
 
@@ -29,9 +34,15 @@
 //            return question;
 //        }
 
-//        public SchoolQuestion GetQuestion(int questionId)
+//        public Question GetQuestion(int questionId)
 //        {
-//            return _db.SchoolQuestions.Find(questionId);
+//            SchoolQuestion q = new SchoolQuestion();
+//            var a = q.GetType();
+//            if (a is SchoolQuestion)
+//                return q;
+
+//            //return 
+//            //return _db.SchoolQuestions.Find(questionId);
 //        }
 
 //        public List<SchoolQuestion> GetQuestions(List<int> ids)

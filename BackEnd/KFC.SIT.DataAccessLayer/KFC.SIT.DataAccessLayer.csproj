@@ -152,9 +152,9 @@
     <Compile Include="Logging\OptimizeLogging\NLogger.cs" />
     <Compile Include="Logging\OptimizeLogging\TelemetryFormat.cs" />
     <Compile Include="Logging\Models\Repository\TelemetryLogCollection.cs" />
-    <Compile Include="Migrations\201905050543284_Initial.cs" />
-    <Compile Include="Migrations\201905050543284_Initial.Designer.cs">
-      <DependentUpon>201905050543284_Initial.cs</DependentUpon>
+    <Compile Include="Migrations\201905052101179_Initial.cs" />
+    <Compile Include="Migrations\201905052101179_Initial.Designer.cs">
+      <DependentUpon>201905052101179_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Category.cs" />
@@ -229,8 +229,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201905050543284_Initial.resx">
-      <DependentUpon>201905050543284_Initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201905052101179_Initial.resx">
+      <DependentUpon>201905052101179_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

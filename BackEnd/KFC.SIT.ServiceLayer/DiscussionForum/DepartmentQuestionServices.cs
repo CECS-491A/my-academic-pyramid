@@ -9,7 +9,7 @@
 
 //namespace ServiceLayer.DiscussionForum
 //{
-//    public class DepartmentQuestionServices : IQuestionServices<DepartmentQuestion>, INotADraftQuestionServices<DepartmentQuestion>
+//    public class DepartmentQuestionServices : IQuestionServices<DepartmentQuestion>, IPostedQuestionServices<DepartmentQuestion>
 //    {
 //        private DatabaseContext _db;
 

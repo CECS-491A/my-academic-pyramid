@@ -112,7 +112,7 @@ namespace DataAccessLayer.Migrations
                         Discriminator = c.String(nullable: false, maxLength: 128),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Accounts", t => t.AccountId, cascadeDelete: true)
+                .ForeignKey("dbo.Accounts", t => t.AccountId, cascadeDelete: false)
                 .ForeignKey("dbo.SchoolDepartments", t => t.SchoolDepartmentId, cascadeDelete: true)
                 .ForeignKey("dbo.Schools", t => t.SchoolId, cascadeDelete: true)
                 .ForeignKey("dbo.Courses", t => t.CourseId, cascadeDelete: true)
@@ -130,7 +130,7 @@ namespace DataAccessLayer.Migrations
                         Name = c.String(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.SchoolDepartments", t => t.SchoolDeparmentId, cascadeDelete: true)
+                .ForeignKey("dbo.SchoolDepartments", t => t.SchoolDeparmentId, cascadeDelete: false)
                 .Index(t => t.SchoolDeparmentId);
             
             CreateTable(
@@ -143,7 +143,7 @@ namespace DataAccessLayer.Migrations
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Departments", t => t.DepartmentID, cascadeDelete: true)
-                .ForeignKey("dbo.Schools", t => t.SchoolId, cascadeDelete: true)
+                .ForeignKey("dbo.Schools", t => t.SchoolId, cascadeDelete: false)
                 .Index(t => t.SchoolId)
                 .Index(t => t.DepartmentID);
             
@@ -282,7 +282,7 @@ namespace DataAccessLayer.Migrations
                     })
                 .PrimaryKey(t => new { t.Student_Id, t.SchoolTeacherCourse_Id })
                 .ForeignKey("dbo.Students", t => t.Student_Id, cascadeDelete: true)
-                .ForeignKey("dbo.SchoolTeacherCourses", t => t.SchoolTeacherCourse_Id, cascadeDelete: true)
+                .ForeignKey("dbo.SchoolTeacherCourses", t => t.SchoolTeacherCourse_Id, cascadeDelete: false)
                 .Index(t => t.Student_Id)
                 .Index(t => t.SchoolTeacherCourse_Id);
             

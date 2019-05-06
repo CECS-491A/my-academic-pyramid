@@ -7,35 +7,44 @@
 //using DataAccessLayer.DTOs;
 //using DataAccessLayer.Models.DiscussionForum;
 
+
+//// Fix services for each
+//// Update migration to include all types of questions in DBcontext
+//// Go from there 
+
 //namespace ServiceLayer.DiscussionForum
 //{
-//    public class CourseQuestionServices : IQuestionServices<CourseQuestion>, IPostedQuestionServices<CourseQuestion>
+//    public class QuestionServices : IQuestionServices<SchoolQuestion>, IPostedQuestionServices<SchoolQuestion>
 //    {
 //        private DatabaseContext _db;
 
-//        public CourseQuestionServices(DatabaseContext _db)
+//        public QuestionServices(DatabaseContext _db)
 //        {
 //            this._db = _db;
 //        }
 
-//        public CourseQuestion PostQuestion(CourseQuestion question)
+//        //public Question GetAnyQuestion(int questionId)
+//        //{
+//        //    return _db.Questions.Find(questionId);
+//        //}
+
+//        public Question PostQuestion(Question question)
 //        {
 //            _db.Entry(question).State = EntityState.Added;
 //            return question;
 //        }
 
-//        public CourseQuestion GetQuestion(int questionId)
+//        public Question GetQuestion(int questionId)
 //        {
-//            return _db.CourseQuestions.Find(questionId);
-
+//            return _db.Questions.Find(questionId); 
 //        }
 
-//        public List<CourseQuestion> GetQuestions(List<int> ids)
+//        public List<SchoolQuestion> GetSchoolQuestions(int schoolId)
 //        {
 //            try
 //            {
-//                return _db.CourseQuestions
-//                    .Where(q => q.SchoolId == ids[0] && q.SchoolDepartmentId == ids[1] && q.CourseId == ids[3])
+//                return _db.SchoolQuestions
+//                    .Where(q => q.SchoolId == ids[0])
 //                    .OrderBy(q => q.DateCreated)
 //                    .ToList();
 //            }
@@ -45,13 +54,13 @@
 //            }
 //        }
 
-//        public CourseQuestion UpdateQuestion(CourseQuestion question)
+//        public SchoolQuestion UpdateQuestion(SchoolQuestion question)
 //        {
 //            _db.Entry(question).State = EntityState.Modified;
 //            return question;
 //        }
 
-//        public CourseQuestion DeleteQuestion(int questionId)
+//        public SchoolQuestion DeleteQuestion(int questionId)
 //        {
 //            var question = GetQuestion(questionId);
 //            if (question == null)
@@ -62,7 +71,7 @@
 //            return question;
 //        }
 
-//        public CourseQuestion CloseQuestion(int questionId)
+//        public SchoolQuestion CloseQuestion(int questionId)
 //        {
 //            var question = GetQuestion(questionId);
 //            if (question.IsClosed == false)
@@ -75,7 +84,7 @@
 //                return question;
 //        }
 
-//        public CourseQuestion IncreaseQuestionSpamCount(int questionId)
+//        public SchoolQuestion IncreaseQuestionSpamCount(int questionId)
 //        {
 //            var question = GetQuestion(questionId);
 //            question.SpamCount++;
@@ -83,17 +92,17 @@
 //            return question;
 //        }
 
-//        public QuestionResponseDTO ApplyQuestionResponseDTOFormat(CourseQuestion question)
+//        public QuestionResponseDTO ApplyQuestionResponseDTOFormat(SchoolQuestion question)
 //        {
 //            QuestionResponseDTO qRDTO = new QuestionResponseDTO
 //            {
 //                QuestionId = question.Id,
 //                // = q.SchoolId,
-//                SchoolName = question.Course.SchoolDepartment.School.Name;
+//                SchoolName = question.School.Name,
 //                //DepartmentId = q.DepartmentId,
-//                DepartmentName = question.SchoolDepartment.Department.Name,
+//                DepartmentName = null,
 //                //CourseId = q.CourseId,
-//                CourseName = question.Course.Name,
+//                CourseName = null,
 //                AccountId = question.AccountId,
 //                AccountName = question.Account.UserName,
 //                Text = question.Text,
@@ -106,19 +115,17 @@
 //            return qRDTO;
 //        }
 
-//        public CourseQuestion DraftToQuestion(DraftQuestion draft, List<int> ids)
+//        public SchoolQuestion DraftToQuestion(DraftQuestion draft, List<int> ids)
 //        {
 //            try
 //            {
-//                var question = (CourseQuestion)draft;
+//                var question = (SchoolQuestion)draft;
 //                //question.IsDraft = false;
 //                question.IsClosed = false;
 //                question.SpamCount = 0;
 //                question.Answers = new List<Answer>();
 //                question.DateCreated = DateTime.Now;
 //                question.SchoolId = ids[0];
-//                question.SchoolDepartmentId = ids[1];
-//                question.CourseId = ids[2];
 //                return question;
 //            }
 //            catch (Exception)

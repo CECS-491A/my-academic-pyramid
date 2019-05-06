@@ -104,8 +104,9 @@
     <Compile Include="DiscussionForum\DepartmentQuestionServices.cs" />
     <Compile Include="DiscussionForum\DraftQuestionServices.cs" />
     <Compile Include="DiscussionForum\IAnswerServices.cs" />
-    <Compile Include="DiscussionForum\INotADraftQuestionServices.cs" />
+    <Compile Include="DiscussionForum\IPostedQuestionServices.cs" />
     <Compile Include="DiscussionForum\IQuestionServices.cs" />
+    <Compile Include="DiscussionForum\QuestionServices.cs" />
     <Compile Include="DiscussionForum\SchoolQuestionServices.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="DataAnalysisDashboard\DashboardService.cs" />

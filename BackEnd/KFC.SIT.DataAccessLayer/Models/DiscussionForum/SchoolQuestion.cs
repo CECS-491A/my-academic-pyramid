@@ -11,7 +11,7 @@ using DataAccessLayer.Models.School;
 
 namespace DataAccessLayer.Models.DiscussionForum
 {
-    public class SchoolQuestion : PostedQuestion
+    public class SchoolQuestion : PostedQuestion , IEntity
     {
         public SchoolQuestion()
         {
@@ -27,6 +27,7 @@ namespace DataAccessLayer.Models.DiscussionForum
         {
             AccountId = accountId;
             SchoolId = schoolId;
+            
             //
             //SchoolDepartmentId = 
             //CourseId = 
