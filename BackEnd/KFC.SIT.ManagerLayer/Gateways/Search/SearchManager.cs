@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Web;
 using DataAccessLayer;
 using DataAccessLayer.DTOs;
+using DataAccessLayer.Models.DiscussionForum;
 using DataAccessLayer.Models.Requests;
 using DataAccessLayer.Models.School;
+using ServiceLayer;
 using ServiceLayer.Search;
 using WebAPI.UserManagement;
 
@@ -25,51 +28,97 @@ namespace ManagerLayer.Gateways.Search
         }
 
         // TODO: Make all messages constants
-        public dynamic Search(SearchRequest request, int category)
+        public dynamic Search(SearchRequest request)
         {
+            // Validate
             var student = ValidateRequest(request);
-
-            if( request.SearchDepartment == 0)
-            {
-                switch (category)
-                {
-                    case 0:
-                        var studentList = _searchService.SearchAllStudentsInSchool(student.SchoolId, request.SearchInput);
-                        return studentList;
-                    case 1:
-                        var teacherList = _searchService.SearchAllTeachersInSchool(student.SchoolId, request.SearchInput);
-                        return teacherList;
-                    case 2:
-                        var forumPostList = _searchService.SearchAllForumPostsInSchool(student.SchoolId, request.SearchInput);
-                        return forumPostList;
-                    default:
-                        throw new ArgumentException("Invalid Search Category");
-                }
-                
-            }
-            else
-            {
-                Debug.WriteLine("HELLO" + category);
-                switch (category)
-                {
-                    case 0:
-                        var studentList = _searchService.SearchStudentsInDepartment(student.SchoolId, request.SearchDepartment, request.SearchInput);
-                        return studentList;
-                    case 1:
-                        var teacherList = _searchService.SearchTeachersInDepartment(student.SchoolId, request.SearchDepartment, request.SearchInput);
-                        return teacherList;
-                    case 2:
-                        var forumPostList = _searchService.SearchForumPostsInDepartment(student.SchoolId, request.SearchDepartment, request.SearchInput);
-                        return forumPostList;
-                    default:
-                        throw new ArgumentException("Invalid Search Category");
-                }
-            }
-
             
+            switch (request.SearchCategory)
+            {
+                // Search Students
+                case 0:
+                    var studentPredicate = PredicateBuilder.True<Student>();
+
+                    // Match students' names with the search input
+                    studentPredicate = studentPredicate.And(s => (s.Account.FirstName + " " + s.Account.MiddleName + " " + s.Account.LastName).Contains(request.SearchInput)
+                        || (s.Account.FirstName + " " + s.Account.LastName).Contains(request.SearchInput));
+
+                    // User logged in is not a student
+                    if (student is null)
+                    {
+                        return _searchService.GetStudents(studentPredicate);
+                    }
+                    // Filter by school
+                    if(request.SearchDepartment == 0)
+                    {
+                        studentPredicate = studentPredicate.And(s => s.SchoolId == student.SchoolId);
+                        return _searchService.GetStudents(studentPredicate);
+                    }
+                    // Filter by department
+                    if(request.SearchCourse == 0)
+                    {
+                        studentPredicate = studentPredicate.And(s => s.DepartmentId == request.SearchDepartment);
+                        return _searchService.GetStudents(studentPredicate);
+                    }
+                    break;
+
+                // Search Teachers
+                case 1:
+                    var teacherPredicate = PredicateBuilder.True<SchoolTeacher>();
+
+                    // Match students' names with the search input
+                    teacherPredicate = teacherPredicate.And(st => (st.Teacher.FirstName + " " + st.Teacher.MiddleName + " " + st.Teacher.LastName).Contains(request.SearchInput)
+                    || (st.Teacher.FirstName + " " + st.Teacher.LastName).Contains(request.SearchInput));
+
+                    // User logged in is not a student
+                    if (student is null)
+                    {
+                        return _searchService.GetTeachers(teacherPredicate);
+                    }
+                    // Filter by school
+                    if (request.SearchDepartment == 0)
+                    {
+                        teacherPredicate = teacherPredicate.And(st => st.SchoolId == student.SchoolId);
+                        return _searchService.GetTeachers(teacherPredicate);
+                    }
+                    // Filter by department
+                    if (request.SearchCourse == 0)
+                    {
+                        teacherPredicate = teacherPredicate.And(st => st.DepartmentId == request.SearchDepartment);
+                        return _searchService.GetTeachers(teacherPredicate);
+                    }
+                    break;
+
+                // Search Discussion Forum Posts
+                case 2:
+                    var forumPostPredicate = PredicateBuilder.True<Question>();
+
+                    // Match students' names with the search input
+                    forumPostPredicate = forumPostPredicate.And(q => q.Text.Contains(request.SearchInput));
+
+                    // User logged in is not a student
+                    if (student is null)
+                    {
+                        return _searchService.GetForumPosts(forumPostPredicate);
+                    }
+                    // Filter by school
+                    if (request.SearchDepartment == 0)
+                    {
+                        forumPostPredicate = forumPostPredicate.And(q => q.SchoolId == student.SchoolId);
+                        return _searchService.GetForumPosts(forumPostPredicate);
+                    }
+                    // Filter by department
+                    if (request.SearchCourse == 0)
+                    {
+                        forumPostPredicate = forumPostPredicate.And(q => q.DepartmentId == request.SearchDepartment);
+                        return _searchService.GetForumPosts(forumPostPredicate);
+                    }
+                    break;
+            }
             
+            throw new ArgumentException("Invalid Search Category");
+
         }
-
         
 
         public List<DepartmentDTO> GetDepartments(int accountId)
@@ -114,11 +163,6 @@ namespace ManagerLayer.Gateways.Search
             }
 
             var student = _searchService.FindStudentByAccountId(account.Id);
-
-            if (student is null)
-            {
-                throw new ArgumentException("User is not a student");
-            }
 
             return student;
         }

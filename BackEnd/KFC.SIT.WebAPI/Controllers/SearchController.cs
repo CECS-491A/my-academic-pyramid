@@ -19,7 +19,7 @@ namespace KFC.SIT.WebAPI.Controllers
     {
         [HttpGet]
         [ActionName("input")]
-        public IHttpActionResult SearchStudents([FromUri] SearchRequest request)
+        public IHttpActionResult Search([FromUri] SearchRequest request)
         {
             if (!ModelState.IsValid || request is null)
             {
@@ -33,20 +33,8 @@ namespace KFC.SIT.WebAPI.Controllers
                 {
                     ISearchManager manager = new SearchManager(_db);
 
-                    switch (request.SearchCategory)
-                    {
-                        case 0:
-                            var students = new SearchResponse(manager.Search(request,request.SearchCategory));
-                            return Content(HttpStatusCode.OK, students);
-                        case 1:
-                            var teachers = new SearchResponse(manager.Search(request,request.SearchCategory));
-                            return Content(HttpStatusCode.OK, teachers);
-                        case 2:
-                            var posts = new SearchResponse(manager.Search(request,request.SearchCategory));
-                            return Content(HttpStatusCode.OK, posts);
-                        default:
-                            throw new ArgumentException("Invalid Search Category");
-                    }
+                    var results = new SearchResponse(manager.Search(request));
+                    return Content(HttpStatusCode.OK, results);
                 }
             }
             catch (Exception x) when (x is ArgumentException)

@@ -5,6 +5,9 @@ using System.Web;
 using DataAccessLayer;
 using DataAccessLayer.DTOs;
 using DataAccessLayer.Models.School;
+using System.Data;
+using System.Linq.Expressions;
+using DataAccessLayer.Models.DiscussionForum;
 
 namespace ServiceLayer.Search
 {
@@ -17,68 +20,10 @@ namespace ServiceLayer.Search
             _db = db;
         }
 
-        public List<SearchPersonDTO> SearchAllStudentsInSchool(int schoolId, string searchName)
+        public List<SearchPersonDTO> GetStudents(Expression<Func<Student, bool>> predicate)
         {
             return _db.Students
-                .Where(s => s.SchoolId == schoolId && ((s.Account.FirstName + " " + s.Account.MiddleName + " " + s.Account.LastName).Contains(searchName) 
-                || (s.Account.FirstName + " " + s.Account.LastName).Contains(searchName)))
-                .Select(s => new SearchPersonDTO
-                {
-                    Id = s.Id,
-                    FirstName = s.Account.FirstName,
-                    MiddleName = s.Account.MiddleName,
-                    LastName = s.Account.LastName,
-                    Department = s.SchoolDepartment.Department.Name })
-                .ToList();
-        }
-
-        public List<SearchPersonDTO> SearchAllTeachersInSchool(int schoolId, string searchName)
-        {
-            return _db.SchoolTeachers
-                .Where(st => st.SchoolId == schoolId && (st.Teacher.FirstName + " " + st.Teacher.MiddleName + " " + st.Teacher.LastName).Contains(searchName)
-                || (st.Teacher.FirstName + " " + st.Teacher.LastName).Contains(searchName))
-                .Select(t => new SearchPersonDTO
-                {
-                    Id = t.TeacherId,
-                    FirstName = t.Teacher.FirstName,
-                    MiddleName = t.Teacher.MiddleName,
-                    LastName = t.Teacher.LastName,
-                    Department = t.Department.Department.Name,
-                    Courses = t.Courses.Select(c => c.Course.Name).ToList()
-                })
-                .ToList();
-        }
-
-        public List<ForumPostDTO> SearchAllForumPostsInSchool(int schoolId, string searchName)
-        {
-            return _db.Questions
-                .Where(q => q.SchoolId == schoolId && q.Text.Contains(searchName))
-                .Select(q => new ForumPostDTO
-                {
-                    postId = q.Id,
-                    title = (q.Account.FirstName + " " + q.Account.MiddleName + " " + q.Account.LastName),
-                    headline = "" + q.DepartmentId,
-                    subtitle = q.Text,
-                    action = q.CreatedDate.ToString(),
-                    //answers = q.Answers.Select(a => new ForumPostDTO
-                    //{
-                    //    postId = a.Id,
-                    //    title = (a.Account.FirstName + " " + a.Account.MiddleName + " " + a.Account.LastName),
-                    //    subtitle = a.Text,
-                    //    action = a.CreatedDate.ToString(),
-                    //}).ToList()
-                }).ToList();
-
-        }
-
-        public List<SearchPersonDTO> SearchStudentsInDepartment(int schoolId, int departmentId, string searchName)
-        {
-            return _db.Students
-                .Where(s => s.SchoolId == schoolId && s.DepartmentId == departmentId 
-                && ((s.Account.FirstName + " " + s.Account.MiddleName + " " + s.Account.LastName)
-                .Contains(searchName)
-                || (s.Account.FirstName + " " + s.Account.LastName)
-                .Contains(searchName)))
+                .Where(predicate)
                 .Select(s => new SearchPersonDTO
                 {
                     Id = s.Id,
@@ -90,14 +35,11 @@ namespace ServiceLayer.Search
                 .ToList();
         }
 
-        public List<SearchPersonDTO> SearchTeachersInDepartment(int schoolId, int departmentId, string searchName)
+        public List<SearchPersonDTO> GetTeachers(Expression<Func<SchoolTeacher, bool>> predicate)
         {
+
             return _db.SchoolTeachers
-                .Where(st => st.SchoolId == schoolId && st.DepartmentId == departmentId
-                && (st.Teacher.FirstName + " " + st.Teacher.MiddleName + " " + st.Teacher.LastName)
-                .Contains(searchName)
-                || (st.Teacher.FirstName + " " + st.Teacher.LastName)
-                .Contains(searchName))
+                .Where(predicate)
                 .Select(t => new SearchPersonDTO
                 {
                     Id = t.TeacherId,
@@ -110,15 +52,15 @@ namespace ServiceLayer.Search
                 .ToList();
         }
 
-        public List<ForumPostDTO> SearchForumPostsInDepartment(int schoolId, int departmentId, string searchName)
+        public List<SearchForumPostDTO> GetForumPosts(Expression<Func<Question, bool>> predicate)
         {
             return _db.Questions
-                .Where(q => q.SchoolId == schoolId && q.DepartmentId == departmentId && q.Text.Contains(searchName))
-                .Select(q => new ForumPostDTO
+                .Where(predicate)
+                .Select(q => new SearchForumPostDTO
                 {
                     postId = q.Id,
                     title = (q.Account.FirstName + " " + q.Account.MiddleName + " " + q.Account.LastName),
-                    headline = "" + q.DepartmentId,
+                    headline = "" + q.Department.Department.Name,
                     subtitle = q.Text,
                     action = q.CreatedDate.ToString(),
                     //answers = q.Answers.Select(a => new ForumPostDTO
@@ -131,6 +73,7 @@ namespace ServiceLayer.Search
                 }).ToList();
 
         }
+        
 
         public List<DepartmentDTO> GetDepartments(int schoolId)
         {

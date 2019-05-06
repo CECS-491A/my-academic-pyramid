@@ -38,7 +38,7 @@
 
     <div>
         <v-toolbar flat color="white">
-        <v-toolbar-title>Search Results</v-toolbar-title>
+        <v-toolbar-title v-if="!errorMessage">Search Results</v-toolbar-title>
         </v-toolbar>
 
         <v-data-table
@@ -59,7 +59,7 @@
             </template>
             <template v-slot:expand="props">
                 <v-card flat>
-                <v-card-text>Peek-a-boo!</v-card-text>
+                    <v-card-text>{{data.People.Courses}}</v-card-text>
                 </v-card>
             </template>
         
@@ -74,13 +74,13 @@
               
             >
               <v-list-tile-content>
-                <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-                <v-list-tile-sub-title class="text--primary">{{ item.headline }}</v-list-tile-sub-title>
-                <v-list-tile-sub-title>{{ item.subtitle }}</v-list-tile-sub-title>
+                <v-list-tile-title>{{ post.title }}</v-list-tile-title>
+                <v-list-tile-sub-title class="text--primary">{{ post.headline }}</v-list-tile-sub-title>
+                <v-list-tile-sub-title>{{ post.subtitle }}</v-list-tile-sub-title>
               </v-list-tile-content>
 
               <v-list-tile-action>
-                <v-list-tile-action-text>{{ item.action }}</v-list-tile-action-text>
+                <v-list-tile-action-text>{{ post.action }}</v-list-tile-action-text>
               </v-list-tile-action>
 
             </v-list-tile>
@@ -164,11 +164,11 @@ export default {
             else if(this.category === 0 || this.category === 1){
                 this.useTable = true;
             }
-            else if(this.category === 3){
+            else if(this.category === 2){
                 this.useTable = false;
             }
 
-            const url = 'https://api.kfc-sso.com/api/search/input'
+            const url = `${this.$hostname}search/input`;
             
             axios
             .get(url, {
@@ -183,9 +183,6 @@ export default {
             })
             .then(response =>{
                 this.data = response.data
-                if(this.data.People.length === 0){
-                    this.errorMessage = "No Results Found";
-                }
             })
             .catch(searchError =>{
                 this.errorMessage = searchError.response.data.Message
@@ -197,11 +194,11 @@ export default {
         getDepartments: function(){
             this.errorMessage = "";
 
-            const url = 'http://localhost:59364/api/search/departments/'
+            const url = `${this.$hostname}search/departments`;
             axios
             .get(url, {
                 params:{
-                    AccountEmail: this.userId,
+                    AccountId: this.userId,
                 },
                 headers: { "Content-Type": "application/json" }
                 
@@ -223,6 +220,7 @@ export default {
     },
     beforeMount(){
         this.userId = sessionStorage.SITuserId;
+        this.userId = "3"
         this.getDepartments()
     },
 }

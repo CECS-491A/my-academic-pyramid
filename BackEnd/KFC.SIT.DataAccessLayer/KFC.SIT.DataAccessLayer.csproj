@@ -138,7 +138,7 @@
     <Compile Include="DTOs\ContactHistoryDTO.cs" />
     <Compile Include="DTOs\ConversationDTO.cs" />
     <Compile Include="DTOs\DepartmentDTO.cs" />
-    <Compile Include="DTOs\ForumPostDTO.cs" />
+    <Compile Include="DTOs\SearchForumPostDTO.cs" />
     <Compile Include="DTOs\FriendContactDTO.cs" />
     <Compile Include="DTOs\SearchPersonDTO.cs" />
     <Compile Include="DTOs\QuestionDTO.cs" />

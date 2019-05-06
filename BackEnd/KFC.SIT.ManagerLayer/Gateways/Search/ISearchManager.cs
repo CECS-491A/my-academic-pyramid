@@ -11,7 +11,7 @@ namespace ManagerLayer.Gateways.Search
 {
     public interface ISearchManager
     {
-        dynamic Search (SearchRequest request, int category);
+        dynamic Search (SearchRequest request);
         List<DepartmentDTO> GetDepartments(int accountId);
     }
 }
