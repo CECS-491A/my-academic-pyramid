@@ -334,7 +334,9 @@ namespace WebAPI.Gateways.UserManagement
 
                 //Discussion Forum's claims
                 _userManagementServices.AddClaim(user, new Claim("CanPostQuestion"));
-                _userManagementServices.AddClaim(user, new Claim("CanReceiveQuestion"));
+                _userManagementServices.AddClaim(user, new Claim("CanSeeQuestion"));
+                _userManagementServices.AddClaim(user, new Claim("CanPostAnswer"));
+                _userManagementServices.AddClaim(user, new Claim("CanSeeAnswer"));
 
                 //User Management's claims
                 _userManagementServices.AddClaim(user, new Claim("CanCreateOwnStudentAccount"));
