@@ -8,7 +8,7 @@ using DataAccessLayer.Models.School;
 
 namespace ServiceLayer.Search
 {
-    public class SearchService //: ISearchService
+    public class SearchService : ISearchService
     {
         private DatabaseContext _db;
 
@@ -17,57 +17,135 @@ namespace ServiceLayer.Search
             _db = db;
         }
 
-        //public List<SearchPersonDTO> SearchStudents(int schoolId, string searchName)
-        //{
-            
+        public List<SearchPersonDTO> SearchAllStudentsInSchool(int schoolId, string searchName)
+        {
+            return _db.Students
+                .Where(s => s.SchoolId == schoolId && ((s.Account.FirstName + " " + s.Account.MiddleName + " " + s.Account.LastName).Contains(searchName) 
+                || (s.Account.FirstName + " " + s.Account.LastName).Contains(searchName)))
+                .Select(s => new SearchPersonDTO
+                {
+                    Id = s.Id,
+                    FirstName = s.Account.FirstName,
+                    MiddleName = s.Account.MiddleName,
+                    LastName = s.Account.LastName,
+                    Department = s.SchoolDepartment.Department.Name })
+                .ToList();
+        }
 
-        //    return _db.Students
-        //        .Include("Department")
-        //        .Where(s => s.SchoolId == schoolId && ((s.FirstName + " " + s.MiddleName + " " + s.LastName).Contains(searchName) || (s.FirstName + " " + s.LastName).Contains(searchName)))
-        //        .Select(s => new SearchPersonDTO { Id = s.Id, FirstName = s.FirstName, MiddleName = s.MiddleName, LastName = s.LastName, Department = s.Department.Name})
-        //        .ToList();
+        public List<SearchPersonDTO> SearchAllTeachersInSchool(int schoolId, string searchName)
+        {
+            return _db.SchoolTeachers
+                .Where(st => st.SchoolId == schoolId && (st.Teacher.FirstName + " " + st.Teacher.MiddleName + " " + st.Teacher.LastName).Contains(searchName)
+                || (st.Teacher.FirstName + " " + st.Teacher.LastName).Contains(searchName))
+                .Select(t => new SearchPersonDTO
+                {
+                    Id = t.TeacherId,
+                    FirstName = t.Teacher.FirstName,
+                    MiddleName = t.Teacher.MiddleName,
+                    LastName = t.Teacher.LastName,
+                    Department = t.Department.Department.Name,
+                    Courses = t.Courses.Select(c => c.Course.Name).ToList()
+                })
+                .ToList();
+        }
 
-        //    //return _db.Students
-        //    //    .Join(_db.Departments, s => s.DepartmentId, d => d.Id, (s, d) => new { Student = s, Department = d })
-        //    //    .Where(sd => sd.Student.SchoolId == _schoolId &&
-        //    //    (sd.Student.FirstName.Contains(searchName) || sd.Student.LastName.Contains(searchName)))
-        //    //    .Select(sd => new SearchDTO { Id = sd.Student.Id, FirstName = sd.Student.FirstName, LastName = sd.Student.LastName, Department = sd.Department.Name })
-        //    //    .ToList();
-        //}
+        public List<ForumPostDTO> SearchAllForumPostsInSchool(int schoolId, string searchName)
+        {
+            return _db.Questions
+                .Where(q => q.SchoolId == schoolId && q.Text.Contains(searchName))
+                .Select(q => new ForumPostDTO
+                {
+                    postId = q.Id,
+                    title = (q.Account.FirstName + " " + q.Account.MiddleName + " " + q.Account.LastName),
+                    headline = "" + q.DepartmentId,
+                    subtitle = q.Text,
+                    action = q.CreatedDate.ToString(),
+                    //answers = q.Answers.Select(a => new ForumPostDTO
+                    //{
+                    //    postId = a.Id,
+                    //    title = (a.Account.FirstName + " " + a.Account.MiddleName + " " + a.Account.LastName),
+                    //    subtitle = a.Text,
+                    //    action = a.CreatedDate.ToString(),
+                    //}).ToList()
+                }).ToList();
 
-        //public List<SearchPersonDTO> SearchTeachers(int schoolId, string searchName)
-        //{
-        //    var teachers = _db.Schools
-        //        .Where(s => s.Id == schoolId)
-        //        .SelectMany(s => s.Teachers);
+        }
 
-        //    return teachers
-        //        .Where(t => (t.FirstName + " " + t.MiddleName + " " + t.LastName).Contains(searchName) || (t.FirstName + " " + t.LastName).Contains(searchName))
-        //        .Select(t => new SearchPersonDTO { Id = t.Id, FirstName = t.FirstName, MiddleName = t.MiddleName, LastName = t.LastName, Department = t.Department.Name, Courses = t.Courses.Select(c => c.Name).ToList()})
-        //        .ToList();
+        public List<SearchPersonDTO> SearchStudentsInDepartment(int schoolId, int departmentId, string searchName)
+        {
+            return _db.Students
+                .Where(s => s.SchoolId == schoolId && s.DepartmentId == departmentId 
+                && ((s.Account.FirstName + " " + s.Account.MiddleName + " " + s.Account.LastName)
+                .Contains(searchName)
+                || (s.Account.FirstName + " " + s.Account.LastName)
+                .Contains(searchName)))
+                .Select(s => new SearchPersonDTO
+                {
+                    Id = s.Id,
+                    FirstName = s.Account.FirstName,
+                    MiddleName = s.Account.MiddleName,
+                    LastName = s.Account.LastName,
+                    Department = s.SchoolDepartment.Department.Name
+                })
+                .ToList();
+        }
 
+        public List<SearchPersonDTO> SearchTeachersInDepartment(int schoolId, int departmentId, string searchName)
+        {
+            return _db.SchoolTeachers
+                .Where(st => st.SchoolId == schoolId && st.DepartmentId == departmentId
+                && (st.Teacher.FirstName + " " + st.Teacher.MiddleName + " " + st.Teacher.LastName)
+                .Contains(searchName)
+                || (st.Teacher.FirstName + " " + st.Teacher.LastName)
+                .Contains(searchName))
+                .Select(t => new SearchPersonDTO
+                {
+                    Id = t.TeacherId,
+                    FirstName = t.Teacher.FirstName,
+                    MiddleName = t.Teacher.MiddleName,
+                    LastName = t.Teacher.LastName,
+                    Department = t.Department.Department.Name,
+                    Courses = t.Courses.Select(c => c.Course.Name).ToList()
+                })
+                .ToList();
+        }
 
-        //    //var teachers = (from teacher in _db.Teachers
-        //    //                from school in teacher.Schools
-        //    //                where school.Id == schoolId && ((teacher.FirstName + " " + teacher.MiddleName + " " + teacher.LastName).Contains(searchName) || (teacher.FirstName + " " + teacher.LastName).Contains(searchName))
-        //    //                select new SearchPersonDTO { Id = teacher.Id, FirstName = teacher.FirstName, MiddleName = teacher.MiddleName, LastName = teacher.LastName, Department = teacher.Department.Name })
-        //    //               .ToList();
+        public List<ForumPostDTO> SearchForumPostsInDepartment(int schoolId, int departmentId, string searchName)
+        {
+            return _db.Questions
+                .Where(q => q.SchoolId == schoolId && q.DepartmentId == departmentId && q.Text.Contains(searchName))
+                .Select(q => new ForumPostDTO
+                {
+                    postId = q.Id,
+                    title = (q.Account.FirstName + " " + q.Account.MiddleName + " " + q.Account.LastName),
+                    headline = "" + q.DepartmentId,
+                    subtitle = q.Text,
+                    action = q.CreatedDate.ToString(),
+                    //answers = q.Answers.Select(a => new ForumPostDTO
+                    //{
+                    //    postId = a.Id,
+                    //    title = (a.Account.FirstName + " " + a.Account.MiddleName + " " + a.Account.LastName),
+                    //    subtitle = a.Text,
+                    //    action = a.CreatedDate.ToString(),
+                    //}).ToList()
+                }).ToList();
 
-        //    //return teachers;
-        //}
+        }
 
-        //public List<Department> GetDepartments(int schoolId)
-        //{
-        //    return _db.Schools
-        //        .Where(s => s.Id == schoolId)
-        //        .SelectMany(s => s.Departments)
-        //        .ToList();
+        public List<DepartmentDTO> GetDepartments(int schoolId)
+        {
+            return _db.SchoolDepartments
+                .Where(sd => sd.SchoolId == schoolId)
+                .Select(sd => new DepartmentDTO { id = sd.DepartmentID, text = sd.Department.Name, value = sd.DepartmentID })
+                .OrderBy(sd => sd.text)
+                .ToList();
+        }
 
-        //    //return (from school in _db.Schools
-        //    //        from department in school.Departments
-        //    //        where school.Id == schoolId
-        //    //        select department)
-        //    //        .ToList();
-        //}
+        public Student FindStudentByAccountId(int id)
+        {
+            return _db.Students
+                .Where(s => s.AccountId == id)
+                .FirstOrDefault();
+        }
     }
 }

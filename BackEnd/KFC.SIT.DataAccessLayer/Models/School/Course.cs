@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataAccessLayer.Models.School
 {
-    public class Course
+    public class Course :IEntity
     {
         public Course()
         {

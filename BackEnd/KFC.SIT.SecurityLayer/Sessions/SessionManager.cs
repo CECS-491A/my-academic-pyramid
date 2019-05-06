@@ -5,7 +5,7 @@ using System.Text;
 using SecurityLayer.utility;
 using System.Security.Cryptography;
 using Newtonsoft.Json;
-using WebAPI.UserManagement;
+using WebAPI.Gateways.UserManagement;
 using DataAccessLayer.Models;
 
 namespace SecurityLayer.Sessions
@@ -16,7 +16,7 @@ namespace SecurityLayer.Sessions
         private JWTokenManager _jwtManager;
         private SessionServices _sessionServices;
         private UserManager _userManager;
-        private const double ACTIVE_SESSION_DURATION = 60.0;
+        private const double ACTIVE_SESSION_DURATION = 1440.0;
 
         public SessionManager()
         {

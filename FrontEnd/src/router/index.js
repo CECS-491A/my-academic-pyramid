@@ -1,7 +1,5 @@
 import Vue from 'vue'
 import Vuetify from 'vuetify'
-//import Vuechart from 'vue-chartjs'
-//import Chart from 'chart.js'
 import Router from 'vue-router'
 import 'vuetify/dist/vuetify.min.css'
 import Home from '@/Views/Home'
@@ -10,18 +8,15 @@ import Logging from '@/Views/Logging'
 import Login from '@/Views/Login'
 import UserManagement from '@/Views/UserManagement'
 import LoginPrototype from '@/Views/LoginPrototype'
-import ChatContainer from '@/Views/ChatContainer'
+import Chat from '@/Views/Chat'
 import UserRegistration from '@/Views/UserRegistration'
 import UserHomePage from '@/Views/UserHomePage'
 import Redirect from '@/Views/Redirect'
 import UsageAnalysisDashboard from '@/Views/UsageAnalysisDashboard'
-import Search from '@/Views/Search'
-
+//import Search from '@/Views/Search'
 
 Vue.use(Router)
 Vue.use(Vuetify)
-//Vue.use(Vuechart)
-//Vue.use(Chart)
 
 export default new Router({
   base: process.env.BASE_URL,
@@ -61,7 +56,7 @@ export default new Router({
   {
     path: '/Chat',
     name: 'Chat',
-    component: ChatContainer
+    component: Chat
   },
   {
     path: "/UserRegistration",
@@ -83,10 +78,10 @@ export default new Router({
     name: "Dashboard",
     component: UsageAnalysisDashboard
   },
-  {
-    path: "/Search",
-    name: "Search",
-    component: Search
-  }
+  //{
+  //  path: "/Search",
+  //  name: "Search",
+  //  component: Search
+  //}
   ]
 })

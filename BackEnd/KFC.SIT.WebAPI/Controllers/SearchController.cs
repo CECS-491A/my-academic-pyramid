@@ -15,17 +15,16 @@ using System.Web.Http.Cors;
 namespace KFC.SIT.WebAPI.Controllers
 {
     [Route("api/[controller]")]
-    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class SearchController : ApiController
     {
         [HttpGet]
-        [ActionName("students")]
+        [ActionName("input")]
         public IHttpActionResult SearchStudents([FromUri] SearchRequest request)
         {
             if (!ModelState.IsValid || request is null)
             {
                 // 412 Response
-                return Content(HttpStatusCode.PreconditionFailed, "Invalid Request");
+                return Content(HttpStatusCode.PreconditionFailed, new SearchResponse("Invalid Request"));
             }
 
             try
@@ -33,58 +32,42 @@ namespace KFC.SIT.WebAPI.Controllers
                 using (var _db = new DatabaseContext())
                 {
                     ISearchManager manager = new SearchManager(_db);
-                    SearchResponse response = new SearchResponse(manager.SearchStudents(request));
-                    return Content(HttpStatusCode.OK, response);
+
+                    switch (request.SearchCategory)
+                    {
+                        case 0:
+                            var students = new SearchResponse(manager.Search(request,request.SearchCategory));
+                            return Content(HttpStatusCode.OK, students);
+                        case 1:
+                            var teachers = new SearchResponse(manager.Search(request,request.SearchCategory));
+                            return Content(HttpStatusCode.OK, teachers);
+                        case 2:
+                            var posts = new SearchResponse(manager.Search(request,request.SearchCategory));
+                            return Content(HttpStatusCode.OK, posts);
+                        default:
+                            throw new ArgumentException("Invalid Search Category");
+                    }
                 }
             }
             catch (Exception x) when (x is ArgumentException)
             {
-                return Content(HttpStatusCode.BadRequest, x.Message);
+                return Content(HttpStatusCode.BadRequest, new SearchResponse(x.Message));
             }
             catch (Exception x)
             {
-                return Content(HttpStatusCode.InternalServerError, x.Message);
+                return Content(HttpStatusCode.InternalServerError, new SearchResponse(x.Message));
             }
         }
-
-        [HttpGet]
-        [ActionName("teachers")]
-        public IHttpActionResult SearchTeachers([FromUri] SearchRequest request)
-        {
-            if (!ModelState.IsValid || request is null)
-            {
-                // 412 Response
-                return Content(HttpStatusCode.PreconditionFailed, "Invalid Request");
-            }
-
-            try
-            {
-                using (var _db = new DatabaseContext())
-                {
-                    ISearchManager manager = new SearchManager(_db);
-                    SearchResponse response = new SearchResponse(manager.SearchTeachers(request));
-                    return Content(HttpStatusCode.OK, response);
-                }
-            }
-            catch (Exception x) when (x is ArgumentException)
-            {
-                return Content(HttpStatusCode.BadRequest, x.Message);
-            }
-            catch (Exception x)
-            {
-                return Content(HttpStatusCode.InternalServerError, x.Message);
-            }
-        }
+        
 
         [HttpGet]
         [ActionName("departments")]
-        [EnableCors(origins: "*", headers: "*", methods: "*")]
-        public IHttpActionResult GetDepartments([FromUri] SearchRequest request)
+        public IHttpActionResult GetDepartments([FromUri] int AccountId)
         {
-            if (!ModelState.IsValid || request is null)
+            if (!ModelState.IsValid)
             {
                 // 412 Response
-                return Content(HttpStatusCode.PreconditionFailed, "Invalid Request");
+                return Content(HttpStatusCode.PreconditionFailed, new SearchResponse("Invalid Request"));
             }
 
             try
@@ -92,17 +75,16 @@ namespace KFC.SIT.WebAPI.Controllers
                 using (var _db = new DatabaseContext())
                 {
                     ISearchManager manager = new SearchManager(_db);
-                    SearchResponse response = new SearchResponse(manager.GetDepartments(request));
-                    return Content(HttpStatusCode.OK, response);
+                    return Content(HttpStatusCode.OK, manager.GetDepartments(AccountId));
                 }
             }
             catch (Exception x) when (x is ArgumentException)
             {
-                return Content(HttpStatusCode.BadRequest, x.Message);
+                return Content(HttpStatusCode.BadRequest, new SearchResponse(x.Message));
             }
             catch (Exception x)
             {
-                return Content(HttpStatusCode.InternalServerError, x.Message);
+                return Content(HttpStatusCode.InternalServerError, new SearchResponse(x.Message));
             }
         }
     }

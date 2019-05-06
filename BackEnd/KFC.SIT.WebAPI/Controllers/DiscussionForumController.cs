@@ -9,7 +9,7 @@ using SecurityLayer.Authorization.AuthorizationManagers;
 using System.Web.Http;
 using KFC.SIT.WebAPI.Utility;
 using System.Web.Http.Cors;
-using WebAPI.UserManagement;
+using WebAPI.Gateways.UserManagement;
 using DataAccessLayer.Models.DiscussionForum;
 using DataAccessLayer.Models;
 //using ManagerLayer.DiscussionManager;

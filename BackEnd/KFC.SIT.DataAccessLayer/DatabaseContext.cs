@@ -17,13 +17,16 @@ namespace DataAccessLayer
 
         public DbSet<Category> Categories { get; set; }
 
-        //Set of Conservations
+        // Set of Conservations
         public DbSet<Conversation> Conversations { get; set; }
         
-        public DbSet<ChatHistory> ChatHistory {get;set;}
+        // Set of Messages in conversation
+        public DbSet<Message> Messages {get;set;}
 
+        // Set of friends in a friendlist
         public DbSet<FriendRelationship>FriendRelationships { get; set; }
 
+        // Set of SignalR connection Id
         public DbSet<ChatConnectionMapping> ChatConnectionMappings { get; set; }
 
         // Discussion Forum
@@ -44,7 +47,7 @@ namespace DataAccessLayer
         public DbSet<SchoolTeacher> SchoolTeachers { get; set; }
         public DbSet<SchoolTeacherCourse> SchoolTeacherCourses { get; set; }
 
-        public DatabaseContext () :base ("name=LocalTest")
+        public DatabaseContext () :base ("name=MYAPConnectionString")
         {
             //Database.SetInitializer(new DropCreateDatabaseAlways<DatabaseContext>());
 
@@ -60,6 +63,7 @@ namespace DataAccessLayer
                 .HasForeignKey(p => p.ParentUser_Id);
             
         }
+
 
 
     }

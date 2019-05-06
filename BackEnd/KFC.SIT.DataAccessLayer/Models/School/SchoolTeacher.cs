@@ -34,6 +34,12 @@ namespace DataAccessLayer.Models.School
         [ForeignKey("SchoolDepartment")]
         public int SchoolDepartmentId { get; set; }
         public virtual SchoolDepartment SchoolDepartment { get; set; }
+        // [ForeignKey("Department"),Column(Order = 2)]
+        // public int DepartmentId { get; set; }
+        // [ForeignKey("Department"),Column(Order = 3)]
+        // public int SchoolId2 { get; set; }
+        // [ForeignKey("DepartmentId,SchoolId")]
+        // public virtual SchoolDepartment Department { get; set; }
 
         public virtual ICollection<SchoolTeacherCourse> Courses { get; set; }
     }

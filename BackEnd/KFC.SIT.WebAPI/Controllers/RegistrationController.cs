@@ -10,7 +10,7 @@ using SecurityLayer.Authorization.AuthorizationManagers;
 using Newtonsoft.Json;
 using SecurityLayer.Authorization;
 using DataAccessLayer;
-using WebAPI.UserManagement;
+using WebAPI.Gateways.UserManagement;
 using System.Web.Http.Cors;
 using DataAccessLayer.Models;
 using KFC.SIT.WebAPI.Utility;

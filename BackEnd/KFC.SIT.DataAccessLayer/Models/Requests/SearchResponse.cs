@@ -13,30 +13,37 @@ namespace DataAccessLayer.Models.Requests
         public SearchResponse()
         {
             People = new List<SearchPersonDTO>();
-            Departments = new List<Department>();
+            ForumPosts = new List<ForumPostDTO>();
         }
 
         public SearchResponse(List<SearchPersonDTO> people)
         {
             People = people;
-            Departments = new List<Department>();
+            ForumPosts = new List<ForumPostDTO>();
+        }
+
+        public SearchResponse(List<ForumPostDTO> posts)
+        {
+            ForumPosts = posts;
+            People = new List<SearchPersonDTO>();
         }
 
         public SearchResponse(List<SearchPersonDTO> people, string message)
         {
             People = people;
+            ForumPosts = new List<ForumPostDTO>();
             Message = message;
-            Departments = new List<Department>();
         }
 
-        public SearchResponse(List<Department> departments)
+        public SearchResponse(string message)
         {
-            Departments = departments;
+            Message = message;
             People = new List<SearchPersonDTO>();
+            ForumPosts = new List<ForumPostDTO>();
         }
 
         public List<SearchPersonDTO> People { get; set; }
-        public List<Department> Departments { get; set; }
+        public List<ForumPostDTO> ForumPosts { get; set; }
         public string Message { get; set; }
     }
 }

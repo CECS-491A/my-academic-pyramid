@@ -10,9 +10,14 @@ namespace ServiceLayer.Search
 {
     public interface ISearchService
     {
-        List<SearchPersonDTO> SearchStudents(int schoolId, string searchName);
-        List<SearchPersonDTO> SearchTeachers(int schoolId, string searchName);
-        List<Department> GetDepartments(int schoolId);
+        List<SearchPersonDTO> SearchAllStudentsInSchool(int schoolId, string searchName);
+        List<SearchPersonDTO> SearchAllTeachersInSchool(int schoolId, string searchName);
+        List<ForumPostDTO> SearchAllForumPostsInSchool(int schoolId, string searchName);
+        List<SearchPersonDTO> SearchStudentsInDepartment(int schoolId, int departmentId, string searchName);
+        List<SearchPersonDTO> SearchTeachersInDepartment(int schoolId, int departmentId, string searchName);
+        List<ForumPostDTO> SearchForumPostsInDepartment(int schoolId, int departmentId, string searchName);
+        Student FindStudentByAccountId(int id);
+        List<DepartmentDTO> GetDepartments(int schoolId);
         //IEnumerable<Question> SearchQuestions();
     }
 }

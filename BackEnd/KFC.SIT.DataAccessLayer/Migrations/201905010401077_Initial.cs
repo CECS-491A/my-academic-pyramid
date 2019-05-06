@@ -129,7 +129,7 @@ namespace DataAccessLayer.Migrations
                 "dbo.Courses",
                 c => new
                     {
-                        Id = c.Int(nullable: false),
+                        Id = c.Int(nullable: false, identity: true),
                         DepartmentId = c.Int(nullable: false),
                         SchoolId = c.Int(nullable: false),
                         Name = c.String(nullable: false),
