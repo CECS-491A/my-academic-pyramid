@@ -2,14 +2,10 @@
 using WebAPI.Gateways.Messenger;
 using Microsoft.AspNet.SignalR;
 using System;
-using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
-using System.Web;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using WebAPI.Signalr;
-using System.Net.Http;
 using DataAccessLayer.DTOs;
 using System.Collections.Generic;
 using WebAPI.Gateways.UserManagement;
@@ -17,11 +13,8 @@ using SecurityLayer.Authorization;
 using KFC.SIT.WebAPI.Utility;
 using SecurityLayer.Sessions;
 using SecurityLayer.Authorization.AuthorizationManagers;
-using DataAccessLayer;
-using System.Web.Http.Controllers;
 using DataAccessLayer.Models;
 using System.Data.Entity.Infrastructure;
-using static ServiceLayer.ServiceExceptions.SignalRException;
 using static ServiceLayer.ServiceExceptions.MessengerServiceException;
 
 namespace KFC.SIT.WebAPI.Controllers

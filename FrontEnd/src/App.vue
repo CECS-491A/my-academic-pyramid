@@ -73,10 +73,22 @@ export default {
         { name: 'DiscussionForum', icon: 'forum', text: 'Discussion Forum', route: '/DiscussionForum'},
         { name: 'UserRegistration', icon: 'account_box', text: 'User Registration', route: '/UserRegistration'},
         { name: 'UserHomePage', icon: 'contacts', text: 'User HomePage', route: '/UserHomePage'}
-      ]
+      ],
+      newMessage:false
+    }
+  },
+   created() {
+    this.$eventBus.$on("ReloadChatHistoryList", () => {
+      this.newMessage = true;
+    });
+  },
+  methods: {
+    goToChatScreen() {
+      this.$router.push("/Chat"), (this.newMessage = false);
     }
   }
 };
+
 </script>
 
 

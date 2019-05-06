@@ -3,7 +3,7 @@ namespace DataAccessLayer.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class Initial : DbMigration
+    public partial class initial : DbMigration
     {
         public override void Up()
         {
@@ -61,18 +61,34 @@ namespace DataAccessLayer.Migrations
                 .PrimaryKey(t => t.Id);
             
             CreateTable(
-                "dbo.ChatHistories",
+                "dbo.Conversations",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        ContactId = c.Int(nullable: false),
+                        ContactUserId = c.Int(nullable: false),
                         ContactUsername = c.String(),
-                        ContactTime = c.DateTime(nullable: false),
+                        HasNewMessage = c.Boolean(nullable: false),
+                        CreatedDate = c.DateTime(nullable: false),
+                        ModifiedDate = c.DateTime(nullable: false),
                         UserId = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Accounts", t => t.UserId, cascadeDelete: true)
                 .Index(t => t.UserId);
+            
+            CreateTable(
+                "dbo.Messages",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        OutgoingMessage = c.Boolean(nullable: false),
+                        MessageContent = c.String(),
+                        CreatedDate = c.DateTime(nullable: false),
+                        ConversationId = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.Conversations", t => t.ConversationId, cascadeDelete: true)
+                .Index(t => t.ConversationId);
             
             CreateTable(
                 "dbo.Claims",
@@ -117,9 +133,9 @@ namespace DataAccessLayer.Migrations
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Accounts", t => t.AccountId, cascadeDelete: false)
-                .ForeignKey("dbo.Courses", t => new { t.CourseId, t.DepartmentId2 }, cascadeDelete: true)
-                .ForeignKey("dbo.SchoolDepartments", t => new { t.DepartmentId, t.SchoolId2 }, cascadeDelete: true)
-                .ForeignKey("dbo.Schools", t => t.SchoolId, cascadeDelete: true)
+                .ForeignKey("dbo.Courses", t => new { t.CourseId, t.DepartmentId2 }, cascadeDelete: false)
+                .ForeignKey("dbo.SchoolDepartments", t => new { t.DepartmentId, t.SchoolId2 }, cascadeDelete: false)
+                .ForeignKey("dbo.Schools", t => t.SchoolId, cascadeDelete: false)
                 .Index(t => new { t.DepartmentId, t.SchoolId2 })
                 .Index(t => new { t.CourseId, t.DepartmentId2 })
                 .Index(t => t.SchoolId)
@@ -129,13 +145,13 @@ namespace DataAccessLayer.Migrations
                 "dbo.Courses",
                 c => new
                     {
-                        Id = c.Int(nullable: false, identity: true),
+                        Id = c.Int(nullable: false),
                         DepartmentId = c.Int(nullable: false),
                         SchoolId = c.Int(nullable: false),
                         Name = c.String(nullable: false),
                     })
                 .PrimaryKey(t => new { t.Id, t.DepartmentId })
-                .ForeignKey("dbo.SchoolDepartments", t => new { t.DepartmentId, t.SchoolId }, cascadeDelete: false)
+                .ForeignKey("dbo.SchoolDepartments", t => new { t.DepartmentId, t.SchoolId }, cascadeDelete: true)
                 .Index(t => new { t.DepartmentId, t.SchoolId });
             
             CreateTable(
@@ -147,7 +163,7 @@ namespace DataAccessLayer.Migrations
                     })
                 .PrimaryKey(t => new { t.DepartmentID, t.SchoolId })
                 .ForeignKey("dbo.Departments", t => t.DepartmentID, cascadeDelete: true)
-                .ForeignKey("dbo.Schools", t => t.SchoolId, cascadeDelete: false)
+                .ForeignKey("dbo.Schools", t => t.SchoolId, cascadeDelete: true)
                 .Index(t => t.DepartmentID)
                 .Index(t => t.SchoolId);
             
@@ -177,16 +193,16 @@ namespace DataAccessLayer.Migrations
                     {
                         SchoolId = c.Int(nullable: false),
                         TeacherId = c.Int(nullable: false),
-                        SchoolDepartment_DepartmentID = c.Int(),
-                        SchoolDepartment_SchoolId = c.Int(),
+                        DepartmentId = c.Int(nullable: false),
+                        SchoolId2 = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => new { t.SchoolId, t.TeacherId })
-                .ForeignKey("dbo.Schools", t => t.SchoolId, cascadeDelete: true)
-                .ForeignKey("dbo.Teachers", t => t.TeacherId, cascadeDelete: true)
-                .ForeignKey("dbo.SchoolDepartments", t => new { t.SchoolDepartment_DepartmentID, t.SchoolDepartment_SchoolId })
+                .ForeignKey("dbo.SchoolDepartments", t => new { t.DepartmentId, t.SchoolId2 }, cascadeDelete: true)
+                .ForeignKey("dbo.Schools", t => t.SchoolId, cascadeDelete: false)
+                .ForeignKey("dbo.Teachers", t => t.TeacherId, cascadeDelete: false)
                 .Index(t => t.SchoolId)
                 .Index(t => t.TeacherId)
-                .Index(t => new { t.SchoolDepartment_DepartmentID, t.SchoolDepartment_SchoolId });
+                .Index(t => new { t.DepartmentId, t.SchoolId2 });
             
             CreateTable(
                 "dbo.SchoolTeacherCourses",
@@ -198,8 +214,8 @@ namespace DataAccessLayer.Migrations
                         DepartmentId = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => new { t.SchoolId, t.TeacherId, t.CourseId, t.DepartmentId })
-                .ForeignKey("dbo.Courses", t => new { t.CourseId, t.DepartmentId }, cascadeDelete: true)
-                .ForeignKey("dbo.SchoolTeachers", t => new { t.SchoolId, t.TeacherId }, cascadeDelete: true)
+                .ForeignKey("dbo.Courses", t => new { t.CourseId, t.DepartmentId }, cascadeDelete: false)
+                .ForeignKey("dbo.SchoolTeachers", t => new { t.SchoolId, t.TeacherId }, cascadeDelete: false)
                 .Index(t => new { t.SchoolId, t.TeacherId })
                 .Index(t => new { t.CourseId, t.DepartmentId });
             
@@ -255,18 +271,6 @@ namespace DataAccessLayer.Migrations
                 .PrimaryKey(t => t.ConnectionId);
             
             CreateTable(
-                "dbo.Conversations",
-                c => new
-                    {
-                        Id = c.Int(nullable: false, identity: true),
-                        SenderId = c.Int(nullable: false),
-                        ReceiverId = c.Int(nullable: false),
-                        MessageContent = c.String(),
-                        CreatedDate = c.DateTime(nullable: false),
-                    })
-                .PrimaryKey(t => t.Id);
-            
-            CreateTable(
                 "dbo.ClaimAccounts",
                 c => new
                     {
@@ -306,10 +310,10 @@ namespace DataAccessLayer.Migrations
             DropForeignKey("dbo.Questions", new[] { "DepartmentId", "SchoolId2" }, "dbo.SchoolDepartments");
             DropForeignKey("dbo.Questions", new[] { "CourseId", "DepartmentId2" }, "dbo.Courses");
             DropForeignKey("dbo.Courses", new[] { "DepartmentId", "SchoolId" }, "dbo.SchoolDepartments");
-            DropForeignKey("dbo.SchoolTeachers", new[] { "SchoolDepartment_DepartmentID", "SchoolDepartment_SchoolId" }, "dbo.SchoolDepartments");
             DropForeignKey("dbo.SchoolDepartments", "SchoolId", "dbo.Schools");
             DropForeignKey("dbo.SchoolTeachers", "TeacherId", "dbo.Teachers");
             DropForeignKey("dbo.SchoolTeachers", "SchoolId", "dbo.Schools");
+            DropForeignKey("dbo.SchoolTeachers", new[] { "DepartmentId", "SchoolId2" }, "dbo.SchoolDepartments");
             DropForeignKey("dbo.Students", new[] { "DepartmentId", "SchoolId" }, "dbo.SchoolDepartments");
             DropForeignKey("dbo.StudentSchoolTeacherCourses", new[] { "SchoolTeacherCourse_SchoolId", "SchoolTeacherCourse_TeacherId", "SchoolTeacherCourse_CourseId", "SchoolTeacherCourse_DepartmentId" }, "dbo.SchoolTeacherCourses");
             DropForeignKey("dbo.StudentSchoolTeacherCourses", "Student_Id", "dbo.Students");
@@ -322,7 +326,8 @@ namespace DataAccessLayer.Migrations
             DropForeignKey("dbo.FriendRelationships", "UserId", "dbo.Accounts");
             DropForeignKey("dbo.ClaimAccounts", "Account_Id", "dbo.Accounts");
             DropForeignKey("dbo.ClaimAccounts", "Claim_Id", "dbo.Claims");
-            DropForeignKey("dbo.ChatHistories", "UserId", "dbo.Accounts");
+            DropForeignKey("dbo.Conversations", "UserId", "dbo.Accounts");
+            DropForeignKey("dbo.Messages", "ConversationId", "dbo.Conversations");
             DropForeignKey("dbo.Accounts", "CategoryId", "dbo.Categories");
             DropIndex("dbo.StudentSchoolTeacherCourses", new[] { "SchoolTeacherCourse_SchoolId", "SchoolTeacherCourse_TeacherId", "SchoolTeacherCourse_CourseId", "SchoolTeacherCourse_DepartmentId" });
             DropIndex("dbo.StudentSchoolTeacherCourses", new[] { "Student_Id" });
@@ -333,7 +338,7 @@ namespace DataAccessLayer.Migrations
             DropIndex("dbo.Students", new[] { "DepartmentId", "SchoolId" });
             DropIndex("dbo.SchoolTeacherCourses", new[] { "CourseId", "DepartmentId" });
             DropIndex("dbo.SchoolTeacherCourses", new[] { "SchoolId", "TeacherId" });
-            DropIndex("dbo.SchoolTeachers", new[] { "SchoolDepartment_DepartmentID", "SchoolDepartment_SchoolId" });
+            DropIndex("dbo.SchoolTeachers", new[] { "DepartmentId", "SchoolId2" });
             DropIndex("dbo.SchoolTeachers", new[] { "TeacherId" });
             DropIndex("dbo.SchoolTeachers", new[] { "SchoolId" });
             DropIndex("dbo.SchoolDepartments", new[] { "SchoolId" });
@@ -344,14 +349,14 @@ namespace DataAccessLayer.Migrations
             DropIndex("dbo.Questions", new[] { "CourseId", "DepartmentId2" });
             DropIndex("dbo.Questions", new[] { "DepartmentId", "SchoolId2" });
             DropIndex("dbo.FriendRelationships", new[] { "UserId" });
-            DropIndex("dbo.ChatHistories", new[] { "UserId" });
+            DropIndex("dbo.Messages", new[] { "ConversationId" });
+            DropIndex("dbo.Conversations", new[] { "UserId" });
             DropIndex("dbo.Accounts", new[] { "ParentUser_Id" });
             DropIndex("dbo.Accounts", new[] { "CategoryId" });
             DropIndex("dbo.Answers", new[] { "AccountId" });
             DropIndex("dbo.Answers", new[] { "QuestionId" });
             DropTable("dbo.StudentSchoolTeacherCourses");
             DropTable("dbo.ClaimAccounts");
-            DropTable("dbo.Conversations");
             DropTable("dbo.ChatConnectionMappings");
             DropTable("dbo.UserSessions");
             DropTable("dbo.Teachers");
@@ -365,7 +370,8 @@ namespace DataAccessLayer.Migrations
             DropTable("dbo.Questions");
             DropTable("dbo.FriendRelationships");
             DropTable("dbo.Claims");
-            DropTable("dbo.ChatHistories");
+            DropTable("dbo.Messages");
+            DropTable("dbo.Conversations");
             DropTable("dbo.Categories");
             DropTable("dbo.Accounts");
             DropTable("dbo.Answers");

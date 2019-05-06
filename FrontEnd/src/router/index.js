@@ -13,6 +13,7 @@ import UserRegistration from '@/Views/UserRegistration'
 import UserHomePage from '@/Views/UserHomePage'
 import Redirect from '@/Views/Redirect'
 import UsageAnalysisDashboard from '@/Views/UsageAnalysisDashboard'
+import SchoolRegistration from '@/Views/SchoolRegistration'
 //import Search from '@/Views/Search'
 
 Vue.use(Router)
@@ -78,6 +79,11 @@ export default new Router({
     name: "Dashboard",
     component: UsageAnalysisDashboard
   },
+  {
+    path: "/SchoolRegistration",
+    name: "SchoolRegistration",
+    component: SchoolRegistration
+  }
   //{
   //  path: "/Search",
   //  name: "Search",
