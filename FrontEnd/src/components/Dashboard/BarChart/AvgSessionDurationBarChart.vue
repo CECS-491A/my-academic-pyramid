@@ -17,7 +17,7 @@
               borderWidth: 1,
               pointBorderColor: '#249EBF',
               //Data to be represented on y-axis
-              data: [40, 20, 30, 50, 90, 10, 20, 40, 50, 70, 90, 100]
+              data: [.40, .20, .30, .50, .90, .10, .20, .40, .50, .70, .90, .100]
             }
           ]
         },

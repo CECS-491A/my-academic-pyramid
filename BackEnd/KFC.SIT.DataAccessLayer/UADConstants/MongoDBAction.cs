@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccessLayer.MongoDBQueryConstants
+namespace DataAccessLayer.UADConstants
 {
     public static class MongoDBAction
     {
