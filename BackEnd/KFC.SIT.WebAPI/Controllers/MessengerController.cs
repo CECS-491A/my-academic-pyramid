@@ -33,7 +33,7 @@ namespace KFC.SIT.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Return all conversations of authenticated user Id
+        /// Return all conversations of authenticated user 
         /// Auth User Id will be get from the security context which from the token 
         /// </summary>
         /// <returns></returns>
