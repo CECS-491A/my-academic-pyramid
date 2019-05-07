@@ -75,7 +75,8 @@ export default {
       { text: "Teacher Middle Name", value: "MiddleName" },
       { text: "Teacher Last Name", value: "LastName" },
       { text: "Department", value: "DepartmentName" }
-    ],
+	],
+	
     teachers: [],
     editedIndex: -1,
     editedItem: {
@@ -97,7 +98,13 @@ export default {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
     }
   },
-
+ created() {
+    this.$eventBus.$on("TeacherTableFromFile", TeacherDTO => {
+      console.log("Receive Teacher");
+      this.teachers = TeacherDTO;
+      /* eslint no-console: "off" */
+    });
+  },
   watch: {
     dialog(val) {
       val || this.close();
@@ -106,6 +113,7 @@ export default {
       this.$eventBus.$emit("SendTeacherTable", this.teachers);
     }
   },
+ 
 
   methods: {
     editItem(item) {
