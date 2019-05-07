@@ -284,16 +284,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="api\index.md" />
-    <None Include="App.config">
-      <SubType>Designer</SubType>
-    </None>
     <Content Include=".gitignore" />
     <Content Include="api\.gitignore" />
-    <None Include="App.config" />
     <Content Include="NLog.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
+    <None Include="App.config" />
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>

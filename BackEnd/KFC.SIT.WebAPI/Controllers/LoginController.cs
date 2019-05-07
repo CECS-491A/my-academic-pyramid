@@ -57,14 +57,14 @@ namespace KFC.SIT.WebAPI.Controllers
             // For production
             return Redirect(redirectUrl);
 
-            // Local only
-            //Dictionary<string, string> redirectResponseDictionary = new Dictionary<string, string>()
-            //{
-            //    { "redirectURL", URL_FIRST_PART }
-            //};
-            //redirectResponseDictionary["redirectURL"]
-            //             = redirectResponseDictionary["redirectURL"] + "?SITtoken=" + token;
-            //return Ok(redirectResponseDictionary);
+            //Local only
+            Dictionary<string, string> redirectResponseDictionary = new Dictionary<string, string>()
+            {
+                { "redirectURL", URL_FIRST_PART }
+            };
+            redirectResponseDictionary["redirectURL"]
+                         = redirectResponseDictionary["redirectURL"] + "?SITtoken=" + token;
+            return Ok(redirectResponseDictionary);
 
         }
 
