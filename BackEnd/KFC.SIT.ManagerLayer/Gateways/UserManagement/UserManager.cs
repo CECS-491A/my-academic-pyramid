@@ -203,10 +203,10 @@ namespace WebAPI.Gateways.UserManagement
         /// Method to get all users in database
         /// </summary>
         /// <returns></returns>
-        public IList<Account> GetAllUser()
+        public List<Account> GetAllUser()
         {
             // Call GetAllUser method in userManagementServices
-            IList<Account> userList = _userManagementServices.GetAllUser();
+            List<Account> userList = _userManagementServices.GetAllUser();
             return userList;
         }
 
