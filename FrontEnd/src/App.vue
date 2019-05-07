@@ -88,8 +88,4 @@ export default {
     }
   }
 };
-
 </script>
-
-
-}
