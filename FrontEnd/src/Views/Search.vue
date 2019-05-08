@@ -162,11 +162,11 @@ export default {
                     text: "Teachers",
                     value: 1
                 },
-                {
-                    id: 2,
-                    text: "Forum Posts",
-                    value: 2
-                }
+                // {
+                //     id: 2,
+                //     text: "Forum Posts",
+                //     value: 2
+                // }
             ],
             school: 0,
             schools: [],
