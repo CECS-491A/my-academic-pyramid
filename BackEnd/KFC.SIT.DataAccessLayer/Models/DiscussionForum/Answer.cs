@@ -17,6 +17,7 @@ namespace DataAccessLayer.Models.DiscussionForum
             SpamCount = 0;
             IsCorrectAnswer = false;
             CreatedDate = DateTime.Now;
+            UpdatedTime = DateTime.Now;
         }
 
         public Answer(int questionId, int accountId, string text)
@@ -57,6 +58,7 @@ namespace DataAccessLayer.Models.DiscussionForum
         public bool IsCorrectAnswer { get; set; }
         [Required]
         public DateTime CreatedDate { get; set; }
+        //Todo delete UpdatedTime
         public DateTime UpdatedTime { get; set; }
     }
 }
