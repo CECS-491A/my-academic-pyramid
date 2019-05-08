@@ -19,6 +19,20 @@ namespace ManagerLayer.Gateways.UsageAnalysisDashboard
             _dashboardService = new DashboardService(url, database);
         }
 
+        public IList<string> GetRecentMonths()
+        {
+            int numOfMonth = BusinessRuleConstants.GetRecentMonths_Months;
+            int monthToday = DateTime.Today.Month;
+            IList<string> dateList = new List<string>();
+            for (int i = 0; i < numOfMonth; i++)
+            {
+                dateList.Add(dateFormatConverter[monthToday]);
+                monthToday--;
+                if (monthToday == 0) { monthToday = 12; }
+            }
+            return dateList;
+        }
+
         /// <summary>
         /// Get the list of number of successful login and list of number of failed login per month 
         /// Divide number of successful login by the number of total login attempts
@@ -26,32 +40,32 @@ namespace ManagerLayer.Gateways.UsageAnalysisDashboard
         /// It will get the data of recent 12 month according to the business rules. 
         /// </summary>
         /// <returns>avgLogin</returns>
-        public IDictionary<string, double> GetAverageSuccessfulLogin()
+        public IList<double> GetAverageSuccessfulLogin()
         {
-            int numOfMonth = 12;
+            int numOfMonth = BusinessRuleConstants.GetAverageSuccessfulLogin_NumOfMonth;
             IDictionary<int, long> successLogin = _dashboardService.CountSuccessfulLogin(numOfMonth);
             IDictionary<int, long> failedLogin = _dashboardService.CountFailedLogin(numOfMonth);
-            Dictionary<string, double> avgLogin = new Dictionary<string, double>();
+            IList<double> avgLogin = new List<double>();
             int monthToday = DateTime.Today.Month;
 
             for (int i = 1; i < numOfMonth + 1; i++)
             {
                 double avgSuccessfulLogin = 0;
 
-                if (successLogin.ContainsKey(monthToday))
+                if (successLogin.ContainsKey(monthToday)) // checks there is logged in user in the month
                 {
                     double numSuccessfulLogin = 0;
                     double numFailedLogin = 0;
                     numSuccessfulLogin = successLogin[monthToday];
 
-                    if (failedLogin.ContainsKey(monthToday))
+                    if (failedLogin.ContainsKey(monthToday)) // checks there is failed logged attempts in the month
                     {
                         numFailedLogin = failedLogin[monthToday];
                     }
                     double totalLoginAttempt = numSuccessfulLogin + numFailedLogin;
                     avgSuccessfulLogin = numSuccessfulLogin / totalLoginAttempt;
                 }
-                avgLogin.Add(dateFormatConverter[monthToday], avgSuccessfulLogin);
+                avgLogin.Add(avgSuccessfulLogin);
                 monthToday--;
                 if (monthToday == 0) { monthToday = 12; }
             }

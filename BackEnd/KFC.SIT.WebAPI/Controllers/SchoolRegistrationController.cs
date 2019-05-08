@@ -1,6 +1,7 @@
 ﻿using DataAccessLayer.DTOs.SchoolRegistrationDTO;
 using ManagerLayer.Gateways.SchoolRegistration;
 using Newtonsoft.Json.Linq;
+using ServiceLayer.ServiceExceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,9 +29,9 @@ namespace KFC.SIT.WebAPI.Controllers
                 return Ok();
             }
 
-            catch(Exception e)
+            catch(SchoolRegistrationException ex)
             {
-                return Content(HttpStatusCode.InternalServerError, "error");
+                return Content(HttpStatusCode.Conflict, "School with same name exists");
             }
             
         }

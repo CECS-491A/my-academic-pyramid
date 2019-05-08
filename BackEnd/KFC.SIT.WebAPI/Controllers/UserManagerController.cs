@@ -29,7 +29,7 @@ namespace KFC.SIT.WebAPI.Controllers
         public IQueryable<UserDTO> GetAllUsers()
         {
             UserManager umManager = new UserManager();
-            List<Account> userList = umManager.GetAllUser();
+            IList<Account> userList = umManager.GetAllUser();
 
             List<UserDTO> list = new List<UserDTO>();
             foreach (var user in userList)

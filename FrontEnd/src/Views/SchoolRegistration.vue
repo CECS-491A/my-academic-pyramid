@@ -4,80 +4,77 @@
     <v-app id="schoolRegistration">
       <v-card>
         <v-toolbar>
-          <v-toolbar-title>Create User</v-toolbar-title>
+          <v-toolbar-title>School Registration</v-toolbar-title>
         </v-toolbar>
+        <v-card-title primary-title>
+          <div>
+            <h3 class="headline mb-0">Import JSON File</h3>
+          </div>
+        </v-card-title>
+        <FileReader @load="text = $event"></FileReader>
+        <v-btn @click="importData" color="light-blue">Import Data</v-btn>
+
         <v-card-text>
           <form>
             <v-text-field
               id="schoolName"
-              v-model="school.SchoolName"
+              v-model="schoolData.schoolDTO.SchoolName"
               :error-messages="textErrors"
               label="School Name"
               required
-              @input="$v.schoolName.$touch()"
-              @blur="$v.schoolName.$touch()"
+              @input="$v.schoolData.schoolDTO.SchoolName.$touch()"
+              @blur="$v.schoolData.schoolDTO.SchoolName.$touch()"
             ></v-text-field>
 
             <v-text-field
               id="schoolContactEmail"
-              v-model="school.SchoolContactEmail"
+              v-model="schoolData.schoolDTO.SchoolContactEmail"
               :error-messages="emailErrors"
               label="School Contact Email"
               required
-              @input="$v.school.SchoolContactEmail.$touch()"
-              @blur="$v.school.SchoolContactEmail.$touch()"
+              @input="$v.schoolData.schoolDTO.SchoolContactEmail.$touch()"
+              @blur="$v.schoolData.schoolDTO.SchoolContactEmail.$touch()"
             ></v-text-field>
 
             <v-text-field
               id="schoolEmailDomain"
-              v-model="school.SchoolEmailDomain"
+              v-model="schoolData.schoolDTO.SchoolEmailDomain"
+              :error-messages="domainErrors"
               label="School Email Domain"
               required
-              @input="$v.formData.LastName.$touch()"
-              @blur="$v.formData.LastName.$touch()"
+              @input="$v.schoolData.schoolDTO.SchoolEmailDomain.$touch()"
+              @blur="$v.schoolData.schoolDTO.SchoolEmailDomain.$touch()"
             ></v-text-field>
-
-         
-
-			
-<v-tabs left color="cyan" dark icons-and-text>
-	<v-tabs-slider color="green"></v-tabs-slider>
-	<v-tab id="JSONfile">File Upload </v-tab>
-	<v-tab-item>
-	</v-tab-item>
-	<v-tab id="ManualEnter">Enter manually</v-tab>
-	<v-tab-item>
-		<courseTable></courseTable>
-			<teacherTable></teacherTable>
-	</v-tab-item>
-</v-tabs>
-            <div v-for="item in teachers"
-			:key="item.FirstName">
-			test
-			{{item.FirstName}}
-			{{item.LastName}}
-			{{item.MiddleName}}
-			{{item.DepartmentName}}
-			</div>
-
-            <v-btn @click="submitData">submit</v-btn>
-            <v-alert
-              :value="failedAlert"
-              type="error"
-              transition="scale-transition"
-            >Submit Failed. Please check all fields</v-alert>
-
-            <v-alert
-              :value="successAlert"
-              type="success"
-              transition="scale-transition"
-            >Submit Sucessfully</v-alert>
-
-			
-
-            <v-btn @click="clear">clear</v-btn>
           </form>
         </v-card-text>
+        <v-alert
+          v-model="departmentError"
+          type="error"
+          transition="scale-transition"
+        >Please enter departments</v-alert>
+        <departmentTable></departmentTable>
+
+        <v-alert
+          v-model="courseError"
+          type="error"
+          transition="scale-transition"
+        >Please enter courses</v-alert>
+        <courseTable></courseTable>
+
+        <v-alert
+          v-model="teacherError"
+          type="error"
+          transition="scale-transition"
+        >Please enter teachers</v-alert>
+        <teacherTable></teacherTable>
+        <v-alert :value="failedAlert" type="error" transition="scale-transition">{{errors}}</v-alert>
+        <v-alert
+          :value="successAlert"
+          type="success"
+          transition="scale-transition"
+        >School is registered Sucessfully</v-alert>
+
+        <v-btn @click="RegisterSchool">submit</v-btn>
       </v-card>
     </v-app>
   </div>
@@ -89,64 +86,69 @@
 /*global console*/ /* eslint no-console: "off" */
 import { validationMixin } from "vuelidate";
 
-import { required, maxLength, email } from "vuelidate/lib/validators";
+import { required, maxLength, email, helpers } from "vuelidate/lib/validators";
 import courseTable from "@/components/SchoolRegistration/CourseTable";
 import teacherTable from "@/components/SchoolRegistration/TeacherTable";
+import departmentTable from "@/components/SchoolRegistration/DepartmentTable";
+import FileReader from "@/components/SchoolRegistration/FileReader";
 
+const domainValidation = helpers.regex(
+  "alpha",
+  /(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]/
+);
 export default {
   mixins: [validationMixin],
 
   validations: {
-    school: {
-      SchoolName: { required, maxLength: maxLength(10) },
-      SchoolContactEmail: { required, email },
-
+    schoolData: {
+      schoolDTO: {
+        SchoolName: { required, maxLength: maxLength(100) },
+        SchoolContactEmail: { required, email },
+        SchoolEmailDomain: { required, domainValidation }
+      }
     }
   },
-  components:{
-	  courseTable,
-	  teacherTable
+  components: {
+    courseTable,
+    teacherTable,
+    departmentTable,
+    FileReader
   },
 
   data: () => ({
-    school: {
-      SchoolName: "",
-      SchoolContactEmail: "",
-      SchoolEmailDomain: ""
+    schoolData: {
+      schoolDTO: {
+        SchoolName: "",
+        SchoolContactEmail: "",
+        SchoolEmailDomain: ""
+      },
+
+      departmentDTO: [],
+
+      CourseDTO: [],
+
+      TeacherDTO: []
     },
 
-    departments: {
-      DepartmentName: ""
-    },
-
-    departmentItems: [],
-
-    courses: [{
-      CourseName: "",
-      SchoolName: "",
-      DepartmentName: "",
-      TeacherFirstName: "",
-      TeacherLastName: ""
-    }],
-
-    teachers: [{
-      FirstName: "",
-      MiddleName: "",
-      LastName: "",
-      DepartmentName: ""
-    }]
+    text: "",
+    errors: "",
+    departmentError: false,
+    courseError: false,
+    teacherError: false,
+    failedAlert: false,
+    successAlert: false
   }),
 
   computed: {
     textErrors() {
       const errors = [];
 
-      if (!this.$v.school.SchoolName.$dirty) return errors;
+      if (!this.$v.schoolData.schoolDTO.SchoolName.$dirty) return errors;
 
-      !this.$v.school.SchoolName.maxLength &&
+      !this.$v.schoolData.schoolDTO.SchoolName.maxLength &&
         errors.push("Name must be at most 10 characters long");
 
-      !this.$v.school.SchoolName.required &&
+      !this.$v.schoolData.schoolDTO.SchoolName.required &&
         errors.push("Last Name is required.");
 
       return errors;
@@ -155,33 +157,130 @@ export default {
     emailErrors() {
       const errors = [];
 
-      if (!this.$v.school.SchoolContactEmail.$dirty) return errors;
+      if (!this.$v.schoolData.schoolDTO.SchoolContactEmail.$dirty)
+        return errors;
 
-      !this.$v.school.SchoolContactEmail.email && errors.push("Must be valid e-mail");
+      !this.$v.schoolData.schoolDTO.SchoolContactEmail.email &&
+        errors.push("Must be valid e-mail");
 
-      !this.$v.school.SchoolContactEmail.required && errors.push("E-mail is required");
+      !this.$v.schoolData.schoolDTO.SchoolContactEmail.required &&
+        errors.push("E-mail is required");
+
+      return errors;
+    },
+    domainErrors() {
+      const errors = [];
+
+      if (!this.$v.schoolData.schoolDTO.SchoolEmailDomain.$dirty) return errors;
+
+      !this.$v.schoolData.schoolDTO.SchoolEmailDomain.domainValidation &&
+        errors.push("Must be valid domain");
+
+      !this.$v.schoolData.schoolDTO.SchoolEmailDomain.required &&
+        errors.push("Domain is required");
 
       return errors;
     }
   },
   created() {
+    this.$eventBus.$on("SendDepartmentTable", departments => {
+      this.schoolData.departmentDTO = departments;
+      /* eslint no-console: "off" */
+      console.log("Receive department");
+    });
+
     this.$eventBus.$on("SendCourseTable", courses => {
-      this.courses = courses
-	}),
-	this.$eventBus.$on("SendTeacherTable", teachers => {
-      this.teachers = teachers
-	})
-	
+      this.schoolData.CourseDTO = courses;
+      /* eslint no-console: "off" */
+      console.log("Receive crouse");
+    }),
+      this.$eventBus.$on("SendTeacherTable", teachers => {
+        this.schoolData.TeacherDTO = teachers;
+      });
   },
   watch: {
-    DateOfBirth(val) {
-      val && setTimeout(() => (this.$refs.picker.activePicker = "YEAR"));
+    schoolData() {
+      this.$eventBus.$emit("TeacherTableFromFile", this.schoolData.TeacherDTO),
+        this.$eventBus.$emit(
+          "DepartmentTableFromFile",
+          this.schoolData.departmentDTO
+        ),
+        this.$eventBus.$emit("CourseTableFromFile", this.schoolData.CourseDTO),
+        this.$eventBus.$emit(
+          "TeacherTableFromFile",
+          this.schoolData.TeacherDTO
+        );
+    },
+    "schoolData.departmentDTO": function() {
+      if (this.schoolData.departmentDTO.length) {
+        this.departmentError = false;
+      }
+    },
+    "schoolData.CourseDTO": function() {
+      if (this.schoolData.CourseDTO.length) {
+        this.courseError = false;
+      }
+    },
+    "schoolData.TeacherDTO": function() {
+      if (this.schoolData.TeacherDTO.length) {
+        this.teacherError = false;
+      }
     }
   },
   methods: {
-    submitData() {
-     
-  }
+    tableValidation() {
+      if (!this.schoolData.departmentDTO.length) {
+        this.departmentError = true;
+      }
+      if (!this.schoolData.CourseDTO.length) {
+        this.courseError = true;
+      }
+      if (!this.schoolData.TeacherDTO.length) {
+        this.teacherError = true;
+      }
+    },
+    convertData() {
+      this.schoolData = JSON.parse(this.text);
+    },
+    importData() {
+      this.schoolData = JSON.parse(this.text);
+    },
+    RegisterSchool() {
+      this.tableValidation();
+      this.$v.$touch();
+      if (
+        this.$v.$invalid ||
+        !this.schoolData.departmentDTO.length ||
+        !this.schoolData.CourseDTO.length ||
+        !this.schoolData.TeacherDTO.length
+      ) {
+        (this.errors = "Submit Failed. Please check all fields"),
+          (this.failedAlert = true);
+      } else {
+        this.axios({
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + sessionStorage.SITtoken
+          },
+          method: "POST",
+          crossDomain: true,
+          url: this.$hostname + "SchoolRegistration",
+          data: this.schoolData
+        })
+          .then(() => {
+			this.failedAlert = false;
+            this.successAlert = true;
+          })
+
+          .catch(err => {
+            if (err.response.status == 409) {
+              this.errors = "School with same name exists";
+              this.failedAlert = true;
+            }
+          });
+      }
+    }
   }
 };
 </script>

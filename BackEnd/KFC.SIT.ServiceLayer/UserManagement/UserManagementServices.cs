@@ -105,7 +105,11 @@ namespace ServiceLayer.UserManagement.UserAccountServices
                                         .FirstOrDefault();
             return user;
         }
-
+        /// <summary>
+        /// Find user by user name
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
         public Account FindByUsername(String username)
         {
             Account user = _DbContext.Set<Account>().Where( u => u.UserName.Equals(username)).FirstOrDefault();
@@ -200,6 +204,7 @@ namespace ServiceLayer.UserManagement.UserAccountServices
             return user;
         }
 
+        // Luis
         public Account AssignCategory(Account user, Category category)
         {
             Category existingCategory = _DbContext.Categories.FirstOrDefault(c => c.Value == category.Value);
@@ -216,6 +221,7 @@ namespace ServiceLayer.UserManagement.UserAccountServices
             return user;
         }
 
+        // Luis
         public int? FindIdBySsoId(Guid ssoId)
         {
             int? userId = null;

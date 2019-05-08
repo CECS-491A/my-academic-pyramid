@@ -125,6 +125,7 @@
     <Compile Include="SchoolRegistration\ISchoolRegistrationService.cs" />
     <Compile Include="SchoolRegistration\SchoolRegistrationService.cs" />
     <Compile Include="ServiceExceptions\MessengerServiceException.cs" />
+    <Compile Include="ServiceExceptions\SchoolRegistrationException.cs" />
     <Compile Include="ServiceExceptions\SignalRMappingException.cs" />
     <Compile Include="Search\ISearchService.cs" />
     <Compile Include="Search\SearchService.cs" />
