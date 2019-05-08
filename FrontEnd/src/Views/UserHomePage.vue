@@ -39,8 +39,8 @@ export default {
 }
 </script>
 <style>
-body {
-  /* background-image: url('../assets/csulb_pyramid.jpg'); */
+.home {
+  background-image: url('../assets/background2.jpg');
   width: 2000px;
   margin: auto;
 }

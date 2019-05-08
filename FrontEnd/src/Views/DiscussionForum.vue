@@ -83,6 +83,7 @@
               :key="item.Id"
               avatar
               ripple
+              @click=""
             >
               <v-list-tile-content>
                 <v-list-tile-title>{{ item.AccountName }}</v-list-tile-title>
@@ -111,6 +112,10 @@
               </v-list-tile-action>
 
             </v-list-tile>
+            <v-divider
+              v-if="index + 1 < questions.length"
+              :key="index"
+            ></v-divider>
           </template>
         </v-list>
 
