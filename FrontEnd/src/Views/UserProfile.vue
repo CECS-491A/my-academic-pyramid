@@ -48,15 +48,6 @@
             prepend-inner-icon="business"
             readonly/>
         </v-flex>
-
-        <v-alert
-            :value="errorMessage"
-            id="errorMessage"
-            type="error"
-            transition="scale-transition"
-        >
-            {{errorMessage}}
-        </v-alert>
         
       </v-layout>
 
@@ -74,6 +65,15 @@
         </v-flex>
         
       </v-layout>
+
+      <v-alert
+          :value="errorMessage"
+          id="errorMessage"
+          type="error"
+          transition="scale-transition"
+      >
+          {{errorMessage}}
+      </v-alert>
     </v-container>
   </v-form>
 </template>
