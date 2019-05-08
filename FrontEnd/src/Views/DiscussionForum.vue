@@ -34,7 +34,7 @@
             </v-flex>
             <v-spacer></v-spacer>
 
-            <v-btn small> Post </v-btn>
+            <v-btn small @click="PostQuestion" > Post </v-btn>
 
             <v-btn icon>
               <v-icon>refresh</v-icon>
@@ -187,6 +187,9 @@ import axios from 'axios'
         this.getSchoolQuestions()
     },
     methods: {
+      gotoPost () {
+        this.$router.push("/DiscussionForum/PostQuestion")
+      }
         getSchoolQuestions() {
             this.axios({
               headers: {
