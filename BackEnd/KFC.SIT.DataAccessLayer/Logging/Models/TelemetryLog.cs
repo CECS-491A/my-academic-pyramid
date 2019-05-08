@@ -19,9 +19,6 @@ namespace DataAccessLayer.Models
         [BsonElement("UserName")]
         public string UserName { get; set; }
 
-        [BsonElement("Session Duration")]
-        public int SessionDuration { get; set; }
-
         [BsonElement("Action")]
         public string Action { get; set; }
 

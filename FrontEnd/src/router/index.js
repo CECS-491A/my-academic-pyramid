@@ -13,8 +13,14 @@ import UserRegistration from '@/Views/UserRegistration'
 import UserHomePage from '@/Views/UserHomePage'
 import Redirect from '@/Views/Redirect'
 import UsageAnalysisDashboard from '@/Views/UsageAnalysisDashboard'
-import SchoolRegistration from '@/Views/SchoolRegistration'
 //import Search from '@/Views/Search'
+import DiscussionForum from '@/Views/DiscussionForum'
+import PostQuestion from '@/components/DiscussionForum/PostQuestion'
+// delete later
+import TestComponent from '@/components/DiscussionForum/TestComponent'
+import SchoolRegistration from '@/Views/SchoolRegistration'
+import Search from '@/Views/Search'
+import Profile from '@/Views/UserProfile'
 
 Vue.use(Router)
 Vue.use(Vuetify)
@@ -80,14 +86,35 @@ export default new Router({
     component: UsageAnalysisDashboard
   },
   {
+    path: "/DiscussionForum",
+    name: "DiscussionForum",
+    component: DiscussionForum
+  },
+  // delete later
+  {
+    path: "/TestComponent",
+    name: "TestComponent",
+    component: TestComponent
+  },
+  {
     path: "/SchoolRegistration",
     name: "SchoolRegistration",
     component: SchoolRegistration
+  },
+  {
+   path: "/Search",
+   name: "Search",
+   component: Search
+  },
+  {
+    path: '/Profile/:id',
+    name: 'Profile',
+    component: Profile
+  },
+  {
+    path: '/DiscussionForum/PostQuestion',
+    name: 'PostQuestion',
+    component: PostQuestion
   }
-  //{
-  //  path: "/Search",
-  //  name: "Search",
-  //  component: Search
-  //}
   ]
 })

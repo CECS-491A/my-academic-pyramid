@@ -20,13 +20,15 @@ namespace ServiceLayer.DiscussionForum
 
         public Answer PostAnswer(Answer answer)
         {
-            _db.Entry(answer).State = EntityState.Added;
-            return answer;
+            answer.CreatedDate = DateTime.Now;
+            return _db.Answers.Add(answer);
         }
 
         public Answer GetAnswer(int answerId)
         {
-            return _db.Answers.Find(answerId);
+            return _db.Answers
+                .Where(a => a.Id == answerId)
+                .FirstOrDefault();
         }
 
         public List<Answer> GetAnswers(int questionId)
@@ -57,43 +59,38 @@ namespace ServiceLayer.DiscussionForum
             {
                 return null;
             }
-            _db.Entry(answer).State = EntityState.Deleted;
-            return answer;
+            return _db.Answers.Remove(answer);
         }
 
         public Answer IncreaseAnswerSpamCount(int answerId)
         {
             var answer = GetAnswer(answerId);
             answer.SpamCount++;
-            answer = UpdateAnswer(answer);
-            return answer;
+            return UpdateAnswer(answer);
         }
 
         public Answer IncreaseHelpfulCount(int answerId)
         {
             var answer = GetAnswer(answerId);
             answer.HelpfulCount++;
-            answer = UpdateAnswer(answer);
-            return answer;
+            return UpdateAnswer(answer);
         }
 
         public Answer IncreaseUnHelpfulCount(int answerId)
         {
             var answer = GetAnswer(answerId);
             answer.UnHelpfulCount++;
-            answer = UpdateAnswer(answer);
-            return answer;
+            return UpdateAnswer(answer);
         }
 
         public Answer MarkAnswerAsCorrect(int answerId)
         {
             var answer = GetAnswer(answerId);
             answer.IsCorrectAnswer = true;
-            answer = UpdateAnswer(answer);
-            return answer;
+            return UpdateAnswer(answer);
         }
 
-        public AnswerResponseDTO ApplyAnswerFortmat(Answer answer)
+        public AnswerResponseDTO ApplyAnswerFormat(Answer answer)
         {
             AnswerResponseDTO aRDTO = new AnswerResponseDTO
             {
@@ -111,16 +108,16 @@ namespace ServiceLayer.DiscussionForum
             return aRDTO;
         }
 
-        public Question GetPostedQuestion(int questionId)
-        {
-            return _db.Questions.Find(questionId);
-        }
+        //       public Question GetPostedQuestion(int questionId)
+        //       {
+        //           return _db.Questions.Find(questionId);
+        //       }
 
-        public Question UpdateAnyPostedQuestion(Question question)
-        {
-            _db.Entry(question).State = EntityState.Modified;
-            return question;
-            
-        }
+        //       public Question UpdateAnyPostedQuestion(Question question)
+        //       {
+        //           _db.Entry(question).State = EntityState.Modified;
+        //           return question;
+
+        //       }
     }
 }

@@ -1,5 +1,6 @@
 <template>
-  <div>
+<v-app>
+<div>
     <v-form>
         <v-container>
             <v-layout row wrap>
@@ -14,12 +15,46 @@
                 <v-flex>
                     <v-text-field
                       label="Solo"
+                      placeholder="Middle Name"
+                      solo
+                      v-model="middleName"
+                    ></v-text-field>
+                </v-flex>
+                <v-flex>
+                    <v-text-field
+                      label="Solo"
                       placeholder="Last Name"
                       solo
                       v-model="lastName"
                     ></v-text-field>
                 </v-flex>
             </v-layout>
+
+            <v-layout row>
+                <v-flex
+                grow
+                pa-1
+                >
+                <v-select
+                    v-model="school"
+                    :items="schools"
+                    label="School"
+                    @input="getDepartments"
+                ></v-select>
+                </v-flex>
+                
+                <v-flex
+                shrink
+                pa-1
+                >
+                <v-select
+                    v-model="department"
+                    :items="departments"
+                    label="Department"
+                ></v-select>
+                </v-flex>
+            </v-layout>
+
             <v-layout row wrap>
               <v-flex xs12 sm6 md4>
                 <v-menu
@@ -55,9 +90,20 @@
 
           <v-btn @click="registerUser" color="primary">Complete Registration</v-btn>
           <v-btn @click="logoutFunc">Log Out</v-btn>
+
+          <v-alert
+              :value="errorMessage"
+              id="errorMessage"
+              type="error"
+              transition="scale-transition"
+          >
+              {{errorMessage}}
+          </v-alert>
         </v-container>
     </v-form>
   </div>
+</v-app>
+  
 </template>
 
 <script>
@@ -69,10 +115,16 @@ export default {
   data () {
     return {
       firstName: "",
+      middleName: "",
       lastName: "",
       userName: "",
       email: "",
       dateOfBirth: null,
+      school: "",
+      schools: [],
+      department: "",
+      departments: [],
+      errorMessage: "",
       menu: false
     }
   },
@@ -89,8 +141,11 @@ export default {
     registerUser() {
         let requestPayload = {
           FirstName: this.firstName,
+          MiddleName: this.middleName,
           LastName: this.lastName,
-          DateOfBirth: this.dateOfBirth
+          DateOfBirth: this.dateOfBirth,
+          SchoolId: this.school,
+          DepartmentId: this.department
         }
         let headersObject = {
           headers: {
@@ -128,7 +183,51 @@ export default {
                 .catch(error => {
 
                 })
-    }
+    },
+    getSchools: function(){
+        this.errorMessage = "";
+
+        const url = `${this.$hostname}search/selections`;
+        Axios
+        .get(url, {
+            params:{
+                SearchCategory: 0
+            },
+            headers: { "Content-Type": "application/json", Authorization: "Bearer " + sessionStorage.SITtoken }
+            
+        })
+        .then(response =>{
+            this.schools = response.data;
+        })
+        .catch(error =>{
+            this.errorMessage = error.response.data
+        })
+        
+    },
+    getDepartments: function(){
+        this.errorMessage = "";
+
+        const url = `${this.$hostname}search/selections`;
+        Axios
+        .get(url, {
+            params:{
+                SearchCategory: 1,
+                SearchSchool: this.school
+            },
+            headers: { "Content-Type": "application/json", Authorization: "Bearer " + sessionStorage.SITtoken }
+            
+        })
+        .then(response =>{
+            this.departments = response.data;
+            if(this.departments.length > 1){
+                this.departments = [{id: 0, text: "NONE", value: 0 }].concat(this.departments)
+            }
+        })
+        .catch(error =>{
+            this.errorMessage = error.response.data
+        })
+        
+    },
   },
 
   created() {        
@@ -148,6 +247,9 @@ export default {
                   // delete token to logout the user.
                   // Redirect user to error page.
                 })
-  }
+  },
+  beforeMount(){
+        this.getSchools()
+    },
 }
 </script>

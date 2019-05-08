@@ -7,7 +7,7 @@
     <v-layout column align-center>
       <v-flex class="mt-5">
         <v-avatar size="100">
-          <img src="">
+          <img src="../assets/Vong.jpg">
         </v-avatar>
         <p >User</p>
       </v-flex>
@@ -51,7 +51,7 @@ export default {
           name: "Search",
           icon: "search",
           text: "Search",
-          route: "/",
+          route: "/Search",
           onlyActive: true
         },
         {

@@ -42,7 +42,7 @@ export default {
   },
   methods: {
     logOut() {
-      let logoutUrl = `${this.$hostname}/logout`
+      let logoutUrl = `${this.$hostname}logout`
       let headersObject = {
           headers: {
           'Accept': 'application/json',

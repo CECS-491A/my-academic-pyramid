@@ -1,8 +1,11 @@
 ﻿using DataAccessLayer.DTOs;
+using DataAccessLayer.DTOs.SearchDTO;
+using DataAccessLayer.Models.DiscussionForum;
 using DataAccessLayer.Models.School;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,14 +13,18 @@ namespace ServiceLayer.Search
 {
     public interface ISearchService
     {
-        List<SearchPersonDTO> SearchAllStudentsInSchool(int schoolId, string searchName);
-        List<SearchPersonDTO> SearchAllTeachersInSchool(int schoolId, string searchName);
-        List<ForumPostDTO> SearchAllForumPostsInSchool(int schoolId, string searchName);
-        List<SearchPersonDTO> SearchStudentsInDepartment(int schoolId, int departmentId, string searchName);
-        List<SearchPersonDTO> SearchTeachersInDepartment(int schoolId, int departmentId, string searchName);
-        List<ForumPostDTO> SearchForumPostsInDepartment(int schoolId, int departmentId, string searchName);
+        List<SearchPersonDTO> GetStudents(Expression<Func<Student, bool>> predicate);
+        List<SearchPersonDTO> GetTeachers(Expression<Func<SchoolTeacher, bool>> predicate);
+
+        List<SearchForumPostDTO> GetSchoolQuestions(Expression<Func<SchoolQuestion, bool>> predicate);
+        List<SearchForumPostDTO> GetDepartmentQuestions(Expression<Func<DepartmentQuestion, bool>> predicate);
+        List<SearchForumPostDTO> GetCourseQuestions(Expression<Func<CourseQuestion, bool>> predicate);
+
         Student FindStudentByAccountId(int id);
-        List<DepartmentDTO> GetDepartments(int schoolId);
-        //IEnumerable<Question> SearchQuestions();
+        List<SearchFilterSelectionDTO> GetSchools();
+        List<SearchFilterSelectionDTO> GetDepartments(int schoolId);
+        List<SearchFilterSelectionDTO> GetCourses(int schoolId, int departmentId);
+
+        Course GetCourse(int courseId);
     }
 }

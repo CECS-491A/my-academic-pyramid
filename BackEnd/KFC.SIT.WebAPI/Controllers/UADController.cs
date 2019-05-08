@@ -16,21 +16,21 @@ namespace KFC.SIT.WebAPI.Controllers
         private DashboardManager _dashboardManager = new DashboardManager(url, database);
 
         [HttpGet]
-        [ActionName("api/dashboard/recentMonths")]
+        [ActionName("recentMonths")]
         public IList<string> GetRecentMonths()
         {
             return _dashboardManager.GetRecentMonths();
         }
 
         [HttpGet]
-        [ActionName("api/dashboard/sLogin")]
+        [ActionName("sLogin")]
         public IList<double> GetScuessfulLogin()
         {
             return _dashboardManager.GetAverageSuccessfulLogin();
         }
 
         [HttpGet]
-        [ActionName("api/dashboard/avgSession")]
+        [ActionName("avgSession")]
         public long[] GetavgSessionTime()
         {
             return _dashboardManager.GetAverageSessionDuration();
