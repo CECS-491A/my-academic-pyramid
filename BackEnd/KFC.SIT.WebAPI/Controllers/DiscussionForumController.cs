@@ -42,7 +42,7 @@ namespace KFC.SIT.WebAPI.Controllers
                 try
                 {
                     // TODO accountId should come from authorization and take out hard-coded value
-                    discussionForumManager.PostQuestion(questionDTO, 2);
+                    discussionForumManager.PostQuestion(questionDTO, questionDTO.AccountId);
                     _db.SaveChanges();
                     return Content(HttpStatusCode.OK, "Question posted successfully");
                 }

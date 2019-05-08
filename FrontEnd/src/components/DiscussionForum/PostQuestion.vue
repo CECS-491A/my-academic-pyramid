@@ -109,10 +109,11 @@ export default {
       const url = 'DiscussionForum/PostQuestion'
       this.loading = true;
       this.axios.post(url, {
-        QuestionType: "DraftQuestion",
-        SchoolId: getSchoolId(),
-        DepartmentId: getDepartmentId(),
-        CourseId: getCourseId(),
+        QuestionType: "SchoolQuestion",
+        // SchoolId: getSchoolId(),
+        SchoolId: 1,        
+        //DepartmentId: getDepartmentId(),
+        //CourseId: getCourseId(),
         Text: document.getElementById('text').value,
         Exp: document.getElementById('exp').value,
         headers: {

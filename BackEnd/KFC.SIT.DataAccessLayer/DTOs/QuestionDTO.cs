@@ -13,7 +13,7 @@ namespace DataAccessLayer.DTOs
         public int SchoolId { get; set; }
         public int DepartmentId { get; set; }
         public int CourseId { get; set; }
-        //public int AccountId { get; set; }
+        public int AccountId { get; set; }
         public string Text { get; set; }
         public int ExpNeededToAnswer { get; set; }
     }
