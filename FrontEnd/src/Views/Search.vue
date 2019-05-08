@@ -290,7 +290,7 @@ export default {
             })
             .then(response =>{
                 this.departments = response.data;
-                if(this.departments.length > 1){
+                if(this.departments.length > 0){
                     this.departments = [{id: 0, text: "ALL", value: 0 }].concat(this.departments)
                 }
             })
@@ -315,7 +315,7 @@ export default {
             })
             .then(response =>{
                 this.courses = response.data
-                if(this.courses.length > 1){
+                if(this.courses.length > 0){
                     this.courses = [{id: 0, text: "ALL", value: 0 }].concat(this.courses)
                 }
             })
