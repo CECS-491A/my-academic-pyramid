@@ -168,12 +168,6 @@ namespace KFC.SIT.WebAPI.Controllers
             {
                 return Content(HttpStatusCode.Unauthorized, "Invalid Headers");
             }
-            SessionManager sm = new SessionManager();
-            if (!sm.ValidateSession(securityContext.Token))
-            {
-                return Content(HttpStatusCode.Unauthorized, "Invalid Token");
-            }
-            string updatedToken = sm.RefreshSession(securityContext.Token);
 
             try
             {
