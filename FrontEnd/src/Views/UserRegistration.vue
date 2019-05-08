@@ -198,6 +198,9 @@ export default {
         })
         .then(response =>{
             this.schools = response.data;
+            if(this.schools.length > 0){
+                this.schools = [{id: 0, text: "NONE", value: 0 }].concat(this.schools)
+            }
         })
         .catch(error =>{
             this.errorMessage = error.response.data
@@ -219,9 +222,6 @@ export default {
         })
         .then(response =>{
             this.departments = response.data;
-            if(this.departments.length > 1){
-                this.departments = [{id: 0, text: "NONE", value: 0 }].concat(this.departments)
-            }
         })
         .catch(error =>{
             this.errorMessage = error.response.data
