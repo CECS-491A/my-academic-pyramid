@@ -46,6 +46,32 @@
         }
       }
     },
+    fetchData() {
+      this.axios
+        .get('http://localhost:59364/api/dashboard/sLogin', {
+          headers: { "Content-Type": "application/Json" }
+        })
+        .then(response => {
+          this.datacollection.data = response.data;
+          console.log(response.data);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    fetchLabel() {
+      this.axios
+        .get('http://localhost:59364/api/dashboard/recentMonths', {
+          headers: { "Content-Type": "application/Json" }
+        })
+        .then(response => {
+          this.datacollection.labels = response.data;
+          console.log(response.data);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
     mounted () {
       //renderChart function renders the chart with the datacollection and options object.
       this.renderChart(this.datacollection, this.options)
