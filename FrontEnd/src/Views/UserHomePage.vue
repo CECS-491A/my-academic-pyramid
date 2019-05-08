@@ -38,3 +38,10 @@ export default {
   
 }
 </script>
+<style>
+.home {
+  background-image: url('../assets/csulb_pyramid.jpg');
+  width: 2000px;
+  margin: auto;
+}
+</style>
