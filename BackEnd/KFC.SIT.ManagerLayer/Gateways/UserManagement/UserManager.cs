@@ -389,5 +389,10 @@ namespace WebAPI.Gateways.UserManagement
 
         }
 
+        public UserProfileDTO GetUserProfile(int accountId)
+        {
+            return _userManagementServices.GetUserProfile(accountId);
+        }
+
     }
 }
