@@ -81,6 +81,7 @@ namespace ManagerLayer.Gateways.UsageAnalysisDashboard
             int duration = 6;
             int monthToday = DateTime.Today.Month;
             int yearToday = DateTime.Today.Year;
+            long[] output = new long[1000];
             IDictionary<int, long> numLoginInCertainDuration = _dashboardService.CountSuccessfulLogin(6);
             for (int i = 0; i < duration; i++)
             {
