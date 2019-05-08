@@ -7,7 +7,7 @@
     <v-layout column align-center>
       <v-flex class="mt-5">
         <v-avatar size="100">
-          <img src="../assets/Vong.jpg">
+          <img src="">
         </v-avatar>
         <p >User</p>
       </v-flex>

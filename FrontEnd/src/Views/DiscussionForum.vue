@@ -189,7 +189,7 @@ import axios from 'axios'
     methods: {
       gotoPost () {
         this.$router.push("/DiscussionForum/PostQuestion")
-      }
+      },
         getSchoolQuestions() {
             this.axios({
               headers: {
