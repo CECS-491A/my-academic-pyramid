@@ -11,7 +11,7 @@
           labels: ['Page0', 'Page1', 'Page2', 'Page3', 'Page4'],
           datasets: [
             {
-              label: 'Data One',
+              label: '# of Time Spent on the Page',
               backgroundColor: [
                             "rgba(255, 99, 132, 0.6)",
                             "rgba(54, 162, 235, 0.6)",
