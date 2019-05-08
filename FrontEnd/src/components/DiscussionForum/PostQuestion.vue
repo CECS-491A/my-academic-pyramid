@@ -110,6 +110,7 @@ export default {
       this.loading = true;
       this.axios.post(url, {
         QuestionType: "SchoolQuestion",
+        AccountId: sessionStorage.SITuserId,
         // SchoolId: getSchoolId(),
         SchoolId: 1,        
         //DepartmentId: getDepartmentId(),
@@ -153,6 +154,7 @@ export default {
          
         //'Send': 'application/json'
           QuestionType: "DraftQuestion",
+          AccountId: sessionStorage.SITuserId,
           Text: document.getElementById('text').value,
           Exp: document.getElementById('exp').value.toString(),
         headers: {
