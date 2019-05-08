@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using DataAccessLayer;
+using DataAccessLayer.DTOs;
 using DataAccessLayer.Models;
 using ServiceLayer.UserManagement.UserClaimServices;
 
@@ -243,6 +244,29 @@ namespace ServiceLayer.UserManagement.UserAccountServices
             // It can be null.
             return _DbContext.Categories.Where(c => c.Value == categoryValue)
                                         .FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Gets the profile information of a user
+        /// </summary>
+        /// <param name="accountId"></param>
+        /// <returns></returns>
+        public UserProfileDTO GetUserProfile(int accountId)
+        {
+            return _DbContext.Students
+                .Include("Courses")
+                .Where(s => s.AccountId == accountId)
+                .Select(s => new UserProfileDTO
+                {
+                    FirstName = s.Account.FirstName,
+                    MiddleName = s.Account.MiddleName,
+                    LastName = s.Account.LastName,
+                    SchoolName = s.SchoolDepartment.School.Name,
+                    DepartmentName = s.SchoolDepartment.Department.Name,
+                    Ranking = s.Account.Exp,
+                    Courses = s.Courses.Select(c => c.Course.Name).ToList()
+                })
+                .FirstOrDefault();
         }
 
     } // end of class
