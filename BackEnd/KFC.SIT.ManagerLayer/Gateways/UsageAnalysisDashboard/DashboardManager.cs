@@ -12,10 +12,25 @@ namespace ManagerLayer.Gateways.UsageAnalysisDashboard
         private DashboardService _dashboardService;
         private const string url = "mongodb+srv://super:superheroes@myacademicpyramidlogging-if0cx.mongodb.net/test?retryWrites=true";
         private const string database = "test";
+        public static string[] dateFormatConverter = { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
 
         public DashboardManager(string url, string database)
         {
             _dashboardService = new DashboardService(url, database);
+        }
+
+        public IList<string> GetRecentMonths()
+        {
+            int numOfMonth = BusinessRuleConstants.GetRecentMonths_Months;
+            int monthToday = DateTime.Today.Month;
+            IList<string> dateList = new List<string>();
+            for (int i = 0; i < numOfMonth; i++)
+            {
+                dateList.Add(dateFormatConverter[monthToday]);
+                monthToday--;
+                if (monthToday == 0) { monthToday = 12; }
+            }
+            return dateList;
         }
 
         /// <summary>
@@ -25,32 +40,32 @@ namespace ManagerLayer.Gateways.UsageAnalysisDashboard
         /// It will get the data of recent 12 month according to the business rules. 
         /// </summary>
         /// <returns>avgLogin</returns>
-        public IDictionary<int, double> GetAverageSuccessfulLogin()
+        public IList<double> GetAverageSuccessfulLogin()
         {
-            int numOfMonth = 12;
+            int numOfMonth = BusinessRuleConstants.GetAverageSuccessfulLogin_NumOfMonth;
             IDictionary<int, long> successLogin = _dashboardService.CountSuccessfulLogin(numOfMonth);
             IDictionary<int, long> failedLogin = _dashboardService.CountFailedLogin(numOfMonth);
-            Dictionary<int, double> avgLogin = new Dictionary<int, double>();
+            IList<double> avgLogin = new List<double>();
             int monthToday = DateTime.Today.Month;
 
             for (int i = 1; i < numOfMonth + 1; i++)
             {
                 double avgSuccessfulLogin = 0;
 
-                if (successLogin.ContainsKey(monthToday))
+                if (successLogin.ContainsKey(monthToday)) // checks there is logged in user in the month
                 {
                     double numSuccessfulLogin = 0;
                     double numFailedLogin = 0;
                     numSuccessfulLogin = successLogin[monthToday];
 
-                    if (failedLogin.ContainsKey(monthToday))
+                    if (failedLogin.ContainsKey(monthToday)) // checks there is failed logged attempts in the month
                     {
                         numFailedLogin = failedLogin[monthToday];
                     }
                     double totalLoginAttempt = numSuccessfulLogin + numFailedLogin;
                     avgSuccessfulLogin = numSuccessfulLogin / totalLoginAttempt;
                 }
-                avgLogin.Add(monthToday, avgSuccessfulLogin);
+                avgLogin.Add(avgSuccessfulLogin);
                 monthToday--;
                 if (monthToday == 0) { monthToday = 12; }
             }
@@ -88,12 +103,11 @@ namespace ManagerLayer.Gateways.UsageAnalysisDashboard
 
         /// <summary>
         /// Get the list of five features that are used most
-        /// parameter = number of features
         /// </summary>
         /// <returns></returns>
         public IDictionary<string, long> GetMostUsedFeature()
         {
-            IDictionary<string, long> featureNumUsed = _dashboardService.CountMostUsedFiveFeature(5);
+            IDictionary<string, long> featureNumUsed = _dashboardService.CountMostUsedFeature(BusinessRuleConstants.GetMostUsedFeature_FeatureNumber);
             return featureNumUsed;
         }
 
@@ -106,17 +120,17 @@ namespace ManagerLayer.Gateways.UsageAnalysisDashboard
         /// Get the list of logged in users and number of total users 
         /// </summary>
         /// <returns></returns>
-        public long[] GetSuccessfulLoggedInUsers()
+        public IDictionary<string, long> GetSuccessfulLoggedInUsers()
         {
-            int duration = 6;
-            long[] successfulLoggedInUsers = new long[duration + 1];
+            int duration = BusinessRuleConstants.GetSuccessfulLoggedInUsers_Duartion; // 6
+            Dictionary<string, long> successfulLoggedInUsers = new Dictionary<string, long>();
             long numTotalUser = _dashboardService.CountTotalUsers();
             int monthToday = DateTime.Today.Month;
 
-            successfulLoggedInUsers[0] = numTotalUser;
+            successfulLoggedInUsers.Add("total", numTotalUser);
             for (int i = 1; i < duration + 1; i++)
             {
-                successfulLoggedInUsers[i] = _dashboardService.CountUniqueLoggedInUsers(monthToday);
+                successfulLoggedInUsers.Add(dateFormatConverter[monthToday], _dashboardService.CountUniqueLoggedInUsers(monthToday));
                 monthToday--;
                 if (monthToday == 0) { monthToday = 12; }
             }

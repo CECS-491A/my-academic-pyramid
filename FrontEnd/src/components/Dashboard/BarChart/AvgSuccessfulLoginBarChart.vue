@@ -8,7 +8,7 @@
       return {
         datacollection: {
           //Data to be represented on x-axis
-          labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+          labels: [],
           datasets: [
             {
               label: 'Data One',
@@ -17,7 +17,7 @@
               borderWidth: 1,
               pointBorderColor: '#249EBF',
               //Data to be represented on y-axis
-              data: [40, 20, 30, 50, 90, 10, 20, 40, 50, 70, 90, 100]
+              data: []
             }
           ]
         },
@@ -45,6 +45,32 @@
           maintainAspectRatio: false
         }
       }
+    },
+    fetchData() {
+      this.axios
+        .get('http://localhost:59364/api/dashboard/sLogin', {
+          headers: { "Content-Type": "application/List" }
+        })
+        .then(response => {
+          this.datacollection.data = response.data;
+          console.log(response.data);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    fetchLabel() {
+      this.axios
+        .get('http://localhost:59364/api/dashboard/recentMonths', {
+          headers: { "Content-Type": "application/List" }
+        })
+        .then(response => {
+          this.datacollection.labels = response.data;
+          console.log(response.data);
+        })
+        .catch(error => {
+          console.log(error);
+        });
     },
     mounted () {
       //renderChart function renders the chart with the datacollection and options object.

@@ -16,15 +16,21 @@ namespace KFC.SIT.WebAPI.Controllers
         private DashboardManager _dashboardManager = new DashboardManager(url, database);
 
         [HttpGet]
-        [Route("api/dashboard/slogin")]
-        public long[] GetScuessfulLogin()
+        [ActionName("api/dashboard/recentMonths")]
+        public IList<string> GetRecentMonths()
         {
-            throw new System.Exception();
-            //return _dashboardManager.GetAverageSuccessfulLogin();
+            return _dashboardManager.GetRecentMonths();
         }
 
         [HttpGet]
-        [Route("api/dashboard/avgSession")]
+        [ActionName("api/dashboard/sLogin")]
+        public IList<double> GetScuessfulLogin()
+        {
+            return _dashboardManager.GetAverageSuccessfulLogin();
+        }
+
+        [HttpGet]
+        [ActionName("api/dashboard/avgSession")]
         public long[] GetavgSessionTime()
         {
             return _dashboardManager.GetAverageSessionDuration();
@@ -38,11 +44,10 @@ namespace KFC.SIT.WebAPI.Controllers
         //}
 
         [HttpGet]
-        [Route("api/dashboard/feature")]
-        public long[] GetFeatureData()
+        [ActionName("api/dashboard/feature")]
+        public IDictionary<string, long> GetFeatureData()
         {
-            throw new System.Exception();
-            //return _dashboardManager.GetAverageSuccessfulLogin();
+            return _dashboardManager.GetMostUsedFeature();
         }
 
     }

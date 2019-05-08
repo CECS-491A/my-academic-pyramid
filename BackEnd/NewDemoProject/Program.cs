@@ -21,7 +21,7 @@ namespace NewDemoProject
             DashboardService service = new DashboardService(url, database);
             IDictionary<int, long> get = service.CountSuccessfulLogin(12);
             IDictionary<int, long> get2 = service.CountFailedLogin(12);
-            IDictionary<int, double> get3 = manager.GetAverageSuccessfulLogin();
+            //IDictionary<int, double> get3 = manager.GetAverageSuccessfulLogin();
             /**
             Console.WriteLine("succesufl");
             foreach (var s in get)
@@ -41,11 +41,7 @@ namespace NewDemoProject
             **/
             long sum = service.CountUniqueLoggedInUsers(1);
             Console.WriteLine("sum:" + sum);
-            IDictionary<string, long> something3 = service.CountMostUsedFiveFeature(2);
-            foreach (var tmp in something3)
-            {
-                Console.WriteLine(tmp);
-            }
+            //IDictionary<string, long> something3 = service.CountMostUsedFiveFeature(2);
             Console.WriteLine("hi");
 
 

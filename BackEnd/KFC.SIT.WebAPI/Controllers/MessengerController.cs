@@ -2,14 +2,10 @@
 using WebAPI.Gateways.Messenger;
 using Microsoft.AspNet.SignalR;
 using System;
-using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
-using System.Web;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using WebAPI.Signalr;
-using System.Net.Http;
 using DataAccessLayer.DTOs;
 using System.Collections.Generic;
 using WebAPI.Gateways.UserManagement;
@@ -17,11 +13,8 @@ using SecurityLayer.Authorization;
 using KFC.SIT.WebAPI.Utility;
 using SecurityLayer.Sessions;
 using SecurityLayer.Authorization.AuthorizationManagers;
-using DataAccessLayer;
-using System.Web.Http.Controllers;
 using DataAccessLayer.Models;
 using System.Data.Entity.Infrastructure;
-using static ServiceLayer.ServiceExceptions.SignalRException;
 using static ServiceLayer.ServiceExceptions.MessengerServiceException;
 
 namespace KFC.SIT.WebAPI.Controllers
@@ -40,7 +33,7 @@ namespace KFC.SIT.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Return all conversations of authenticated user Id
+        /// Return all conversations of authenticated user 
         /// Auth User Id will be get from the security context which from the token 
         /// </summary>
         /// <returns></returns>
@@ -530,6 +523,11 @@ namespace KFC.SIT.WebAPI.Controllers
 
                 // Get contactUserId from the conversation
                 var contactId = _messengerManager.GetContactUserIdFromConversation(messageDTO.ConversationId);
+                if(contactId == 0 )
+                {
+                    return Content(HttpStatusCode.NotFound, "User is no longer exist to receive message");
+                }
+
                 var authUsername = securityContext.UserName;
                 //Map the messageDTO from front end to message object to save in the system
                 var message = new Message
@@ -641,7 +639,6 @@ namespace KFC.SIT.WebAPI.Controllers
                 var contactUser = um.FindByUserName(newConversationMessageDTO.ContactUsername);
                 Message returnMessage;
               
-                
                 if (contactUser != null && contactUser.Id != _authUserId)
                 {
                     // Map the message to store in database 

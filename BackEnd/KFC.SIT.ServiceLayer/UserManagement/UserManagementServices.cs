@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using DataAccessLayer;
+using DataAccessLayer.DTOs;
 using DataAccessLayer.Models;
 using ServiceLayer.UserManagement.UserClaimServices;
 
@@ -104,7 +105,11 @@ namespace ServiceLayer.UserManagement.UserAccountServices
                                         .FirstOrDefault();
             return user;
         }
-
+        /// <summary>
+        /// Find user by user name
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
         public Account FindByUsername(String username)
         {
             Account user = _DbContext.Set<Account>().Where( u => u.UserName.Equals(username)).FirstOrDefault();
@@ -199,6 +204,7 @@ namespace ServiceLayer.UserManagement.UserAccountServices
             return user;
         }
 
+        // Luis
         public Account AssignCategory(Account user, Category category)
         {
             Category existingCategory = _DbContext.Categories.FirstOrDefault(c => c.Value == category.Value);
@@ -215,6 +221,7 @@ namespace ServiceLayer.UserManagement.UserAccountServices
             return user;
         }
 
+        // Luis
         public int? FindIdBySsoId(Guid ssoId)
         {
             int? userId = null;
@@ -237,6 +244,29 @@ namespace ServiceLayer.UserManagement.UserAccountServices
             // It can be null.
             return _DbContext.Categories.Where(c => c.Value == categoryValue)
                                         .FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Gets the profile information of a user
+        /// </summary>
+        /// <param name="accountId"></param>
+        /// <returns></returns>
+        public UserProfileDTO GetUserProfile(int accountId)
+        {
+            return _DbContext.Students
+                .Include("Courses")
+                .Where(s => s.AccountId == accountId)
+                .Select(s => new UserProfileDTO
+                {
+                    FirstName = s.Account.FirstName,
+                    MiddleName = s.Account.MiddleName,
+                    LastName = s.Account.LastName,
+                    SchoolName = s.SchoolDepartment.School.Name,
+                    DepartmentName = s.SchoolDepartment.Department.Name,
+                    Ranking = s.Account.Exp,
+                    Courses = s.Courses.Select(c => c.Course.Name).ToList()
+                })
+                .FirstOrDefault();
         }
 
     } // end of class

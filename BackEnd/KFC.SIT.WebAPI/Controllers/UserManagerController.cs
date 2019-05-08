@@ -29,7 +29,7 @@ namespace KFC.SIT.WebAPI.Controllers
         public IQueryable<UserDTO> GetAllUsers()
         {
             UserManager umManager = new UserManager();
-            List<Account> userList = umManager.GetAllUser();
+            IList<Account> userList = umManager.GetAllUser();
 
             List<UserDTO> list = new List<UserDTO>();
             foreach (var user in userList)
@@ -157,7 +157,40 @@ namespace KFC.SIT.WebAPI.Controllers
             return new HttpResponseMessage { StatusCode = HttpStatusCode.OK };
         }
 
+        [HttpGet]
+        [ActionName("profile")]
+        public IHttpActionResult GetUserProfile([FromUri] int accountId)
+        {
+            SecurityContext securityContext = SecurityContextBuilder.CreateSecurityContext(
+               Request.Headers
+            );
+            if (securityContext == null)
+            {
+                return Content(HttpStatusCode.Unauthorized, "Invalid Headers");
+            }
+            SessionManager sm = new SessionManager();
+            if (!sm.ValidateSession(securityContext.Token))
+            {
+                return Content(HttpStatusCode.Unauthorized, "Invalid Token");
+            }
+            string updatedToken = sm.RefreshSession(securityContext.Token);
 
+            try
+            {
+                UserManager userManager = new UserManager();
+
+                var results = userManager.GetUserProfile(accountId);
+                return Content(HttpStatusCode.OK, results);
+            }
+            catch (Exception x) when (x is ArgumentException)
+            {
+                return Content(HttpStatusCode.BadRequest, x.Message);
+            }
+            catch (Exception x)
+            {
+                return Content(HttpStatusCode.InternalServerError, x.Message);
+            }
+        }
 
 
     }
