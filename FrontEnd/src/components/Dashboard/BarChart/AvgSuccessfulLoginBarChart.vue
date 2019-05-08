@@ -9,7 +9,7 @@
       return {
         datacollection: {
           //Data to be represented on x-axis
-          labels: [],
+          labels: ['December', 'January', 'February', 'March', 'April', 'May'],
           datasets: [
             {
               label: '# of Average Successful',
@@ -18,7 +18,7 @@
               borderWidth: 1,
               pointBorderColor: '#249EBF',
               //Data to be represented on y-axis
-              data: []
+              data: [70, 50, 20, 10, 30, 100]
             }
           ]
         },
