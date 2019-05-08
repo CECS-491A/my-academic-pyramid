@@ -1,20 +1,24 @@
 <template>
-  <v-navigation-drawer app v-model="navigationBarState.drawerIsOpen">
+  <v-navigation-drawer 
+  class="blue lighten-3"
+      dark
+      permanent
+     app v-model="navigationBarState.drawerIsOpen">
     <v-layout column align-center>
       <v-flex class="mt-5">
         <v-avatar size="100">
           <img src="">
         </v-avatar>
-        <p class="black--text subheading mt-1">Professor Vong</p>
+        <p >User</p>
       </v-flex>
     </v-layout>
     <v-list>
       <v-list-tile v-for="link in linksToDisplay" :key="link.name" router :to="link.route">
         <v-list-tile-action>
-          <v-icon class="purple--text">{{link.icon}}</v-icon>
+          <v-icon >{{link.icon}}</v-icon>
         </v-list-tile-action>
         <v-list-tile-content>
-          <v-list-tile-title class="purple--text">{{link.text}}</v-list-tile-title>
+          <v-list-tile-title >{{link.text}}</v-list-tile-title>
         </v-list-tile-content>
       </v-list-tile>
     </v-list>
