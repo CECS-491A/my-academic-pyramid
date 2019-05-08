@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccessLayer.DTOs
+namespace DataAccessLayer.DTOs.SearchDTO
 {
     public class SearchPersonDTO
     {

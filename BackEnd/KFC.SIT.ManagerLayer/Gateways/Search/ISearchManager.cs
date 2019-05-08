@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer.DTOs;
+using DataAccessLayer.DTOs.SearchDTO;
 using DataAccessLayer.Models.Requests;
 using DataAccessLayer.Models.School;
 using System;
@@ -12,6 +13,9 @@ namespace ManagerLayer.Gateways.Search
     public interface ISearchManager
     {
         dynamic Search (SearchRequest request);
-        List<DepartmentDTO> GetDepartments(int accountId);
+        List<SearchFilterSelectionDTO> GetSchools();
+        List<SearchFilterSelectionDTO> GetDepartments(int schoolId);
+        List<SearchFilterSelectionDTO> GetCourses(int schoolId, int departmentId);
+        AccountDTO GetAccount(int AccountId);
     }
 }

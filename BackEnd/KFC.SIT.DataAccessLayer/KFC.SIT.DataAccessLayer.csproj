@@ -197,8 +197,9 @@
   <ItemGroup>
     <Compile Include="DTOs\AnswerDTO.cs" />
     <Compile Include="DTOs\ConversationDTO.cs" />
-    <Compile Include="DTOs\DepartmentDTO.cs" />
-    <Compile Include="DTOs\SearchForumPostDTO.cs" />
+    <Compile Include="DTOs\SearchDTO\SearchFilterSelectionDTO.cs" />
+    <Compile Include="DTOs\SearchDTO\AccountDTO.cs" />
+    <Compile Include="DTOs\SearchDTO\SearchForumPostDTO.cs" />
     <Compile Include="DTOs\FriendRelationshipDTO.cs" />
     <Compile Include="DTOs\MessageDTO.cs" />
     <Compile Include="DTOs\NewConversationMessageDTO.cs" />
@@ -206,10 +207,11 @@
     <Compile Include="DTOs\SchoolRegistrationDTO\DepartmentDTO.cs" />
     <Compile Include="DTOs\SchoolRegistrationDTO\SchoolDTO.cs" />
     <Compile Include="DTOs\SchoolRegistrationDTO\TeacherDTO.cs" />
-    <Compile Include="DTOs\SearchPersonDTO.cs" />
+    <Compile Include="DTOs\SearchDTO\SearchPersonDTO.cs" />
     <Compile Include="DTOs\QuestionDTO.cs" />
     <Compile Include="DTOs\StoredMessageDTO.cs" />
     <Compile Include="DTOs\UserDTO.cs" />
+    <Compile Include="DTOs\UserProfileDTO.cs" />
     <Compile Include="IEntity.cs" />
     <Compile Include="Logging\OptimizeLogging\ErrorFormat.cs" />
     <Compile Include="Logging\Models\Repository\ErrorLogCollection.cs" />

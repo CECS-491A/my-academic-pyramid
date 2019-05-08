@@ -1,30 +1,59 @@
 <template>
-<v-container fluid>
+<v-app>
+    <v-container fluid>
     <v-layout row>
-      <v-flex
+        <v-flex
         shrink
         pa-1
-      >
+        
+        >
         <v-select
             v-model="category"
             :items="categories"
             label="Category"
         ></v-select>
-      </v-flex>
-      <v-flex
+        </v-flex>
+        
+        <v-flex
         shrink
         pa-1
-      >
+        >
+        <v-select
+            v-model="school"
+            :items="schools"
+            label="School"
+            v-if="!isStudent"
+            @input="getDepartments"
+        ></v-select>
+        </v-flex>
+        
+        <v-flex
+        shrink
+        pa-1
+        >
         <v-select
             v-model="department"
             :items="departments"
             label="Department"
+            @input="getCourses"
         ></v-select>
-      </v-flex>
-      <v-flex
+        </v-flex>
+
+        <v-flex
+        shrink
+        pa-1
+        >
+        <v-select
+            v-model="course"
+            :items="courses"
+            label="Course"
+        ></v-select>
+        </v-flex>
+
+        <v-flex
         grow
         pa-1
-      >
+        >
         <v-text-field
             class="searchBar"
             v-model="SearchInput" 
@@ -33,11 +62,11 @@
             @click:append="search" 
             hide-details>
         </v-text-field>
-      </v-flex>
+        </v-flex>
     </v-layout>
 
     <div>
-        <v-toolbar flat color="white">
+        <v-toolbar flat>
         <v-toolbar-title v-if="!errorMessage">Search Results</v-toolbar-title>
         </v-toolbar>
 
@@ -48,7 +77,7 @@
             item-key="AccountId"
             v-if="useTable"
         >
-            <v-progress-linear v-slot:progress color="blue" indeterminate v-if="loading"></v-progress-linear>
+            <v-progress-linear v-slot:progress color="info" indeterminate v-if="loading"></v-progress-linear>
             <template v-slot:items="props">
                 <tr @click="props.expanded = !props.expanded">
                 <td>{{ props.item.FirstName }}</td>
@@ -60,9 +89,15 @@
             </template>
             <template v-slot:expand="props">
                 <v-card flat v-if="!hasProfile">
-                    <v-card-text>Courses: {{props.item.Courses.toString()}}</v-card-text>
+                    <v-card-text> <v-icon>view_list</v-icon> Courses: {{props.item.Courses.toString()}}</v-card-text>
                 </v-card>
-                <v-btn v-if="hasProfile" color="blue">Profile</v-btn>
+                <v-btn
+                    v-if="hasProfile"
+                    block color="secondary"
+                    :to="{ name: 'Profile', params: { id: props.item.AccountId } }">
+                        <v-icon dark>person</v-icon>
+                        Student Profile
+                </v-btn>
             </template>
         
         </v-data-table>
@@ -70,7 +105,7 @@
         <v-list two-line v-if="!useTable">
           <template v-for="post in data.ForumPosts">
             <v-list-tile
-              :key="post.title"
+              :key="post.text"
               avatar
               ripple
               
@@ -86,6 +121,9 @@
               </v-list-tile-action>
 
             </v-list-tile>
+            <v-divider
+              :key="post.text"
+            ></v-divider>
           </template>
         </v-list>
 
@@ -94,25 +132,24 @@
             id="errorMessage"
             type="error"
             transition="scale-transition"
-            color="red"
         >
             {{errorMessage}}
         </v-alert>
     </div>
   </v-container>
+</v-app>
 
-    
 </template>
 
 <script>
 import axios from 'axios'
-import { POINT_CONVERSION_COMPRESSED } from 'constants';
 export default {
     name: "Search",
     data () {
         return {
             openSearch: '',
             SearchInput: '',
+            userAccount: null,
             category: 0,
             categories: [
                 {
@@ -131,8 +168,12 @@ export default {
                     value: 2
                 }
             ],
+            school: 0,
+            schools: [],
             department: 0,
             departments: [],
+            course: 0,
+            courses: [],
             expand: false,
             tableHeaders: [
                 { text: 'First Name', value: 'FirstName' },
@@ -150,7 +191,8 @@ export default {
             errorMessage: null,
             loading: true,
             useTable: false,
-            hasProfile: false
+            hasProfile: false,
+            isStudent: true
         }
     },
     methods: {
@@ -186,7 +228,9 @@ export default {
                 params:{
                     AccountId: this.userId,
                     SearchCategory: this.category,
+                    SearchSchool: this.school,
                     SearchDepartment: this.department,
+                    SearchCourse: this.course,
                     SearchInput: this.SearchInput
                 },
                 headers: { "Content-Type": "application/json" }
@@ -207,10 +251,83 @@ export default {
                 this.loading = false;
             })
         },
+        getSchools: function(){
+            this.errorMessage = "";
+
+            const url = `${this.$hostname}search/selections`;
+            axios
+            .get(url, {
+                params:{
+                    SearchCategory: 0
+                },
+                headers: { "Content-Type": "application/json" }
+                
+            })
+            .then(response =>{
+                this.schools = response.data;
+                if(this.schools.length > 1){
+                    this.schools = [{id: 0, text: "ALL", value: 0 }].concat(this.schools)
+                }
+                this.courses = [];
+            })
+            .catch(error =>{
+                this.errorMessage = error.response.data.Message
+            })
+            
+        },
         getDepartments: function(){
             this.errorMessage = "";
 
-            const url = `${this.$hostname}search/departments`;
+            const url = `${this.$hostname}search/selections`;
+            axios
+            .get(url, {
+                params:{
+                    SearchCategory: 1,
+                    SearchSchool: this.school
+                },
+                headers: { "Content-Type": "application/json" }
+                
+            })
+            .then(response =>{
+                this.departments = response.data;
+                if(this.departments.length > 1){
+                    this.departments = [{id: 0, text: "ALL", value: 0 }].concat(this.departments)
+                }
+            })
+            .catch(error =>{
+                this.errorMessage = error.response.data.Message
+            })
+            
+        },
+        getCourses: function(){
+            this.errorMessage = "";
+
+            const url = `${this.$hostname}search/selections`;
+            axios
+            .get(url, {
+                params:{
+                    SearchCategory: 2,
+                    SearchSchool: this.school,
+                    SearchDepartment: this.department
+                },
+                headers: { "Content-Type": "application/json" }
+                
+            })
+            .then(response =>{
+                this.courses = response.data
+                if(this.courses.length > 1){
+                    this.courses = [{id: 0, text: "ALL", value: 0 }].concat(this.courses)
+                }
+            })
+            .catch(error =>{
+                this.errorMessage = error.response.data.Message
+            })
+            
+        },
+        getAccount: function(){
+            this.errorMessage = "";
+
+            const url = `${this.$hostname}search/account`;
             axios
             .get(url, {
                 params:{
@@ -220,24 +337,24 @@ export default {
                 
             })
             .then(response =>{
-                this.departments = response.data
-                if(this.departments.length === 0){
-                    this.errorMessage = "No Results Found";
-                }
-                else{
-                    this.departments = [{id: 0, text: "ALL", value: 0 }].concat(this.departments)
+                this.userAccount = response.data;
+                this.isStudent = this.userAccount.IsStudent;
+                if(!this.isStudent){
+                    this.getSchools();
+                }else{
+                    this.school = this.userAccount.SchoolId;
+                    this.getDepartments();
                 }
             })
             .catch(error =>{
                 this.errorMessage = error.response.data.Message
             })
-            
         }
     },
     beforeMount(){
         this.userId = sessionStorage.SITuserId;
-        this.userId = "5"
-        this.getDepartments()
+        //this.userId = "2"
+        this.getAccount()
     },
 }
 </script>

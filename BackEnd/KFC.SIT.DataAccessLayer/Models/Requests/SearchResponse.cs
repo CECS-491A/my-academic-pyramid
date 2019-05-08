@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer.DTOs;
+using DataAccessLayer.DTOs.SearchDTO;
 using DataAccessLayer.Models.School;
 using System;
 using System.Collections.Generic;
