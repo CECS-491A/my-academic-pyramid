@@ -163,6 +163,11 @@ namespace WebAPI.Gateways.UserManagement
             return user;
         }
 
+        /// <summary>
+        /// find the user by id and returns the information of the user
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public UserDTO GetUserInfo(int id)
         {
             Account user = FindUserById(id);
@@ -237,6 +242,12 @@ namespace WebAPI.Gateways.UserManagement
 
         }
 
+        /// <summary>
+        /// By Luis
+        /// </summary>
+        /// <param name="targetUserId"></param>
+        /// <param name="categoryStr"></param>
+        /// <returns></returns>
         public Account SetCategory(int targetUserId, string categoryStr)
         {
             Category categoryToAdd = _userManagementServices.GetCategory(categoryStr);
@@ -267,7 +278,6 @@ namespace WebAPI.Gateways.UserManagement
             if (targetedUser == null)
             {
                 return null;
-
             }
             // Check if the requesting user is  at least same level as  the targeted user
             else
@@ -279,6 +289,11 @@ namespace WebAPI.Gateways.UserManagement
 
         }
 
+        /// <summary>
+        /// find the user by user name and return the list of claims that user has
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
         public List<string> GetClaims(string username)
         {
             Account user = _userManagementServices.FindByUsername(username);
@@ -294,6 +309,7 @@ namespace WebAPI.Gateways.UserManagement
         /// <summary>
         /// Method to verify password when user login. Entered password will be hashed using input from user plus the salt value
         /// The hashed password then will be compared with the value in database for validation.
+        /// No longer being used!
         /// </summary>
         /// <param name="enteredPassword"></param>
         /// <param name="storedHash"></param>
@@ -319,6 +335,11 @@ namespace WebAPI.Gateways.UserManagement
 
         }
 
+        /// <summary>
+        /// Assign the same claims to the new user account
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         public Account AutomaticClaimAssigning(Account user)
         {
             if (user.Category.Value.Equals("Student"))
