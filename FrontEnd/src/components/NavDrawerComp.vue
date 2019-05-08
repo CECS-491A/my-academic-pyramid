@@ -37,11 +37,11 @@ export default {
         // If false, show when logged out
         { name: "Home", icon: "home", text: "Home", route: "/" },
         {
-          name: "Login",
-          icon: "face",
-          text: "Login",
-          route: "/login",
-          onlyActive: false
+          name: "UserHomePage",
+          icon: "contacts",
+          text: "User HomePage",
+          route: "/UserHomePage",
+          onlyActive: true
         },
         {
           name: "Search",
@@ -90,13 +90,6 @@ export default {
           icon: "forum",
           text: "Discussion Forum",
           route: "/DiscussionForum",
-          onlyActive: true
-        },
-        {
-          name: "UserHomePage",
-          icon: "contacts",
-          text: "User HomePage",
-          route: "/UserHomePage",
           onlyActive: true
         }
       ],

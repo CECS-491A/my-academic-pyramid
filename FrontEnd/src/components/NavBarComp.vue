@@ -5,7 +5,7 @@
         <span>My Academic Pyramid</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-badge v-model="navigationBarState.newMessage" color="red">
+      <v-badge v-if="sessionState.userId" v-model="navigationBarState.newMessage" color="red">
         <template v-slot:badge>
           <span>!</span>
         </template>
