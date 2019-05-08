@@ -14,6 +14,8 @@ import UserHomePage from '@/Views/UserHomePage'
 import Redirect from '@/Views/Redirect'
 import UsageAnalysisDashboard from '@/Views/UsageAnalysisDashboard'
 //import Search from '@/Views/Search'
+import DiscussionForum from '@/Views/DiscussionForum'
+import TestComponent from '@/components/DiscussionForum/TestComponent'
 
 Vue.use(Router)
 Vue.use(Vuetify)
@@ -82,6 +84,16 @@ export default new Router({
   //  path: "/Search",
   //  name: "Search",
   //  component: Search
-  //}
+  //},
+  {
+    path: "/DiscussionForum",
+    name: "DiscussionForum",
+    component: DiscussionForum
+  },
+  {
+    path: "/TestComponent",
+    name: "TestComponent",
+    component: TestComponent
+  }
   ]
 })

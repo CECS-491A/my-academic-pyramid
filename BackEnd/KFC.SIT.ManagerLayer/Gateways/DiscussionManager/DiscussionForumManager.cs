@@ -221,7 +221,7 @@ namespace ManagerLayer.DiscussionManager
                     ExpNeededToAnswer = q.ExpNeededToAnswer,
                     IsClosed = q.IsClosed,
                     SpamCount = q.SpamCount,
-                    AnswerCount = q.Answers.Count,
+                    AnswerCount = q.Answers.Count(),
                     DateCreated  = q.DateCreated,
                     DateUpdated = q.DateUpdated
                 });

@@ -9,6 +9,7 @@
       <v-btn icon v-if="sessionState.token" to="Search" flat>
         <v-icon>search</v-icon>
       </v-btn>
+      <v-btn v-if="sessionState.token" to="DiscussionForum" flat>DiscussionForum</v-btn>
       <v-btn v-if="sessionState.token" to="Publish" flat>Publish</v-btn>
       <v-btn v-if="sessionState.token" to="Logging" flat>Logging</v-btn>
       <v-btn v-if="sessionState.token" to="UserManagement" flat>UM</v-btn>
