@@ -211,6 +211,7 @@
     <Compile Include="DTOs\StoredMessageDTO.cs" />
     <Compile Include="DTOs\UserDTO.cs" />
     <Compile Include="IEntity.cs" />
+    <Compile Include="Logging\MyLogger.cs" />
     <Compile Include="Logging\OptimizeLogging\ErrorFormat.cs" />
     <Compile Include="Logging\Models\Repository\ErrorLogCollection.cs" />
     <Compile Include="Logging\OptimizeLogging\ILogDestination.cs" />

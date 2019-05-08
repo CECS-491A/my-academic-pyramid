@@ -32,12 +32,24 @@ namespace DataAccessLayer.Logging
         // Get an ErrorLog by id
         public ErrorLog Get(string id)
         {
-            return this.Collection.Find(new BsonDocument { { "_id", new ObjectId(id) } }).FirstAsync().Result;
+            return this.Collection.Find(new BsonDocument
+            {
+                {
+                    "_id", new ObjectId(id)
+                }
+            })
+            .FirstAsync()
+            .Result;
         }
 
         public void Delete(string id)
         {
-            this.Collection.FindOneAndDeleteAsync(new BsonDocument { { "_id", new ObjectId(id) } });
+            this.Collection.FindOneAndDeleteAsync(new BsonDocument
+            {
+                {
+                    "_id", new ObjectId(id)
+                }
+            });
         }
 
         public void DeleteAll()
