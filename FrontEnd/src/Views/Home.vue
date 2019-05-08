@@ -38,11 +38,6 @@ export default {
 }
 </script>
 <style>
-.team {
-  background-image: url('../assets/csulb_pyramid.jpg');
-  width: 2000px;
-  margin: auto;
-}
 .team h1 {
   font-size:30pt;
   color:blanchedalmond;
