@@ -23,6 +23,7 @@ export default {
   },
   created() {
     if (this.$route.query.SITtoken != undefined) {
+      console.log('in created')
       AppSession.updateSession(this.$route.query.SITtoken)
       // try to get userinfo
       this.axios.get(`${this.$hostname}UserManager/GetContextId`, 
@@ -51,15 +52,18 @@ export default {
                   }
                   else {
                     //error
+                    console.log('error')
                   }
                 })
                 .catch(error => {
                   //Indicate an error. Server might be down so just logout the user.
                   // delete token to logout the user.
                   // Redirect user to error page.
+                  console.log('error')
                 })
     }
     else {
+      console.log('token is undefined.')
       //
       // display error message.
     }

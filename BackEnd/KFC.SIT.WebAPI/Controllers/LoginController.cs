@@ -55,9 +55,9 @@ namespace KFC.SIT.WebAPI.Controllers
 
             string redirectUrl = URL_FIRST_PART + "?SITtoken=" + token;
             // For production
-            return Redirect(redirectUrl);
+            //return Redirect(redirectUrl);
 
-            //Local only
+            // Local only
             Dictionary<string, string> redirectResponseDictionary = new Dictionary<string, string>()
             {
                 { "redirectURL", URL_FIRST_PART }
