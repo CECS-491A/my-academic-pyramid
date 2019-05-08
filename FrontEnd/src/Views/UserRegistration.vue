@@ -1,7 +1,6 @@
 <template>
 <v-app>
-<div>
-    <v-form>
+<v-form>
         <v-container>
             <v-layout row wrap>
                 <v-flex>
@@ -32,7 +31,7 @@
 
             <v-layout row>
                 <v-flex
-                grow
+                
                 pa-1
                 >
                 <v-select
@@ -44,7 +43,7 @@
                 </v-flex>
                 
                 <v-flex
-                shrink
+                
                 pa-1
                 >
                 <v-select
@@ -101,7 +100,6 @@
           </v-alert>
         </v-container>
     </v-form>
-  </div>
 </v-app>
   
 </template>
