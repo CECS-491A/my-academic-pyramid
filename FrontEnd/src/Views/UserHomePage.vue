@@ -40,7 +40,7 @@ export default {
 </script>
 <style>
 body {
-  background-image: url('../assets/csulb_pyramid.jpg');
+  /* background-image: url('../assets/csulb_pyramid.jpg'); */
   width: 2000px;
   margin: auto;
 }

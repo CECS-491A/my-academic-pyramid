@@ -2,7 +2,6 @@
   <v-navigation-drawer 
   class="blue lighten-3"
       dark
-      permanent
      app v-model="navigationBarState.drawerIsOpen">
     <v-layout column align-center>
       <v-flex class="mt-5">
