@@ -221,13 +221,9 @@
     <Compile Include="Logging\OptimizeLogging\NLogger.cs" />
     <Compile Include="Logging\OptimizeLogging\TelemetryFormat.cs" />
     <Compile Include="Logging\Models\Repository\TelemetryLogCollection.cs" />
-    <Compile Include="Migrations\201905060449280_Initial.cs" />
-    <Compile Include="Migrations\201905060449280_Initial.Designer.cs">
-      <DependentUpon>201905060449280_Initial.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201905060525187_removeSchoolIdinSchoolTeacher.cs" />
-    <Compile Include="Migrations\201905060525187_removeSchoolIdinSchoolTeacher.Designer.cs">
-      <DependentUpon>201905060525187_removeSchoolIdinSchoolTeacher.cs</DependentUpon>
+    <Compile Include="Migrations\201905080342363_Initial.cs" />
+    <Compile Include="Migrations\201905080342363_Initial.Designer.cs">
+      <DependentUpon>201905080342363_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Category.cs" />
@@ -299,11 +295,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201905060449280_Initial.resx">
-      <DependentUpon>201905060449280_Initial.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201905060525187_removeSchoolIdinSchoolTeacher.resx">
-      <DependentUpon>201905060525187_removeSchoolIdinSchoolTeacher.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201905080342363_Initial.resx">
+      <DependentUpon>201905080342363_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
