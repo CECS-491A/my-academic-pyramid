@@ -48,8 +48,8 @@
     },
     fetchData() {
       this.axios
-        .get('http://localhost:59364/api/dashboard/sLogin', {
-          headers: { "Content-Type": "application/List" }
+        .get('${this.$hostname}UAD/sLogin', {
+          headers: { "Content-Type": "application/Json" }
         })
         .then(response => {
           this.datacollection.data = response.data;
@@ -61,8 +61,8 @@
     },
     fetchLabel() {
       this.axios
-        .get('http://localhost:59364/api/dashboard/recentMonths', {
-          headers: { "Content-Type": "application/List" }
+        .get('${this.$hostname}UAD/recentMonths', {
+          headers: { "Content-Type": "application/Json" }
         })
         .then(response => {
           this.datacollection.labels = response.data;

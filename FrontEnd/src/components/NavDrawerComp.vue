@@ -3,7 +3,7 @@
     <v-layout column align-center>
       <v-flex class="mt-5">
         <v-avatar size="100">
-          <img src="">
+          <img src="../assets/Vong.jpg">
         </v-avatar>
         <p class="black--text subheading mt-1">Professor Vong</p>
       </v-flex>

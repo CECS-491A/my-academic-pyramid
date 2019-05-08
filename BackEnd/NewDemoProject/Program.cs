@@ -39,7 +39,8 @@ namespace NewDemoProject
                 Console.WriteLine(s.Key + "," + s.Value);
             }
             **/
-            long sum = service.CountUniqueLoggedInUsers(1);
+            service.CountAverageSessionDuration(1, 2019);
+            long sum = service.CountUniqueLoggedInUsers(1, 2019);
             Console.WriteLine("sum:" + sum);
             //IDictionary<string, long> something3 = service.CountMostUsedFiveFeature(2);
             Console.WriteLine("hi");

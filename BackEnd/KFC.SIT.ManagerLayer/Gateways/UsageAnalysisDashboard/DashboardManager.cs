@@ -78,19 +78,25 @@ namespace ManagerLayer.Gateways.UsageAnalysisDashboard
         /// <returns></returns>
         public long[] GetAverageSessionDuration()
         {
-            long[] avgSessionDur = _dashboardService.CountAverageSessionDuration();
-            return avgSessionDur;
+            IDictionary<int, long> numLoginInCertainDuration = _dashboardService.CountSuccessfulLogin(6);
+
+            return null;
+            //return avgSessionDur;
         }
 
         /// <summary>
-        /// 
+        /// Get total number of successful login, failed login and attempted login from the service layer and save into the list
+        /// index 0 = Total number of successful login
+        /// index 1 = Total number of failed login
+        /// index 2 = Total number of attempted login
         /// </summary>
         /// <returns></returns>
         public IEnumerable<long> GetFailedSuccessfulLogIn()
         {
-            long[] successFailed = new long[2];
+            long[] successFailed = new long[3];
             successFailed[0] = _dashboardService.CountTotalSuccessfulLogin();
             successFailed[1] = _dashboardService.CountTotalFailedLogin();
+            successFailed[2] = successFailed[0] + successFailed[1];
 
             return successFailed;
         }
@@ -126,11 +132,12 @@ namespace ManagerLayer.Gateways.UsageAnalysisDashboard
             Dictionary<string, long> successfulLoggedInUsers = new Dictionary<string, long>();
             long numTotalUser = _dashboardService.CountTotalUsers();
             int monthToday = DateTime.Today.Month;
+            int yearToday = DateTime.Today.Year;
 
             successfulLoggedInUsers.Add("total", numTotalUser);
             for (int i = 1; i < duration + 1; i++)
             {
-                successfulLoggedInUsers.Add(dateFormatConverter[monthToday], _dashboardService.CountUniqueLoggedInUsers(monthToday));
+                successfulLoggedInUsers.Add(dateFormatConverter[monthToday], _dashboardService.CountUniqueLoggedInUsers(monthToday, yearToday));
                 monthToday--;
                 if (monthToday == 0) { monthToday = 12; }
             }
