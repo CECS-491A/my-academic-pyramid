@@ -47,7 +47,7 @@ export default {
           name: "Search",
           icon: "search",
           text: "Search",
-          route: "/",
+          route: "/Search",
           onlyActive: true
         },
         {

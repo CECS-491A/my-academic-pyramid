@@ -113,7 +113,7 @@ export default {
                 params:{
                     AccountId: this.id
                 },
-                headers: { "Content-Type": "application/json" }
+                headers: { "Content-Type": "application/json", Authorization: "Bearer " + sessionStorage.SITtoken }
                 
             })
             .then(response =>{

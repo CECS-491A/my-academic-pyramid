@@ -233,7 +233,7 @@ export default {
                     SearchCourse: this.course,
                     SearchInput: this.SearchInput
                 },
-                headers: { "Content-Type": "application/json" }
+                headers: { "Content-Type": "application/json", Authorization: "Bearer " + sessionStorage.SITtoken }
                 
             })
             .then(response =>{
@@ -260,7 +260,7 @@ export default {
                 params:{
                     SearchCategory: 0
                 },
-                headers: { "Content-Type": "application/json" }
+                headers: { "Content-Type": "application/json", Authorization: "Bearer " + sessionStorage.SITtoken }
                 
             })
             .then(response =>{
@@ -285,7 +285,7 @@ export default {
                     SearchCategory: 1,
                     SearchSchool: this.school
                 },
-                headers: { "Content-Type": "application/json" }
+                headers: { "Content-Type": "application/json", Authorization: "Bearer " + sessionStorage.SITtoken }
                 
             })
             .then(response =>{
@@ -310,7 +310,7 @@ export default {
                     SearchSchool: this.school,
                     SearchDepartment: this.department
                 },
-                headers: { "Content-Type": "application/json" }
+                headers: { "Content-Type": "application/json", Authorization: "Bearer " + sessionStorage.SITtoken }
                 
             })
             .then(response =>{
@@ -333,7 +333,7 @@ export default {
                 params:{
                     AccountId: this.userId,
                 },
-                headers: { "Content-Type": "application/json" }
+                headers: { "Content-Type": "application/json", Authorization: "Bearer " + sessionStorage.SITtoken }
                 
             })
             .then(response =>{
