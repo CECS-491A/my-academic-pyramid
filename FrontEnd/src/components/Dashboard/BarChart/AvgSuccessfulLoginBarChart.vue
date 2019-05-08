@@ -8,7 +8,7 @@
       return {
         datacollection: {
           //Data to be represented on x-axis
-          labels: ['December', 'January', 'February', 'March', 'April', 'May'],
+          labels: [],
           datasets: [
             {
               label: 'Data One',
@@ -17,7 +17,7 @@
               borderWidth: 1,
               pointBorderColor: '#249EBF',
               //Data to be represented on y-axis
-              data: [.40, .20, .30, .50, .90, .40]
+              data: []
             }
           ]
         },
@@ -49,7 +49,7 @@
     fetchData() {
       this.axios
         .get('http://localhost:59364/api/dashboard/sLogin', {
-          headers: { "Content-Type": "application/Json" }
+          headers: { "Content-Type": "application/List" }
         })
         .then(response => {
           this.datacollection.data = response.data;
@@ -62,7 +62,7 @@
     fetchLabel() {
       this.axios
         .get('http://localhost:59364/api/dashboard/recentMonths', {
-          headers: { "Content-Type": "application/Json" }
+          headers: { "Content-Type": "application/List" }
         })
         .then(response => {
           this.datacollection.labels = response.data;
