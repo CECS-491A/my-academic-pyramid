@@ -3,7 +3,10 @@ using DataAccessLayer.Models;
 using DataAccessLayer.Models.DiscussionForum;
 using DataAccessLayer.Models.Requests;
 using DataAccessLayer.Models.School;
+using KFC.SIT.WebAPI.Utility;
 using ManagerLayer.Gateways.Search;
+using SecurityLayer.Authorization;
+using SecurityLayer.Sessions;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -23,6 +26,20 @@ namespace KFC.SIT.WebAPI.Controllers
         [ActionName("input")]
         public IHttpActionResult Search([FromUri] SearchRequest request)
         {
+            SecurityContext securityContext = SecurityContextBuilder.CreateSecurityContext(
+               Request.Headers
+            );
+            if (securityContext == null)
+            {
+                return Content(HttpStatusCode.Unauthorized, "Invalid Security Context");
+            }
+            SessionManager sm = new SessionManager();
+            if (!sm.ValidateSession(securityContext.Token))
+            {
+                return Content(HttpStatusCode.Unauthorized,"Invalid Session");
+            }
+            string updatedToken = sm.RefreshSession(securityContext.Token);
+
             if (!ModelState.IsValid || request is null)
             {
                 // 412 Response
@@ -59,6 +76,20 @@ namespace KFC.SIT.WebAPI.Controllers
                 return Content(HttpStatusCode.PreconditionFailed, new SearchResponse("Invalid Request"));
             }
 
+            SecurityContext securityContext = SecurityContextBuilder.CreateSecurityContext(
+               Request.Headers
+            );
+            if (securityContext == null)
+            {
+                return Content(HttpStatusCode.Unauthorized, "Invalid Security Context");
+            }
+            SessionManager sm = new SessionManager();
+            if (!sm.ValidateSession(securityContext.Token))
+            {
+                return Content(HttpStatusCode.Unauthorized, "Invalid Session");
+            }
+            string updatedToken = sm.RefreshSession(securityContext.Token);
+
             try
             {
                 using (var _db = new DatabaseContext())
@@ -89,6 +120,20 @@ namespace KFC.SIT.WebAPI.Controllers
                 // 412 Response
                 return Content(HttpStatusCode.PreconditionFailed, new SearchResponse("Invalid Request"));
             }
+
+            SecurityContext securityContext = SecurityContextBuilder.CreateSecurityContext(
+               Request.Headers
+            );
+            if (securityContext == null)
+            {
+                return Content(HttpStatusCode.Unauthorized, "Invalid Security Context");
+            }
+            SessionManager sm = new SessionManager();
+            if (!sm.ValidateSession(securityContext.Token))
+            {
+                return Content(HttpStatusCode.Unauthorized, "Invalid Session");
+            }
+            string updatedToken = sm.RefreshSession(securityContext.Token);
 
             try
             {
