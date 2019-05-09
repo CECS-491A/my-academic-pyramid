@@ -112,11 +112,11 @@ export default {
         QuestionType: "SchoolQuestion",
         AccountId: sessionStorage.SITuserId,
         // SchoolId: getSchoolId(),
-        SchoolId: 1,        
+        SchoolId: "1",        
         //DepartmentId: getDepartmentId(),
         //CourseId: getCourseId(),
         Text: document.getElementById('text').value,
-        Exp: document.getElementById('exp').value,
+        Exp: document.getElementById('exp').value.ToString(),
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
