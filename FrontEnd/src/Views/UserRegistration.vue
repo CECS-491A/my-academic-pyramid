@@ -160,7 +160,7 @@ export default {
                this.$router.push({name: "UserHomePage"})
                })
              .catch(error =>{
-                  this.errorMessage = error.response.data
+                  this.errorMessage = error.response.data.Message
               })
     },
 
@@ -203,7 +203,7 @@ export default {
             }
         })
         .catch(error =>{
-            this.errorMessage = error.response.data
+            this.errorMessage = error.response.data.Message
         })
         
     },
@@ -224,7 +224,7 @@ export default {
             this.departments = response.data;
         })
         .catch(error =>{
-            this.errorMessage = error.response.data
+            this.errorMessage = error.response.data.Message
         })
         
     },
