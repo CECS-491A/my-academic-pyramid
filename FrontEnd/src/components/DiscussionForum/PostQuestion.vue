@@ -116,7 +116,7 @@ export default {
         //DepartmentId: getDepartmentId(),
         //CourseId: getCourseId(),
         Text: document.getElementById('text').value,
-        Exp: document.getElementById('exp').value.ToString(),
+        Exp: document.getElementById('exp').value.toString(),
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
