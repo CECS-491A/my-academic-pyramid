@@ -216,9 +216,7 @@ namespace KFC.SIT.WebAPI.Controllers
             {
                 var authUsername = securityContext.UserName;
 
-                //Find auth user Id from auth username
-                _authUserId = um.FindByUserName(authUsername).Id;
-
+                
                 // Get conversation from conversation Id
                 var conversation = _messengerManager.GetConversationFromId(conversationId);
 
@@ -334,7 +332,7 @@ namespace KFC.SIT.WebAPI.Controllers
                         //Set the display username in front end to auth username 
                         if (recentMessage.OutgoingMessage == true)
                         {
-                            senderUsername = securityContext.UserName;
+                            senderUsername = authUsername;
                         }
 
                         //If false , set the display user name in front end to contactUsername
