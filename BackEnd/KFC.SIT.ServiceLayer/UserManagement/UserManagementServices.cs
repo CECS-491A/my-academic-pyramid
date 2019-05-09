@@ -239,6 +239,7 @@ namespace ServiceLayer.UserManagement.UserAccountServices
             return userId;
         }
 
+        // Luis
         public Category GetCategory(string categoryValue)
         {
             // It can be null.

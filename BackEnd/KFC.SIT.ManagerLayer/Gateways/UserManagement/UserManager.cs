@@ -100,8 +100,6 @@ namespace WebAPI.Gateways.UserManagement
             }
             catch (DbEntityValidationException ex)
             {
-                // catch error
-                // rollback changes
                 return 0;
             }
         }
@@ -141,6 +139,7 @@ namespace WebAPI.Gateways.UserManagement
         }
 
         /// <summary>
+        /// Not Being Used
         /// Method to find user object using email
         /// </summary>
         /// <param name="userEmail"></param>
@@ -216,16 +215,9 @@ namespace WebAPI.Gateways.UserManagement
         /// <param name="claim"></param>
         public Account RemoveClaimAction(int targetedUserId, string claimStr)
         {
-            // List of required claims needed for AddClaimAction Method
-            List<Claim> createUserRequiredClaimTypes = new List<Claim>
-            {
-                new Claim("UserManager")
-            };
 
-            // Check if the requesting user has the require claims
-
-                // Retrive targeted user exists from database
-                Account targetedUser = FindUserById(targetedUserId);
+            // Retrive targeted user exists from database
+            Account targetedUser = FindUserById(targetedUserId);
             if (targetedUser == null)
              {
                 return null;
