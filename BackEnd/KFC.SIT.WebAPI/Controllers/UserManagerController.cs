@@ -161,14 +161,6 @@ namespace KFC.SIT.WebAPI.Controllers
         [ActionName("profile")]
         public IHttpActionResult GetUserProfile([FromUri] int accountId)
         {
-            SecurityContext securityContext = SecurityContextBuilder.CreateSecurityContext(
-               Request.Headers
-            );
-            if (securityContext == null)
-            {
-                return Content(HttpStatusCode.Unauthorized, "Invalid Headers");
-            }
-
             try
             {
                 UserManager userManager = new UserManager();
