@@ -53,7 +53,6 @@ namespace WebAPI.Gateways.UserManagement
 
             //Automatically assigning claim to user
             user = AutomaticClaimAssigning(user);
-            // TODO test this.
             //user = _userManagementServices.AssignCategory(user, new Category(userDto.Category));
 
             var response = _userManagementServices.CreateUser(user);
