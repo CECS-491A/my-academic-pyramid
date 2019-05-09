@@ -159,7 +159,9 @@ export default {
                AppSession.updateSession(response.data.SITtoken)
                this.$router.push({name: "UserHomePage"})
                })
-             .catch(error => {console.log(error)})
+             .catch(error =>{
+                  this.errorMessage = error.response.data
+              })
     },
 
     logoutFunc() {

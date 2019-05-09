@@ -13,7 +13,7 @@
           datasets: [
             {
               label: '# of Average Successful',
-              backgroundColor: "rgba(75, 192, 192, 0.6)",
+              backgroundColor: "rgba(54, 162, 235, 0.6)",
               pointBackgroundColor: 'white',
               borderWidth: 1,
               pointBorderColor: '#249EBF',
