@@ -25,7 +25,7 @@ namespace ManagerLayer.Tests
                     UserName = "SystemAdmin",
                     FirstName = "Arturo",
                     LastName = "NA",
-                    SsoId = System.Guid.NewGuid(),
+                    SsoId = new Guid(),
                 });
                 Account createdUser = UM.FindByUserName("SystemAdmin");
                 if (createdUser != null)
