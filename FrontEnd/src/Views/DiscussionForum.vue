@@ -34,7 +34,7 @@
             </v-flex>
             <v-spacer></v-spacer>
 
-            <v-btn small @click="PostQuestion" > Post </v-btn>
+            <v-btn small @click="gotoPost" > Post </v-btn>
 
             <v-btn icon>
               <v-icon>refresh</v-icon>
@@ -87,7 +87,7 @@
             >
               <v-list-tile-content>
                 <v-list-tile-title>{{ item.AccountName }}</v-list-tile-title>
-                <v-list-tile-sub-title class="text--primary">{{ item.Text }}</v-list-tile-sub-title>
+                <v-list-tile-sub-title>{{ item.Text }}</v-list-tile-sub-title>
                 <v-list-tile-sub-title>{{ item.SchoolName + "/" + item.DepartmentName + "/" + item.CourseName 
                     + " Spam Count: " + item.SpamCount + " Answers: " + item.AnswerCount + " Exp Needed to Answer: " + item.ExpNeededToAnswer}}</v-list-tile-sub-title>
               </v-list-tile-content>
