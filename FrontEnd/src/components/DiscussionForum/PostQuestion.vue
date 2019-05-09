@@ -108,7 +108,7 @@ export default {
 
       const url = 'DiscussionForum/PostQuestion'
       this.loading = true;
-      this.axios.post(url, {
+      this.axios.post(this.$hostname + url, {
         QuestionType: "SchoolQuestion",
         AccountId: sessionStorage.SITuserId,
         // SchoolId: getSchoolId(),
@@ -123,10 +123,10 @@ export default {
         }
       })
         .then(response => {
-          this.validation = response.data.Message // Retrieve validation message from response
+          this.validation = response.data
         })
         .catch(err => {
-          this.error = err.response.data.Message
+          this.error = err.response.data
         })
         .finally(() => {
           this.loading = false;
