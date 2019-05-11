@@ -22,8 +22,9 @@ export default {
     }
   },
   created() {
+    // TODO might move this in a different function.
     if (this.$route.query.SITtoken != undefined) {
-      console.log('in created')
+      console.log('in created of Redirect view')
       AppSession.updateSession(this.$route.query.SITtoken)
       // try to get userinfo
       this.axios.get(`${this.$hostname}UserManager/GetContextId`, 

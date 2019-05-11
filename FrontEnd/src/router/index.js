@@ -14,6 +14,7 @@ import UserHomePage from '@/Views/UserHomePage'
 import Redirect from '@/Views/Redirect'
 import UsageAnalysisDashboard from '@/Views/UsageAnalysisDashboard'
 import SchoolRegistration from '@/Views/SchoolRegistration'
+import Profile from '@/Views/Profile'
 //import Search from '@/Views/Search'
 
 Vue.use(Router)
@@ -83,6 +84,11 @@ export default new Router({
     path: "/SchoolRegistration",
     name: "SchoolRegistration",
     component: SchoolRegistration
+  },
+  {
+    path: "/Profile/:id",
+    name: "Profile",
+    component: Profile
   }
   //{
   //  path: "/Search",

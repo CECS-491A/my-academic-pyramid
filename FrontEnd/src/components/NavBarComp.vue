@@ -36,8 +36,8 @@ export default {
   data () {
     return {
       info: "My Academic Pyramid Homepage",
+      navigationBarState: NavBarState.state,
       sessionState: AppSession.state,
-      navigationBarState: NavBarState.state
     }
   },
   methods: {

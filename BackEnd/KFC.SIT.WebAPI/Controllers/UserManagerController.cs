@@ -116,6 +116,54 @@ namespace KFC.SIT.WebAPI.Controllers
             }
         }
 
+        [HttpGet]
+        public IHttpActionResult GetPublicUserInfoWithId(int id)
+        {
+            SecurityContext securityContext = SecurityContextBuilder.CreateSecurityContext(
+               Request.Headers
+           );
+            if (securityContext == null)
+            {
+                return Unauthorized();
+            }
+            SessionManager sm = new SessionManager();
+            if (!sm.ValidateSession(securityContext.Token))
+            {
+                return Unauthorized();
+            }
+
+            AuthorizationManager authorizationManager = new AuthorizationManager(
+                securityContext
+            );
+            // TODO get this from table in database.
+            List<string> requiredClaims = new List<string>()
+            {
+                "CanReadAStudentPublicInformation"
+            };
+
+            if (!authorizationManager.CheckClaims(requiredClaims))
+            {
+                return Unauthorized();
+            }
+            else
+            {
+                UserManager um = new UserManager();
+                UserDTO userDTO = um.GetUserInfo(id);
+                var publicUserInfo = new
+                {
+                    Id = userDTO.Id,
+                    UserName = userDTO.UserName,
+                    FirstName = userDTO.FirstName,
+                    LastName = userDTO.LastName,
+                    Exp = userDTO.Exp
+                };
+                string updatedToken = sm.RefreshSession(securityContext.Token);
+                return Ok(
+                    new { User = publicUserInfo, SITtoken = updatedToken }
+                );
+            }
+        }
+
 
         // POST api/<controller>
         [HttpPost]

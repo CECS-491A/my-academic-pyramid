@@ -17,6 +17,13 @@
           <v-list-tile-title class="purple--text">{{link.text}}</v-list-tile-title>
         </v-list-tile-content>
       </v-list-tile>
+      <v-list-tile>
+        <v-list-tile-content>
+          <v-list-tile-title>
+            {{computedTestObj}}
+          </v-list-tile-title>
+        </v-list-tile-content>
+      </v-list-tile>
     </v-list>
   </v-navigation-drawer>
 </template>
@@ -32,6 +39,7 @@ export default {
     return {
       info: "My Academic Pyramid Homepage",
       navigationBarState: NavBarState.state,
+      sessionState: AppSession.state,
       links: [
         // If true, show when logged in
         // If false, show when logged out
@@ -41,6 +49,14 @@ export default {
           icon: "contacts",
           text: "User HomePage",
           route: "/UserHomePage",
+          onlyActive: true
+        },
+        {
+          name: "MyProfile",
+          icon: "",
+          text: "My Profile",
+          // sessionState isn't defined when this is being parsed....
+          route: `/Profile/${(this.sessionState != undefined) ? this.sessionState.userId : ""}`,
           onlyActive: true
         },
         {
@@ -92,12 +108,29 @@ export default {
           route: "/DiscussionForum",
           onlyActive: true
         }
-      ],
-      sessionState: AppSession.state
+      ], 
+      testObj: {greeting: "hello"},
+      computedTestObj: "default"
     };
   },
   created() {
     AppSession.synchAppSession();
+    console.log(`This is the userId ${this.sessionState.userId}`)
+  },
+  watch: {
+    sessionState : {
+      handler: function(newSessionState, oldSessionState) {
+        console.log('Session state has been changed.')
+        let profileLink = this.links[2]
+        // When session changes, update the link to profile.
+        profileLink.route = 
+          `/Profile/${(newSessionState.userId != undefined) ? newSessionState.userId : ""}`
+      },
+      deep: true // Vue watches for changes to properties of object.
+    },
+    testObj : function(newT, oldT) {
+      this.computedTestObj = "a" + newT.greeting
+    }
   },
   computed: {
     linksToDisplay: function() {
