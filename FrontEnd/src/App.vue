@@ -1,10 +1,7 @@
 <template>
+  <v-app>
   <nav>
-    <v-content>
-      <keep-alive>
-        <router-view/>
-      </keep-alive>
-    </v-content>
+    
     <!-- <v-toolbar flat app>
       <v-toolbar-side-icon class="grey--text" @click="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title>
@@ -30,6 +27,12 @@
 
     <NavDrawerComp ></NavDrawerComp>
   </nav>
+  <v-content>
+      <keep-alive>
+        <router-view/>
+      </keep-alive>
+    </v-content>
+  </v-app>
 </template>
 
 <script>

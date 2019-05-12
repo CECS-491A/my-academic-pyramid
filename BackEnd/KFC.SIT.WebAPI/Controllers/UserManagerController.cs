@@ -116,6 +116,54 @@ namespace KFC.SIT.WebAPI.Controllers
             }
         }
 
+        [HttpGet]
+        public IHttpActionResult GetPublicUserInfoWithId(int id)
+        {
+            SecurityContext securityContext = SecurityContextBuilder.CreateSecurityContext(
+               Request.Headers
+            );
+            if (securityContext == null)
+            {
+                return Unauthorized();
+            }
+            SessionManager sm = new SessionManager();
+            if (!sm.ValidateSession(securityContext.Token))
+            {
+                return Unauthorized();
+            }
+
+            AuthorizationManager authorizationManager = new AuthorizationManager(
+                securityContext
+            );
+            // TODO get this from table in database.
+            List<string> requiredClaims = new List<string>()
+            {
+                "CanReadAStudentPublicInformation"
+            };
+
+            if (!authorizationManager.CheckClaims(requiredClaims))
+            {
+                return Unauthorized();
+            }
+            else
+            {
+                UserManager um = new UserManager();
+                UserDTO userDTO = um.GetUserInfo(id);
+                var publicUserInfo = new
+                {
+                    Id = userDTO.Id,
+                    UserName = userDTO.UserName,
+                    FirstName = userDTO.FirstName,
+                    LastName = userDTO.LastName,
+                    Exp = userDTO.Exp
+                };
+                string updatedToken = sm.RefreshSession(securityContext.Token);
+                return Ok(
+                    new { User = publicUserInfo, SITtoken = updatedToken }
+                );
+            }
+        }
+
 
         // POST api/<controller>
         [HttpPost]
@@ -158,23 +206,52 @@ namespace KFC.SIT.WebAPI.Controllers
         }
 
         [HttpGet]
-        [ActionName("profile")]
+        [ActionName("UserProfile")]
         public IHttpActionResult GetUserProfile([FromUri] int accountId)
         {
-            try
+            SecurityContext securityContext = SecurityContextBuilder.CreateSecurityContext(
+               Request.Headers
+            );
+            if (securityContext == null)
             {
-                UserManager userManager = new UserManager();
+                return Unauthorized();
+            }
+            SessionManager sm = new SessionManager();
+            if (!sm.ValidateSession(securityContext.Token))
+            {
+                return Unauthorized();
+            }
 
-                var results = userManager.GetUserProfile(accountId);
-                return Content(HttpStatusCode.OK, results);
-            }
-            catch (Exception x) when (x is ArgumentException)
+            AuthorizationManager authorizationManager = new AuthorizationManager(
+                securityContext
+            );
+            // TODO get this from table in database.
+            List<string> requiredClaims = new List<string>()
             {
-                return Content(HttpStatusCode.BadRequest, x.Message);
-            }
-            catch (Exception x)
+                "CanReadAStudentPublicInformation"
+            };
+
+            if (!authorizationManager.CheckClaims(requiredClaims))
             {
-                return Content(HttpStatusCode.InternalServerError, x.Message);
+                return Unauthorized();
+            }
+            else
+            {
+                try
+                {
+                    UserManager userManager = new UserManager();
+                    string updatedToken = sm.RefreshSession(securityContext.Token);
+                    var results = userManager.GetUserProfile(accountId);
+                    return Ok(new { User = results, SITtoken = updatedToken });
+                }
+                catch (Exception x) when (x is ArgumentException)
+                {
+                    return Content(HttpStatusCode.BadRequest, x.Message);
+                }
+                catch (Exception x)
+                {
+                    return Content(HttpStatusCode.InternalServerError, x.Message);
+                }
             }
         }
 
