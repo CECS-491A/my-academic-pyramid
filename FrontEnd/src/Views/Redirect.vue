@@ -45,22 +45,25 @@ export default {
                     )
                 })
                 .then(response => {
-                  this.userCategory = response.data.User.Category
+                  AppSession.setCategory(response.data.User.Category)
                   AppSession.updateSession(response.data.SITtoken)
+                  this.userCategory = AppSession.state.category
                   this.targetURL = this.DIRECTED_PATHS[this.userCategory]
                   if (this.targetURL != undefined) {
                     this.$router.push(this.targetURL)
                   }
                   else {
                     //error
-                    console.log('error')
+                    console.log(`No target URL is found for the category: ${this.userCategory}`)
                   }
                 })
                 .catch(error => {
                   //Indicate an error. Server might be down so just logout the user.
                   // delete token to logout the user.
                   // Redirect user to error page.
+                  console.log('Was the getcontextid not succesful')
                   console.log('error')
+                  console.log(error)
                 })
     }
     else {

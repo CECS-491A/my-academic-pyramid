@@ -8,6 +8,9 @@ using DataAccessLayer.DTOs;
 using System.Security.Cryptography;
 using System.Text;
 using System.Data.Entity.Validation;
+using DataAccessLayer.Models.School;
+using static ServiceLayer.ServiceExceptions.UserManagementExceptions;
+using ServiceLayer.SchoolRegistration;
 
 namespace WebAPI.Gateways.UserManagement
 {
@@ -405,5 +408,37 @@ namespace WebAPI.Gateways.UserManagement
             return _userManagementServices.GetUserProfile(accountId);
         }
 
+        public void EditStudentProfile(int accountId, UserProfileDTO newUserProfileInfo)
+        {
+            Account accountToEdit = _userManagementServices.FindById(accountId);
+            Student studentToEdit = _userManagementServices.FindStudentById(accountId);
+
+            if(accountToEdit == null)
+            {
+                throw new AccountNotFoundException();
+            }
+            if(studentToEdit == null)
+            {
+                throw new NotAStudentException();
+            }
+            accountToEdit.FirstName = newUserProfileInfo.FirstName;
+            accountToEdit.MiddleName = newUserProfileInfo.MiddleName;
+            accountToEdit.LastName = newUserProfileInfo.LastName;
+            ISchoolRegistrationService schoolRegistrationServices = new SchoolRegistrationService(this._DbContext);
+            Department department = schoolRegistrationServices.FindDepartment(
+                newUserProfileInfo.DepartmentName
+            );
+            if(department == null)
+            {
+                throw new DepartmentNotFoundException();
+            }
+            studentToEdit.SchoolDepartmentId = department.Id;
+            // TODO allow telemetry
+
+            _userManagementServices.UpdateUser(accountToEdit);
+            _userManagementServices.UpdateStudent(studentToEdit);
+            this._DbContext.SaveChanges();
+
+        }
     }
 }

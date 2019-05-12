@@ -21,7 +21,8 @@
                 <v-card-text>
                   <p>{{username}}</p>
                   <p>{{name}}</p>
-                  <p>{{userInfo.schoolName}} Department: {{userInfo.departmentName}}</p>
+                  <p>{{userInfo.schoolName}} </p>
+                  <p>Department: {{userInfo.departmentName}}</p>
                   <p>Member since: {{memberSince}}</p>
                   <p>Age: {{age}}</p>
                   
@@ -48,14 +49,14 @@
                     </v-flex>
                     <v-divider></v-divider>
                   </v-layout>
-                  <v-layout>
-                    <v-text-field v-model="updatedUserInfo.newDepartmentName" :label="`Allow telemetric data recording.`"></v-text-field>
+                  <v-layout row wrap>
+                    <v-text-field v-model="updatedUserInfo.newDepartmentName" :label="`Department`"></v-text-field>
                   </v-layout>
-                  <v-layout>
+                  <v-layout row wrap>
                     <v-checkbox v-model="allowTelemetry" :label="`Allow telemetric data recording.`"></v-checkbox>
                   </v-layout>
                   <v-layout>
-                    <v-btn>Enter</v-btn>
+                    <v-btn @click="modifyProfile">Enter</v-btn>
                   </v-layout>
                   
                 </v-container>
@@ -110,7 +111,12 @@ export default {
                 .then(response => {
                     // Get user userid.
                     AppSession.updateSession(response.data.SITtoken)
-                    this.userInfo = response.data.User
+                    this.userInfo.firstName = response.data.User.FirstName
+                    this.userInfo.middleName = response.data.User.MiddleName
+                    this.userInfo.lastName = response.data.User.LastName
+                    this.userInfo.schoolName = response.data.User.SchoolName
+                    this.userInfo.departmentName = response.data.User.DepartmentName
+                    this.userInfo.courses = response.data.user.Courses
                     console.log('About to finish getUserInfo')
                 })
                 .catch(error => {
@@ -118,6 +124,36 @@ export default {
                   // delete token to logout the user.
                   // Redirect user to error page.
                 })
+    },
+    modifyProfile() {
+      let requestPayload = {
+          FirstName: this.updatedUserInfo.newFirstName,
+          MiddleName: this.updatedUserInfo.newMiddleName,
+          LastName: this.updatedUserInfo.newLastName,
+          DepartmentName: this.updatedUserInfo.newDepartmentName
+        }
+      let headersObject = {
+          headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + AppSession.state.token
+          }
+        }
+      let editUrl = `${this.$hostname}/User/EditUser`
+      this.axios.post(editUrl, requestPayload, headersObject)
+                .then(response => {
+                  console.log("starting frontend")
+                  AppSession.updateSession(response.data)
+                  this.getUserInfo(this.$route.params.id).then(() => {
+                    if (this.isOwnUser) {
+                      this.synchToInputs()
+                    }
+                  }).catch((error)=> {
+
+                  })
+                  console.log("Update succeeded")
+                })
+                .catch(error => {console.log('Error in edit')})
     },
     synchToInputs() {
       console.log('This is the first name' + this.userInfo.firstName)
@@ -131,7 +167,7 @@ export default {
   },
   computed: {
     name() {
-      return this.updatedUserInfo.firstName + " " + this.updatedUserInfo.lastName;
+      return this.userInfo.firstName + " " + this.userInfo.lastName;
     },
     isOwnUser() {
       if (this.$route != undefined) {
