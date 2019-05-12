@@ -48,6 +48,9 @@
                     
                   </v-layout>
                   <v-layout>
+                    <v-checkbox v-model="allowTelemetry" :label="`Allow telemetric data recording.`"></v-checkbox>
+                  </v-layout>
+                  <v-layout>
                     <v-btn>Enter</v-btn>
                   </v-layout>
                   
@@ -70,21 +73,23 @@ export default {
   data() {
     return {
       tab: null,
-      username: "username",
-      firstName: "firstName",
-      lastName: "lastName",
+      username: "",
+      firstName: "",
+      middleName: "",
+      lastName: "",
       memberSince: "date",
       age: "age",
       newFirstName: "New",
       newMiddleName: "new",
       newLastName: "New",
-      viewingUserId: AppSession.state.userId
+      viewingUserId: AppSession.state.userId,
+      allowTelemetry: false
     };
   },
   methods: {
-    getUserInfo(profileUserId) {
+    async getUserInfo(profileUserId) {
       console.log(`Id of get user info is ${profileUserId}`)
-      this.axios.get(`${this.$hostname}UserManager/GetPublicUserInfoWithId?id=${profileUserId}`, 
+      await this.axios.get(`${this.$hostname}UserManager/GetPublicUserInfoWithId?id=${profileUserId}`, 
                      {headers: {'Accept': 'application/json',
                                 'Content-Type': 'application/json',
                                 'Authorization': `Bearer ${AppSession.state.token}`}})
@@ -94,12 +99,20 @@ export default {
                     this.username = response.data.User.UserName
                     this.firstName = response.data.User.FirstName
                     this.lastName = response.data.User.LastName
+                    console.log('About to finish getUserInfo')
                 })
                 .catch(error => {
                   //Indicate an error. Server might be down so just logout the user.
                   // delete token to logout the user.
                   // Redirect user to error page.
                 })
+    },
+    synchToInputs() {
+      console.log('This is the first name' + this.firstName)
+      this.newFirstName = this.firstName
+      // this.newMiddleName = this.middleName
+      this.newLastName = this.lastName
+      
     }
   },
   computed: {
@@ -116,12 +129,27 @@ export default {
   watch: {
     '$route' (to,from) {
       if(to.params.id != undefined) {
-        this.getUserInfo(to.params.id)
+        this.getUserInfo(to.params.id).then(() =>  {
+          console.log('getUserInfo is complete in watch')
+          if (this.isOwnUser()) {
+            this.synchToInputs()
+          }
+        }).catch((error)=> {
+
+          })
       }
     }
   },
   created() {
+    console.log("In createed of Profile.vue")
     this.getUserInfo(this.$route.params.id)
+        .then(() => {
+          if (this.isOwnUser) {
+            this.synchToInputs()
+          }
+        }).catch((error)=> {
+
+          })
   }
 };
 </script>
