@@ -120,6 +120,7 @@
     <Compile Include="HttpClients\HttpClientString.cs" />
     <Compile Include="PasswordChecking\HashFunctions\SHA256HashFunction.cs" />
     <Compile Include="PasswordChecking\SaltFunction\CustomSaltFunction.cs" />
+    <Compile Include="PredicateBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SchoolRegistration\ISchoolRegistrationService.cs" />
     <Compile Include="SchoolRegistration\SchoolRegistrationService.cs" />

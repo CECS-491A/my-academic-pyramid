@@ -12,7 +12,7 @@
           labels: ['December', 'January', 'February', 'March', 'April', 'May'],
           datasets: [
             {
-              label: 'Data One',
+              label: '# of Logged In Users',
               backgroundColor: "rgba(54, 162, 235, 0.6)",
               pointBackgroundColor: 'white',
               borderWidth: 1,

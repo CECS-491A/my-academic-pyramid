@@ -1,6 +1,7 @@
 <script>
   //Importing Bar class from the vue-chartjs wrapper
   import { Bar } from 'vue-chartjs'
+  import axios from 'axios'
   //Exporting this so it can be used in other components
   export default {
     extends: Bar,
@@ -11,13 +12,13 @@
           labels: ['December', 'January', 'February', 'March', 'April', 'May'],
           datasets: [
             {
-              label: 'Data One',
-              backgroundColor: "rgba(75, 192, 192, 0.6)",
+              label: '# of Average Successful',
+              backgroundColor: "rgba(54, 162, 235, 0.6)",
               pointBackgroundColor: 'white',
               borderWidth: 1,
               pointBorderColor: '#249EBF',
               //Data to be represented on y-axis
-              data: [.40, .20, .30, .50, .90, .40]
+              data: [44, 32, 14, 45, 30, 40]
             }
           ]
         },
@@ -48,7 +49,7 @@
     },
     fetchData() {
       this.axios
-        .get('http://localhost:59364/api/dashboard/sLogin', {
+        .get(`${this.$hostname}UAD/sLogin`, {
           headers: { "Content-Type": "application/Json" }
         })
         .then(response => {
@@ -61,7 +62,7 @@
     },
     fetchLabel() {
       this.axios
-        .get('http://localhost:59364/api/dashboard/recentMonths', {
+        .get(`${this.$hostname}UAD/recentMonths`, {
           headers: { "Content-Type": "application/Json" }
         })
         .then(response => {

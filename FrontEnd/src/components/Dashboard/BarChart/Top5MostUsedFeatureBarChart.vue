@@ -11,11 +11,23 @@
           labels: ['Dashboard', 'Feature2', 'Feature3', 'Feature4', 'Feature5'],
           datasets: [
             {
-              label: 'Data One',
-              backgroundColor: "rgba(54, 162, 235, 0.6)",
+              label: '# of Used',
+              backgroundColor: [
+                            "rgba(255, 99, 132, 0.6)",
+                            "rgba(54, 162, 235, 0.6)",
+                            "rgba(255, 206, 86, 0.6)",
+                            "rgba(75, 192, 192, 0.6)",
+                            "rgba(153, 102, 255, 0.6)",
+              ],
               pointBackgroundColor: 'white',
               borderWidth: 1,
-              pointBorderColor: '#249EBF',
+              pointBorderColor: [
+                            "rgba(255, 99, 132, 0.6)",
+                            "rgba(54, 162, 235, 0.6)",
+                            "rgba(255, 206, 86, 0.6)",
+                            "rgba(75, 192, 192, 0.6)",
+                            "rgba(153, 102, 255, 0.6)",
+              ],
               //Data to be represented on y-axis
               data: [40, 20, 30, 50, 90]
             }

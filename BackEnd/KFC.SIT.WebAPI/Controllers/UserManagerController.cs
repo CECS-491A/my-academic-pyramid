@@ -205,7 +205,26 @@ namespace KFC.SIT.WebAPI.Controllers
             return new HttpResponseMessage { StatusCode = HttpStatusCode.OK };
         }
 
+        [HttpGet]
+        [ActionName("profile")]
+        public IHttpActionResult GetUserProfile([FromUri] int accountId)
+        {
+            try
+            {
+                UserManager userManager = new UserManager();
 
+                var results = userManager.GetUserProfile(accountId);
+                return Content(HttpStatusCode.OK, results);
+            }
+            catch (Exception x) when (x is ArgumentException)
+            {
+                return Content(HttpStatusCode.BadRequest, x.Message);
+            }
+            catch (Exception x)
+            {
+                return Content(HttpStatusCode.InternalServerError, x.Message);
+            }
+        }
 
 
     }

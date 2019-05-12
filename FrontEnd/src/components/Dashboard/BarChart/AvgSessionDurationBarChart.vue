@@ -11,7 +11,7 @@
           labels: ['December', 'January', 'February', 'March', 'April', 'May'],
           datasets: [
             {
-              label: 'Average Successful Login',
+              label: '# of Average Successful Login',
               backgroundColor: "rgba(54, 162, 235, 0.6)",
               pointBackgroundColor: 'green',
               borderWidth: 1,
