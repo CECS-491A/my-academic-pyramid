@@ -43,119 +43,119 @@ namespace KFC.SIT.WebAPI.Controllers
                     Category = user.Category.Value,
                     DateOfBirth = user.DateOfBirth.ToString("MMMM dd yyyy hh:mm:ss tt"),
                     CreatedAt = user.CreatedAt.ToString("MMMM dd yyyy hh:mm:ss tt")
-                    
-
-//                });
-//            }
-
-//            return list.AsQueryable();
-//        }
-
-//        [HttpGet]
-//        [ActionName("GetContextId")]
-//        public HttpResponseMessage GetContextId()
-//        {
-//            SecurityContext securityContext = SecurityContextBuilder.CreateSecurityContext(
-//               Request.Headers
-//            );
-//            if (securityContext == null)
-//            {
-//                return Request.CreateResponse(HttpStatusCode.Unauthorized);
-//            }
-//            SessionManager sm = new SessionManager();
-//            if (!sm.ValidateSession(securityContext.Token))
-//            {
-//                return Request.CreateResponse(HttpStatusCode.Unauthorized);
-//            }
-//            string updatedToken = sm.RefreshSession(securityContext.Token);
-//            // TODO finish this.
-//            return Request.CreateResponse(
-//                HttpStatusCode.OK, new { userid = securityContext.UserId, SITtoken = updatedToken }
-//            );
-//        }
-
-//        [HttpGet]
-//        [ActionName("GetUserInfoWithId")]
-//        public HttpResponseMessage GetUserInfoWithId(int id)
-//        {
-//            SecurityContext securityContext = SecurityContextBuilder.CreateSecurityContext(
-//               Request.Headers
-//           );
-//            if (securityContext == null)
-//            {
-//                return Request.CreateResponse(HttpStatusCode.Unauthorized);
-//            }
-//            SessionManager sm = new SessionManager();
-//            if (!sm.ValidateSession(securityContext.Token))
-//            {
-//                return Request.CreateResponse(HttpStatusCode.Unauthorized);
-//            }
-
-//            AuthorizationManager authorizationManager = new AuthorizationManager(
-//                securityContext
-//            );
-//            // TODO get this from table in database.
-//            List<string> requiredClaims = new List<string>()
-//            {
-//                "CanReadOwnStudentAccount"
-//            };
-
-//            if (securityContext.UserId != id ||
-//                !authorizationManager.CheckClaims(requiredClaims))
-//            {
-//                return Request.CreateResponse(HttpStatusCode.Unauthorized);
-//            }
-//            else
-//            {
-//                UserManager um = new UserManager();
-//                UserDTO userDTO = um.GetUserInfo(id);
-//                string updatedToken = sm.RefreshSession(securityContext.Token);
-//                return Request.CreateResponse(
-//                    HttpStatusCode.OK, new {User = userDTO, SITtoken = updatedToken}
-//                );
-//            }
-//        }
 
 
-//        // POST api/<controller>
-//        [HttpPost]
-      
-//        public HttpResponseMessage CreateNewUSer([FromBody] UserDTO userDto)
-//        {
-//            UserManager umManager = new UserManager();
-//            var createdUser = umManager.CreateUserAccount(userDto);
-//            var message = Request.CreateResponse(HttpStatusCode.OK, userDto);
-  
-//            return message;
+                });
+            }
 
-//        }
+            return list.AsQueryable();
+        }
 
-//        // PUT api/<controller>/5
-//        [HttpPut]
-//        public IHttpActionResult EditUser([FromBody] UserDTO userDto)
-//        {
-//            UserManager umManager = new UserManager();
-//            Account foundUser = umManager.FindUserById(userDto.Id);
-//            foundUser.UserName = userDto.UserName;
-//            foundUser.FirstName = userDto.FirstName;
-//            foundUser.LastName = userDto.LastName;
-//            return Ok(umManager.UpdateUserAccount(foundUser));
-//        }
+        [HttpGet]
+        [ActionName("GetContextId")]
+        public HttpResponseMessage GetContextId()
+        {
+            SecurityContext securityContext = SecurityContextBuilder.CreateSecurityContext(
+               Request.Headers
+            );
+            if (securityContext == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.Unauthorized);
+            }
+            SessionManager sm = new SessionManager();
+            if (!sm.ValidateSession(securityContext.Token))
+            {
+                return Request.CreateResponse(HttpStatusCode.Unauthorized);
+            }
+            string updatedToken = sm.RefreshSession(securityContext.Token);
+            // TODO finish this.
+            return Request.CreateResponse(
+                HttpStatusCode.OK, new { userid = securityContext.UserId, SITtoken = updatedToken }
+            );
+        }
+
+        [HttpGet]
+        [ActionName("GetUserInfoWithId")]
+        public HttpResponseMessage GetUserInfoWithId(int id)
+        {
+            SecurityContext securityContext = SecurityContextBuilder.CreateSecurityContext(
+               Request.Headers
+           );
+            if (securityContext == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.Unauthorized);
+            }
+            SessionManager sm = new SessionManager();
+            if (!sm.ValidateSession(securityContext.Token))
+            {
+                return Request.CreateResponse(HttpStatusCode.Unauthorized);
+            }
+
+            AuthorizationManager authorizationManager = new AuthorizationManager(
+                securityContext
+            );
+            // TODO get this from table in database.
+            List<string> requiredClaims = new List<string>()
+            {
+                "CanReadOwnStudentAccount"
+            };
+
+            if (securityContext.UserId != id ||
+                !authorizationManager.CheckClaims(requiredClaims))
+            {
+                return Request.CreateResponse(HttpStatusCode.Unauthorized);
+            }
+            else
+            {
+                UserManager um = new UserManager();
+                UserDTO userDTO = um.GetUserInfo(id);
+                string updatedToken = sm.RefreshSession(securityContext.Token);
+                return Request.CreateResponse(
+                    HttpStatusCode.OK, new { User = userDTO, SITtoken = updatedToken }
+                );
+            }
+        }
 
 
-//        [HttpDelete]    
-//        public IHttpActionResult DeleteUser(SsoPayload ssoPayload)
-//        {
-//            //UserManager umManager = new UserManager();
-//            //umManager.DeleteUserAccount(umManager.FindUserById(id));
-//            return Ok();
-//        }
+        // POST api/<controller>
+        [HttpPost]
 
-//        [HttpOptions]
-//        public HttpResponseMessage Options()
-//        {
-//            return new HttpResponseMessage { StatusCode = HttpStatusCode.OK };
-//        }
+        public HttpResponseMessage CreateNewUSer([FromBody] UserDTO userDto)
+        {
+            UserManager umManager = new UserManager();
+            var createdUser = umManager.CreateUserAccount(userDto);
+            var message = Request.CreateResponse(HttpStatusCode.OK, userDto);
+
+            return message;
+
+        }
+
+        // PUT api/<controller>/5
+        [HttpPut]
+        public IHttpActionResult EditUser([FromBody] UserDTO userDto)
+        {
+            UserManager umManager = new UserManager();
+            Account foundUser = umManager.FindUserById(userDto.Id);
+            foundUser.UserName = userDto.UserName;
+            foundUser.FirstName = userDto.FirstName;
+            foundUser.LastName = userDto.LastName;
+            return Ok(umManager.UpdateUserAccount(foundUser));
+        }
+
+
+        [HttpDelete]
+        public IHttpActionResult DeleteUser(SsoPayload ssoPayload)
+        {
+            //UserManager umManager = new UserManager();
+            //umManager.DeleteUserAccount(umManager.FindUserById(id));
+            return Ok();
+        }
+
+        [HttpOptions]
+        public HttpResponseMessage Options()
+        {
+            return new HttpResponseMessage { StatusCode = HttpStatusCode.OK };
+        }
 
         [HttpGet]
         [ActionName("profile")]
@@ -179,5 +179,5 @@ namespace KFC.SIT.WebAPI.Controllers
         }
 
 
-//    }
-//}
+    }
+}
