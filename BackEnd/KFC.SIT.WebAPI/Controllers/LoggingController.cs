@@ -7,74 +7,102 @@ using System.Web.Http;
 using DataAccessLayer.Models;
 using DataAccessLayer.Logging;
 using System.Web.Http.Cors;
-
+using ServiceLayer.Logging;
+using ManagerLayer.Gateways.Logging;
+using System.Web;
 
 namespace KFC.SIT.WebAPI.Controllers
 {
-    //readonly MongoDatabase mongoDatabase;
     [EnableCors(origins: "*", headers: "*", methods: "*")]
-    [Route("api/[controller]")]
     public class LoggingController : ApiController
     {
-        //mongoDatabase = RetrieveMongohqDB();
-        private ErrorLogCollection _errors = new DataAccessLayer.Logging.ErrorLogCollection();
-        private TelemetryLogCollection _telemetries = new DataAccessLayer.Logging.TelemetryLogCollection();
-
+        private LoggingServices _loggingServices = new LoggingServices();
+        private static LoggingManager _loggingManager = new LoggingManager();
 
         [HttpGet]
-        [Route("api/logging/geterrors")]
-        public List<ErrorLog> ListErrors()
+        [ActionName("GetErrorLogs")]
+        public IHttpActionResult GetErrorLogs()
         {
-            return _errors.GetAll();
+            var errorLogs =  _loggingServices.GetAllErrorLogs();
+            return Content(HttpStatusCode.OK, errorLogs);
         }
 
         [HttpGet]
-        [Route("api/logging/gettelemetries")]
-        public List<TelemetryLog> ListTelemetries()
+        [ActionName("GetTelemetryLogs")]
+        public List<TelemetryLog> GetTelemetryLogs()
         {
-            return _telemetries.GetAll();
+            return _loggingServices.GetAllTelemetryLogs();
         }
 
         [HttpDelete]
-        [Route("api/logging/deleteerror")]
-        public void DeleteError(string id)
+        [ActionName("DeleteErrorLog")]
+        public void DeleteErrorLog(string errorLogId)
         {
-            _errors.Delete(id);
-
+            _loggingServices.DeleteErrorLog(errorLogId);
             //return Ok();
         }
 
         [HttpDelete]
-        [Route("api/logging/deletetelemetry")]
-        public IHttpActionResult DeleteTelemetry(string id)
+        [ActionName("DeleteTelemetryLog")]
+        public IHttpActionResult DeleteTelemetryLog(string telemetryLogId)
         {
-            _telemetries.Delete(id);
+            _loggingServices.DeleteTelemetryLog(telemetryLogId);
 
             return Ok();
         }
 
         [HttpPost]
-        [Route("api/logging/deleteerrors")]
-        public IHttpActionResult DeleteAllErrors()
+        [ActionName("LogPageVisit")]
+        public IHttpActionResult LogPageVisit(string userName, string page)
         {
-            _errors.DeleteAll();
+            _loggingManager.LogLogin(userName, page);
+            string ip = HttpContext.Current.Request.UserHostAddress;
+
+            string request = HttpContext.Current.Request.HttpMethod;
+            _loggingManager.LogRequest(userName, request);
 
             return Ok();
         }
 
+        // IP Address
+        // string ipAddress = HttpContext.Current.Request.UserHostAddress
+        //_logger.LogLogin(userName, ipAddress);
+
+        // Functionality 
+        // string functionality = this.ControllerContext.RouteData.Values["action"].ToString();
+
+
+
+
+
+        // TODO - delete
         [HttpPost]
-        [Route("api/logging/deletetelemetries")]
-        public IHttpActionResult DeleteAllTelemetries()
+        [ActionName("DeleteAllErrorLogs")]
+        public IHttpActionResult DeleteAllErrorLogs()
         {
-            _telemetries.DeleteAll();
+            _loggingServices.DeleteAllErrorLogs();
 
             return Ok();
         }
 
+        // TODO - delete 
+        [HttpPost]
+        [ActionName("DeleteAllTelemetryLogs")]
+        public IHttpActionResult DeleteAllTelemetryLogs()
+        {
+            _loggingServices.DeleteAllTelemetryLogs();
 
+            return Ok();
+        }
 
+        // Todo - Delete. call service where account is deleted
+        [HttpPost]
+        [ActionName("DeleteAllTelemetryLogsForUser")]
+        public IHttpActionResult DeleteAllTelemetryLogsForUser(string userName)
+        {
+            _loggingServices.DeleteUserTelemetryLogs(userName);
 
-
-
+            return Ok();
+        }
     }
 }

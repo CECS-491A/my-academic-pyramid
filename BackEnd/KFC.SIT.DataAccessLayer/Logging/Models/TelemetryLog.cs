@@ -13,23 +13,57 @@ namespace DataAccessLayer.Models
         [BsonElement("Date")]
         public DateTime Date { get; set; }
 
-        [BsonElement("Month")]
-        public int Month { get; set; }
-
         [BsonElement("UserName")]
-        public string UserName { get; set; }
-
-        [BsonElement("Session Duration")]
-        public int SessionDuration { get; set; }
+        public string UserName { get; set; }       
 
         [BsonElement("Action")]
         public string Action { get; set; }
 
         [BsonElement("User IP Address")]
         public string UserIPAddress { get; set; }
- 
 
         [BsonElement("User Location")]
         public string UserLocation { get; set; }
+
+        [BsonElement("Session Duration")]
+        public DateTime SessionDuration { get; set; }
+
+        [BsonElement("Month")]
+        public int Month { get; set; }
     }
+
+    public class RequestLog
+    {
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string ID { get; set; }
+
+        [BsonElement("Date")]
+        public DateTime Date { get; set; }
+
+        [BsonElement("UserName")]
+        public string UserName { get; set; }
+
+        [BsonElement("Request")]
+        public string Request { get; set; }
+    }
+    
+    //public class LoginLog
+    //{
+    //    [BsonId]
+    //    [BsonRepresentation(BsonType.ObjectId)]
+    //    public string ID { get; set; }
+
+    //    [BsonElement("Login Date")]
+    //    public DateTime Date { get; set; }
+
+    //    [BsonElement("UserName")]
+    //    public string UserName { get; set; }
+
+    //    [BsonElement("User IP Address")]
+    //    public string UserIPAddress { get; set; }
+
+    //    [BsonElement("User Location")]
+    //    public string UserLocation { get; set; }
+    //}
 }
