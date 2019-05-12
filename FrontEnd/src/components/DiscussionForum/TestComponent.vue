@@ -1,177 +1,157 @@
 <template>
-  <v-app>
-    <div class="post question">
-      <v-container>
-      <v-card dark > 
-        <v-responsive aspect-ration= "9/16">
-        <h1>Post Question</h1>
+<v-container>
+  <v-card class="mx-auto" dark max-width="1400" max-height="800" v-for="item in questions" :key="item.AccountName">
 
-        <v-form>
-        <v-textarea
-            name="text"
-            id="text"
-            type="text"
-            v-model="text"
-            label="Enter question between 50 and 2000 characters"
-            auto-grow
-            v-if="!validation"
-            rows="3"
-            /><br />
-        <v-text-field
-            name="exp"
-            id="exp"
-            type="exp"
-            v-model="exp"
-            label="Enter exp a user needs to answer your question" 
-            v-if="!validation"
-            /><br />
-        
-          <v-btn id="btnDraft" color="grey" v-if="!validation" v-on:click="postDraft">Save Draft</v-btn>
+    <v-card-title>{{item.AccountName}}
+    <v-spacer></v-spacer>
+    {{item.DateCreated}}</v-card-title>
 
 
-        
-        <v-alert
-            :value="error"
-            id="error"
-            type="error"
-            transition="scale-transition"
-        >
-            {{error}}
-        </v-alert>
+    <v-card-text class="headline font-weight-bold"> {{item.Text}} </v-card-text>
 
-        <div v-if="validation" id="postQuestion">
-            <h3>{{ validation }}</h3>
-        </div>
+    <v-card-actions>
+      <v-list-item class="grow">
+
+        <v-list-item-content> {{ item.SchoolName + "/" + item.DepartmentName + "/" + item.CourseName }}     <v-spacer></v-spacer>
+
+         {{"     Spam Count        : " + item.SpamCount + " Answers: " + item.AnswerCount + " Exp Needed to Answer: " + item.ExpNeededToAnswer}}
+        <!-- </v-list-item-content>
+
+        <v-list-item-content> -->
+<v-spacer></v-spacer>
+
+        <!-- <v-btn slot="activator" color="success">
+        <v-icon left>mdi-bell</v-icon>
+            Dropdown
+        </v-btn>
+        <v-card>
+            <v-list dense>
+            <v-list-tile
+                v-for="option in options"
+                :key="option"
+            >
+                <v-list-tile-title
+                v-text="option"
+                />
+            </v-list-tile>
+            </v-list>
+        </v-card> -->
 
 
-        <v-btn id="btnPostQuestion" color="success" v-if="!validation" v-on:click="postQuestion">Post Question</v-btn>
 
-        </v-form>
+            <!-- <v-flex shrink pa-1> -->
+                <!-- <v-select
+                    v-model="options"
+                    :items="options"
+                    @input=""
+                ></v-select> -->
+            <!-- </v-flex> -->
+        </v-list-item-content>    
 
-        <v-dialog
-          v-model="loading"
-          hide-overlay
-          persistent
-          width="300"
-        >
-          <v-card
-            color="primary"
-            dark
-          >
-            <v-card-text>
-              Loading
-              <v-progress-linear
-                indeterminate
-                color="white"
-                class="mb-0"
-              ></v-progress-linear>
-            </v-card-text>
-          </v-card>
-        </v-dialog>
-        </v-responsive>
-      </v-card> 
-      </v-container>
-    </div>
-  </v-app>
+        <v-layout align-center>
+          <v-btn small>See Answers</v-btn>
+          <v-btn small>Post Answer</v-btn>
+
+<v-spacer></v-spacer>
+
+
+          <v-btn small>See Answers</v-btn>
+          <v-btn small>Post Answer</v-btn>
+
+        </v-layout>
+      </v-list-item>
+    </v-card-actions>
+  </v-card>
+  </v-container>
 </template>
+
 
 <script>
 import axios from 'axios'
-
-export default {
-  data () {
-    return {
-      validation: null,
-      text: '',
-      exp: '',
-      underMaintenance: false,
-      error: '',
-      loading: false
-    }
-  },
-  methods: {
-    postQuestion: function () {
-      this.error = "";
-      if (this.text.length < 50 || this.text.length > 2000) {
-        this.error = "Invalid text length";
+  export default {
+    name: "QuestionCard",
+    data () {
+      return {
+        ismyQuestion: true,
+        options: ["edit", "delete", "spam"],
+        userAccount: null,
+        isStudent: true,
+        userId: "",
+        school: "",
+        schools: [],
+        department: "",
+        departments: [],
+        course: "",
+        courses: [],
+        response: '',
+        item: 
+          {
+            QuestionId: '11',
+            SchoolName: 'CSULB',
+            DepartmentName: 'Computer Science',
+            CourseName: 'CECS491',
+            AccountId: "10",
+            AccountName: "account name ",
+            Text: "a question ",
+            ExpNeededToAnswer: "17",
+            IsClosed: "false",
+            SpamCount: "0",
+            AnswerCount: "0",
+            DateCreated: "05/12/19",
+            DateUpdated: "05/15/19",
+          }, 
+        questions: [
+        //   {
+        //     QuestionId: '',
+        //     SchoolName: '',
+        //     DepartmentName: '',
+        //     CourseName: '',
+        //     AccountId: "",
+        //     AccountName: "",
+        //     Text: "",
+        //     ExpNeededToAnswer: "",
+        //     IsClosed: "",
+        //     SpamCount: "",
+        //     AnswerCount: "",
+        //     DateCreated: "",
+        //     DateUpdated: "",
+        //   }, 
+        ]
       }
-
-      if (this.exp.length == 0) {
-        this.exp = 0;
-      }
-
-      if (this.exp < 0) {
-        this.error = "Invalid exp number";
-      }
-
-      if (this.error) return;
-
-      const url = 'DiscussionForum/PostQuestion'
-      this.loading = true;
-      this.axios.post(url, {
-        QuestionType: "DraftQuestion",
-        SchoolId: getSchoolId(),
-        DepartmentId: getDepartmentId(),
-        CourseId: getCourseId(),
-        Text: document.getElementById('text').value,
-        Exp: document.getElementById('exp').value,
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        }
-      })
-        .then(response => {
-          this.validation = response.data.Message // Retrieve validation message from response
-        })
-        .catch(err => {
-          this.error = err.response.data.Message
-        })
-        .finally(() => {
-          this.loading = false;
-        })
     },
-    postDraft: function () {
-      this.error = "";
-      if (this.text.length > 2000) {
-        this.error = "Invalid text length";
-      }
 
-      if (this.exp.length == 0) {
-        this.exp = 0;
-      }
-
-      if (this.exp < 0) {
-        this.error = "Invalid exp number";
-      }
-
-      if (this.error) return;
-
-      const url = 'DiscussionForum/PostQuestion'
-      this.loading = true;
-      this.axios.post(this.$hostname + url, {
-         
-        //'Send': 'application/json'
-          QuestionType: "DraftQuestion",
-          Text: document.getElementById('text').value,
-          Exp: document.getElementById('exp').value.toString(),
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
+    created() {
+        this.getSchoolQuestions()
+    },
+    
+    // beforeMount(){
+    //     this.userId = sessionStorage.SITuserId;
+    //     //this.userId = "2"
+    //     this.getAccount()
+    // },
+    methods: {
+      getSchoolQuestions() {
+            this.axios({
+              headers: {
+                //Accept: "application/json", 
+                "Content-Type": "application/Json",
+                //Authorization: "Bearer" + sessionStorage.SITtoken
+              },
+              method: "GET", 
+              crossDomain: true,
+              url: this.$hostname + "DiscussionForum/GetQuestionsBySchool",
+              params: {
+                  schoolId: 1
+              }
+            })
+              .then(response => {
+                  this.questions = response.data;
+              })
+              .catch(err => {
+                  console.log(err);
+              });
         },
-      })
-        .then(response => {
-          this.validation = response.data 
-        })
-        .catch(err => {
-          this.error = err.response.data
-        })
-        .finally(() => {
-          this.loading = false;
-        })
     }
   }
-}
-
 </script>
-
 

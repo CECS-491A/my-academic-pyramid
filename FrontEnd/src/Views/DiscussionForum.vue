@@ -12,6 +12,7 @@
                 v-model="school"
                 :items="schools"
                 label="School"
+
             ></v-select>
             </v-flex>
             
@@ -34,7 +35,7 @@
             </v-flex>
             <v-spacer></v-spacer>
 
-            <v-btn small @click="gotoPost" > Post </v-btn>
+            <v-btn small @click="PostQuestion" > Post </v-btn>
 
             <v-btn icon>
               <v-icon>refresh</v-icon>
@@ -149,15 +150,9 @@ import axios from 'axios'
                 { text: 'Three', value: 'C' }
             ],
             questions: [],
-            schools: [
-              'All', 'Family', 'Friends', 'Coworkers'
-            ],
-            departments: [
-              'All', 'Family', 'Friends', 'Coworkers'
-            ],
-            courses: [
-              'All', 'Family', 'Friends', 'Coworkers'
-            ],
+            schools: [],
+            departments: [],
+            courses: [],
             drawer: false,
             links: [
                 { name: 'Questions', text: 'Questions', route: '/DiscussionForum'},
@@ -187,7 +182,7 @@ import axios from 'axios'
         this.getSchoolQuestions()
     },
     methods: {
-      gotoPost () {
+      PostQuestion () {
         this.$router.push("/DiscussionForum/PostQuestion")
       },
         getSchoolQuestions() {
@@ -211,6 +206,50 @@ import axios from 'axios'
                   console.log(err);
               });
         },
+        getSchools: function(){
+        this.errorMessage = "";
+
+        const url = `${this.$hostname}search/selections`;
+        Axios
+        .get(url, {
+            params:{
+                SearchCategory: 0
+            },
+            headers: { "Content-Type": "application/json", Authorization: "Bearer " + sessionStorage.SITtoken }
+            
+        })
+        .then(response =>{
+            this.schools = response.data;
+            if(this.schools.length > 0){
+                this.schools = [{id: 0, text: "NONE", value: 0 }].concat(this.schools)
+            }
+        })
+        .catch(error =>{
+            this.errorMessage = error.response.data.Message
+        })
+        
+    },
+    getDepartments: function(){
+        this.errorMessage = "";
+
+        const url = `${this.$hostname}search/selections`;
+        Axios
+        .get(url, {
+            params:{
+                SearchCategory: 1,
+                SearchSchool: this.school
+            },
+            headers: { "Content-Type": "application/json", Authorization: "Bearer " + sessionStorage.SITtoken }
+            
+        })
+        .then(response =>{
+            this.departments = response.data;
+        })
+        .catch(error =>{
+            this.errorMessage = error.response.data.Message
+        })
+        
+    },
         // toggle (index) {
         //   const i = this.selected.indexOf(index)
         //   if (i > -1) {
