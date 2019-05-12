@@ -14,7 +14,7 @@
 
 //namespace ServiceLayer.DiscussionForum
 //{
-//    public class SchoolQuestionServices : IQuestionServices<SchoolQuestion>, IPostedQuestionServices<SchoolQuestion>
+//    public class SchoolQuestionServices<T> where T : Question , IQuestionServices<T>, IPostedQuestionServices<SchoolQuestion>
 //    {
 //        private DatabaseContext _db;
 
@@ -45,11 +45,12 @@
 //            //return _db.SchoolQuestions.Find(questionId);
 //        }
 
-//        public List<SchoolQuestion> GetQuestions(List<int> ids)
+//        public List<T> GetQuestions(List<int> ids)
 //        {
 //            try
 //            {
-//                return _db.SchoolQuestions
+//                return _db.Questions
+//                    .OfType<T>()
 //                    .Where(q => q.SchoolId == ids[0])
 //                    .OrderBy(q => q.DateCreated)
 //                    .ToList();
@@ -103,20 +104,21 @@
 //            QuestionResponseDTO qRDTO = new QuestionResponseDTO
 //            {
 //                QuestionId = question.Id,
-//                // = q.SchoolId,
+//                //SchoolId = q.SchoolId,
 //                SchoolName = question.School.Name,
 //                //DepartmentId = q.DepartmentId,
 //                DepartmentName = null,
 //                //CourseId = q.CourseId,
 //                CourseName = null,
-//                AccountId = question.AccountId,
+//                //AccountId = question.AccountId,
 //                AccountName = question.Account.UserName,
 //                Text = question.Text,
 //                MinimumExpForAnswer = question.ExpNeededToAnswer,
-//                //IsDraft = q.IsDraft,
 //                IsClosed = question.IsClosed,
 //                SpamCount = question.SpamCount,
-//                AnswerCount = question.Answers.Count
+//                AnswerCount = question.Answers.Count,
+//                DateCreated = question.DateCreated,
+//                DateUpdated = question.DateUpdated
 //            };
 //            return qRDTO;
 //        }

@@ -10,7 +10,9 @@ namespace DataAccessLayer.Models.Requests
     {
         public int AccountId { get; set; }
         public int SearchCategory { get; set; }
+        public int SearchSchool { get; set; }
         public int SearchDepartment { get; set; }
+        public int SearchCourse { get; set; }
         public string SearchInput { get; set; }
     }
 }

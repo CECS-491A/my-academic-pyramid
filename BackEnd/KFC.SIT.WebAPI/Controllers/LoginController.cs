@@ -25,7 +25,7 @@ namespace KFC.SIT.WebAPI.Controllers
             SessionManager sm = new SessionManager();
             UserManager um = new UserManager();
             string URL_FIRST_PART 
-                = $"{WebAPIConstants.FRONT_END_LOCAL}/#/Redirect";
+                = $"{WebAPIConstants.FRONT_END_PRODUCTION}/#/Redirect";
             
             // Assume it's there for now.
             if (!SignatureService.IsValidClientRequest(
@@ -57,14 +57,14 @@ namespace KFC.SIT.WebAPI.Controllers
             // For production
             return Redirect(redirectUrl);
 
-            //Local only
-            Dictionary<string, string> redirectResponseDictionary = new Dictionary<string, string>()
-            {
-                { "redirectURL", URL_FIRST_PART }
-            };
-            redirectResponseDictionary["redirectURL"]
-                         = redirectResponseDictionary["redirectURL"] + "?SITtoken=" + token;
-            return Ok(redirectResponseDictionary);
+            // Local only
+            //Dictionary<string, string> redirectResponseDictionary = new Dictionary<string, string>()
+            //{
+            //    { "redirectURL", URL_FIRST_PART }
+            //};
+            //redirectResponseDictionary["redirectURL"]
+            //             = redirectResponseDictionary["redirectURL"] + "?SITtoken=" + token;
+            //return Ok(redirectResponseDictionary);
 
         }
 

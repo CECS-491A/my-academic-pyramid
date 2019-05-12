@@ -14,7 +14,7 @@ namespace DataAccessLayer.Models
         public DateTime Date { get; set; }
 
         [BsonElement("UserName")]
-        public string UserName { get; set; }       
+        public string UserName { get; set; }
 
         [BsonElement("Action")]
         public string Action { get; set; }

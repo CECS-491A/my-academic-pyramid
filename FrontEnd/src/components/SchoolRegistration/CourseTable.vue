@@ -1,7 +1,5 @@
 <template>
   <div id="courseTable">
-    <v-app id="inspire">
-      <div>
         <v-toolbar flat color="white">
           <v-toolbar-title>Course</v-toolbar-title>
           <v-divider class="mx-2" inset vertical></v-divider>
@@ -56,13 +54,8 @@
               <v-icon small @click="deleteItem(props.item)">delete</v-icon>
             </td>
           </template>
-          <template v-slot:no-data>
-            <v-btn color="primary" @click="initialize">Reset</v-btn>
-          </template>
         </v-data-table>
       </div>
-    </v-app>
-  </div>
 </template>
 <script>
 export default {

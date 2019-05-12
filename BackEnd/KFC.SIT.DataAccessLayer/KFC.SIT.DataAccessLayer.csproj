@@ -197,8 +197,9 @@
   <ItemGroup>
     <Compile Include="DTOs\AnswerDTO.cs" />
     <Compile Include="DTOs\ConversationDTO.cs" />
-    <Compile Include="DTOs\DepartmentDTO.cs" />
-    <Compile Include="DTOs\ForumPostDTO.cs" />
+    <Compile Include="DTOs\SearchDTO\SearchFilterSelectionDTO.cs" />
+    <Compile Include="DTOs\SearchDTO\AccountDTO.cs" />
+    <Compile Include="DTOs\SearchDTO\SearchForumPostDTO.cs" />
     <Compile Include="DTOs\FriendRelationshipDTO.cs" />
     <Compile Include="DTOs\MessageDTO.cs" />
     <Compile Include="DTOs\NewConversationMessageDTO.cs" />
@@ -206,21 +207,19 @@
     <Compile Include="DTOs\SchoolRegistrationDTO\DepartmentDTO.cs" />
     <Compile Include="DTOs\SchoolRegistrationDTO\SchoolDTO.cs" />
     <Compile Include="DTOs\SchoolRegistrationDTO\TeacherDTO.cs" />
-    <Compile Include="DTOs\SearchPersonDTO.cs" />
+    <Compile Include="DTOs\SearchDTO\SearchPersonDTO.cs" />
     <Compile Include="DTOs\QuestionDTO.cs" />
     <Compile Include="DTOs\StoredMessageDTO.cs" />
     <Compile Include="DTOs\UserDTO.cs" />
+    <Compile Include="DTOs\UserProfileDTO.cs" />
     <Compile Include="IEntity.cs" />
     <Compile Include="Logging\Models\Repository\ILogRepository.cs" />
     <Compile Include="Logging\MyLogger.cs" />
     <Compile Include="Logging\Models\Repository\LogRepository.cs" />
-    <Compile Include="Migrations\201905060449280_Initial.cs" />
-    <Compile Include="Migrations\201905060449280_Initial.Designer.cs">
-      <DependentUpon>201905060449280_Initial.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201905060525187_removeSchoolIdinSchoolTeacher.cs" />
-    <Compile Include="Migrations\201905060525187_removeSchoolIdinSchoolTeacher.Designer.cs">
-      <DependentUpon>201905060525187_removeSchoolIdinSchoolTeacher.cs</DependentUpon>
+   
+    <Compile Include="Migrations\201905080342363_Initial.cs" />
+    <Compile Include="Migrations\201905080342363_Initial.Designer.cs">
+      <DependentUpon>201905080342363_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Category.cs" />
@@ -292,11 +291,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201905060449280_Initial.resx">
-      <DependentUpon>201905060449280_Initial.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201905060525187_removeSchoolIdinSchoolTeacher.resx">
-      <DependentUpon>201905060525187_removeSchoolIdinSchoolTeacher.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201905080342363_Initial.resx">
+      <DependentUpon>201905080342363_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

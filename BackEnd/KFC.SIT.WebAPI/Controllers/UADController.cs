@@ -15,19 +15,26 @@
 //        private const string database = "test";
 //        private DashboardManager _dashboardManager = new DashboardManager(url, database);
 
-//        [HttpGet]
-//        [Route("api/dashboard/slogin")]
-//        public IDictionary<string, double> GetScuessfulLogin()
-//        {
-//            return _dashboardManager.GetAverageSuccessfulLogin();
-//        }
+        [HttpGet]
+        [ActionName("recentMonths")]
+        public IList<string> GetRecentMonths()
+        {
+            return _dashboardManager.GetRecentMonths();
+        }
 
-//        [HttpGet]
-//        [Route("api/dashboard/avgSession")]
-//        public long[] GetavgSessionTime()
-//        {
-//            return _dashboardManager.GetAverageSessionDuration();
-//        }
+        [HttpGet]
+        [ActionName("sLogin")]
+        public IList<double> GetScuessfulLogin()
+        {
+            return _dashboardManager.GetAverageSuccessfulLogin();
+        }
+
+        [HttpGet]
+        [ActionName("avgSession")]
+        public long[] GetavgSessionTime()
+        {
+            return _dashboardManager.GetAverageSessionDuration();
+        }
 
 //        //[HttpGet]
 //        //[Route("api/dashboard/fslogin")]
@@ -36,12 +43,12 @@
 //        //    return _dashboardManager.GetFailedSuccessfulLogIn();
 //        //}
 
-//        [HttpGet]
-//        [Route("api/dashboard/feature")]
-//        public IDictionary<string, long> GetFeatureData()
-//        {
-//            return _dashboardManager.GetMostUsedFeature();
-//        }
+        [HttpGet]
+        [ActionName("api/dashboard/feature")]
+        public IDictionary<string, long> GetFeatureData()
+        {
+            return _dashboardManager.GetMostUsedFeature();
+        }
 
 //    }
 //}

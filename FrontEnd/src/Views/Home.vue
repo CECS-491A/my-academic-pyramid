@@ -1,9 +1,8 @@
 <template>
-<div class="team">
+<v-app>
+  <v-parallax src="https://cdn.vuetifyjs.com/images/parallax/material.jpg">
   <h1>{{info}}</h1>
-  <v-container class="my-5">
-
-    <v-lay row wrap>
+    <v-layout row wrap>
       <v-flex xs12 sm6 md4 lg3 v-for="person in team" :key="person.name">
         <v-card flat class="text-xs-center ma-3">
           <v-card-text>
@@ -12,10 +11,9 @@
           </v-card-text>
         </v-card>
       </v-flex>
-    </v-lay>
-
-  </v-container>
-</div>
+    </v-layout>
+</v-parallax>
+</v-app>
 </template>
 
 <script>
@@ -38,13 +36,8 @@ export default {
 }
 </script>
 <style>
-.team {
-  background-image: url('../assets/csulb_pyramid.jpg');
-  width: 2000px;
-  margin: auto;
-}
 .team h1 {
   font-size:30pt;
-  color:blanchedalmond;
+  color:rgb(26, 125, 182);
 }
 </style>

@@ -25,12 +25,9 @@ namespace ManagerLayer.Tests
                     UserName = "SystemAdmin",
                     FirstName = "Arturo",
                     LastName = "NA",
-                    //BirthDate = DateTime.UtcNow,
-                    //RawPassword = "PasswordArturo",
-                    //Location = "Long Beach",
-                    Email = "Arturo1@gmail.com",
+                    SsoId = new Guid(),
                 });
-                Account createdUser = UM.FindUserByEmail("Arturo1@gmail.com");
+                Account createdUser = UM.FindByUserName("SystemAdmin");
                 if (createdUser != null)
                 {
                     actual = true;

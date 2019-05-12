@@ -12,7 +12,7 @@ using System.Web.Http.Cors;
 using WebAPI.Gateways.UserManagement;
 using DataAccessLayer.Models.DiscussionForum;
 using DataAccessLayer.Models;
-//using ManagerLayer.DiscussionManager;
+using ManagerLayer.DiscussionManager;
 using DataAccessLayer.DTOs;
 using DataAccessLayer;
 using ServiceLayer;
@@ -25,16 +25,35 @@ using System.Web;
 
 namespace KFC.SIT.WebAPI.Controllers
 {
+    // TODO consistency throughout project on (DepartmentQuestions) or (SchoolDepartmentQuestions)
+
+
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class DiscussionForumController : ApiController
     {
-        //        private bool securityPass = false;
-        //        private int authUserId;
+        private bool securityPass = false;
+        private int authUserId;
 
-        //        // Fix all errors and update database to make sure it works
-        //        // Continue fixing DFManager then move on to controller
-        //        // Test in Postman then start on UI
-        //        // Try - make interface for IAnyQuestion and Services for UpdateAnyQuestion & DeleteAnyQuestion to take that away from AnswerServices 
+        [HttpPost]
+        [ActionName("PostQuestion")]
+        public IHttpActionResult PostQuestion([FromBody] QuestionCreateRequestDTO questionDTO)
+        {
+            using (var _db = new DatabaseContext())
+            {
+                DiscussionForumManager discussionForumManager = new DiscussionForumManager(_db);
+                try
+                {
+                    // TODO accountId should come from authorization and take out hard-coded value
+                    discussionForumManager.PostQuestion(questionDTO, questionDTO.AccountId);
+                    _db.SaveChanges();
+                    return Content(HttpStatusCode.OK, "Question posted successfully");
+                }
+                catch (Exception ex)
+                {
+                    return Content(HttpStatusCode.InternalServerError, ex.InnerException);
+                }
+            }
+        }
 
         // delete later. Don't need
         private static LoggingManager _logger = new LoggingManager();
@@ -83,264 +102,229 @@ namespace KFC.SIT.WebAPI.Controllers
 
 
         [HttpGet]
-        [ActionName("GetAllQuestions")]
-        public IHttpActionResult GetQuestions()
+        [ActionName("GetQuestionsBySchool")]
+        public IHttpActionResult GetQuestionsBySchool(int schoolId)
         {
-            using (var _db = new DatabaseContext())
+            try
             {
-                var questions = _db.Questions
-                    .OfType<PostedQuestion>()
-                    .OrderBy(q => q.DateCreated)
-                    .Select(t => new QuestionResponseDTO { QuestionId = t.Id, AccountId = t.AccountId,  Text = t.Text, MinimumExpForAnswer = t.ExpNeededToAnswer, IsClosed = t.IsClosed, SpamCount = t.SpamCount})
-                     .ToList();
+                using (var _db = new DatabaseContext())
+                {
+                    DiscussionForumManager _discussionForumManager = new DiscussionForumManager(_db);
+                    var questions = _discussionForumManager.GetSchoolQuestions(schoolId);
+                    return Content(HttpStatusCode.OK, questions);
+                }
+            }
+            catch (Exception ex) when (ex is ArgumentException)
+            {
+                return Content(HttpStatusCode.NoContent, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Content(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
 
+        [HttpGet]
+        [ActionName("GetQuestionsByDepartment")]
+        public IHttpActionResult GetQuestionsByDepartment(int departmentId)
+        {
+            try
+            {
+                using (var _db = new DatabaseContext())
+                {
+                    DiscussionForumManager _discussionForumManager = new DiscussionForumManager(_db);
+                    var questions = _discussionForumManager.GetSchoolDepartmentQuestions(departmentId);
+                    return Content(HttpStatusCode.OK, questions);
+                }
+            }
+            catch (Exception ex) when (ex is ArgumentException)
+            {
+                return Content(HttpStatusCode.NoContent, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Content(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
 
-                return Content(HttpStatusCode.OK, questions);
+        [HttpGet]
+        [ActionName("GetQuestionsByCourse")]
+        public IHttpActionResult GetQuestionsByCourse(int courseId)
+        {
+            try
+            {
+                using (var _db = new DatabaseContext())
+                {
+                    DiscussionForumManager _discussionForumManager = new DiscussionForumManager(_db);
+                    var questions = _discussionForumManager.GetCourseQuestions(courseId);
+                    return Content(HttpStatusCode.OK, questions);
+                }
+            }
+            catch (Exception ex) when (ex is ArgumentException)
+            {
+                return Content(HttpStatusCode.NoContent, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Content(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [ActionName("GetDraftQuestions")]
+        public IHttpActionResult GetDraftQuestions()
+        {
+            try
+            {
+                using (var _db = new DatabaseContext())
+                {
+                    DiscussionForumManager _discussionForumManager = new DiscussionForumManager(_db);
+                    // TODO change hardcoded userId to 
+                    var questions = _discussionForumManager.GetDraftQuestions(2);
+                    return Content(HttpStatusCode.OK, questions);
+                }
+            }
+            catch (Exception ex) when (ex is ArgumentException)
+            {
+                return Content(HttpStatusCode.NoContent, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Content(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
 
         [HttpPost]
-        [ActionName("PostQuestion")]
-        public IHttpActionResult PostQuestion()
+        [ActionName("PostAnswer")]
+        public IHttpActionResult PostAnswer([FromBody] AnswerCreateRequestDTO answerDTO)
         {
             using (var _db = new DatabaseContext())
             {
-                //School school = new School()
-                //{
-                //    Id = 1,
-                //    Name = "Lbsu",
-                //    ContactEmail = "Lbsu@csulb.edu",
-                //    EmailDomain = "@csulb.edu"
-                //};
-                //Question schoolQuestion = new SchoolQuestion(2, 1, "Testing this from controller", 20);
-                PostedQuestion schoolQuestion = new SchoolQuestion()
-                {
-                    Text = "This is a test quesiton",
-                    ExpNeededToAnswer = 0,
-                    DateCreated = DateTime.Now,
-                    DateUpdated = DateTime.Now,
-                    AccountId = 2,
-                    IsClosed = false,
-                    SpamCount = 0,
-                    SchoolId = 1,
-                    //School = school,
-
-                };
+                DiscussionForumManager discussionForumManager = new DiscussionForumManager(_db);
                 try
                 {
-                    _db.Questions.Add(schoolQuestion);
+                    // TODO accountId should come from authorization and take out hard-coded value
+                    discussionForumManager.PostAnswer(answerDTO, 3);
                     _db.SaveChanges();
-                    //_db.Entry(schoolQuestion).State = EntityState.Added;
-                    //            return question;
-                    var questions = _db.Questions
-                    .OfType<SchoolQuestion>()
-                    .OrderBy(q => q.DateCreated)
-                    .Select(t => new QuestionResponseDTO { QuestionId = t.Id, AccountId = t.AccountId, Text = t.Text, MinimumExpForAnswer = t.ExpNeededToAnswer, IsClosed = t.IsClosed, SpamCount = t.SpamCount, SchoolName = t.School.Name, AccountName = t.Account.UserName })
-                     .ToList();
-                    return Content(HttpStatusCode.OK, questions);
+                    return Content(HttpStatusCode.OK, "Answer posted successfully");
+                }
+                catch (QuestionIsClosedException ex)
+                {
+                    return Content(HttpStatusCode.Forbidden, ex.Message);
+                }
+                catch (NotEnoughExpException ex)
+                {
+                    // TODO BadRequest?
+                    return Content(HttpStatusCode.BadRequest, ex.Message);
                 }
                 catch (Exception ex)
                 {
-                    return Content(HttpStatusCode.ExpectationFailed, ex.InnerException);
+                    return Content(HttpStatusCode.InternalServerError, ex.InnerException);
                 }
             }
         }
 
+        [HttpGet]
+        [ActionName("GetAnswers")]
+        public IHttpActionResult GetAnswers(int questionId)
+        {
+            try
+            {
+                using (var _db = new DatabaseContext())
+                {
+                    DiscussionForumManager _discussionForumManager = new DiscussionForumManager(_db);
+                    var answers = _discussionForumManager.GetAnswers(questionId);
+                    return Content(HttpStatusCode.OK, answers);
+                }
+            }
+            catch (Exception ex) when (ex is ArgumentException)
+            {
+                return Content(HttpStatusCode.NoContent, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Content(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
 
+        // Test for <T>
+        [HttpGet]
+        [ActionName("GetAnyQuestion")]
+        public IHttpActionResult GetAnyQuestion(int questionId)
+        {
+            try
+            {
+                using (var _db = new DatabaseContext())
+                {
+                    QuestionServices qServices = new QuestionServices(_db);
+                    var q = qServices.GetAnyQuestion<DepartmentQuestion>(questionId);
+                    QuestionResponseDTO questionResponseDTO = new QuestionResponseDTO
+                    {
+                        QuestionId = q.Id,
+                        ////SchoolId = ,
+                        //SchoolName = q.School.Name,
+                        ////DepartmentId = , 
+                        DepartmentName = q.SchoolDepartment.Department.Name,
+                        ////CourseId = ,
+                        //CourseName = ,
+                        AccountId = q.AccountId,
+                        AccountName = q.Account.UserName,
+                        Text = q.Text,
+                        ExpNeededToAnswer = q.ExpNeededToAnswer,
+                        IsClosed = q.IsClosed,
+                        SpamCount = q.SpamCount,
+                        AnswerCount = q.Answers.Count,
+                        DateCreated = q.DateCreated,
+                        DateUpdated = q.DateUpdated
+                    };
+                    return Content(HttpStatusCode.OK, questionResponseDTO);
+                }
+            }
+            catch (Exception ex) when (ex is ArgumentException)
+            {
+                return Content(HttpStatusCode.NoContent, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Content(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
 
-
-
-
-        //        // everyone can see questions 
-        //        // only students can post questions? 
-
-        //        // delete later. Don't need
-        //        [HttpGet]
-        //        [ActionName("GetAllQuestions")]
-        //        public IHttpActionResult GetQuestions()
+        //[HttpPost]
+        //[ActionName("PostQuestionFromDraft")]
+        //public IHttpActionResult PostQuestionFromDraft([FromBody] QuestionCreateFromDraftRequestDTO questionDTO)
+        //{
+        //    using (var _db = new DatabaseContext())
+        //    {
+        //        Question question;
+        //        try
         //        {
-        //            using (var _db = new DatabaseContext())
-        //            {
-        //                DiscussionForumServices _discussionServices = new DiscussionForumServices(_db);
-        //                var questions = _discussionServices.GetQuestions();
-        //                return Content(HttpStatusCode.OK, questions);
-        //            }
+        //            questionDTO.AccountId = authUserId;
+        //            DiscussionForumManager discussionManager = new DiscussionForumManager(_db);
+        //            question = discussionManager.PostQuestion(questionDTO, authUserId);
+        //        }
+        //        catch (InvalidQuestionLengthException ex)
+        //        {
+        //            return Content(HttpStatusCode.BadRequest, ex.Message);
         //        }
 
-        //        [HttpGet]
-        //        [ActionName("GetQuestionsBySchool")]
-        //        public IHttpActionResult GetQuestions(int schoolId)
+        //        DiscussionForumServices discussionServices = new DiscussionForumServices(_db);
+        //        var qDraft = discussionServices.DeleteQuestionDraft(qDraftId);
+
+        //        try
         //        {
-        //            using (var _db = new DatabaseContext())
-        //            {
-        //                DiscussionForumServices _discussionServices = new DiscussionForumServices(_db);
-        //                var questions = _discussionServices.GetQuestions(schoolId);
-        //                return Content(HttpStatusCode.OK, questions);
-        //            }
+        //            _db.SaveChanges();
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            return Content(HttpStatusCode.InternalServerError, ex.Message);
         //        }
 
-        //        //[HttpGet]
-        //        //[ActionName("GetQuestionsByDepartment")]
-        //        //public IHttpActionResult GetQuestions()
-        //        //{
-
-        //        //}
-
-        //        // where to get userId
-        //        [HttpGet]
-        //        [ActionName("GetQuestionDrafts")]
-        //        public IHttpActionResult GetQuestionDrafts(int userId)
-        //        {
-        //            using (var _db = new DatabaseContext())
-        //            {
-        //                DiscussionForumServices _dicussionServices = new DiscussionForumServices(_db);
-        //                var drafts = _dicussionServices.GetQuestionDrafts(userId);
-        //                return Content(HttpStatusCode.OK, drafts);
-        //            }
-        //        }
-
-        //        [HttpGet]
-        //        [ActionName("GetAnswers")]
-        //        public IHttpActionResult GetAnswers(int questionId)
-        //        {
-        //            using (var _db = new DatabaseContext())
-        //            {
-        //                DiscussionForumServices _discussionServices = new DiscussionForumServices(_db);
-        //                var answers = _discussionServices.GetAnswers(questionId);
-        //                return Content(HttpStatusCode.OK, answers);
-        //            }
-        //        }
-
-        //        [HttpPost]
-        //        [ActionName("PostQuestion")]
-        //        public IHttpActionResult PostQuestion([FromBody] QuestionCreateRequestDTO questionDTO)
-        //        {
-        //            SecurityContext securityContext = SecurityContextBuilder.CreateSecurityContext(
-        //                 Request.Headers
-        //             );
-        //            if (securityContext == null)
-        //            {
-        //                return Unauthorized();
-        //            }
-        //            SessionManager sm = new SessionManager();
-        //            if (!sm.ValidateSession(securityContext.Token))
-        //            {
-        //                return Unauthorized();
-        //            }
-
-        //            AuthorizationManager authorizationManager = new AuthorizationManager(
-        //                securityContext
-        //            );
-        //            // TODO get this from table in database.
-        //            //List<string> requiredClaims = new List<string>()
-        //            //{
-        //            //    "CanPostQuestion"
-        //            //};
-        //            //if (!authorizationManager.CheckClaims(requiredClaims))
-        //            //{
-        //            //    return Unauthorized();
-        //            //}
-        //            //else
-        //            //{
-        //                UserManager um = new UserManager();
-        //                Account user = um.FindByUserName(securityContext.UserName);
-        //                if (user == null)
-        //                {
-        //                    return Unauthorized();
-        //                }
-        //                authUserId = um.FindByUserName(securityContext.UserName).Id;
-        //            //}
+        //        return Content(HttpStatusCode.OK, question);
+        //    }
+        //}
 
 
-
-        //            using (var _db = new DatabaseContext())
-        //            {
-        //                Question question;
-        //                try
-        //                {
-        //                    questionDTO.AccountId = authUserId;
-        //                    DiscussionForumManager discussionManager = new DiscussionForumManager(_db);
-        //                    question = discussionManager.PostQuestion(questionDTO, authUserId);
-        //                    return Content(HttpStatusCode.OK, "Question was posted succesfully.");
-        //                }
-        //                catch (InvalidQuestionLengthException ex)
-        //                {
-        //                    return Content(HttpStatusCode.BadRequest, ex.Message);
-        //                }
-        //            }
-        //        }
-
-        //        [HttpPost]
-        //        [ActionName("PostQuestionFromDraft")]
-        //        public IHttpActionResult PostQuestionFromDraft([FromBody] QuestionCreateRequestDTO questionDTO, int qDraftId)
-        //        {
-        //            SecurityContext securityContext = SecurityContextBuilder.CreateSecurityContext(
-        //                 Request.Headers
-        //             );
-        //            if (securityContext == null)
-        //            {
-        //                return Unauthorized();
-        //            }
-        //            SessionManager sm = new SessionManager();
-        //            if (!sm.ValidateSession(securityContext.Token))
-        //            {
-        //                return Unauthorized();
-        //            }
-
-        //            AuthorizationManager authorizationManager = new AuthorizationManager(
-        //                securityContext
-        //            );
-        //            // TODO get this from table in database.
-        //            //List<string> requiredClaims = new List<string>()
-        //            //{
-        //            //    "CanPostQuestion"
-        //            //};
-        //            //if (!authorizationManager.CheckClaims(requiredClaims))
-        //            //{
-        //            //    return Unauthorized();
-        //            //}
-        //            //else
-        //            //{
-        //            UserManager um = new UserManager();
-        //            Account user = um.FindByUserName(securityContext.UserName);
-        //            if (user == null)
-        //            {
-        //                return Unauthorized();
-        //            }
-        //            authUserId = um.FindByUserName(securityContext.UserName).Id;
-        //            //}
-
-
-
-        //            using (var _db = new DatabaseContext())
-        //            {
-        //                Question question;
-        //                try
-        //                {
-        //                    questionDTO.AccountId = authUserId;
-        //                    DiscussionForumManager discussionManager = new DiscussionForumManager(_db);
-        //                    question = discussionManager.PostQuestion(questionDTO, authUserId);
-        //                }
-        //                catch (InvalidQuestionLengthException ex)
-        //                {
-        //                    return Content(HttpStatusCode.BadRequest, ex.Message);
-        //                }
-
-        //                DiscussionForumServices discussionServices = new DiscussionForumServices(_db);
-        //                var qDraft = discussionServices.DeleteQuestionDraft(qDraftId);
-
-        //                try
-        //                {
-        //                    _db.SaveChanges();
-        //                }
-        //                catch (Exception ex)
-        //                {
-        //                    return Content(HttpStatusCode.InternalServerError, ex.Message);
-        //                }
-
-        //                return Content(HttpStatusCode.OK, question);
-        //            }
-        //        }
 
         //        [HttpPost]
         //        [ActionName("PostAnswer")]
@@ -809,6 +793,7 @@ namespace KFC.SIT.WebAPI.Controllers
         //                    DiscussionForumServices discussionServices = new DiscussionForumServices(_db);
         //                    var answer = discussionManager.MarkAsCorrectAnswer(answerId, authUserId);
         //                    var answerDTO = discussionServices.ApplyAnswerFortmat(answer);
+        //                                  _db.SaveChanges();
         //                    return Content(HttpStatusCode.OK, answerDTO);
         //                }
         //                catch (ArgumentNullException)
@@ -870,5 +855,123 @@ namespace KFC.SIT.WebAPI.Controllers
         //            }
         //            return authUserId;
         //        }
+
+
+
+
+        // Authorization code
+
+        //        SecurityContext securityContext = SecurityContextBuilder.CreateSecurityContext(
+        //                 Request.Headers
+        //             );
+        //            if (securityContext == null)
+        //            {
+        //                return Unauthorized();
+        //    }
+        //    SessionManager sm = new SessionManager();
+        //            if (!sm.ValidateSession(securityContext.Token))
+        //            {
+        //                return Unauthorized();
+        //}
+
+        //AuthorizationManager authorizationManager = new AuthorizationManager(
+        //    securityContext
+        //);
+        //TODO get this from table in database.
+        //List<string> requiredClaims = new List<string>()
+        //{
+        //    "CanPostQuestion"
+        //};
+        //if (!authorizationManager.CheckClaims(requiredClaims))
+        //{
+        //    return Unauthorized();
+        //}
+        //else
+        //{
+        //    UserManager um = new UserManager();
+        //    Account user = um.FindByUserName(securityContext.UserName);
+        //    if (user == null)
+        //    {
+        //        return Unauthorized();
+        //    }
+        //    authUserId = um.FindByUserName(securityContext.UserName).Id;
+        //}
+
+
+
+
+
+
+        //Testing
+        //// delete later. Don't need
+        //[HttpGet]
+        //[ActionName("GetAllQuestions")]
+        //public IHttpActionResult GetQuestions()
+        //{
+        //    using (var _db = new DatabaseContext())
+        //    {
+        //        var questions = _db.Questions
+        //            .OfType<PostedQuestion>()
+        //            .OrderBy(q => q.DateCreated)
+        //            .Select(t => new QuestionResponseDTO { QuestionId = t.Id, AccountId = t.AccountId, Text = t.Text, ExpNeededToAnswer = t.ExpNeededToAnswer, IsClosed = t.IsClosed, SpamCount = t.SpamCount })
+        //             .ToList();
+
+
+        //        return Content(HttpStatusCode.OK, questions);
+        //    }
+        //}
+
+        //[HttpPost]
+        //[ActionName("PostQuestion")]
+        //public IHttpActionResult PostQuestion()
+        //{
+        //    using (var _db = new DatabaseContext())
+        //    {
+        //        //School school = new School()
+        //        //{
+        //        //    Id = 1,
+        //        //    Name = "Lbsu",
+        //        //    ContactEmail = "Lbsu@csulb.edu",
+        //        //    EmailDomain = "@csulb.edu"
+        //        //};
+        //        //Question schoolQuestion = new SchoolQuestion(2, 1, "Testing this from controller", 20);
+        //        PostedQuestion schoolQuestion = new SchoolQuestion()
+        //        {
+        //            Text = "This is a test quesiton",
+        //            ExpNeededToAnswer = 0,
+        //            //DateCreated = DateTime.Now,
+        //            //DateUpdated = DateTime.Now,
+        //            AccountId = 2,
+        //            //IsClosed = false,
+        //            //SpamCount = 0,
+        //            SchoolId = 1,
+        //            //School = school,
+
+        //        };
+        //        try
+        //        {
+        //            _db.Questions.Add(schoolQuestion);
+        //            _db.SaveChanges();
+        //            //_db.Entry(schoolQuestion).State = EntityState.Added;
+        //            //            return question;
+        //            var questions = _db.Questions
+        //            .OfType<SchoolQuestion>()
+        //            .OrderBy(q => q.DateCreated)
+        //            .Select(t => new QuestionResponseDTO { QuestionId = t.Id, AccountId = t.AccountId, Text = t.Text, ExpNeededToAnswer = t.ExpNeededToAnswer, IsClosed = t.IsClosed, SpamCount = t.SpamCount, SchoolName = t.School.Name, AccountName = t.Account.UserName })
+        //             .ToList();
+        //            return Content(HttpStatusCode.OK, questions);
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            return Content(HttpStatusCode.ExpectationFailed, ex.InnerException);
+        //        }
+        //    }
+        //}
+
+
+
+
+
+
     }
 }
