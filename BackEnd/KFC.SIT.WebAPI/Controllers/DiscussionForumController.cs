@@ -20,6 +20,8 @@ using ServiceLayer.DiscussionForum;
 using System.Data.Entity.Infrastructure;
 using System.Data.Entity;
 using DataAccessLayer.Models.School;
+using ManagerLayer.Gateways.Logging;
+using System.Web;
 
 namespace KFC.SIT.WebAPI.Controllers
 {
@@ -52,6 +54,52 @@ namespace KFC.SIT.WebAPI.Controllers
                 }
             }
         }
+
+        // delete later. Don't need
+        private static LoggingManager _logger = new LoggingManager();
+
+        [HttpGet]
+        [ActionName("TestLogger")]
+        public void TestLogger()
+        {
+            try
+            {
+                int a = 0;
+                int b = 0;
+                int c = a / b;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Arturo", "request", ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [ActionName("TestFails")]
+        public IHttpActionResult TestFails()
+        {
+            try
+            {
+                int a = 0;
+                int b = 0;
+                int c = a / b;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Arturo", "request", ex.Message);
+            }
+            return Content(HttpStatusCode.OK, _logger.getErrorFailCount());
+        }
+
+        [HttpGet]
+        [Route("TestIP")]
+        public IHttpActionResult TestIP()
+        {
+            //_telemetries.DeleteAll();
+            _logger.LogPageVisit("Arturo", HttpContext.Current.Request.UserHostAddress);
+            return Ok();
+        }
+
 
         [HttpGet]
         [ActionName("GetQuestionsBySchool")]

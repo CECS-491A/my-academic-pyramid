@@ -38,6 +38,8 @@ namespace KFC.SIT.WebAPI.Controllers
             try
             {
                 sm.InvalidateSession(securityContext.Token);
+                //
+
                 return Request.CreateResponse(HttpStatusCode.OK);
             }
             catch

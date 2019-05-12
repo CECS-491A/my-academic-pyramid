@@ -43,7 +43,7 @@ namespace KFC.SIT.WebAPI.Controllers
                     Category = user.Category.Value,
                     DateOfBirth = user.DateOfBirth.ToString("MMMM dd yyyy hh:mm:ss tt"),
                     CreatedAt = user.CreatedAt.ToString("MMMM dd yyyy hh:mm:ss tt")
-                    
+
 
                 });
             }
@@ -111,7 +111,7 @@ namespace KFC.SIT.WebAPI.Controllers
                 UserDTO userDTO = um.GetUserInfo(id);
                 string updatedToken = sm.RefreshSession(securityContext.Token);
                 return Request.CreateResponse(
-                    HttpStatusCode.OK, new {User = userDTO, SITtoken = updatedToken}
+                    HttpStatusCode.OK, new { User = userDTO, SITtoken = updatedToken }
                 );
             }
         }
@@ -119,13 +119,13 @@ namespace KFC.SIT.WebAPI.Controllers
 
         // POST api/<controller>
         [HttpPost]
-      
+
         public HttpResponseMessage CreateNewUSer([FromBody] UserDTO userDto)
         {
             UserManager umManager = new UserManager();
             var createdUser = umManager.CreateUserAccount(userDto);
             var message = Request.CreateResponse(HttpStatusCode.OK, userDto);
-  
+
             return message;
 
         }
@@ -143,7 +143,7 @@ namespace KFC.SIT.WebAPI.Controllers
         }
 
 
-        [HttpDelete]    
+        [HttpDelete]
         public IHttpActionResult DeleteUser(SsoPayload ssoPayload)
         {
             //UserManager umManager = new UserManager();
