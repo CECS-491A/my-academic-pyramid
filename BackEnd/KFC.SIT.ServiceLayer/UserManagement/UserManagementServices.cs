@@ -254,7 +254,7 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         /// <returns></returns>
         public UserProfileDTO GetUserProfile(int accountId)
         {
-            return _DbContext.Students
+            UserProfileDTO profile =  _DbContext.Students
                 .Include("Courses")
                 .Where(s => s.AccountId == accountId)
                 .Select(s => new UserProfileDTO
@@ -268,6 +268,7 @@ namespace ServiceLayer.UserManagement.UserAccountServices
                     Courses = s.Courses.Select(c => c.Course.Name).ToList()
                 })
                 .FirstOrDefault();
+            return profile;
         }
 
     } // end of class

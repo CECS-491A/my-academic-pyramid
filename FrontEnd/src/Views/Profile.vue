@@ -21,8 +21,10 @@
                 <v-card-text>
                   <p>{{username}}</p>
                   <p>{{name}}</p>
+                  <p>{{userInfo.schoolName}} Department: {{userInfo.departmentName}}</p>
                   <p>Member since: {{memberSince}}</p>
                   <p>Age: {{age}}</p>
+                  
                 </v-card-text>
               </v-card>
             </v-tab-item>
@@ -34,18 +36,20 @@
                 <v-container>
                   <v-layout row wrap>
                     <v-flex>
-                      <v-text-field v-model="newFirstName" label="First name" required></v-text-field>
+                      <v-text-field v-model="updatedUserInfo.newFirstName" label="First name" required></v-text-field>
                     </v-flex>
 
                     <v-flex>
-                      <v-text-field v-model="newMiddleName" label="Middle name" required></v-text-field>
+                      <v-text-field v-model="updatedUserInfo.newMiddleName" label="Middle name" required></v-text-field>
                     </v-flex>
 
                     <v-flex>
-                      <v-text-field v-model="newLastName" label="Last name" required></v-text-field>
+                      <v-text-field v-model="updatedUserInfo.newLastName" label="Last name" required></v-text-field>
                     </v-flex>
                     <v-divider></v-divider>
-                    
+                  </v-layout>
+                  <v-layout>
+                    <v-text-field v-model="updatedUserInfo.newDepartmentName" :label="`Allow telemetric data recording.`"></v-text-field>
                   </v-layout>
                   <v-layout>
                     <v-checkbox v-model="allowTelemetry" :label="`Allow telemetric data recording.`"></v-checkbox>
@@ -74,14 +78,24 @@ export default {
     return {
       tab: null,
       username: "",
-      firstName: "",
-      middleName: "",
-      lastName: "",
-      memberSince: "date",
-      age: "age",
-      newFirstName: "New",
-      newMiddleName: "new",
-      newLastName: "New",
+      userInfo: {
+        firstName: "",
+        middleName: "",
+        lastName: "",
+        schoolName: "",
+        departmentName: "",
+        ranking: "",
+        courses: "",
+      },
+      memberSince: "",
+      age: "",
+      updatedUserInfo: {
+        newFirstName: "New",
+        newMiddleName: "new",
+        newLastName: "New",
+        newDepartmentName: "New",
+        allowTelemetry: false
+      },
       viewingUserId: AppSession.state.userId,
       allowTelemetry: false
     };
@@ -89,16 +103,14 @@ export default {
   methods: {
     async getUserInfo(profileUserId) {
       console.log(`Id of get user info is ${profileUserId}`)
-      await this.axios.get(`${this.$hostname}UserManager/GetPublicUserInfoWithId?id=${profileUserId}`, 
+      await this.axios.get(`${this.$hostname}UserManager/UserProfile?accountId=${profileUserId}`, 
                      {headers: {'Accept': 'application/json',
                                 'Content-Type': 'application/json',
                                 'Authorization': `Bearer ${AppSession.state.token}`}})
                 .then(response => {
                     // Get user userid.
                     AppSession.updateSession(response.data.SITtoken)
-                    this.username = response.data.User.UserName
-                    this.firstName = response.data.User.FirstName
-                    this.lastName = response.data.User.LastName
+                    this.userInfo = response.data.User
                     console.log('About to finish getUserInfo')
                 })
                 .catch(error => {
@@ -108,16 +120,18 @@ export default {
                 })
     },
     synchToInputs() {
-      console.log('This is the first name' + this.firstName)
-      this.newFirstName = this.firstName
-      // this.newMiddleName = this.middleName
-      this.newLastName = this.lastName
+      console.log('This is the first name' + this.userInfo.firstName)
+      this.updatedUserInfo.newFirstName = this.userInfo.firstName
+      this.updatedUserInfo.newMiddleName = this.userInfo.middleName
+      this.updatedUserInfo.newLastName = this.userInfo.lastName
+      this.updatedUserInfo.newDepartmentName = this.userInfo.departmentName
+      this.updatedUserInfo.allowTelemetry = this.userInfo.allowTelemetry
       
     }
   },
   computed: {
     name() {
-      return this.firstName + " " + this.lastName;
+      return this.updatedUserInfo.firstName + " " + this.updatedUserInfo.lastName;
     },
     isOwnUser() {
       if (this.$route != undefined) {
@@ -141,7 +155,7 @@ export default {
     }
   },
   created() {
-    console.log("In createed of Profile.vue")
+    console.log("In created of Profile.vue")
     this.getUserInfo(this.$route.params.id)
         .then(() => {
           if (this.isOwnUser) {

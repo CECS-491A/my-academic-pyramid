@@ -121,7 +121,7 @@ namespace KFC.SIT.WebAPI.Controllers
         {
             SecurityContext securityContext = SecurityContextBuilder.CreateSecurityContext(
                Request.Headers
-           );
+            );
             if (securityContext == null)
             {
                 return Unauthorized();
@@ -206,23 +206,52 @@ namespace KFC.SIT.WebAPI.Controllers
         }
 
         [HttpGet]
-        [ActionName("profile")]
+        [ActionName("UserProfile")]
         public IHttpActionResult GetUserProfile([FromUri] int accountId)
         {
-            try
+            SecurityContext securityContext = SecurityContextBuilder.CreateSecurityContext(
+               Request.Headers
+            );
+            if (securityContext == null)
             {
-                UserManager userManager = new UserManager();
+                return Unauthorized();
+            }
+            SessionManager sm = new SessionManager();
+            if (!sm.ValidateSession(securityContext.Token))
+            {
+                return Unauthorized();
+            }
 
-                var results = userManager.GetUserProfile(accountId);
-                return Content(HttpStatusCode.OK, results);
-            }
-            catch (Exception x) when (x is ArgumentException)
+            AuthorizationManager authorizationManager = new AuthorizationManager(
+                securityContext
+            );
+            // TODO get this from table in database.
+            List<string> requiredClaims = new List<string>()
             {
-                return Content(HttpStatusCode.BadRequest, x.Message);
-            }
-            catch (Exception x)
+                "CanReadAStudentPublicInformation"
+            };
+
+            if (!authorizationManager.CheckClaims(requiredClaims))
             {
-                return Content(HttpStatusCode.InternalServerError, x.Message);
+                return Unauthorized();
+            }
+            else
+            {
+                try
+                {
+                    UserManager userManager = new UserManager();
+                    string updatedToken = sm.RefreshSession(securityContext.Token);
+                    var results = userManager.GetUserProfile(accountId);
+                    return Ok(new { User = results, SITtoken = updatedToken });
+                }
+                catch (Exception x) when (x is ArgumentException)
+                {
+                    return Content(HttpStatusCode.BadRequest, x.Message);
+                }
+                catch (Exception x)
+                {
+                    return Content(HttpStatusCode.InternalServerError, x.Message);
+                }
             }
         }
 
