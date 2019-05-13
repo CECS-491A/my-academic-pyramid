@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using DataAccessLayer;
-using DataAccessLayer.Logging;
 using DataAccessLayer.Models;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
@@ -12,6 +11,7 @@ using System.Threading.Tasks;
 using DataAccessLayer.UADConstants;
 using System.Collections;
 using System.Collections.ObjectModel;
+using DataAccessLayer.Logging;
 
 namespace ServiceLayer.DataAnalysisDashboard
 {
@@ -24,14 +24,17 @@ namespace ServiceLayer.DataAnalysisDashboard
         private readonly IMongoCollection<ErrorLog> CollectionE;
         protected DatabaseContext _DbContext;
 
-        protected MongoDBRepo _repo;
+        protected LogRepository<TelemetryLog> _repoTelemetry;
+        protected LogRepository<ErrorLog> _repoError;
 
         public DashboardService(string url, string database)
         {
-            _repo = new MongoDBRepo(url, database);
+            _repoTelemetry = new LogRepository<TelemetryLog>("TelemetryLogs");
+            _repoError = new LogRepository<ErrorLog>("ErrorLogs");
             _DbContext = new DatabaseContext();
-            CollectionT = _repo.Db.GetCollection<TelemetryLog>(_collectionTName);
-            CollectionE = _repo.Db.GetCollection<ErrorLog>(_collectionEName);
+            CollectionT = _repoTelemetry._logCollection;
+            CollectionE = _repoError._logCollection;
+            //CollectionE = _repo.Db.GetCollection<ErrorLog>(_collectionEName);
         }
 
         /// <summary>
@@ -71,7 +74,7 @@ namespace ServiceLayer.DataAnalysisDashboard
         {
             Dictionary<int, long> failedLogin = new Dictionary<int, long>();
             var queryResult = CollectionE.Aggregate()
-                            .Match(x => x.Action == MongoDBAction.Login)
+                            .Match(x => x.Request == MongoDBAction.Login)
                             .Group(
                 x => x.Date.Month,
                 i => new
@@ -153,7 +156,7 @@ namespace ServiceLayer.DataAnalysisDashboard
         /// <returns></returns>
         public long CountTotalFailedLogin()
         {
-            Task<long> queryResult = CollectionE.CountDocumentsAsync(x => x.Action == "Login");
+            Task<long> queryResult = CollectionE.CountDocumentsAsync(x => x.Request == "Login");
             return queryResult.Result;
         }
     
@@ -233,7 +236,7 @@ namespace ServiceLayer.DataAnalysisDashboard
                 .ToList()
                 .Count();
             
-//            return query;
-//        }
-//    }
-//}
+            return query;
+       }
+    }
+}
