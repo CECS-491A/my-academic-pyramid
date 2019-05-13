@@ -71,6 +71,7 @@ import axios from 'axios'
         this.getAccount()
     },
     methods: {
+      // @Author: Krystal 
       getAccount: function(){
           this.errorMessage = "";
 
@@ -161,6 +162,7 @@ import axios from 'axios'
               this.errorMessage = error.response.data.Message
           })
       },
+      // End Krytal
       PostQuestion () {
         //this.$router.push("/DiscussionForum/PostQuestion")
       },

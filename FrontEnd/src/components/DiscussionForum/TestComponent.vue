@@ -2,6 +2,8 @@
 <v-container>
   <v-card class="mx-auto" dark max-width="1400" max-height="800" v-for="item in questions" :key="item.AccountName">
 
+  <!-- <v-card class="mx-auto" dark max-width="1400" max-height="800"> -->
+
     <v-card-title>{{item.AccountName}}
       <v-spacer></v-spacer>
       {{item.DateCreated}}
@@ -11,15 +13,16 @@
 
     <v-card-actions>   
       <v-layout align-center>
-        <v-btn small>Mark As Spam</v-btn> {{"Spam Count: " + item.SpamCount}}
+        <v-btn small v-if="userId != item.AccoutId">Mark As Spam</v-btn> {{"Spam Count: " + item.SpamCount}}
         <v-btn small>See Answers</v-btn> {{"Answers: " + item.AnswerCount}}
-        <v-btn small>Post Answer</v-btn> {{"Exp needed to answer: " + item.ExpNeededToAnswer}}
+        <v-btn small v-if="userId != item.AccountId">Post Answer</v-btn> {{"Exp needed to answer: " + item.ExpNeededToAnswer}}
 
         <v-spacer></v-spacer>
 
-        <v-btn small>Close Question</v-btn> 
-        <v-icon small>edit</v-icon>
-        <v-icon small>delete</v-icon>
+        <v-btn small v-if="userId == item.AccountId" @click="closeQuestion(item.QuestionId)">Close Question</v-btn> 
+        <v-icon small v-if="userId == item.AccountId" @click="editQuestion(item.QuestionId)">edit</v-icon>
+        <!-- not in the business rules to delete a question 
+            <v-icon small v-if="userId == item.AccountId" @click="deleteQuestion()">delete</v-icon> -->
 
       </v-layout>
     </v-card-actions>
@@ -39,7 +42,7 @@ import axios from 'axios'
     name: "QuestionCard",
     data () {
       return {
-        ismyQuestion: true,
+        //ismyQuestion: true,
         userAccount: null,
         isStudent: true,
         userId: "",
@@ -58,12 +61,35 @@ import axios from 'axios'
         this.getSchoolQuestions()
     },
     
-    // beforeMount(){
-    //     this.userId = sessionStorage.SITuserId;
-    //     //this.userId = "2"
-    //     this.getAccount()
-    // },
+    beforeMount(){
+        this.userId = sessionStorage.SITuserId;
+        this.getAccount()
+    },
     methods: {
+    //   isMyQuestion: function() {
+            
+    //   },
+      closeQuestion: function(qId) {
+            const url = `${this.$hostname}DiscussionForum/CloseQuestion`;
+            
+            axios
+            .post(url, {
+                params:{
+                    questionId: qId
+                },
+                headers: { "Content-Type": "application/json", Authorization: "Bearer " + sessionStorage.SITtoken }
+                
+            })
+            .then(response =>{
+                this.item.IsClosed = response.data;
+            })
+            .catch(error =>{
+                this.errorMessage = error.response.data.Message
+            })
+      },
+      editQuestion: function(qId) {
+            // open up form to update question 
+      },
       getSchoolQuestions() {
             this.axios({
               headers: {
@@ -75,7 +101,8 @@ import axios from 'axios'
               crossDomain: true,
               url: this.$hostname + "DiscussionForum/GetQuestionsBySchool",
               params: {
-                  schoolId: 1
+                  // or id? if not change backend from id to name
+                  schoolId: this.school.Id
               }
             })
               .then(response => {
@@ -85,7 +112,7 @@ import axios from 'axios'
                   console.log(err);
               });
         },
-        getSchoolQuestions() {
+        getDepartmentQuestions(dId) {
             this.axios({
               headers: {
                 //Accept: "application/json", 
@@ -94,9 +121,30 @@ import axios from 'axios'
               },
               method: "GET", 
               crossDomain: true,
-              url: this.$hostname + "DiscussionForum/GetQuestionsBySchool",
+              url: this.$hostname + "DiscussionForum/GetQuestionsByDepartment",
               params: {
-                  schoolId: 1
+                  departmentId: dId
+              }
+            })
+              .then(response => {
+                  this.questions = response.data;
+              })
+              .catch(err => {
+                  console.log(err);
+              });
+        },
+        getCourseQuestions(cId) {
+            this.axios({
+              headers: {
+                //Accept: "application/json", 
+                "Content-Type": "application/Json",
+                //Authorization: "Bearer" + sessionStorage.SITtoken
+              },
+              method: "GET", 
+              crossDomain: true,
+              url: this.$hostname + "DiscussionForum/GetQuestionsByCourse",
+              params: {
+                  courseId: cId
               }
             })
               .then(response => {

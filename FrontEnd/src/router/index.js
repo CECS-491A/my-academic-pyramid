@@ -18,6 +18,8 @@ import DiscussionForum from '@/Views/DiscussionForum'
 import PostQuestion from '@/components/DiscussionForum/PostQuestion'
 // delete later
 import TestComponent from '@/components/DiscussionForum/TestComponent'
+import TestView from '@/Views/TestView'
+
 import SchoolRegistration from '@/Views/SchoolRegistration'
 import Search from '@/Views/Search'
 import Profile from '@/Views/UserProfile'
@@ -95,6 +97,12 @@ export default new Router({
     path: "/TestComponent",
     name: "TestComponent",
     component: TestComponent
+  },
+  // delete later
+  {
+    path: "/TestView",
+    name: "TestView",
+    component: TestView
   },
   {
     path: "/SchoolRegistration",

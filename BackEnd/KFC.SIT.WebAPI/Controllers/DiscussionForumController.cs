@@ -489,7 +489,7 @@ namespace KFC.SIT.WebAPI.Controllers
         {
             List<string> requiredClaims = new List<string>()
             {
-                "CanCloseQuestion"
+                //"CanCloseQuestion"
             };
             authUserId = AuthorizeUser(requiredClaims);
             if (authUserId == 0)
@@ -523,7 +523,7 @@ namespace KFC.SIT.WebAPI.Controllers
         {
             List<string> requiredClaims = new List<string>()
             {
-                "CanMarkAnswerAsCorrect"
+                //"CanMarkAnswerAsCorrect"
             };
             authUserId = AuthorizeUser(requiredClaims);
             if (authUserId == 0)
