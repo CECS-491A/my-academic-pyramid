@@ -87,7 +87,15 @@ namespace KFC.SIT.WebAPI.Controllers.Controllers
                 // TODO test this.
                 user.DateOfBirth = registrationData.DateOfBirth;
                 um.UpdateUserAccount(user);
-                um.SetCategory(user.Id, "Student");
+                if (registrationData.SchoolId > 0)
+                {
+                    um.SetCategory(user.Id, "Student");
+                }
+                else
+                {
+
+                    um.SetCategory(user.Id, "NonStudent");
+                }
                 um.RemoveClaimAction(user.Id, "CanRegister");
                 um.AutomaticClaimAssigning(user);
                 string updatedToken = sm.RefreshSessionUpdatedPayload(
