@@ -350,9 +350,9 @@ namespace WebAPI.Gateways.UserManagement
 
                 //User Management's claims
                 _userManagementServices.AddClaim(user, new Claim("CanCreateOwnStudentAccount"));
-                _userManagementServices.AddClaim(user, new Claim("CanEditOwnAccount"));
                 _userManagementServices.AddClaim(user, new Claim("CanReadOwnStudentAccount"));
                 _userManagementServices.AddClaim(user, new Claim("CanReadOtherStudentPublicInformation"));
+                _userManagementServices.AddClaim(user, new Claim("CanReadAStudentPublicInformation"));
                 _DbContext.SaveChanges();
             }
             else if (user.Category.Value.Equals("Student"))

@@ -20,13 +20,6 @@
           <v-list-tile-title >{{link.text}}</v-list-tile-title>
         </v-list-tile-content>
       </v-list-tile>
-      <v-list-tile>
-        <v-list-tile-content>
-          <v-list-tile-title>
-            {{computedTestObj}}
-          </v-list-tile-title>
-        </v-list-tile-content>
-      </v-list-tile>
     </v-list>
   </v-navigation-drawer>
 </template>
@@ -35,6 +28,8 @@
 //import axios from 'axios'
 import AppSession from "@/services/AppSession";
 import NavBarState from "@/services/NavBarState"
+import AllowedFeaturesService from "@/services/AllowedFeaturesService"
+import * as NavLinkNames from "@/constants/NavLinkNames"
 
 export default {
   name: "NavBar",
@@ -48,14 +43,14 @@ export default {
         // If false, show when logged out
         { name: "Home", icon: "home", text: "Home", route: "/" },
         {
-          name: "UserHomePage",
+          name: NavLinkNames.USERHOMEPAGE,
           icon: "contacts",
           text: "User HomePage",
           route: "/UserHomePage",
           onlyActive: true
         },
         {
-          name: "MyProfile",
+          name: NavLinkNames.PROFILE,
           icon: "",
           text: "My Profile",
           // sessionState isn't defined when this is being parsed....
@@ -63,14 +58,14 @@ export default {
           onlyActive: true
         },
         {
-          name: "Search",
+          name: NavLinkNames.SEARCH,
           icon: "search",
           text: "Search",
           route: "/Search",
           onlyActive: true
         },
         {
-          name: "Dashboard",
+          name: NavLinkNames.DASHBOARD,
           icon: "dashboard",
           text: "Dashboard",
           route: "/Dashboard",
@@ -84,36 +79,34 @@ export default {
           onlyActive: true
         },
         {
-          name: "Chat",
+          name: NavLinkNames.CHAT,
           icon: "chat",
           text: "Chat",
           route: "/Chat",
           onlyActive: true
         },
         {
-          name: "Logging",
+          name: NavLinkNames.LOGGING,
           icon: "restore",
           text: "Logging",
           route: "/Logging",
           onlyActive: true
         },
         {
-          name: "Publish",
+          name: NavLinkNames.PUBLISH,
           icon: "launch",
           text: "Publish",
           route: "/publish",
           onlyActive: true
         },
         {
-          name: "DiscussionForum",
+          name: NavLinkNames.DISCUSSIONFORUM,
           icon: "forum",
           text: "Discussion Forum",
           route: "/DiscussionForum",
           onlyActive: true
         }
-      ], 
-      testObj: {greeting: "hello"},
-      computedTestObj: "default"
+      ]
     };
   },
   created() {
@@ -130,20 +123,18 @@ export default {
           `/Profile/${(newSessionState.userId != undefined) ? newSessionState.userId : ""}`
       },
       deep: true // Vue watches for changes to properties of object.
-    },
-    testObj : function(newT, oldT) {
-      this.computedTestObj = "a" + newT.greeting
     }
   },
   computed: {
     linksToDisplay: function() {
-      // sessionState = this.sessionState;
       return this.links.filter(function(link) {
         if (this.sessionState.token) {
           // it's there
           console.log('There is a session.')
           let generateButton = false;
-          if (link.onlyActive) {
+          if (link.onlyActive && this.sessionState.category != undefined
+              && AllowedFeaturesService[this.sessionState.category].includes(link.name)) {
+            // if (link.name == )
             generateButton = true;
           }
           return generateButton;
