@@ -40,7 +40,7 @@ namespace KFC.SIT.WebAPI.Controllers
 
             List<string> requiredClaims = new List<string>()
             {
-                "CanReadOwnStudentAccount"
+                "CanEditOwnAccount"
             };
             UserManager um = new UserManager();
 
