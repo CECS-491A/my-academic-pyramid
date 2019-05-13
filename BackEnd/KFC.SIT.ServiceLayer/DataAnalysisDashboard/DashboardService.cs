@@ -222,7 +222,7 @@ namespace ServiceLayer.DataAnalysisDashboard
             DateTime validation1 = new DateTime(chosenYear, chosenMonth, 1);
             DateTime validation2 = new DateTime(chosenYear, chosenMonth, DateTime.DaysInMonth(chosenYear, chosenMonth));
             var query = CollectionT.Aggregate()
-                        .Match(x => x.Action == MongoDBAction.Login && x.Month == chosenMonth)
+                        .Match(x => x.Action == MongoDBAction.Login)
                         .Match(x => x.Date >= validation1)
                         .Match(x => x.Date < validation2)
                         .Group(
