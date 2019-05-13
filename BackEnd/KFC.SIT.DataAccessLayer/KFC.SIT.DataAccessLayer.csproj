@@ -213,19 +213,12 @@
     <Compile Include="DTOs\UserDTO.cs" />
     <Compile Include="DTOs\UserProfileDTO.cs" />
     <Compile Include="IEntity.cs" />
-    <Compile Include="Logging\OptimizeLogging\ErrorFormat.cs" />
-    <Compile Include="Logging\Models\Repository\ErrorLogCollection.cs" />
-    <Compile Include="Logging\OptimizeLogging\ILogDestination.cs" />
-    <Compile Include="Logging\OptimizeLogging\ILogFormat.cs" />
-    <Compile Include="Logging\OptimizeLogging\IMyLogger.cs" />
-    <Compile Include="Logging\OptimizeLogging\LogMongo.cs" />
-    <Compile Include="Logging\Models\Repository\MongoDBRepo.cs" />
-    <Compile Include="Logging\OptimizeLogging\NLogger.cs" />
-    <Compile Include="Logging\OptimizeLogging\TelemetryFormat.cs" />
-    <Compile Include="Logging\Models\Repository\TelemetryLogCollection.cs" />
-    <Compile Include="Migrations\201905080342363_Initial.cs" />
-    <Compile Include="Migrations\201905080342363_Initial.Designer.cs">
-      <DependentUpon>201905080342363_Initial.cs</DependentUpon>
+    <Compile Include="Logging\Models\Repository\ILogRepository.cs" />
+    <Compile Include="Logging\MyLogger.cs" />
+    <Compile Include="Logging\Models\Repository\LogRepository.cs" />
+    <Compile Include="Migrations\201905130052114_Initial.cs" />
+    <Compile Include="Migrations\201905130052114_Initial.Designer.cs">
+      <DependentUpon>201905130052114_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Category.cs" />
@@ -297,8 +290,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201905080342363_Initial.resx">
-      <DependentUpon>201905080342363_Initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201905130052114_Initial.resx">
+      <DependentUpon>201905130052114_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

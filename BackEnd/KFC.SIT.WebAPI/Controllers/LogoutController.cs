@@ -24,7 +24,7 @@ namespace KFC.SIT.WebAPI.Controllers
             {
                 return Request.CreateResponse(HttpStatusCode.Unauthorized);
             }
-            // TODO invalidate the token.
+
             DatabaseContext db = new DatabaseContext();
             SessionManager sm = new SessionManager();
             // TODO modify this to allow admins to use this.
@@ -38,6 +38,8 @@ namespace KFC.SIT.WebAPI.Controllers
             try
             {
                 sm.InvalidateSession(securityContext.Token);
+                //
+
                 return Request.CreateResponse(HttpStatusCode.OK);
             }
             catch

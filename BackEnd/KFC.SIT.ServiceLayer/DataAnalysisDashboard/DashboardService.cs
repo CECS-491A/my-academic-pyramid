@@ -233,7 +233,7 @@ namespace ServiceLayer.DataAnalysisDashboard
                 .ToList()
                 .Count();
             
-            return query;
-        }
-    }
-}
+//            return query;
+//        }
+//    }
+//}

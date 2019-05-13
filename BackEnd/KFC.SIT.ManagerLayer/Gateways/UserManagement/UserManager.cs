@@ -8,6 +8,9 @@ using DataAccessLayer.DTOs;
 using System.Security.Cryptography;
 using System.Text;
 using System.Data.Entity.Validation;
+using DataAccessLayer.Models.School;
+using static ServiceLayer.ServiceExceptions.UserManagementExceptions;
+using ServiceLayer.SchoolRegistration;
 
 namespace WebAPI.Gateways.UserManagement
 {
@@ -333,7 +336,26 @@ namespace WebAPI.Gateways.UserManagement
         /// <returns></returns>
         public Account AutomaticClaimAssigning(Account user)
         {
-            if (user.Category.Value.Equals("Student"))
+            if (user.Category.Value.Equals("NonStudent"))
+            {
+                //Check if user is over 18 year old
+                if (user.DateOfBirth.AddYears(18) <= DateTime.Now)
+                {
+                    user.Claims.Add(new Claim("Over18"));
+                }
+
+                //Discussion Forum's claims
+                _userManagementServices.AddClaim(user, new Claim("CanSeeQuestion"));
+                _userManagementServices.AddClaim(user, new Claim("CanSeeAnswer"));
+
+                //User Management's claims
+                _userManagementServices.AddClaim(user, new Claim("CanCreateOwnStudentAccount"));
+                _userManagementServices.AddClaim(user, new Claim("CanEditOwnAccount"));
+                _userManagementServices.AddClaim(user, new Claim("CanReadOwnStudentAccount"));
+                _userManagementServices.AddClaim(user, new Claim("CanReadOtherStudentPublicInformation"));
+                _DbContext.SaveChanges();
+            }
+            else if (user.Category.Value.Equals("Student"))
             {
                 //Check if user is over 18 year old
                 if (user.DateOfBirth.AddYears(18) <= DateTime.Now)
@@ -355,6 +377,7 @@ namespace WebAPI.Gateways.UserManagement
                 _userManagementServices.AddClaim(user, new Claim("CanEditOwnAccount"));
                 _userManagementServices.AddClaim(user, new Claim("CanDeleteOwnAccount"));
                 _userManagementServices.AddClaim(user, new Claim("CanReadOwnStudentAccount"));
+                _userManagementServices.AddClaim(user, new Claim("CanReadAStudentPublicInformation"));
                 _DbContext.SaveChanges();
             }
             else if (user.Category.Value.Equals("Admin") || user.Category.Value.Equals("SystemAdmin"))
@@ -385,5 +408,37 @@ namespace WebAPI.Gateways.UserManagement
             return _userManagementServices.GetUserProfile(accountId);
         }
 
+        public void EditStudentProfile(int accountId, UserProfileDTO newUserProfileInfo)
+        {
+            Account accountToEdit = _userManagementServices.FindById(accountId);
+            Student studentToEdit = _userManagementServices.FindStudentById(accountId);
+
+            if(accountToEdit == null)
+            {
+                throw new AccountNotFoundException();
+            }
+            if(studentToEdit == null)
+            {
+                throw new NotAStudentException();
+            }
+            accountToEdit.FirstName = newUserProfileInfo.FirstName;
+            accountToEdit.MiddleName = newUserProfileInfo.MiddleName;
+            accountToEdit.LastName = newUserProfileInfo.LastName;
+            ISchoolRegistrationService schoolRegistrationServices = new SchoolRegistrationService(this._DbContext);
+            Department department = schoolRegistrationServices.FindDepartment(
+                newUserProfileInfo.DepartmentName
+            );
+            if(department == null)
+            {
+                throw new DepartmentNotFoundException();
+            }
+            studentToEdit.SchoolDepartmentId = department.Id;
+            // TODO allow telemetry
+
+            _userManagementServices.UpdateUser(accountToEdit);
+            _userManagementServices.UpdateStudent(studentToEdit);
+            this._DbContext.SaveChanges();
+
+        }
     }
 }

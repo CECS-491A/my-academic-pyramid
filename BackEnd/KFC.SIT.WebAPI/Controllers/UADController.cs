@@ -9,7 +9,7 @@ using System.Collections.Generic;
 namespace KFC.SIT.WebAPI.Controllers
 {
     [EnableCors(origins: "*", headers: "*", methods: "*")]
-    public class UADController: ApiController
+    public class UADController : ApiController
     {
         private const string url = "mongodb+srv://super:superheroes@myacademicpyramidlogging-if0cx.mongodb.net/test?retryWrites=true";
         private const string database = "test";
@@ -36,12 +36,12 @@ namespace KFC.SIT.WebAPI.Controllers
             return _dashboardManager.GetAverageSessionDuration();
         }
 
-        //[HttpGet]
-        //[Route("api/dashboard/fslogin")]
-        //public long[] GetFSLogin()
-        //{
-        //    return _dashboardManager.GetFailedSuccessfulLogIn();
-        //}
+        [HttpGet]
+        [Route("api/dashboard/fslogin")]
+        public long[] GetFSLogin()
+        {
+            return _dashboardManager.GetFailedSuccessfulLogIn();
+        }
 
         [HttpGet]
         [ActionName("api/dashboard/feature")]
