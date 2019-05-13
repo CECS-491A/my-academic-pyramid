@@ -3,14 +3,16 @@
   class="blue lighten-3"
       dark
      app v-model="navigationBarState.drawerIsOpen">
+     <v-img :aspect-ratio="16/9" src="https://cdn.vuetifyjs.com/images/parallax/material.jpg">
     <v-layout column align-center>
       <v-flex class="mt-5">
         <v-avatar size="100">
-          <img src="">
+          <img src="@/assets/Racoon.png">
         </v-avatar>
-        <p >User</p>
+        <div class="subheading">{{this.$authUsername}}</div>
       </v-flex>
     </v-layout>
+     </v-img>
     <v-list>
       <v-list-tile v-for="link in linksToDisplay" :key="link.name" router :to="link.route">
         <v-list-tile-action>
@@ -22,6 +24,7 @@
       </v-list-tile>
     </v-list>
   </v-navigation-drawer>
+
 </template>
 
 <script>
