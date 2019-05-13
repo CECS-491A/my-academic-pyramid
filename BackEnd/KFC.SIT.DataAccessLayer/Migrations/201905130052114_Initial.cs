@@ -39,6 +39,7 @@ namespace DataAccessLayer.Migrations
                         MiddleName = c.String(),
                         LastName = c.String(),
                         Exp = c.Int(),
+                        LogTelemetry = c.Boolean(nullable: false),
                         CategoryId = c.Int(),
                         DateOfBirth = c.DateTime(nullable: false, precision: 7, storeType: "datetime2"),
                         CreatedAt = c.DateTime(nullable: false, precision: 7, storeType: "datetime2"),
@@ -210,7 +211,7 @@ namespace DataAccessLayer.Migrations
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Courses", t => t.CourseId, cascadeDelete: true)
-                .ForeignKey("dbo.SchoolTeachers", t => t.SchoolTeacherId, cascadeDelete: true)
+                .ForeignKey("dbo.SchoolTeachers", t => t.SchoolTeacherId, cascadeDelete: false)
                 .Index(t => t.SchoolTeacherId)
                 .Index(t => t.CourseId);
             
@@ -286,7 +287,7 @@ namespace DataAccessLayer.Migrations
                     })
                 .PrimaryKey(t => new { t.Student_Id, t.SchoolTeacherCourse_Id })
                 .ForeignKey("dbo.Students", t => t.Student_Id, cascadeDelete: true)
-                .ForeignKey("dbo.SchoolTeacherCourses", t => t.SchoolTeacherCourse_Id, cascadeDelete: false)
+                .ForeignKey("dbo.SchoolTeacherCourses", t => t.SchoolTeacherCourse_Id, cascadeDelete: true)
                 .Index(t => t.Student_Id)
                 .Index(t => t.SchoolTeacherCourse_Id);
             
