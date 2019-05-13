@@ -21,7 +21,6 @@ import PostQuestion from '@/components/DiscussionForum/PostQuestion'
 import TestComponent from '@/components/DiscussionForum/TestComponent'
 import SchoolRegistration from '@/Views/SchoolRegistration'
 import Search from '@/Views/Search'
-// import Profile from '@/Views/UserProfile'
 
 Vue.use(Router)
 Vue.use(Vuetify)
@@ -116,11 +115,6 @@ export default new Router({
     path: '/DiscussionForum/PostQuestion',
     name: 'PostQuestion',
     component: PostQuestion
-  },
-  {
-    path: '/FeatureHomePage',
-    name: 'FeatureHomePage',
-    component: FeatureHomePage
   }
   ]
 })
