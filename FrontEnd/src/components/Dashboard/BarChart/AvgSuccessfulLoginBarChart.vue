@@ -66,7 +66,7 @@
           headers: { "Content-Type": "application/Json" }
         })
         .then(response => {
-          this.datacollection.labels = response.data;
+          this.datacollection.datasets[0].data = response.data;
           console.log(response.data);
         })
         .catch(error => {
@@ -75,6 +75,8 @@
     },
     mounted () {
       //renderChart function renders the chart with the datacollection and options object.
+      fetchData()
+      fetchLabel()
       this.renderChart(this.datacollection, this.options)
     }
   }
