@@ -165,12 +165,5 @@ namespace ServiceLayer.Search
         {
             return _db.Courses.Find(courseId);
         }
-
-        public Student FindStudentByAccountId(int id)
-        {
-            return _db.Students
-                .Where(s => s.AccountId == id)
-                .FirstOrDefault();
-        }
    }
 }

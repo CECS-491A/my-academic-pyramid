@@ -181,29 +181,5 @@ namespace ManagerLayer.Gateways.Search
         {
             return _searchService.GetCourses(schoolId, departmentId);
         }
-
-        public AccountDTO GetAccount(int accountId)
-        {
-            UserManager userManager = new UserManager();
-            var account = userManager.FindUserById(accountId);
-
-            if (account is null)
-            {
-                throw new ArgumentException("User Account Does Not Exist");
-            }
-
-            var student = _searchService.FindStudentByAccountId(account.Id);
-
-            if(student is null)
-            {
-                return new AccountDTO();
-            }
-
-            return new AccountDTO
-            {
-                IsStudent = true,
-                SchoolId = student.SchoolDepartment.SchoolId
-            };
-        }
     }
 }

@@ -109,6 +109,15 @@ namespace KFC.SIT.WebAPI.Controllers
             {
                 UserManager um = new UserManager();
                 UserDTO userDTO = um.GetUserInfo(id);
+                var student = um.FindStudentById(id);
+                if(student is null)
+                {
+                    userDTO.SchoolId = 0;
+                }
+                else
+                {
+                    userDTO.SchoolId = student.SchoolDepartment.SchoolId;
+                }
                 string updatedToken = sm.RefreshSession(securityContext.Token);
                 return Request.CreateResponse(
                     HttpStatusCode.OK, new { User = userDTO, SITtoken = updatedToken }

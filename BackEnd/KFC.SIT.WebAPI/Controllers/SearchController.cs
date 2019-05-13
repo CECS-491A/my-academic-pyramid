@@ -32,36 +32,6 @@ namespace KFC.SIT.WebAPI.Controllers
                 return Content(HttpStatusCode.PreconditionFailed, new SearchResponse("Invalid Request"));
             }
 
-           try
-           {
-               using (var _db = new DatabaseContext())
-               {
-                    ISearchManager manager = new SearchManager(_db);
-
-                    var results = new SearchResponse(manager.Search(request));
-                    return Content(HttpStatusCode.OK, results);
-                }
-            }
-            catch (Exception x) when (x is ArgumentException)
-            {
-                return Content(HttpStatusCode.BadRequest, new SearchResponse(x.Message));
-            }
-            catch (Exception x)
-            {
-                return Content(HttpStatusCode.InternalServerError, new SearchResponse(x.Message));
-            }
-        }
-
-        [HttpGet]
-        [ActionName("account")]
-        public IHttpActionResult GetAccount([FromUri] int AccountId)
-        {
-            if (!ModelState.IsValid)
-            {
-                // 412 Response
-                return Content(HttpStatusCode.PreconditionFailed, new SearchResponse("Invalid Request"));
-            }
-
             SecurityContext securityContext = SecurityContextBuilder.CreateSecurityContext(
                Request.Headers
             );
@@ -78,21 +48,21 @@ namespace KFC.SIT.WebAPI.Controllers
 
             try
             {
-                using (var _db = new DatabaseContext())
-                {
+               using (var _db = new DatabaseContext())
+               {
                     ISearchManager manager = new SearchManager(_db);
 
-                    var results = manager.GetAccount(AccountId);
+                    var results = new SearchResponse(manager.Search(request), updatedToken);
                     return Content(HttpStatusCode.OK, results);
                 }
             }
             catch (Exception x) when (x is ArgumentException)
             {
-                return Content(HttpStatusCode.BadRequest, new SearchResponse(x.Message));
+                return Content(HttpStatusCode.BadRequest, new SearchResponse(x.Message, updatedToken));
             }
             catch (Exception x)
             {
-                return Content(HttpStatusCode.InternalServerError, new SearchResponse(x.Message));
+                return Content(HttpStatusCode.InternalServerError, new SearchResponse(x.Message, updatedToken));
             }
         }
         

@@ -2,7 +2,8 @@ export default {
     state: {
         token: null,
         userId: null,
-        category: null
+        category: null,
+        schoolId: null
     },
     updateSession(newToken) {
         sessionStorage.SITtoken = newToken
@@ -12,9 +13,11 @@ export default {
         this.state.token = null
         this.state.userId = null
         this.state.category = null
+        this.state.schoolId = null
         sessionStorage.removeItem("SITtoken")
         sessionStorage.removeItem("SITuserId")
         sessionStorage.removeItem("SITcategory")
+        sessionStorage.removeItem("SITschoolId")
     },
     setUserId(userId) {
         sessionStorage.SITuserId = userId
@@ -23,6 +26,10 @@ export default {
     setCategory(category) {
         sessionStorage.SITcategory = category
         this.state.category = category
+    },
+    setSchoolId(schoolId){
+        sessionStorage.SITschoolId = schoolId
+        this.state.schoolId = schoolId
     },
     synchAppSession() {
         // run this so that the state will be updated
