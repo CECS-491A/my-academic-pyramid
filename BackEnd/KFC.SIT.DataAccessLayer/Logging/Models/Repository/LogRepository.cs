@@ -15,11 +15,11 @@ namespace DataAccessLayer.Logging
         MongoClient _client = new MongoClient("mongodb+srv://super:superheroes@myacademicpyramidlogging-if0cx.mongodb.net/test?retryWrites=true");
         IMongoDatabase _db; //= _client.GetDatabase("test");
 
-        private IMongoCollection<T> _logCollection;
+        public IMongoCollection<T> _logCollection;
 
         public LogRepository(string collectionName)
         {
-            _db = _client.GetDatabase("tes");
+            _db = _client.GetDatabase("test");
             _logCollection = _db.GetCollection<T>(collectionName);
         }
 
