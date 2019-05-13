@@ -25,9 +25,6 @@ using System.Web;
 
 namespace KFC.SIT.WebAPI.Controllers
 {
-    // TODO consistency throughout project on (DepartmentQuestions) or (SchoolDepartmentQuestions)
-
-
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class DiscussionForumController : ApiController
     {
@@ -38,6 +35,13 @@ namespace KFC.SIT.WebAPI.Controllers
         [ActionName("PostQuestion")]
         public IHttpActionResult PostQuestion([FromBody] QuestionCreateRequestDTO questionDTO)
         {
+            List<string> requiredClaims = new List<string>()
+            {
+            };
+            authUserId = AuthorizeUser(requiredClaims);
+            if (authUserId == 0)
+                return Unauthorized();
+
             using (var _db = new DatabaseContext())
             {
                 DiscussionForumManager discussionForumManager = new DiscussionForumManager(_db);
@@ -54,52 +58,6 @@ namespace KFC.SIT.WebAPI.Controllers
                 }
             }
         }
-
-        // delete later. Don't need
-        private static LoggingManager _logger = new LoggingManager();
-
-        [HttpGet]
-        [ActionName("TestLogger")]
-        public void TestLogger()
-        {
-            try
-            {
-                int a = 0;
-                int b = 0;
-                int c = a / b;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError("Arturo", "request", ex.Message);
-            }
-        }
-
-        [HttpGet]
-        [ActionName("TestFails")]
-        public IHttpActionResult TestFails()
-        {
-            try
-            {
-                int a = 0;
-                int b = 0;
-                int c = a / b;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError("Arturo", "request", ex.Message);
-            }
-            return Content(HttpStatusCode.OK, _logger.getErrorFailCount());
-        }
-
-        [HttpGet]
-        [Route("TestIP")]
-        public IHttpActionResult TestIP()
-        {
-            //_telemetries.DeleteAll();
-            _logger.LogPageVisit("Arturo", HttpContext.Current.Request.UserHostAddress);
-            return Ok();
-        }
-
 
         [HttpGet]
         [ActionName("GetQuestionsBySchool")]
@@ -174,13 +132,20 @@ namespace KFC.SIT.WebAPI.Controllers
         [ActionName("GetDraftQuestions")]
         public IHttpActionResult GetDraftQuestions()
         {
+            List<string> requiredClaims = new List<string>()
+            {
+            };
+            authUserId = AuthorizeUser(requiredClaims);
+            if (authUserId == 0)
+                return Unauthorized();
+
             try
             {
                 using (var _db = new DatabaseContext())
                 {
                     DiscussionForumManager _discussionForumManager = new DiscussionForumManager(_db);
                     // TODO change hardcoded userId to 
-                    var questions = _discussionForumManager.GetDraftQuestions(2);
+                    var questions = _discussionForumManager.GetDraftQuestions(authUserId);
                     return Content(HttpStatusCode.OK, questions);
                 }
             }
@@ -198,13 +163,20 @@ namespace KFC.SIT.WebAPI.Controllers
         [ActionName("PostAnswer")]
         public IHttpActionResult PostAnswer([FromBody] AnswerCreateRequestDTO answerDTO)
         {
+            List<string> requiredClaims = new List<string>()
+            {
+            };
+            authUserId = AuthorizeUser(requiredClaims);
+            if (authUserId == 0)
+                return Unauthorized();
+
             using (var _db = new DatabaseContext())
             {
                 DiscussionForumManager discussionForumManager = new DiscussionForumManager(_db);
                 try
                 {
                     // TODO accountId should come from authorization and take out hard-coded value
-                    discussionForumManager.PostAnswer(answerDTO, 3);
+                    discussionForumManager.PostAnswer(answerDTO, authUserId);
                     _db.SaveChanges();
                     return Content(HttpStatusCode.OK, "Answer posted successfully");
                 }
@@ -228,6 +200,13 @@ namespace KFC.SIT.WebAPI.Controllers
         [ActionName("GetAnswers")]
         public IHttpActionResult GetAnswers(int questionId)
         {
+            List<string> requiredClaims = new List<string>()
+            {
+            };
+            authUserId = AuthorizeUser(requiredClaims);
+            if (authUserId == 0)
+                return Unauthorized();
+
             try
             {
                 using (var _db = new DatabaseContext())
@@ -248,6 +227,7 @@ namespace KFC.SIT.WebAPI.Controllers
         }
 
         // Test for <T>
+        // TODO - Delete
         [HttpGet]
         [ActionName("GetAnyQuestion")]
         public IHttpActionResult GetAnyQuestion(int questionId)
@@ -290,571 +270,350 @@ namespace KFC.SIT.WebAPI.Controllers
             }
         }
 
-        //[HttpPost]
-        //[ActionName("PostQuestionFromDraft")]
-        //public IHttpActionResult PostQuestionFromDraft([FromBody] QuestionCreateFromDraftRequestDTO questionDTO)
-        //{
-        //    using (var _db = new DatabaseContext())
-        //    {
-        //        Question question;
-        //        try
-        //        {
-        //            questionDTO.AccountId = authUserId;
-        //            DiscussionForumManager discussionManager = new DiscussionForumManager(_db);
-        //            question = discussionManager.PostQuestion(questionDTO, authUserId);
-        //        }
-        //        catch (InvalidQuestionLengthException ex)
-        //        {
-        //            return Content(HttpStatusCode.BadRequest, ex.Message);
-        //        }
+        [HttpPost]
+        [ActionName("PostQuestionFromDraft")]
+        public IHttpActionResult PostQuestionFromDraft([FromBody] QuestionCreateFromDraftRequestDTO questionDTO)
+        {
+            List<string> requiredClaims = new List<string>()
+            {
+            };
+            authUserId = AuthorizeUser(requiredClaims);
+            if (authUserId == 0)
+                return Unauthorized();
 
-        //        DiscussionForumServices discussionServices = new DiscussionForumServices(_db);
-        //        var qDraft = discussionServices.DeleteQuestionDraft(qDraftId);
+            using (var _db = new DatabaseContext())
+            {
+                Question question;
+                try
+                {
+                    DiscussionForumManager discussionManager = new DiscussionForumManager(_db);
+                    question = discussionManager.PostQuestionFromDraft(questionDTO, authUserId);
+                    _db.SaveChanges();
+                    return Content(HttpStatusCode.OK, "Draft was posted successfully from draft.");
 
-        //        try
-        //        {
-        //            _db.SaveChanges();
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            return Content(HttpStatusCode.InternalServerError, ex.Message);
-        //        }
+                }
+                catch (InvalidAccountException ex)
+                {
+                    return Content(HttpStatusCode.Unauthorized, ex.Message);
+                }
+                catch (InvalidQuestionLengthException ex)
+                {
+                    return Content(HttpStatusCode.BadRequest, ex.Message);
+                }
+                catch (Exception ex)
+                {
+                    return Content(HttpStatusCode.InternalServerError, ex.Message);
+                }
+            }
+        }
 
-        //        return Content(HttpStatusCode.OK, question);
-        //    }
-        //}
+        [HttpPost]
+        [ActionName("UpdateQuestion")]
+        public IHttpActionResult UpdateQuestion([FromBody] QuestionUpdateRequestDTO questionDTO)
+        {
+            List<string> requiredClaims = new List<string>()
+            {
+            };
+            authUserId = AuthorizeUser(requiredClaims);
+            if (authUserId == 0)
+                return Unauthorized();
 
+            using (var _db = new DatabaseContext())
+            {
+                Question question;
+                try
+                {
+                    DiscussionForumManager discussionManager = new DiscussionForumManager(_db);
+                    question = discussionManager.EditQuestion(questionDTO, questionDTO.AccountId);
+                    _db.SaveChanges();
+                    return Content(HttpStatusCode.OK, "Question was updated succesfully.");
+                }
+                catch (QuestionIsClosedException ex)
+                {
+                    return Content(HttpStatusCode.Forbidden, ex.Message);
+                }
+                catch (InvalidQuestionLengthException ex)
+                {
+                    return Content(HttpStatusCode.BadRequest, ex.Message);
+                }
+                catch (InvalidAccountException ex)
+                {
+                    return Content(HttpStatusCode.Unauthorized, ex.Message);
+                }
+                catch (QuestionUnavailableException ex)
+                {
+                    return Content(HttpStatusCode.Forbidden, ex.Message);
+                }
+            }
+        }
 
+        [HttpPost]
+        [ActionName("IncreaseQuestionSpamCount")]
+        public IHttpActionResult IncreaseQuestionSpamCount(int questionId)
+        {
+            List<string> requiredClaims = new List<string>()
+            {
+            };
+            authUserId = AuthorizeUser(requiredClaims);
+            if (authUserId == 0)
+                return Unauthorized();
 
-        //        [HttpPost]
-        //        [ActionName("PostAnswer")]
-        //        public IHttpActionResult PostAnswer([FromBody] AnswerCreateRequestDTO answerDTO)
-        //        {
-        //            SecurityContext securityContext = SecurityContextBuilder.CreateSecurityContext(
-        //                 Request.Headers
-        //             );
-        //            if (securityContext == null)
-        //            {
-        //                return Unauthorized();
-        //            }
-        //            SessionManager sm = new SessionManager();
-        //            if (!sm.ValidateSession(securityContext.Token))
-        //            {
-        //                return Unauthorized();
-        //            }
+            using (var _db = new DatabaseContext())
+            {
+                PostedQuestion question;
+                try
+                {
+                    DiscussionForumManager discussionManager = new DiscussionForumManager(_db);
+                    question = discussionManager.IncreaseQuestionSpamCount(questionId, authUserId);
+                    _db.SaveChanges();
+                    var spamCount = question.SpamCount;
+                    return Content(HttpStatusCode.OK, spamCount);
+                }
+                catch (ArgumentNullException)
+                {
+                    return Content(HttpStatusCode.BadRequest, "Answer does not exist");
+                }
+                catch (InvalidAccountException ex)
+                {
+                    return Content(HttpStatusCode.Unauthorized, ex.Message);
+                }
+            }
+        }
 
-        //            AuthorizationManager authorizationManager = new AuthorizationManager(
-        //                securityContext
-        //            );
-        //            // TODO get this from table in database.
-        //            //List<string> requiredClaims = new List<string>()
-        //            //{
-        //            //    "CanPostAnswer"
-        //            //};
-        //            //if (!authorizationManager.CheckClaims(requiredClaims))
-        //            //{
-        //            //    return Unauthorized();
-        //            //}
-        //            //else
-        //            //{
-        //                UserManager um = new UserManager();
-        //                Account user = um.FindByUserName(securityContext.UserName);
-        //                if (user == null)
-        //                {
-        //                    return Unauthorized();
-        //                }
-        //                authUserId = um.FindByUserName(securityContext.UserName).Id;
-        //            //}
+        [HttpPost]
+        [ActionName("IncreaseAnswerSpamCount")]
+        public IHttpActionResult IncreaseAnswerSpamCount(int answerId)
+        {
+            List<string> requiredClaims = new List<string>()
+            {
+            };
+            authUserId = AuthorizeUser(requiredClaims);
+            if (authUserId == 0)
+                return Unauthorized();
 
-        //            using (var _db = new DatabaseContext())
-        //            {
-        //                Answer answer;
-        //                try
-        //                {
-        //                    answerDTO.AccountId = authUserId;
-        //                    DiscussionForumManager discussionManager = new DiscussionForumManager(_db);
-        //                    answer = discussionManager.PostAnswer(answerDTO);
-        //                }
-        //                catch (QuestionIsClosedException ex)
-        //                {
-        //                    return Content(HttpStatusCode.Forbidden, ex.Message);
-        //                }
-        //                catch (NotEnoughExpException ex)
-        //                {
-        //                    return Content(HttpStatusCode.Conflict, ex.Message);
-        //                }
-        //                return Content(HttpStatusCode.OK, "Answer was posted succesfully.");
-        //            }
-        //        }
+            using (var _db = new DatabaseContext())
+            {
+                Answer answer;
+                try
+                {
+                    DiscussionForumManager discussionManager = new DiscussionForumManager(_db);
+                    answer = discussionManager.IncreaseAnswerSpamCount(answerId, authUserId);
+                    _db.SaveChanges();
+                    var spamCount = answer.SpamCount;
+                    return Content(HttpStatusCode.OK, spamCount);
+                }
+                catch (ArgumentNullException)
+                {
+                    return Content(HttpStatusCode.BadRequest, "Answer does not exist");
+                }
+                catch (InvalidAccountException ex)
+                {
+                    return Content(HttpStatusCode.Unauthorized, ex.Message);
+                }
+            }
+        }
 
-        //        [HttpPost]
-        //        [ActionName("UpdateQuestions")]
-        //        public IHttpActionResult UpdateQuestion([FromBody] QuestionUpdateRequestDTO questionDTO)
-        //        {
-        //            SecurityContext securityContext = SecurityContextBuilder.CreateSecurityContext(
-        //                 Request.Headers
-        //             );
-        //            if (securityContext == null)
-        //            {
-        //                return Unauthorized();
-        //            }
-        //            SessionManager sm = new SessionManager();
-        //            if (!sm.ValidateSession(securityContext.Token))
-        //            {
-        //                return Unauthorized();
-        //            }
+        [HttpPost]
+        [ActionName("IncreaseAnswerHelpfulCount")]
+        public IHttpActionResult IncreaseAnswerHelpfulCount(int answerId)
+        {
+            List<string> requiredClaims = new List<string>()
+            {
+            };
+            authUserId = AuthorizeUser(requiredClaims);
+            if (authUserId == 0)
+                return Unauthorized();
 
-        //            AuthorizationManager authorizationManager = new AuthorizationManager(
-        //                securityContext
-        //            );
-        //            // TODO get this from table in database.
-        //            //List<string> requiredClaims = new List<string>()
-        //            //{
-        //            //    "CanPostQuestion"
-        //            //};
-        //            //if (!authorizationManager.CheckClaims(requiredClaims))
-        //            //{
-        //            //    return Unauthorized();
-        //            //}
-        //            //else
-        //            //{
-        //                UserManager um = new UserManager();
-        //                Account user = um.FindByUserName(securityContext.UserName);
-        //                if (user == null)
-        //                {
-        //                    return Unauthorized();
-        //                }
-        //                authUserId = um.FindByUserName(securityContext.UserName).Id;
-        //            //}
+            using (var _db = new DatabaseContext())
+            {
+                try
+                {
+                    DiscussionForumManager discussionManager = new DiscussionForumManager(_db);
+                    var answer = discussionManager.IncreaseHelpfulCount(answerId, authUserId);
+                    _db.SaveChanges();
+                    var helpfulCount = answer.HelpfulCount;
+                    return Content(HttpStatusCode.OK, helpfulCount);
+                }
+                catch (ArgumentNullException)
+                {
+                    return Content(HttpStatusCode.BadRequest, "Answer does not exist");
+                }
+                catch (InvalidAccountException ex)
+                {
+                    return Content(HttpStatusCode.Unauthorized, ex.Message);
+                }
+                catch (DbUpdateConcurrencyException)
+                {
 
+                    return Content(HttpStatusCode.InternalServerError, "There was an error on the server");
+                }
+            }
+        }
 
+        [HttpPost]
+        [ActionName("IncreaseAnswerUnHelpfulCount")]
+        public IHttpActionResult IncreaseAnswerUnHelpfulCount(int answerId)
+        {
+            List<string> requiredClaims = new List<string>()
+            {
+            };
+            authUserId = AuthorizeUser(requiredClaims);
+            if (authUserId == 0)
+                return Unauthorized();
 
-        //            using (var _db = new DatabaseContext())
-        //            {
-        //                Question question;
-        //                try
-        //                {
-        //                    DiscussionForumManager discussionManager = new DiscussionForumManager(_db);
-        //                    question = discussionManager.EditQuestion(questionDTO, authUserId);
-        //                    return Content(HttpStatusCode.OK, "Question was posted succesfully.");
-        //                }
-        //                catch (QuestionIsClosedException ex)
-        //                {
-        //                    return Content(HttpStatusCode.Forbidden, ex.Message);
-        //                }
-        //                catch (InvalidQuestionLengthException ex)
-        //                {
-        //                    return Content(HttpStatusCode.BadRequest, ex.Message);
-        //                }
-        //                catch (InvalidAccountException ex)
-        //                {
-        //                    return Content(HttpStatusCode.Unauthorized, ex.Message);
-        //                }
-        //                catch (QuestionUnavailableException ex)
-        //                {
-        //                    return Content(HttpStatusCode.Forbidden, ex.Message);
-        //                }
-        //            }
-        //        }
+            using (var _db = new DatabaseContext())
+            {
+                Answer answer;
+                try
+                {
+                    DiscussionForumManager discussionManager = new DiscussionForumManager(_db);
+                    answer = discussionManager.IncreaseUnHelpfulCount(answerId, authUserId);
+                    _db.SaveChanges();
+                    var unHelpfulCount = answer.UnHelpfulCount;
+                    return Content(HttpStatusCode.OK, unHelpfulCount);
+                }
+                catch (ArgumentNullException)
+                {
+                    return Content(HttpStatusCode.BadRequest, "Answer does not exist");
+                }
+                catch (InvalidAccountException ex)
+                {
+                    return Content(HttpStatusCode.Unauthorized, ex.Message);
+                }
+            }
+        }
 
-        //        [HttpPost]
-        //        [ActionName("IncreaseQuestionSpamCount")]
-        //        public IHttpActionResult IncreaseQuestionSpamCount(int questionId)
-        //        {
-        //            SecurityContext securityContext = SecurityContextBuilder.CreateSecurityContext(
-        //                 Request.Headers
-        //             );
-        //            if (securityContext == null)
-        //            {
-        //                return Unauthorized();
-        //            }
-        //            SessionManager sm = new SessionManager();
-        //            if (!sm.ValidateSession(securityContext.Token))
-        //            {
-        //                return Unauthorized();
-        //            }
+        [HttpPost]
+        [ActionName("CloseQuestion")]
+        public IHttpActionResult CloseQuestion(int questionId)
+        {
+            List<string> requiredClaims = new List<string>()
+            {
+                "CanCloseQuestion"
+            };
+            authUserId = AuthorizeUser(requiredClaims);
+            if (authUserId == 0)
+                return Unauthorized();
 
-        //            AuthorizationManager authorizationManager = new AuthorizationManager(
-        //                securityContext
-        //            );
-        //            // TODO get this from table in database.
-        //            List<string> requiredClaims = new List<string>()
-        //            {
-        //                "CanMarkQuestionAsSpam"
-        //            };
-        //            if (!authorizationManager.CheckClaims(requiredClaims))
-        //            {
-        //                return Unauthorized();
-        //            }
-        //            else
-        //            {
-        //                UserManager um = new UserManager();
-        //                Account user = um.FindByUserName(securityContext.UserName);
-        //                if (user == null)
-        //                {
-        //                    return Unauthorized();
-        //                }
-        //                authUserId = um.FindByUserName(securityContext.UserName).Id;
-        //            }
+            using (var _db = new DatabaseContext())
+            {
+                PostedQuestion question;
+                try
+                {
+                    DiscussionForumManager discussionManager = new DiscussionForumManager(_db);
+                    question = discussionManager.CloseQuestion(questionId, authUserId);
+                    var isClosed = question.IsClosed;
+                    return Content(HttpStatusCode.OK, isClosed);
+                }
+                catch (QuestionIsClosedException ex)
+                {
+                    return Content(HttpStatusCode.BadRequest, ex.Message);
+                }
+                catch (InvalidAccountException ex)
+                {
+                    return Content(HttpStatusCode.Unauthorized, ex.Message);
+                }
 
-        //            using (var _db = new DatabaseContext())
-        //            {
-        //                Question question;
-        //                try
-        //                {
-        //                    DiscussionForumManager discussionManager = new DiscussionForumManager(_db);
-        //                    DiscussionForumServices discussionForumServices = new DiscussionForumServices(_db);
-        //                    question = discussionManager.IncreaseQuestionSpamCount(questionId, authUserId);
-        //                    var questionDTO = discussionForumServices.ApplyQuestionFormat(question);
-        //                    return Content(HttpStatusCode.OK, question);
-        //                }
-        //                catch (ArgumentNullException)
-        //                {
-        //                    return Content(HttpStatusCode.BadRequest, "Answer does not exist");
-        //                }
-        //                catch (InvalidAccountException ex)
-        //                {
-        //                    return Content(HttpStatusCode.Unauthorized, ex.Message);
-        //                }
-        //            }
-        //        }
+            }
+        }
 
-        //        [HttpPost]
-        //        [ActionName("IncreaseAnswerSpamCount")]
-        //        public IHttpActionResult IncreaseAnswerSpamCount(int answerId)
-        //        {
-        //            SecurityContext securityContext = SecurityContextBuilder.CreateSecurityContext(
-        //                 Request.Headers
-        //             );
-        //            if (securityContext == null)
-        //            {
-        //                return Unauthorized();
-        //            }
-        //            SessionManager sm = new SessionManager();
-        //            if (!sm.ValidateSession(securityContext.Token))
-        //            {
-        //                return Unauthorized();
-        //            }
+        [HttpPost]
+        [ActionName("MarkAsCorrectAnswer")]
+        public IHttpActionResult MarkAsCorrectAnswer(int answerId)
+        {
+            List<string> requiredClaims = new List<string>()
+            {
+                "CanMarkAnswerAsCorrect"
+            };
+            authUserId = AuthorizeUser(requiredClaims);
+            if (authUserId == 0)
+                return Unauthorized();
 
-        //            AuthorizationManager authorizationManager = new AuthorizationManager(
-        //                securityContext
-        //            );
-        //            // TODO get this from table in database.
-        //            List<string> requiredClaims = new List<string>()
-        //            {
-        //                "CanMarkAnswerAsSpam"
-        //            };
-        //            if (!authorizationManager.CheckClaims(requiredClaims))
-        //            {
-        //                return Unauthorized();
-        //            }
-        //            else
-        //            {
-        //                UserManager um = new UserManager();
-        //                Account user = um.FindByUserName(securityContext.UserName);
-        //                if (user == null)
-        //                {
-        //                    return Unauthorized();
-        //                }
-        //                authUserId = um.FindByUserName(securityContext.UserName).Id;
-        //            }
+            using (var _db = new DatabaseContext())
+            {
+                try
+                {
+                    DiscussionForumManager discussionManager = new DiscussionForumManager(_db);
+                    var answer = discussionManager.MarkAsCorrectAnswer(answerId, authUserId);
+                    var isCorrect = answer.IsCorrectAnswer;
+                    _db.SaveChanges();
+                    return Content(HttpStatusCode.OK, isCorrect);
+                }
+                catch (ArgumentNullException)
+                {
+                    return Content(HttpStatusCode.BadRequest, "Answer does not exist");
+                }
+                catch (QuestionIsClosedException ex)
+                {
+                    return Content(HttpStatusCode.Forbidden, ex.Message);
+                }
+                catch (InvalidAccountException ex)
+                {
+                    return Content(HttpStatusCode.Unauthorized, ex.Message);
+                }
+                catch (DbUpdateConcurrencyException)
+                {
 
-        //            using (var _db = new DatabaseContext())
-        //            {
-        //                Answer answer;
-        //                try
-        //                {
-        //                    DiscussionForumManager discussionManager = new DiscussionForumManager(_db);
-        //                    DiscussionForumServices discussionForumServices = new DiscussionForumServices(_db);
-        //                    answer = discussionManager.IncreaseAnswerSpamCount(answerId, authUserId);
-        //                    var answerDTO = discussionForumServices.ApplyAnswerFortmat(answer);
-        //                    return Content(HttpStatusCode.OK, answerDTO);
-        //                }
-        //                catch (ArgumentNullException)
-        //                {
-        //                    return Content(HttpStatusCode.BadRequest, "Answer does not exist");
-        //                }
-        //                catch (InvalidAccountException ex)
-        //                {
-        //                    return Content(HttpStatusCode.Unauthorized, ex.Message);
-        //                }
-        //            }
-        //        }
+                    return Content(HttpStatusCode.InternalServerError, "There was an error on the server");
+                }
+            }
+        }
 
-        //        [HttpPost]
-        //        [ActionName("IncreaseAnswerHelpfulCount")]
-        //        public IHttpActionResult IncreaseAnswerHelpfulCount(int answerId)
-        //        {
-        //            SecurityContext securityContext = SecurityContextBuilder.CreateSecurityContext(
-        //                 Request.Headers
-        //             );
-        //            if (securityContext == null)
-        //            {
-        //                return Unauthorized();
-        //            }
-        //            SessionManager sm = new SessionManager();
-        //            if (!sm.ValidateSession(securityContext.Token))
-        //            {
-        //                return Unauthorized();
-        //            }
+        public int AuthorizeUser(List<string> requiredClaims)
+        {
+            SecurityContext securityContext = SecurityContextBuilder.CreateSecurityContext(
+                 Request.Headers
+             );
+            if (securityContext == null)
+            {
+                return 0;
+            }
+            SessionManager sm = new SessionManager();
+            if (!sm.ValidateSession(securityContext.Token))
+            {
+                return 0;
+            }
 
-        //            AuthorizationManager authorizationManager = new AuthorizationManager(
-        //                securityContext
-        //            );
-        //            // TODO get this from table in database.
-        //            List<string> requiredClaims = new List<string>()
-        //            {
-        //                "CanMarkAnswerAsHelpful"
-        //            };
-        //            if (!authorizationManager.CheckClaims(requiredClaims))
-        //            {
-        //                return Unauthorized();
-        //            }
-        //            else
-        //            {
-        //                UserManager um = new UserManager();
-        //                Account user = um.FindByUserName(securityContext.UserName);
-        //                if (user == null)
-        //                {
-        //                    return Unauthorized();
-        //                }
-        //                authUserId = um.FindByUserName(securityContext.UserName).Id;
-        //            }
-
-        //            using (var _db = new DatabaseContext())
-        //            {
-        //                try
-        //                {
-        //                    DiscussionForumManager discussionManager = new DiscussionForumManager(_db);
-        //                    DiscussionForumServices discussionServices = new DiscussionForumServices(_db);
-        //                    var answer = discussionManager.IncreaseHelpfulCount(answerId, authUserId);
-        //                    var answerDTO = discussionServices.ApplyAnswerFortmat(answer);
-        //                    return Content(HttpStatusCode.OK, answerDTO);
-        //                }
-        //                catch (ArgumentNullException)
-        //                {
-        //                    return Content(HttpStatusCode.BadRequest, "Answer does not exist");
-        //                }
-        //                catch (InvalidAccountException ex)
-        //                {
-        //                    return Content(HttpStatusCode.Unauthorized, ex.Message);
-        //                }
-        //                catch (DbUpdateConcurrencyException)
-        //                {
-
-        //                    return Content(HttpStatusCode.InternalServerError, "There was an error on the server");
-        //                }
-        //            }
-        //        }
-
-        //        [HttpPost]
-        //        [ActionName("IncreaseAnswerUnHelpfulCount")]
-        //        public IHttpActionResult IncreaseAnswerUnHelpfulCount(int answerId)
-        //        {
-        //            SecurityContext securityContext = SecurityContextBuilder.CreateSecurityContext(
-        //                 Request.Headers
-        //             );
-        //            if (securityContext == null)
-        //            {
-        //                return Unauthorized();
-        //            }
-        //            SessionManager sm = new SessionManager();
-        //            if (!sm.ValidateSession(securityContext.Token))
-        //            {
-        //                return Unauthorized();
-        //            }
-
-        //            AuthorizationManager authorizationManager = new AuthorizationManager(
-        //                securityContext
-        //            );
-        //            // TODO get this from table in database.
-        //            List<string> requiredClaims = new List<string>()
-        //            {
-        //                "CanMarkAnswerAsUnHelpful"
-        //            };
-        //            if (!authorizationManager.CheckClaims(requiredClaims))
-        //            {
-        //                return Unauthorized();
-        //            }
-        //            else
-        //            {
-        //                UserManager um = new UserManager();
-        //                Account user = um.FindByUserName(securityContext.UserName);
-        //                if (user == null)
-        //                {
-        //                    return Unauthorized();
-        //                }
-        //                authUserId = um.FindByUserName(securityContext.UserName).Id;
-        //            }
-
-        //            using (var _db = new DatabaseContext())
-        //            {
-        //                Answer answer;
-        //                try
-        //                {
-        //                    DiscussionForumManager discussionManager = new DiscussionForumManager(_db);
-        //                    DiscussionForumServices discussionForumServices = new DiscussionForumServices(_db);
-        //                    answer = discussionManager.IncreaseUnHelpfulCount(answerId, authUserId);
-        //                    var answerDTO = discussionForumServices.ApplyAnswerFortmat(answer);
-        //                    return Content(HttpStatusCode.OK, answerDTO);
-        //                }
-        //                catch (ArgumentNullException)
-        //                {
-        //                    return Content(HttpStatusCode.BadRequest, "Answer does not exist");
-        //                }
-        //                catch (InvalidAccountException ex)
-        //                {
-        //                    return Content(HttpStatusCode.Unauthorized, ex.Message);
-        //                }
-        //            }
-        //        }
-
-        //        [HttpPost]
-        //        [ActionName("CloseQuestion")]
-        //        public IHttpActionResult CloseQuestion(int questionId)
-        //        {
-        //            SecurityContext securityContext = SecurityContextBuilder.CreateSecurityContext(
-        //                Request.Headers
-        //            );
-        //            if (securityContext == null)
-        //            {
-        //                return Unauthorized();
-        //            }
-        //            SessionManager sm = new SessionManager();
-        //            if (!sm.ValidateSession(securityContext.Token))
-        //            {
-        //                return Unauthorized();
-        //            }
-
-        //            AuthorizationManager authorizationManager = new AuthorizationManager(
-        //                securityContext
-        //            );
-        //            // TODO get this from table in database.
-        //            List<string> requiredClaims = new List<string>()
-        //            {
-        //                "CanCloseQuestion"
-        //            };
-        //            if (!authorizationManager.CheckClaims(requiredClaims))
-        //            {
-        //                return Unauthorized();
-        //            }
-        //            else
-        //            {
-        //                UserManager um = new UserManager();
-        //                Account user = um.FindByUserName(securityContext.UserName);
-        //                if (user == null)
-        //                {
-        //                    return Unauthorized();
-        //                }
-        //                authUserId = um.FindByUserName(securityContext.UserName).Id;
-        //            }
+            AuthorizationManager authorizationManager = new AuthorizationManager(
+                securityContext
+            );
+            // TODO get this from table in database.
+            //List<string> requiredClaims = new List<string>()
+            //{
+            //    "CanPostQuestion"
+            //};
+            if (!authorizationManager.CheckClaims(requiredClaims))
+            {
+                return 0;
+            }
+            else
+            {
+                UserManager um = new UserManager();
+                Account user = um.FindByUserName(securityContext.UserName);
+                if (user == null)
+                {
+                    return 0;
+                }
+                authUserId = um.FindByUserName(securityContext.UserName).Id;
+            }
+            return authUserId;
+        }
 
 
-        //            using (var _db = new DatabaseContext())
-        //            {
-        //                Question question;
-        //                try
-        //                {
-        //                    DiscussionForumManager discussionManager = new DiscussionForumManager(_db);
-        //                    DiscussionForumServices discussionForumServices = new DiscussionForumServices(_db);
-        //                    question = discussionManager.CloseQuestion(questionId, authUserId);
-        //                    var questionDTO = discussionForumServices.ApplyQuestionFormat(question);
-        //                    return Content(HttpStatusCode.OK, questionDTO);
-        //                }
-        //                catch (QuestionIsClosedException ex)
-        //                {
-        //                    return Content(HttpStatusCode.BadRequest, ex.Message);
-        //                }
-        //                catch (InvalidAccountException ex)
-        //                {
-        //                    return Content(HttpStatusCode.Unauthorized, ex.Message);
-        //                }
 
-        //            }
-        //        }
 
-        //        [HttpPost]
-        //        [ActionName("MarkAsCorrectAnswer")]
-        //        public IHttpActionResult MarkAsCorrectAnswer(int answerId)
-        //        {
-        //            List<string> requiredClaims = new List<string>()
-        //            {
-        //                "CanMarkAnswerAsCorrect"
-        //            };
-        //            authUserId = AuthorizeUser(requiredClaims);
-        //            if (authUserId == 0)
-        //                return Unauthorized();
 
-        //            using (var _db = new DatabaseContext())
-        //            {
-        //                try
-        //                {
-        //                    DiscussionForumManager discussionManager = new DiscussionForumManager(_db);
-        //                    DiscussionForumServices discussionServices = new DiscussionForumServices(_db);
-        //                    var answer = discussionManager.MarkAsCorrectAnswer(answerId, authUserId);
-        //                    var answerDTO = discussionServices.ApplyAnswerFortmat(answer);
-        //                                  _db.SaveChanges();
-        //                    return Content(HttpStatusCode.OK, answerDTO);
-        //                }
-        //                catch (ArgumentNullException)
-        //                {
-        //                    return Content(HttpStatusCode.BadRequest, "Answer does not exist");
-        //                }
-        //                catch (QuestionIsClosedException ex)
-        //                {
-        //                    return Content(HttpStatusCode.Forbidden, ex.Message);
-        //                }
-        //                catch (InvalidAccountException ex)
-        //                {
-        //                    return Content(HttpStatusCode.Unauthorized, ex.Message);
-        //                }
-        //                catch (DbUpdateConcurrencyException)
-        //                {
 
-        //                    return Content(HttpStatusCode.InternalServerError, "There was an error on the server");
-        //                }
-        //            }
-        //        }
 
-        //        public int AuthorizeUser(List<string> requiredClaims)
-        //        {
-        //            SecurityContext securityContext = SecurityContextBuilder.CreateSecurityContext(
-        //                 Request.Headers
-        //             );
-        //            if (securityContext == null)
-        //            {
-        //                return 0;
-        //            }
-        //            SessionManager sm = new SessionManager();
-        //            if (!sm.ValidateSession(securityContext.Token))
-        //            {
-        //                return 0;
-        //            }
 
-        //            AuthorizationManager authorizationManager = new AuthorizationManager(
-        //                securityContext
-        //            );
-        //            // TODO get this from table in database.
-        //            //List<string> requiredClaims = new List<string>()
-        //            //{
-        //            //    "CanPostQuestion"
-        //            //};
-        //            if (!authorizationManager.CheckClaims(requiredClaims))
-        //            {
-        //                return 0;
-        //            }
-        //            else
-        //            {
-        //                UserManager um = new UserManager();
-        //                Account user = um.FindByUserName(securityContext.UserName);
-        //                if (user == null)
-        //                {
-        //                    return 0;
-        //                }
-        //                authUserId = um.FindByUserName(securityContext.UserName).Id;
-        //            }
-        //            return authUserId;
-        //        }
+
+
+
+
+
+
+
+
 
 
 
@@ -974,4 +733,4 @@ namespace KFC.SIT.WebAPI.Controllers
 
 
     }
-}
+    }
