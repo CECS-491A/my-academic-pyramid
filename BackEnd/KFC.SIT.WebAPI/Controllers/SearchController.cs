@@ -29,21 +29,24 @@ namespace KFC.SIT.WebAPI.Controllers
             if (!ModelState.IsValid || request is null)
             {
                 // 412 Response
-                return Content(HttpStatusCode.PreconditionFailed, new SearchResponse("Invalid Request"));
+                return Content(HttpStatusCode.PreconditionFailed, new SearchResponse(Constants.InvalidRequest));
             }
 
+            // Validate token and session
             SecurityContext securityContext = SecurityContextBuilder.CreateSecurityContext(
                Request.Headers
             );
             if (securityContext == null)
             {
-                return Content(HttpStatusCode.Unauthorized, "Invalid Security Context");
+                return Content(HttpStatusCode.Unauthorized, Constants.InvalidSecurityContext);
             }
             SessionManager sm = new SessionManager();
             if (!sm.ValidateSession(securityContext.Token))
             {
-                return Content(HttpStatusCode.Unauthorized, "Invalid Session");
+                return Content(HttpStatusCode.Unauthorized, Constants.InvalidSession);
             }
+
+            // Update token
             string updatedToken = sm.RefreshSession(securityContext.Token);
 
             try
@@ -52,6 +55,7 @@ namespace KFC.SIT.WebAPI.Controllers
                {
                     ISearchManager manager = new SearchManager(_db);
 
+                    // Search
                     var results = new SearchResponse(manager.Search(request), updatedToken);
                     return Content(HttpStatusCode.OK, results);
                 }
@@ -84,10 +88,13 @@ namespace KFC.SIT.WebAPI.Controllers
                     ISearchManager manager = new SearchManager(_db);
                     switch (request.SearchCategory)
                     {
+                        // Get all schools
                         case 0:
                             return Content(HttpStatusCode.OK, manager.GetSchools());
+                        // Get all departments in a school
                         case 1:
                             return Content(HttpStatusCode.OK, manager.GetDepartments(request.SearchSchool));
+                        // Get all courses in a department
                         case 2:
                             return Content(HttpStatusCode.OK, manager.GetCourses(request.SearchSchool, request.SearchDepartment));
                     }
