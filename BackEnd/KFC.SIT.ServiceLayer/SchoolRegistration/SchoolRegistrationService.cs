@@ -53,11 +53,6 @@ namespace ServiceLayer.SchoolRegistration
             return _DbContext.SchoolTeacherCourses.Add(schoolTeacherCourse);
         }
 
-        public School FindSchool(int schoolId)
-        {
-            return _DbContext.Schools.Find(schoolId);
-        }
-
         public School FindSchool (String schoolName)
         {
             return _DbContext.Schools.Where(s => s.Name.Equals(schoolName)).FirstOrDefault();
@@ -66,12 +61,6 @@ namespace ServiceLayer.SchoolRegistration
         public Department FindDepartment(String departmentName)
         {
             return _DbContext.Departments.Where(s => s.Name.Equals(departmentName)).FirstOrDefault();
-        }
-
-        public SchoolDepartment FindSchoolDepartment(int schoolId, int departmentId)
-        {
-            return _DbContext.SchoolDepartments.Where(sd => sd.SchoolId == schoolId
-                                                        && sd.DepartmentID == departmentId).FirstOrDefault();
         }
 
         public SchoolDepartment FindSchoolDepartment(string schoolName, string departmentName)

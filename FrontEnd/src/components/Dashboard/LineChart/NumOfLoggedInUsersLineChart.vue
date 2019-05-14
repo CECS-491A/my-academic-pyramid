@@ -9,10 +9,10 @@
       return {
         datacollection: {
           //Data to be represented on x-axis
-          labels: ['December', 'January', 'February', 'March', 'April', 'May'],
+          labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
           datasets: [
             {
-              label: '# of Logged In Users',
+              label: 'Data One',
               backgroundColor: "rgba(54, 162, 235, 0.6)",
               pointBackgroundColor: 'white',
               borderWidth: 1,

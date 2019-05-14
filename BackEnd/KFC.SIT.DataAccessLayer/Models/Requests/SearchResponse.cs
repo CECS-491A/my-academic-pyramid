@@ -1,5 +1,4 @@
 ﻿using DataAccessLayer.DTOs;
-using DataAccessLayer.DTOs.SearchDTO;
 using DataAccessLayer.Models.School;
 using System;
 using System.Collections.Generic;
@@ -14,16 +13,16 @@ namespace DataAccessLayer.Models.Requests
         public SearchResponse()
         {
             People = new List<SearchPersonDTO>();
-            ForumPosts = new List<SearchForumPostDTO>();
+            ForumPosts = new List<ForumPostDTO>();
         }
 
         public SearchResponse(List<SearchPersonDTO> people)
         {
             People = people;
-            ForumPosts = new List<SearchForumPostDTO>();
+            ForumPosts = new List<ForumPostDTO>();
         }
 
-        public SearchResponse(List<SearchForumPostDTO> posts)
+        public SearchResponse(List<ForumPostDTO> posts)
         {
             ForumPosts = posts;
             People = new List<SearchPersonDTO>();
@@ -32,7 +31,7 @@ namespace DataAccessLayer.Models.Requests
         public SearchResponse(List<SearchPersonDTO> people, string message)
         {
             People = people;
-            ForumPosts = new List<SearchForumPostDTO>();
+            ForumPosts = new List<ForumPostDTO>();
             Message = message;
         }
 
@@ -40,11 +39,11 @@ namespace DataAccessLayer.Models.Requests
         {
             Message = message;
             People = new List<SearchPersonDTO>();
-            ForumPosts = new List<SearchForumPostDTO>();
+            ForumPosts = new List<ForumPostDTO>();
         }
 
         public List<SearchPersonDTO> People { get; set; }
-        public List<SearchForumPostDTO> ForumPosts { get; set; }
+        public List<ForumPostDTO> ForumPosts { get; set; }
         public string Message { get; set; }
     }
 }

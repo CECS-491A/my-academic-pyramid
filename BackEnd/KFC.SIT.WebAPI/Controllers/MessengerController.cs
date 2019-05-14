@@ -216,7 +216,9 @@ namespace KFC.SIT.WebAPI.Controllers
             {
                 var authUsername = securityContext.UserName;
 
-                
+                //Find auth user Id from auth username
+                _authUserId = um.FindByUserName(authUsername).Id;
+
                 // Get conversation from conversation Id
                 var conversation = _messengerManager.GetConversationFromId(conversationId);
 
@@ -332,7 +334,7 @@ namespace KFC.SIT.WebAPI.Controllers
                         //Set the display username in front end to auth username 
                         if (recentMessage.OutgoingMessage == true)
                         {
-                            senderUsername = authUsername;
+                            senderUsername = securityContext.UserName;
                         }
 
                         //If false , set the display user name in front end to contactUsername
@@ -521,11 +523,6 @@ namespace KFC.SIT.WebAPI.Controllers
 
                 // Get contactUserId from the conversation
                 var contactId = _messengerManager.GetContactUserIdFromConversation(messageDTO.ConversationId);
-                if(contactId == 0 )
-                {
-                    return Content(HttpStatusCode.NotFound, "User is no longer exist to receive message");
-                }
-
                 var authUsername = securityContext.UserName;
                 //Map the messageDTO from front end to message object to save in the system
                 var message = new Message
@@ -637,6 +634,7 @@ namespace KFC.SIT.WebAPI.Controllers
                 var contactUser = um.FindByUserName(newConversationMessageDTO.ContactUsername);
                 Message returnMessage;
               
+                
                 if (contactUser != null && contactUser.Id != _authUserId)
                 {
                     // Map the message to store in database 

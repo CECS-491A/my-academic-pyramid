@@ -252,7 +252,6 @@
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\SSOController.cs" />
     <Compile Include="Controllers\UADController.cs" />
-    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\UserManagerController.cs" />
     <Compile Include="Controllers\RegistrationController.cs" />
     <Compile Include="Global.asax.cs">

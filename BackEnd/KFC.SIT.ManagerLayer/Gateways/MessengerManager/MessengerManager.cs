@@ -110,7 +110,6 @@ namespace WebAPI.Gateways.Messenger
             // Create a message which will be saved in contact user's conversation 
             var targetUserMessage = new Message
             {
-                // Refer the message to contact user 's conversation 
                 ConversationId = contactUserConversation.Id,
                 MessageContent = message.MessageContent,
                 OutgoingMessage = false,
@@ -202,28 +201,25 @@ namespace WebAPI.Gateways.Messenger
         /// <param name="authUserId"></param>
         /// <param name="targetUserId"></param>
         /// <returns></returns>
-        public FriendRelationship AddUserFriendList(int authUserId, string targetUsername)
+        public FriendRelationship AddUserFriendList(int authUserId, string targetUserId)
         {
             //var authUser = _umServices.FindById(authUserId);
-            var targetUser = _umServices.FindByUsername(targetUsername);
+            var targetUser = _umServices.FindByUsername(targetUserId);
 
             if (targetUser == null)
             {
                 throw new MessageReceiverNotFoundException();
             }
 
-            else if (_msServices.IsFriend(authUserId, targetUser.Id))
-            {
-                throw new DuplicatedFriendException();
-            }
-            else
-            {
-                var fs = _msServices.AddContactFriendList(authUserId, targetUser.Id);
-                _DbContext.SaveChanges();
-                return fs;
-            }
-            
-          
+            var fs = _msServices.AddContactFriendList(authUserId, targetUser.Id);
+
+
+            _DbContext.SaveChanges();
+            return fs;
+
+
+
+
         }
 
         /// <summary>

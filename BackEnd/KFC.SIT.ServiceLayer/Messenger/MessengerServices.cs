@@ -33,7 +33,7 @@ namespace ServiceLayer.Messenger
         {
             message.CreatedDate = DateTime.Now;
             return _DbContext.Messages.Add(message);
-
+            
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace ServiceLayer.Messenger
             if (message == null)
                 return null;
             return _DbContext.Messages.Remove(message);
-
+           
 
         }
 
@@ -58,9 +58,11 @@ namespace ServiceLayer.Messenger
         /// <param name="firstUserId"></param> 
         /// <param name="secondUserId"></param>
         /// <returns></returns>
-        public List<Message> GetAllMessagesFromConversation(int conversationId)
+        public List<Message> GetAllMessagesFromConversation( int conversationId)
         {
-            return _DbContext.Messages.Where(m => m.ConversationId == conversationId).ToList();
+           
+                return _DbContext.Messages.Where(m => m.ConversationId == conversationId).ToList();
+                  
 
         }
 
@@ -90,8 +92,8 @@ namespace ServiceLayer.Messenger
 
         public Conversation GetConversationBetweenUsers(int authUserId, int targetUserId)
         {
-            return _DbContext.Conversations.Where(c => c.UserId == authUserId && c.ContactUserId == targetUserId)
-                                                           .FirstOrDefault();
+                return _DbContext.Conversations.Where(c => c.UserId == authUserId && c.ContactUserId == targetUserId)
+                                                               .FirstOrDefault();
 
         }
 
@@ -111,16 +113,16 @@ namespace ServiceLayer.Messenger
             {
                 var newConversation = new Conversation
                 {
-
-                    UserId = authUserId,
-                    ContactUserId = targetUserId,
-                    ContactUsername = targetUsername,
-                    CreatedDate = DateTime.Now,
-                    ModifiedDate = DateTime.Now
+                       
+                        UserId = authUserId,
+                        ContactUserId = targetUserId,
+                        ContactUsername = targetUsername,
+                        CreatedDate = DateTime.Now,
+                        ModifiedDate = DateTime.Now
                 };
 
-                return _DbContext.Conversations.Add(newConversation);
-
+                   return _DbContext.Conversations.Add(newConversation);
+                      
             }
             return conversation;
         }
@@ -133,10 +135,10 @@ namespace ServiceLayer.Messenger
         public Conversation DeleteConversation(int conversationId)
         {
             var conversation = _DbContext.Conversations.Where(c => (c.Id == conversationId)).FirstOrDefault();
-            if (conversation != null)
+            if(conversation != null)
             {
                 return _DbContext.Conversations.Remove(conversation);
-
+                
             }
             return null;
         }
@@ -153,7 +155,7 @@ namespace ServiceLayer.Messenger
             {
                 conversation.HasNewMessage = false;
                 _DbContext.Entry(conversation).State = System.Data.Entity.EntityState.Modified;
-
+               
 
             }
             return conversation;
@@ -176,7 +178,7 @@ namespace ServiceLayer.Messenger
         /// <returns></returns>
         public int GetContactUserIdFromConversation(int conversationId)
         {
-            return _DbContext.Conversations.Where(c => c.Id == conversationId).FirstOrDefault().ContactUserId;
+            return _DbContext.Conversations.Where(c => c.Id == conversationId).FirstOrDefault().ContactUserId ;
         }
 
         /// <summary>
@@ -189,6 +191,7 @@ namespace ServiceLayer.Messenger
             return _DbContext.Conversations.Where(c => c.Id == conversationId).FirstOrDefault().ContactUsername;
         }
 
+
         /// <summary>
         /// Method to get SignalR hub connection Id which map to userId
         /// </summary>
@@ -198,6 +201,9 @@ namespace ServiceLayer.Messenger
         {
             return _DbContext.ChatConnectionMappings.Where(c => c.UserId == userId).AsEnumerable();
         }
+
+
+
 
         /// <summary>
         /// Method to check if an user is a friend
@@ -231,18 +237,22 @@ namespace ServiceLayer.Messenger
         public FriendRelationship AddContactFriendList(int authUserId, int targetUserId)
         {
 
+                if (!IsFriend(authUserId, targetUserId))
+                {
+                    var fr = new FriendRelationship
+                    {
+                        FriendId = targetUserId,
 
-            var fr = new FriendRelationship
-            {
-                FriendId = targetUserId,
+                        UserId = authUserId
+                    };
+                    return _DbContext.FriendRelationships.Add(fr);
+               
+                }
 
-                UserId = authUserId
-            };
-            return _DbContext.FriendRelationships.Add(fr);
+            return null;
 
-
-        }
-
+            }
+ 
         /// <summary>
         /// Method return all user's friends
         /// </summary>
@@ -252,9 +262,11 @@ namespace ServiceLayer.Messenger
         {
 
             return _DbContext.FriendRelationships.Where(f => f.UserId == authUserId).AsEnumerable();
-
+            
 
         }
+
+
 
         /// <summary>
         /// Method to remove a user from a friend list
@@ -268,7 +280,7 @@ namespace ServiceLayer.Messenger
             if (friend != null)
             {
                 return _DbContext.FriendRelationships.Remove(friend);
-
+               
             }
 
             else

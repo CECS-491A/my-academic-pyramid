@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using DataAccessLayer.DTOs;
 using DataAccessLayer.Models;
 
 namespace ServiceLayer.UserManagement.UserAccountServices
@@ -19,6 +18,5 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         Category GetCategory(string categoryValue);
         Account RemoveClaim(Account user, string claimStr);
         Account UpdateUser(Account user);
-        UserProfileDTO GetUserProfile(int accountId);
     }
 }

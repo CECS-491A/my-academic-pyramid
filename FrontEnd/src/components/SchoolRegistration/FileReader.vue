@@ -1,10 +1,7 @@
 <template>
-
-  <v-btn 
-  class="text-reader"
-  color="cyan">
+  <label class="text-reader">
     <input type="file" @change="loadTextFromFile">
-  </v-btn>
+  </label>
 </template>
 
 <script>

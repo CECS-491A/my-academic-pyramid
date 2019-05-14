@@ -8,9 +8,6 @@ using DataAccessLayer.DTOs;
 using System.Security.Cryptography;
 using System.Text;
 using System.Data.Entity.Validation;
-using DataAccessLayer.Models.School;
-using static ServiceLayer.ServiceExceptions.UserManagementExceptions;
-using ServiceLayer.SchoolRegistration;
 
 namespace WebAPI.Gateways.UserManagement
 {
@@ -56,6 +53,7 @@ namespace WebAPI.Gateways.UserManagement
 
             //Automatically assigning claim to user
             user = AutomaticClaimAssigning(user);
+            // TODO test this.
             //user = _userManagementServices.AssignCategory(user, new Category(userDto.Category));
 
             var response = _userManagementServices.CreateUser(user);
@@ -103,6 +101,8 @@ namespace WebAPI.Gateways.UserManagement
             }
             catch (DbEntityValidationException ex)
             {
+                // catch error
+                // rollback changes
                 return 0;
             }
         }
@@ -142,7 +142,6 @@ namespace WebAPI.Gateways.UserManagement
         }
 
         /// <summary>
-        /// Not Being Used
         /// Method to find user object using email
         /// </summary>
         /// <param name="userEmail"></param>
@@ -164,11 +163,6 @@ namespace WebAPI.Gateways.UserManagement
             return user;
         }
 
-        /// <summary>
-        /// find the user by id and returns the information of the user
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
         public UserDTO GetUserInfo(int id)
         {
             Account user = FindUserById(id);
@@ -218,9 +212,16 @@ namespace WebAPI.Gateways.UserManagement
         /// <param name="claim"></param>
         public Account RemoveClaimAction(int targetedUserId, string claimStr)
         {
+            // List of required claims needed for AddClaimAction Method
+            List<Claim> createUserRequiredClaimTypes = new List<Claim>
+            {
+                new Claim("UserManager")
+            };
 
-            // Retrive targeted user exists from database
-            Account targetedUser = FindUserById(targetedUserId);
+            // Check if the requesting user has the require claims
+
+                // Retrive targeted user exists from database
+                Account targetedUser = FindUserById(targetedUserId);
             if (targetedUser == null)
              {
                 return null;
@@ -236,12 +237,6 @@ namespace WebAPI.Gateways.UserManagement
 
         }
 
-        /// <summary>
-        /// By Luis
-        /// </summary>
-        /// <param name="targetUserId"></param>
-        /// <param name="categoryStr"></param>
-        /// <returns></returns>
         public Account SetCategory(int targetUserId, string categoryStr)
         {
             Category categoryToAdd = _userManagementServices.GetCategory(categoryStr);
@@ -272,6 +267,7 @@ namespace WebAPI.Gateways.UserManagement
             if (targetedUser == null)
             {
                 return null;
+
             }
             // Check if the requesting user is  at least same level as  the targeted user
             else
@@ -283,11 +279,6 @@ namespace WebAPI.Gateways.UserManagement
 
         }
 
-        /// <summary>
-        /// find the user by user name and return the list of claims that user has
-        /// </summary>
-        /// <param name="username"></param>
-        /// <returns></returns>
         public List<string> GetClaims(string username)
         {
             Account user = _userManagementServices.FindByUsername(username);
@@ -303,7 +294,6 @@ namespace WebAPI.Gateways.UserManagement
         /// <summary>
         /// Method to verify password when user login. Entered password will be hashed using input from user plus the salt value
         /// The hashed password then will be compared with the value in database for validation.
-        /// No longer being used!
         /// </summary>
         /// <param name="enteredPassword"></param>
         /// <param name="storedHash"></param>
@@ -329,33 +319,9 @@ namespace WebAPI.Gateways.UserManagement
 
         }
 
-        /// <summary>
-        /// Assign the same claims to the new user account
-        /// </summary>
-        /// <param name="user"></param>
-        /// <returns></returns>
         public Account AutomaticClaimAssigning(Account user)
         {
-            if (user.Category.Value.Equals("NonStudent"))
-            {
-                //Check if user is over 18 year old
-                if (user.DateOfBirth.AddYears(18) <= DateTime.Now)
-                {
-                    user.Claims.Add(new Claim("Over18"));
-                }
-
-                //Discussion Forum's claims
-                _userManagementServices.AddClaim(user, new Claim("CanSeeQuestion"));
-                _userManagementServices.AddClaim(user, new Claim("CanSeeAnswer"));
-
-                //User Management's claims
-                _userManagementServices.AddClaim(user, new Claim("CanCreateOwnStudentAccount"));
-                _userManagementServices.AddClaim(user, new Claim("CanReadOwnStudentAccount"));
-                _userManagementServices.AddClaim(user, new Claim("CanReadOtherStudentPublicInformation"));
-                _userManagementServices.AddClaim(user, new Claim("CanReadAStudentPublicInformation"));
-                _DbContext.SaveChanges();
-            }
-            else if (user.Category.Value.Equals("Student"))
+            if (user.Category.Value.Equals("Student"))
             {
                 //Check if user is over 18 year old
                 if (user.DateOfBirth.AddYears(18) <= DateTime.Now)
@@ -377,7 +343,6 @@ namespace WebAPI.Gateways.UserManagement
                 _userManagementServices.AddClaim(user, new Claim("CanEditOwnAccount"));
                 _userManagementServices.AddClaim(user, new Claim("CanDeleteOwnAccount"));
                 _userManagementServices.AddClaim(user, new Claim("CanReadOwnStudentAccount"));
-                _userManagementServices.AddClaim(user, new Claim("CanReadAStudentPublicInformation"));
                 _DbContext.SaveChanges();
             }
             else if (user.Category.Value.Equals("Admin") || user.Category.Value.Equals("SystemAdmin"))
@@ -403,42 +368,5 @@ namespace WebAPI.Gateways.UserManagement
 
         }
 
-        public UserProfileDTO GetUserProfile(int accountId)
-        {
-            return _userManagementServices.GetUserProfile(accountId);
-        }
-
-        public void EditStudentProfile(int accountId, UserProfileDTO newUserProfileInfo)
-        {
-            Account accountToEdit = _userManagementServices.FindById(accountId);
-            Student studentToEdit = _userManagementServices.FindStudentById(accountId);
-
-            if(accountToEdit == null)
-            {
-                throw new AccountNotFoundException();
-            }
-            if(studentToEdit == null)
-            {
-                throw new NotAStudentException();
-            }
-            accountToEdit.FirstName = newUserProfileInfo.FirstName;
-            accountToEdit.MiddleName = newUserProfileInfo.MiddleName;
-            accountToEdit.LastName = newUserProfileInfo.LastName;
-            ISchoolRegistrationService schoolRegistrationServices = new SchoolRegistrationService(this._DbContext);
-            Department department = schoolRegistrationServices.FindDepartment(
-                newUserProfileInfo.DepartmentName
-            );
-            if(department == null)
-            {
-                throw new DepartmentNotFoundException();
-            }
-            studentToEdit.SchoolDepartmentId = department.Id;
-            // TODO allow telemetry
-
-            _userManagementServices.UpdateUser(accountToEdit);
-            _userManagementServices.UpdateStudent(studentToEdit);
-            this._DbContext.SaveChanges();
-
-        }
     }
 }

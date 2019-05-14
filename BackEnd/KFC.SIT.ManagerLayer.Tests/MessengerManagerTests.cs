@@ -13,9 +13,9 @@ namespace ManagerLayer.Tests
 {
     public class MessengerManagerTests
     {
-        const int testAuthUserId = 3;
-        const int testContactUserId = 4;
-        const string testContactUsername = "tntsmart1990@gmail.com";
+        const int testAuthUserId = 1;
+        const int testContactUserId = 2;
+        const string testContactUsername = "nguyentrong56@yahoo.com";
         const int conversationIdForTest = 38;
 
 
@@ -160,18 +160,7 @@ namespace ManagerLayer.Tests
 
             //Act
             MessengerManager messengerManager = new MessengerManager();
-            bool isFriend;
-            using (DatabaseContext db = new DatabaseContext())
-            {
-                MessengerServices msService = new MessengerServices(db);
-                isFriend = msService.IsFriend(testAuthUserId, testContactUserId);
-                if (isFriend == true)
-                {
-                    messengerManager.RemoveUserFromFriendList(testAuthUserId, testContactUserId);
-                }
-                db.SaveChanges();
-            }
-
+            messengerManager.RemoveUserFromFriendList(testAuthUserId, testContactUserId);
             friendUser = messengerManager.AddUserFriendList(testAuthUserId, testContactUsername);
 
             //Assert
@@ -200,7 +189,6 @@ namespace ManagerLayer.Tests
 
             //Act
             MessengerManager messengerManager = new MessengerManager();
-            messengerManager.RemoveUserFromFriendList(testAuthUserId , testContactUserId);
             messengerManager.AddUserFriendList(testAuthUserId, testContactUsername);
 
             using (DatabaseContext db = new DatabaseContext())

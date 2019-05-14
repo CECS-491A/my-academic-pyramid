@@ -13,11 +13,11 @@ namespace DataAccessLayer.Models
         [BsonElement("Date")]
         public DateTime Date { get; set; }
 
+        [BsonElement("Action")]
+        public string Action { get; set; }
+
         [BsonElement("Message")]
         public string Message { get; set; }
-
-        [BsonElement("User Name")]
-        public string UserName { get; set; }
 
         [BsonElement("Target Site")]
         public string TargetSite { get; set; }
@@ -25,11 +25,11 @@ namespace DataAccessLayer.Models
         [BsonElement("Line of Code")]
         public string LineOfCode { get; set; }
 
+        [BsonElement("User Name")]
+        public string UserName { get; set; }
+
         [BsonElement("Request")]
         public string Request { get; set; }
-
-        //[BsonElement("Action")]
-        //public string Action { get; set; }
     }
 }
 

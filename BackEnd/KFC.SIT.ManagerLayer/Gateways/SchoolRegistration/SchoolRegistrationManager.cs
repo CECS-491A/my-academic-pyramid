@@ -3,7 +3,6 @@ using DataAccessLayer.DTOs.SchoolRegistrationDTO;
 using DataAccessLayer.Models.School;
 using Newtonsoft.Json.Linq;
 using ServiceLayer.SchoolRegistration;
-using ServiceLayer.ServiceExceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,10 +19,6 @@ namespace ManagerLayer.Gateways.SchoolRegistration
             {
                 schoolRegServ = new SchoolRegistrationService(db);
                 var foundSchool = schoolRegServ.FindSchool(schoolDto.SchoolName);
-                if(foundSchool != null)
-                {
-                    throw new SchoolRegistrationException();
-                }
                 if(foundSchool == null)
                 {
                     var newSchool = new School

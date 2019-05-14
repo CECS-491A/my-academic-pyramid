@@ -9,7 +9,5 @@ namespace ServiceLayer.DataAnalysisDashboard
     {
         public static int GetMostUsedFeature_FeatureNumber = 5;
         public static int GetSuccessfulLoggedInUsers_Duartion = 6;
-        public static int GetRecentMonths_Months = 6;
-        public static int GetAverageSuccessfulLogin_NumOfMonth = 6;
     }
 }

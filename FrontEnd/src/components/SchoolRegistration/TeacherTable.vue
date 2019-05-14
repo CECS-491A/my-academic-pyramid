@@ -1,5 +1,7 @@
 <template>
   <div id="teacherTable">
+    <v-app id="inspire">
+      <div>
         <v-toolbar flat color="white">
           <v-toolbar-title>Teachers</v-toolbar-title>
           <v-divider class="mx-2" inset vertical></v-divider>
@@ -51,8 +53,13 @@
               <v-icon small @click="deleteItem(props.item)">delete</v-icon>
             </td>
           </template>
+          <template v-slot:no-data>
+            <v-btn color="primary" @click="initialize">Reset</v-btn>
+          </template>
         </v-data-table>
       </div>
+    </v-app>
+  </div>
 </template>
 <script>
 export default {
@@ -68,8 +75,7 @@ export default {
       { text: "Teacher Middle Name", value: "MiddleName" },
       { text: "Teacher Last Name", value: "LastName" },
       { text: "Department", value: "DepartmentName" }
-	],
-	
+    ],
     teachers: [],
     editedIndex: -1,
     editedItem: {
@@ -91,12 +97,7 @@ export default {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
     }
   },
- created() {
-    this.$eventBus.$on("TeacherTableFromFile", TeacherDTO => {
-      this.teachers = TeacherDTO;
-      /* eslint no-console: "off" */
-    });
-  },
+
   watch: {
     dialog(val) {
       val || this.close();
@@ -105,7 +106,6 @@ export default {
       this.$eventBus.$emit("SendTeacherTable", this.teachers);
     }
   },
- 
 
   methods: {
     editItem(item) {

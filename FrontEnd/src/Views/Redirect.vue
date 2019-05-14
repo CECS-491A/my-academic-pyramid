@@ -22,9 +22,7 @@ export default {
     }
   },
   created() {
-    // TODO might move this in a different function.
     if (this.$route.query.SITtoken != undefined) {
-      console.log('in created of Redirect view')
       AppSession.updateSession(this.$route.query.SITtoken)
       // try to get userinfo
       this.axios.get(`${this.$hostname}UserManager/GetContextId`, 
@@ -45,29 +43,23 @@ export default {
                     )
                 })
                 .then(response => {
-                  AppSession.setCategory(response.data.User.Category)
+                  this.userCategory = response.data.User.Category
                   AppSession.updateSession(response.data.SITtoken)
-                  this.userCategory = AppSession.state.category
                   this.targetURL = this.DIRECTED_PATHS[this.userCategory]
                   if (this.targetURL != undefined) {
                     this.$router.push(this.targetURL)
                   }
                   else {
                     //error
-                    console.log(`No target URL is found for the category: ${this.userCategory}`)
                   }
                 })
                 .catch(error => {
                   //Indicate an error. Server might be down so just logout the user.
                   // delete token to logout the user.
                   // Redirect user to error page.
-                  console.log('Was the getcontextid not succesful')
-                  console.log('error')
-                  console.log(error)
                 })
     }
     else {
-      console.log('token is undefined.')
       //
       // display error message.
     }

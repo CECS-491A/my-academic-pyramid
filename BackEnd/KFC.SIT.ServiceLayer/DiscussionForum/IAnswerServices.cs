@@ -19,8 +19,8 @@ namespace ServiceLayer.DiscussionForum
         Answer IncreaseHelpfulCount(int answerId);
         Answer IncreaseUnHelpfulCount(int answerId);
         Answer MarkAnswerAsCorrect(int answerId);
-        AnswerResponseDTO ApplyAnswerFormat(Answer answer);
-        //Question GetPostedQuestion(int questionId);
-        //Question UpdateAnyPostedQuestion(Question question);
+        AnswerResponseDTO ApplyAnswerFortmat(Answer answer);
+        Question GetPostedQuestion(int questionId);
+        Question UpdateAnyPostedQuestion(Question question);
     }
 }

@@ -13,14 +13,12 @@
             <div v-for="message in messages" :key="message.CreateDate">
               <!-- Chat usernames -->
               <v-chip
-               :id="usernameChip"
                 label
                 :color="message.OutgoingMessage == true ? 'gray' : 'primary'"
                 :text-color="message.OutgoingMessage == true ? 'black' : 'white'"
               >{{ message.SenderUsername }}</v-chip>
               <!-- Chat messages -->
               <v-chip
-              :id="messageChip"
                 :color="message.OutgoingMessage == true ? 'gray' : 'primary'"
                 :text-color="message.OutgoingMessage == true ? 'black' : 'white'"
               >{{message.MessageContent}}</v-chip>
@@ -70,7 +68,7 @@ export default {
     return {
       messages: [], // hold return message in a conversation
       newMessage: { // used for compiling a new message
-      // conversation id will be passed in from Chat component when user click on the conversation 
+      //conversation id will be passed in from Chat component when user click on the conversation 
         conversationId: "", 
         MessageContent: "" 
       },
@@ -81,12 +79,12 @@ export default {
       contactUsername: "",
 
       connection: "", // connection for SignalR hub
-      hubProxy: "", // Hold SignalR HubConnection created from the connection above
+      hubProxy: "", //Hold SignalR HubConnection created from the connection above
       error: ""
     };
   },
   watch: {
-    // When current conversation id changes, fetch the messages again
+    //When current conversation id changes, fetch the messages again
     currentConversationId: function() {
       this.getMessageInConversation(this.currentConversationId),
         (this.newMessage.conversationId = this.currentConversationId);
