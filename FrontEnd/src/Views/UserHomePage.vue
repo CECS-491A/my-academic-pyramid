@@ -1,7 +1,8 @@
 
 <template>
+
   <v-app>
-    <v-parallax dark :src="require('@/assets/background.jpg')">
+    <div class="home" v-bind="{backgroundImage:'url(' + require('@/assets/background.jpg') + ')' }">
       <div class="home">
         <h3>Hello {{ username }}</h3>
       </div>
@@ -9,11 +10,10 @@
         <v-flex lg9>
           <h1 id="appSelection">All Features</h1>
         </v-flex>
-        <v-layout row wrap>
-          <v-flex xs12 sm6 offset-sm3>
+      </v-layout>
             <v-container fluid grid-list-md>
-              <v-layout row-wrap>
-                <v-flex md12 sm12 lg6 v-for="(app, value) in appFeatures" :key="value">
+              <v-layout row wrap  >
+                <v-flex xs4  v-for="(app, value) in appFeatures" :key="value">
                   <v-card hover flat tile class="mx-auto" width="344">
                     <v-img
                       :aspect-ratio="16/9"
@@ -29,11 +29,9 @@
                 </v-flex>
               </v-layout>
             </v-container>
-          </v-flex>
-        </v-layout>
-      </v-layout>
-    </v-parallax>
+            </div>
   </v-app>
+
 </template>
 <script>
 //import axios from 'axios'
@@ -63,6 +61,37 @@ export default {
           name: "Search",
           route: "/search",
           LogoUrl: "FeatureLogos/search.png"
+        },
+        // {
+        //   value: "analysisDashboard",
+        //   name: "Analysis Dashboard",
+        //   route: "/Dashboard",
+        //   LogoUrl: "FeatureLogos/dashboard.png"
+        // },
+        // {
+        //   value: "logging",
+        //   name: "Logging",
+        //   route: "/Logging",
+        //   LogoUrl: "FeatureLogos/logging.png"
+        // },
+        // {
+        //   value: "userManagement",
+        //   name: "User Management",
+        //   route: "/UserManagement",
+        //   LogoUrl: "FeatureLogos/userManagement.png"
+
+        // },
+        {
+          value: "userProfile",
+          name: "User Profile",
+          route: "",
+          LogoUrl: "FeatureLogos/profile.png"
+        },
+        {
+          value: "schoolRegistration",
+          name: "School Registration",
+          route: "/SchoolRegistration",
+          LogoUrl: "FeatureLogos/SchoolRegistration.png"
         }
       ]
     };
@@ -87,7 +116,7 @@ export default {
       )
       .then(response => {
         this.username = response.data.User.UserName;
-        this.$authUsername = response.data.User.UserName
+        this.$authUserName = response.data.User.UserName
         console.log(
           `Updating session in UserHomPage. New token ${response.data.SITtoken}`
         );
