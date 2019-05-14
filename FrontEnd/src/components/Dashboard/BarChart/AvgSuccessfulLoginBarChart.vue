@@ -1,13 +1,19 @@
 <script>
   //Importing Bar class from the vue-chartjs wrapper
-  import { Bar, mixins } from 'vue-chartjs'
+  import { Bar } from 'vue-chartjs'
   import axios from 'axios'
 
-  const {reactiveProp} = mixins
   //Exporting this so it can be used in other components
   export default {
     extends: Bar,
-    mixins: [reactiveProp],
+    props: {
+      chartData: {
+        type: Array,
+      },
+      chartLabels: {
+        type: Array,
+      }
+    },
     data () {
       return {
         datacollection: {
@@ -67,12 +73,22 @@
           });
       }
     },
-    created () {
-      this.fetchData()
-    },
     mounted () {
       //renderChart function renders the chart with the datacollection and options object.
-      this.renderChart(this.datacollection, this.options)
+      this.renderChart({
+        labels: this.chartLabels,
+          datasets: [
+            {
+              label: '# of Average Successful',
+              backgroundColor: "rgba(54, 162, 235, 0.6)",
+              pointBackgroundColor: 'white',
+              borderWidth: 1,
+              pointBorderColor: '#249EBF',
+              //Data to be represented on y-axis
+              data: this.chartData
+            }
+          ]
+      }, this.options)
     }
   }
 </script>
