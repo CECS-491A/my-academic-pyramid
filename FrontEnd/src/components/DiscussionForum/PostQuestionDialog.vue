@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="postQuestionDialog" max-width="750">
+  <v-dialog v-model="forumState.postQuestionForm" max-width="750">
     <!-- <div class="modal">  -->
       <!-- <v-container>     -->
       <v-card dark > 
@@ -76,12 +76,14 @@
 
 <script>
 import axios from 'axios'
+import ForumState from "@/services/ForumState";
 
 export default {
   name: "PostQuestionDialog",
   data () {
     return {
-      postQuestionDialog: true,
+     forumState: ForumState.state,
+      //postQuestionDialog: true,
       validation: null,
       text: '',
       exp: '',
@@ -91,9 +93,9 @@ export default {
     }
   },
   methods: {
-    close() {
-      this.$emit('close');
-    },
+    // close() {
+    //   this.$emit('close');
+    // },
     postQuestion: function () {
       this.error = "";
       if (this.text.length < 50 || this.text.length > 2000) {
