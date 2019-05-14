@@ -4,7 +4,9 @@
     <div class="Chart">
       <div class="column">
         <h3>Average Successful Login</h3>
-        <avg-successful-login-bar-chart></avg-successful-login-bar-chart>
+        <avg-successful-login-bar-chart v-if="loaded"
+        :chart-data="data"
+        :chart-labels="label"></avg-successful-login-bar-chart>
       </div>
       <div class="column">
         <h3>Average Session Duration</h3>
@@ -43,6 +45,8 @@
 
   import AvgSessionDurationLineChart from '@/components/Dashboard/LineChart/AvgSessionDurationLineChart'
   import NumOfLoggedInUsersLineChart from '@/components/Dashboard/LineChart/NumOfLoggedInUsersLineChart'
+  
+  import axios from 'axios'
 
   export default {
     name: 'VueChartJS',
@@ -57,8 +61,36 @@
       // Line Chart
       AvgSessionDurationLineChart,
       NumOfLoggedInUsersLineChart
-    }
+    },
+    data () {
+      return {
+        loaded: false,
+        data: [],
+        label: []
+      }
+    },
+    methods:
+    {
+      fetchData() {
+        this.axios
+          .get(`${this.$hostname}UAD/sLogin`, {
+            headers: { "Content-Type": "application/Json" }
+          })
+          .then(response => {
+            this.data = response.data.data;
+            this.label = response.data.labels;
+            this.loaded = true;
+            console.log(response.data);
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      }
+    },
+    async mounted () {
+      this.fetchData()
   }
+}
 </script>
 
 <style>
