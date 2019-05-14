@@ -67,9 +67,11 @@
           });
       }
     },
+    created () {
+      this.fetchData()
+    },
     mounted () {
       //renderChart function renders the chart with the datacollection and options object.
-      this.fetchData()
       this.renderChart(this.datacollection, this.options)
     }
   }

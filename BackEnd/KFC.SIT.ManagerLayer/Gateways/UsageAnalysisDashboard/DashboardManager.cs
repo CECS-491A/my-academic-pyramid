@@ -132,6 +132,8 @@ namespace ManagerLayer.Gateways.UsageAnalysisDashboard
             return featureNumUsed;
         }
 
+        // Line Chart
+
         public long[] GetAvgSessionDurationSixMonth()
         {
             throw new Exception();
@@ -149,7 +151,6 @@ namespace ManagerLayer.Gateways.UsageAnalysisDashboard
             int monthToday = DateTime.Today.Month;
             int yearToday = DateTime.Today.Year;
 
-            successfulLoggedInUsers.Add("total", numTotalUser);
             for (int i = 1; i < duration + 1; i++)
             {
                 successfulLoggedInUsers.Add(dateFormatConverter[monthToday], _dashboardService.CountUniqueLoggedInUsers(monthToday, yearToday));

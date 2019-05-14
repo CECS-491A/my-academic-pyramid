@@ -33,7 +33,12 @@ namespace NewDemoProject
                 Console.WriteLine(s);
             }
             Console.WriteLine("Avg");
-          
+            DateTime temp1 = DateTime.Today;
+            DateTime temp2 = temp1.AddDays(2);
+            Console.WriteLine(temp1.Month);
+            Console.WriteLine(temp1.AddDays(2));
+            Console.WriteLine(temp1.Month);
+            Console.WriteLine(temp1.Subtract(temp2));
             /**
             Console.WriteLine("succesufl");
             foreach (var s in get)

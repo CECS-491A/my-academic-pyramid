@@ -46,7 +46,8 @@
 
   export default {
     name: 'VueChartJS',
-    components: {
+    components: 
+    {
       // Bar Chart 
       AvgSuccessfulLoginBarChart,
       AvgSessionDurationBarChart,

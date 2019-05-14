@@ -117,6 +117,7 @@ namespace ServiceLayer.DataAnalysisDashboard
                 })
                 .ToList();
 
+
             foreach (var monthly in query)
             {
                 Console.WriteLine(monthly.Name);
@@ -146,7 +147,7 @@ namespace ServiceLayer.DataAnalysisDashboard
         /// <returns></returns>
         public long CountTotalSuccessfulLogin()
         {
-            Task<long> queryResult = CollectionT.CountDocumentsAsync(x => x.Action == "Login");
+            Task<long> queryResult = CollectionT.CountDocumentsAsync(x => x.Action == MongoDBAction.Login);
             return queryResult.Result;
         }
 
@@ -156,7 +157,7 @@ namespace ServiceLayer.DataAnalysisDashboard
         /// <returns></returns>
         public long CountTotalFailedLogin()
         {
-            Task<long> queryResult = CollectionE.CountDocumentsAsync(x => x.Request == "Login");
+            Task<long> queryResult = CollectionE.CountDocumentsAsync(x => x.Request == MongoDBAction.Login);
             return queryResult.Result;
         }
     
