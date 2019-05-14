@@ -53,7 +53,7 @@
                     <v-text-field v-model="updatedUserInfo.newDepartmentName" :label="`Department`"></v-text-field>
                   </v-layout>
                   <v-layout row wrap>
-                    <v-checkbox v-model="allowTelemetry" :label="`Allow telemetric data recording.`"></v-checkbox>
+                    <v-checkbox v-model="updatedUserInfo.newAllowTelemetry" :label="`Allow telemetric data recording.`"></v-checkbox>
                   </v-layout>
                   <v-layout>
                     <v-btn @click="modifyProfile">Enter</v-btn>
@@ -86,6 +86,7 @@ export default {
         schoolName: "",
         departmentName: "",
         ranking: "",
+        allowTelemetry: false,
         courses: "",
       },
       memberSince: "",
@@ -95,7 +96,7 @@ export default {
         newMiddleName: "new",
         newLastName: "New",
         newDepartmentName: "New",
-        allowTelemetry: false
+        newAllowTelemetry: false
       },
       viewingUserId: AppSession.state.userId,
       allowTelemetry: false
@@ -116,6 +117,7 @@ export default {
                     this.userInfo.lastName = response.data.User.LastName
                     this.userInfo.schoolName = response.data.User.SchoolName
                     this.userInfo.departmentName = response.data.User.DepartmentName
+                    // this.userInfo.allowTelemetry = response.data.User.AllowTelemetry
                     this.userInfo.courses = response.data.user.Courses
                     console.log('About to finish getUserInfo')
                 })
@@ -130,6 +132,7 @@ export default {
           FirstName: this.updatedUserInfo.newFirstName,
           MiddleName: this.updatedUserInfo.newMiddleName,
           LastName: this.updatedUserInfo.newLastName,
+          // AllowTelemetry: this.updatedUserInfo.newAllowTelemetry,
           DepartmentName: this.updatedUserInfo.newDepartmentName
         }
       let headersObject = {
@@ -161,7 +164,7 @@ export default {
       this.updatedUserInfo.newMiddleName = this.userInfo.middleName
       this.updatedUserInfo.newLastName = this.userInfo.lastName
       this.updatedUserInfo.newDepartmentName = this.userInfo.departmentName
-      this.updatedUserInfo.allowTelemetry = this.userInfo.allowTelemetry
+      // this.updatedUserInfo.newAllowTelemetry = this.userInfo.allowTelemetry
       
     }
   },

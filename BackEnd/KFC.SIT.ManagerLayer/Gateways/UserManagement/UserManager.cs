@@ -424,6 +424,7 @@ namespace WebAPI.Gateways.UserManagement
             accountToEdit.FirstName = newUserProfileInfo.FirstName;
             accountToEdit.MiddleName = newUserProfileInfo.MiddleName;
             accountToEdit.LastName = newUserProfileInfo.LastName;
+            accountToEdit.LogTelemetry = newUserProfileInfo.AllowTelemetry;
             ISchoolRegistrationService schoolRegistrationServices = new SchoolRegistrationService(this._DbContext);
             Department department = schoolRegistrationServices.FindDepartment(
                 newUserProfileInfo.DepartmentName
