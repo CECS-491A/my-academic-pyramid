@@ -9,7 +9,7 @@
       return {
         datacollection: {
           //Data to be represented on x-axis
-          labels: ['December', 'January', 'February', 'March', 'April', 'May'],
+          labels: [],
           datasets: [
             {
               label: '# of Average Successful',
@@ -18,7 +18,7 @@
               borderWidth: 1,
               pointBorderColor: '#249EBF',
               //Data to be represented on y-axis
-              data: [44, 32, 14, 45, 30, 40]
+              data: []
             }
           ]
         },
@@ -47,36 +47,26 @@
         }
       }
     },
-    fetchData() {
-      this.axios
-        .get(`${this.$hostname}UAD/sLogin`, {
-          headers: { "Content-Type": "application/Json" }
-        })
-        .then(response => {
-          this.datacollection.data = response.data;
-          console.log(response.data);
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    },
-    fetchLabel() {
-      this.axios
-        .get(`${this.$hostname}UAD/recentMonths`, {
-          headers: { "Content-Type": "application/Json" }
-        })
-        .then(response => {
-          this.datacollection.datasets[0].data = response.data;
-          console.log(response.data);
-        })
-        .catch(error => {
-          console.log(error);
-        });
+    methods:
+    {
+      fetchData() {
+        this.axios
+          .get(`${this.$hostname}UAD/sLogin`, {
+            headers: { "Content-Type": "application/Json" }
+          })
+          .then(response => {
+            this.datacollection.datasets[0].data = response.data.data;
+            this.datacollection.labels = response.data.labels;
+            console.log(response.data);
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      }
     },
     mounted () {
       //renderChart function renders the chart with the datacollection and options object.
-      fetchData()
-      fetchLabel()
+      this.fetchData()
       this.renderChart(this.datacollection, this.options)
     }
   }

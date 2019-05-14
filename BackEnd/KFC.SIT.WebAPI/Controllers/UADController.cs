@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using ManagerLayer.Gateways.UsageAnalysisDashboard;
+using DataAccessLayer.Models.Dashboard;
 using System.Collections.Generic;
 
 namespace KFC.SIT.WebAPI.Controllers
@@ -24,9 +25,11 @@ namespace KFC.SIT.WebAPI.Controllers
 
         [HttpGet]
         [ActionName("sLogin")]
-        public IList<double> GetScuessfulLogin()
+        public GraphData<double> GetScuessfulLogin()
         {
-            return _dashboardManager.GetAverageSuccessfulLogin();
+            IDictionary<string, double> avgSuccessfulLogin = _dashboardManager.GetAverageSuccessfulLogin();
+            GraphData<double> successfulLogin = new GraphData<double>(avgSuccessfulLogin.Keys, avgSuccessfulLogin.Values);
+            return successfulLogin;
         }
 
         [HttpGet]
