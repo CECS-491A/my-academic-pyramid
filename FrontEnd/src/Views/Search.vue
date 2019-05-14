@@ -91,7 +91,7 @@
                     <v-card-text> <v-icon>view_list</v-icon> Courses: {{props.item.Courses.toString()}}</v-card-text>
                 </v-card>
                 <v-btn
-                    v-if="isStudent"
+                    v-if="hasProfile"
                     block color="secondary"
                     :to="{ name: 'Profile', params: { id: props.item.AccountId } }">
                         <v-icon dark>person</v-icon>
@@ -136,12 +136,7 @@ export default {
                     id: 1,
                     text: "Teachers",
                     value: 1
-                },
-                // {
-                //     id: 2,
-                //     text: "Forum Posts",
-                //     value: 2
-                // }
+                }
             ],
             school: 0,
             schools: [],
@@ -182,6 +177,15 @@ export default {
             }
             if(this.category === null){
                 this.errorMessage = "A Category Must Be Chosen";
+            }
+
+            // Search students
+            if(this.category === 0){
+                this.hasProfile = true;
+            }
+            // Search teachers
+            else{
+                this.hasProfile = false;
             }
 
             const url = `${this.$hostname}search/input`;

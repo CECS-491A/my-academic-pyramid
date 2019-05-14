@@ -4,6 +4,7 @@ using DataAccessLayer.Models.DiscussionForum;
 using DataAccessLayer.Models.Requests;
 using DataAccessLayer.Models.School;
 using KFC.SIT.WebAPI.Utility;
+using ManagerLayer.Gateways.Logging;
 using ManagerLayer.Gateways.Search;
 using SecurityLayer.Authorization;
 using SecurityLayer.Sessions;
@@ -22,6 +23,8 @@ namespace KFC.SIT.WebAPI.Controllers
     public class SearchController : ApiController
     {
 
+        private LoggingManager _loggingManager = new LoggingManager();
+
         [HttpGet]
         [ActionName("input")]
         public IHttpActionResult Search([FromUri] SearchRequest request)
@@ -38,11 +41,13 @@ namespace KFC.SIT.WebAPI.Controllers
             );
             if (securityContext == null)
             {
+                _loggingManager.LogError(securityContext.UserName, HttpContext.Current.Request.ToString(), Constants.InvalidSecurityContext);
                 return Content(HttpStatusCode.Unauthorized, Constants.InvalidSecurityContext);
             }
             SessionManager sm = new SessionManager();
             if (!sm.ValidateSession(securityContext.Token))
             {
+                _loggingManager.LogError(securityContext.UserName, HttpContext.Current.Request.ToString(), Constants.InvalidSession);
                 return Content(HttpStatusCode.Unauthorized, Constants.InvalidSession);
             }
 
@@ -62,11 +67,13 @@ namespace KFC.SIT.WebAPI.Controllers
             }
             catch (Exception x) when (x is ArgumentException)
             {
-                return Content(HttpStatusCode.BadRequest, new SearchResponse(x.Message, updatedToken));
+                _loggingManager.LogError(securityContext.UserName, HttpContext.Current.Request.ToString(), x.Message);
+                return Content(HttpStatusCode.BadRequest, new SearchResponse(x.Message));
             }
             catch (Exception x)
             {
-                return Content(HttpStatusCode.InternalServerError, new SearchResponse(x.Message, updatedToken));
+                _loggingManager.LogError(securityContext.UserName, HttpContext.Current.Request.ToString(), x.Message);
+                return Content(HttpStatusCode.InternalServerError, new SearchResponse(x.Message));
             }
         }
         
