@@ -1,10 +1,13 @@
 <script>
   //Importing Bar class from the vue-chartjs wrapper
-  import { Bar } from 'vue-chartjs'
+  import { Bar, mixins } from 'vue-chartjs'
   import axios from 'axios'
+
+  const {reactiveProp} = mixins
   //Exporting this so it can be used in other components
   export default {
     extends: Bar,
+    mixins: [reactiveProp],
     data () {
       return {
         datacollection: {
