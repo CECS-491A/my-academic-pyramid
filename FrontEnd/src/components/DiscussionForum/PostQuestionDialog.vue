@@ -1,9 +1,8 @@
 <template>
-  <v-app>
-    <div class="post question">
-      <v-container>
+  <v-dialog v-model="postQuestionDialog" max-width="750">
+    <!-- <div class="modal">  -->
+      <!-- <v-container>     -->
       <v-card dark > 
-        <v-responsive aspect-ration= "9/16">
         <h1>Post Question</h1>
 
         <v-form>
@@ -43,8 +42,9 @@
             <h3>{{ validation }}</h3>
         </div>
 
-
         <v-btn id="btnPostQuestion" color="success" v-if="!validation" v-on:click="postQuestion">Post Question</v-btn>
+
+        <v-btn id="btnClose" color="grey" v-on:click="postQuestion">Close</v-btn>
 
         </v-form>
 
@@ -68,19 +68,20 @@
             </v-card-text>
           </v-card>
         </v-dialog>
-        </v-responsive>
       </v-card> 
-      </v-container>
-    </div>
-  </v-app>
+      <!-- </v-container>  -->
+    <!-- </div> -->
+  </v-dialog>
 </template>
 
 <script>
 import axios from 'axios'
 
 export default {
+  name: "PostQuestionDialog",
   data () {
     return {
+      postQuestionDialog: true,
       validation: null,
       text: '',
       exp: '',
@@ -90,6 +91,9 @@ export default {
     }
   },
   methods: {
+    close() {
+      this.$emit('close');
+    },
     postQuestion: function () {
       this.error = "";
       if (this.text.length < 50 || this.text.length > 2000) {
@@ -130,6 +134,7 @@ export default {
         })
         .finally(() => {
           this.loading = false;
+          this.postQuestionDialag = false;
         })
     },
     postDraft: function () {
@@ -170,11 +175,9 @@ export default {
         })
         .finally(() => {
           this.loading = false;
+          this.postQuestionDialog = false;
         })
     }
   }
 }
-
 </script>
-
-

@@ -1,41 +1,59 @@
 export default {
     state: {
-        schoolQuestions: true,
-        departmentQuestions: false,
-        courseQuestions: false,
-        draftQuestions: false,
-        answers: false
-    },
-    schoolQuestions() {
-        this.state.schoolQuestions = true;
-        this.state.departmentQuestions = false;
-        this.state.courseQuestions = false;
-        this.state.draftQuestions = false; 
-        this.state.answers = false;
-    },
-    departmentQuestions() {
-        this.state.schoolQuestions = false;
-        this.state.departmentQuestions = true;
-        this.state.courseQuestions = false;
-        this.state.draftQuestions = false; 
-        this.state.answers = false;    },
-    courseQuestions() {
-        this.state.schoolQuestions = false;
-        this.state.departmentQuestions = false;
-        this.state.courseQuestions = true;
-        this.state.draftQuestions = false; 
-        this.state.answers = false;    },
-    draftQuestions() {
-        this.state.schoolQuestions = false
-        this.state.departmentQuestions = false;
-        this.state.courseQuestions = false;
-        this.state.draftQuestions = true; 
-        this.state.answers = false;    },
-    answers() {
-        this.state.schoolQuestions = false;
-        this.state.departmentQuestions = false;
-        this.state.courseQuestions = false;
-        this.state.draftQuestions = false; 
-        this.state.answers = true;    },
+        postQuestionForm: true,
+        postAnswerForm: false,
+        editQuestionForm: false,
+        viewAnswers: false,
+        viewPostedQuestions: true,
+        school: "",
+        department: "",
+        course: "",
+        question: null,
 
+    },
+    openPostQuestionForm() {
+        this.state.postQuestionForm = true
+    },
+    closePostQuestionForm() {
+        this.state.postQuestionForm = false
+    },
+
+    openPostAnswerForm() {
+        this.state.postAnswerForm = true
+    },
+    closePostAnswerForm() {
+        this.state.postAnswerForm = false
+    },
+
+    openEditQuestionForm(item) {
+        this.state.editQuestionForm = true
+        this.state.question = item
+    },
+    closeEditQuestionForm() {
+        this.state.editQuestionForm = false
+    },
+
+    viewPostedQuestions() {
+        this.state.viewPostedQuestions = true
+        this.state.viewAnswers = false
+    },
+    viewDraftQuestions() {
+        this.state.viewPostedQuestions = false
+        this.state.viewAnswers = false
+    },
+    viewAnswers(item) {
+        this.state.viewPostedQuestions = false
+        this.state.viewAnswers = true
+        this.state.question = item
+    },
+
+    setSchool(schoolName) {
+        this.state.school = schoolName
+    },
+    setDepartment(departmentName) {
+        this.state.department = departmentName
+    },
+    setCourse(courseName) {
+        this.state.course = courseName
+    }
 }

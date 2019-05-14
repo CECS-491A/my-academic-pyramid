@@ -68,6 +68,8 @@ namespace KFC.SIT.WebAPI.Controllers
         // string ipAddress = HttpContext.Current.Request.UserHostAddress
         //_logger.LogLogin(userName, ipAddress);
 
+        string ipAddress = HttpContext.Current.Request.ToString();
+
         // Functionality 
         // string functionality = this.ControllerContext.RouteData.Values["action"].ToString();
 

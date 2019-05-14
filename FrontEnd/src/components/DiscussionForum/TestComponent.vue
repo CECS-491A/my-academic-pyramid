@@ -1,48 +1,69 @@
 <template>
-<v-container>
-  <v-card class="mx-auto" dark max-width="1400" max-height="800" v-for="item in questions" :key="item.AccountName">
-
-  <!-- <v-card class="mx-auto" dark max-width="1400" max-height="800"> -->
-
-    <v-card-title>{{item.AccountName}}
-      <v-spacer></v-spacer>
-      {{item.DateCreated}}
-    </v-card-title>
+<v-container fuild>
+  <v-toolbar dark>
+  <v-layout row>
+  <v-toolbar-title centered>Discussion Forum   </v-toolbar-title> 
     
-    <v-card-text class="headline font-weight-bold"> {{item.Text}} </v-card-text>
+    <v-flex shrink pa-1>
+    <v-select
+      v-model="school"
+      :items="schools"
+      label="School"
+    ></v-select>
+    </v-flex>
+      
+    <v-flex shrink pa-1>
+    <v-select
+        v-model="department"
+        :items="departments"
+        label="Department"
+        @input="getDepartments"
+    ></v-select>
+    </v-flex>
+            
+    <v-flex shrink pa-1>
+    <v-select
+        v-model="course"
+        :items="courses"
+        label="Course"
+        @input="getCourses"
+    ></v-select>
+    </v-flex>
+    <v-spacer></v-spacer>
 
-    <v-card-actions>   
-      <v-layout align-center>
-        <v-btn small v-if="userId != item.AccoutId">Mark As Spam</v-btn> {{"Spam Count: " + item.SpamCount}}
-        <v-btn small>See Answers</v-btn> {{"Answers: " + item.AnswerCount}}
-        <v-btn small v-if="userId != item.AccountId">Post Answer</v-btn> {{"Exp needed to answer: " + item.ExpNeededToAnswer}}
+    <v-btn small @click="postQuestionDialog = !postQuestionDialog" > My Drafts </v-btn>    
 
-        <v-spacer></v-spacer>
+    <v-btn small @click="postQuestionDialog = !postQuestionDialog"  > Post </v-btn>
 
-        <v-btn small v-if="userId == item.AccountId" @click="closeQuestion(item.QuestionId)">Close Question</v-btn> 
-        <v-icon small v-if="userId == item.AccountId" @click="editQuestion(item.QuestionId)">edit</v-icon>
-        <!-- not in the business rules to delete a question 
-            <v-icon small v-if="userId == item.AccountId" @click="deleteQuestion()">delete</v-icon> -->
 
-      </v-layout>
-    </v-card-actions>
 
-    <v-card-footer>{{ item.SchoolName + "/" + item.DepartmentName + "/" + item.CourseName }}</v-card-footer>
 
-    <v-divider class ="ma-3"></v-divider>
+    <v-btn icon>
+      <v-icon>refresh</v-icon>
+    </v-btn>
+
+  </v-layout>
+  </v-toolbar>
     
-  </v-card>
+  <v-dialog v-model="postQuestionDialog" max-width="750">
+      <PostQuestionDialog></PostQuestionDialog>
+  </v-dialog>
+
 </v-container>
 </template>
 
-
 <script>
+import PostQuestionDialog from "@/components/DiscussionForum/PostQuestionDialog";
+
 import axios from 'axios'
   export default {
-    name: "QuestionCard",
+    name: "DFToolbar",
+    components: {
+        PostQuestionDialog,
+    },
     data () {
       return {
-        //ismyQuestion: true,
+        postQuestionDialog: false,
         userAccount: null,
         isStudent: true,
         userId: "",
@@ -52,108 +73,119 @@ import axios from 'axios'
         departments: [],
         course: "",
         courses: [],
-        response: '',
-        questions: [ ]
+        response: ''
       }
     },
 
-    created() {
-        this.getSchoolQuestions()
-    },
+    // created() {
+    //     this.getSchoolQuestions()
+    // },
     
     beforeMount(){
         this.userId = sessionStorage.SITuserId;
+        //this.userId = "2"
         this.getAccount()
     },
     methods: {
-    //   isMyQuestion: function() {
-            
-    //   },
-      closeQuestion: function(qId) {
-            const url = `${this.$hostname}DiscussionForum/CloseQuestion`;
-            
-            axios
-            .post(url, {
-                params:{
-                    questionId: qId
-                },
-                headers: { "Content-Type": "application/json", Authorization: "Bearer " + sessionStorage.SITtoken }
-                
-            })
-            .then(response =>{
-                this.item.IsClosed = response.data;
-            })
-            .catch(error =>{
-                this.errorMessage = error.response.data.Message
-            })
+      close() {
+      // this.$emit('close');
+          postQuestionDialag = false;
       },
-      editQuestion: function(qId) {
-            // open up form to update question 
+      // @Author: Krystal
+      getAccount: function(){
+          this.errorMessage = "";
+
+          const url = `${this.$hostname}search/account`;
+          axios
+          .get(url, {
+              params:{
+                  AccountId: this.userId,
+              },
+              headers: { "Content-Type": "application/json", Authorization: "Bearer " + sessionStorage.SITtoken }
+              
+          })
+          .then(response =>{
+              this.userAccount = response.data;
+              this.isStudent = this.userAccount.IsStudent;
+              if(!this.isStudent){
+                  this.getSchools();
+              }else{
+                  this.school = this.userAccount.SchoolId;
+                  this.getDepartments();
+              }
+          })
+          .catch(error =>{
+              this.errorMessage = error.response.data.Message
+          })
       },
-      getSchoolQuestions() {
-            this.axios({
-              headers: {
-                //Accept: "application/json", 
-                "Content-Type": "application/Json",
-                //Authorization: "Bearer" + sessionStorage.SITtoken
+      getSchools: function(){
+          this.errorMessage = "";
+
+          const url = `${this.$hostname}search/selections`;
+          Axios
+          .get(url, {
+              params:{
+                  SearchCategory: 0
               },
-              method: "GET", 
-              crossDomain: true,
-              url: this.$hostname + "DiscussionForum/GetQuestionsBySchool",
-              params: {
-                  // or id? if not change backend from id to name
-                  schoolId: this.school.Id
+              headers: { "Content-Type": "application/json", Authorization: "Bearer " + sessionStorage.SITtoken }
+              
+          })
+          .then(response =>{
+              this.schools = response.data;
+              if(this.schools.length > 0){
+                  this.schools = [{id: 0, text: "NONE", value: 0 }].concat(this.schools)
               }
-            })
-              .then(response => {
-                  this.questions = response.data;
-              })
-              .catch(err => {
-                  console.log(err);
-              });
-        },
-        getDepartmentQuestions(dId) {
-            this.axios({
-              headers: {
-                //Accept: "application/json", 
-                "Content-Type": "application/Json",
-                //Authorization: "Bearer" + sessionStorage.SITtoken
+          })
+          .catch(error =>{
+              this.errorMessage = error.response.data.Message
+          })
+        
+      },
+      getDepartments: function(){
+          this.errorMessage = "";
+
+          const url = `${this.$hostname}search/selections`;
+          Axios
+          .get(url, {
+              params:{
+                  SearchCategory: 1,
+                  SearchSchool: this.school
               },
-              method: "GET", 
-              crossDomain: true,
-              url: this.$hostname + "DiscussionForum/GetQuestionsByDepartment",
-              params: {
-                  departmentId: dId
-              }
-            })
-              .then(response => {
-                  this.questions = response.data;
-              })
-              .catch(err => {
-                  console.log(err);
-              });
-        },
-        getCourseQuestions(cId) {
-            this.axios({
-              headers: {
-                //Accept: "application/json", 
-                "Content-Type": "application/Json",
-                //Authorization: "Bearer" + sessionStorage.SITtoken
+              headers: { "Content-Type": "application/json", Authorization: "Bearer " + sessionStorage.SITtoken }
+              
+          })
+          .then(response =>{
+              this.departments = response.data;
+          })
+          .catch(error =>{
+              this.errorMessage = error.response.data.Message
+          })
+      },
+      getCourses: function(){
+          this.errorMessage = "";
+
+          const url = `${this.$hostname}search/selections`;
+          Axios
+          .get(url, {
+              params:{
+                  SearchCategory: 2,
+                  SearchSchool: this.school,
+                  SearchDepartment: this.department
               },
-              method: "GET", 
-              crossDomain: true,
-              url: this.$hostname + "DiscussionForum/GetQuestionsByCourse",
-              params: {
-                  courseId: cId
-              }
-            })
-              .then(response => {
-                  this.questions = response.data;
-              })
-              .catch(err => {
-                  console.log(err);
-              });
-        },
+              headers: { "Content-Type": "application/json", Authorization: "Bearer " + sessionStorage.SITtoken }
+              
+          })
+          .then(response =>{
+              this.courses = response.data;
+          })
+          .catch(error =>{
+              this.errorMessage = error.response.data.Message
+          })
+      },
+      // End Krytal
+      PostQuestion () {
+        //this.$router.push("/DiscussionForum/PostQuestion")
+      },
     }
   }
 </script>

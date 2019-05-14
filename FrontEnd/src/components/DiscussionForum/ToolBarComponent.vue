@@ -1,7 +1,8 @@
 <template>
+<!-- <v-app> -->
   <v-toolbar dark>
   <v-layout row>
-  <v-toolbar-title centered>Discussion Forum   </v-toolbar-title> 
+  <v-toolbar-title centered>Discussion Forum </v-toolbar-title> 
     
     <v-flex shrink pa-1>
     <v-select
@@ -30,9 +31,11 @@
     </v-flex>
     <v-spacer></v-spacer>
 
-    <v-btn small @click="PostQuestion" > Drafts </v-btn>    
+    <v-btn small @click="postQuestion()" > My Drafts </v-btn>    
 
-    <v-btn small @click="PostQuestion" > Post </v-btn>
+    <v-btn small @click="myDrafts()" > Post </v-btn>
+
+
 
     <v-btn icon>
       <v-icon>refresh</v-icon>
@@ -40,10 +43,13 @@
 
   </v-layout>
   </v-toolbar>
+  <!-- </v-app> -->
 </template>
 
 <script>
 import axios from 'axios'
+import ForumState from "@/services/ForumState";
+
   export default {
     name: "DFToolbar",
     data () {
@@ -68,36 +74,11 @@ import axios from 'axios'
     beforeMount(){
         this.userId = sessionStorage.SITuserId;
         //this.userId = "2"
-        this.getAccount()
+        //this.getAccount()
     },
     methods: {
       // @Author: Krystal 
-      getAccount: function(){
-          this.errorMessage = "";
-
-          const url = `${this.$hostname}search/account`;
-          axios
-          .get(url, {
-              params:{
-                  AccountId: this.userId,
-              },
-              headers: { "Content-Type": "application/json", Authorization: "Bearer " + sessionStorage.SITtoken }
-              
-          })
-          .then(response =>{
-              this.userAccount = response.data;
-              this.isStudent = this.userAccount.IsStudent;
-              if(!this.isStudent){
-                  this.getSchools();
-              }else{
-                  this.school = this.userAccount.SchoolId;
-                  this.getDepartments();
-              }
-          })
-          .catch(error =>{
-              this.errorMessage = error.response.data.Message
-          })
-      },
+      
       getSchools: function(){
           this.errorMessage = "";
 
@@ -163,8 +144,16 @@ import axios from 'axios'
           })
       },
       // End Krytal
-      PostQuestion () {
-        //this.$router.push("/DiscussionForum/PostQuestion")
+
+      postQuestion() {
+        ForumState.setSchool(this.school);
+        ForumState.setDepartment(this.department);
+        ForumState.setCourse(this.course);
+        ForumState.openPostQuestionForm();
+      },
+      
+      myDrafts() {
+        ForumState.viewDraftQuestions();
       },
     }
   }
