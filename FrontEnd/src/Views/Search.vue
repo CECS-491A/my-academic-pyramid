@@ -75,7 +75,6 @@
             :items="data.People"
             :expand="expand"
             item-key="AccountId"
-            v-if="useTable"
         >
             <v-progress-linear v-slot:progress color="info" indeterminate v-if="loading"></v-progress-linear>
             <template v-slot:items="props">
@@ -102,31 +101,6 @@
         
         </v-data-table>
 
-        <v-list two-line v-if="!useTable">
-          <template v-for="post in data.ForumPosts">
-            <v-list-tile
-              :key="post.text"
-              avatar
-              ripple
-              
-            >
-              <v-list-tile-content>
-                <v-list-tile-title>{{ post.title }}</v-list-tile-title>
-                <v-list-tile-sub-title class="text--primary">{{ post.headline }}</v-list-tile-sub-title>
-                <v-list-tile-sub-title>{{ post.subtitle }}</v-list-tile-sub-title>
-              </v-list-tile-content>
-
-              <v-list-tile-action>
-                <v-list-tile-action-text>{{ post.action }}</v-list-tile-action-text>
-              </v-list-tile-action>
-
-            </v-list-tile>
-            <v-divider
-              :key="post.text"
-            ></v-divider>
-          </template>
-        </v-list>
-
         <v-alert
             :value="errorMessage"
             id="errorMessage"
@@ -143,6 +117,7 @@
 
 <script>
 import axios from 'axios'
+import AppSession from "@/services/AppSession"
 export default {
     name: "Search",
     data () {
@@ -161,12 +136,7 @@ export default {
                     id: 1,
                     text: "Teachers",
                     value: 1
-                },
-                // {
-                //     id: 2,
-                //     text: "Forum Posts",
-                //     value: 2
-                // }
+                }
             ],
             school: 0,
             schools: [],
@@ -190,9 +160,8 @@ export default {
             userId: '',
             errorMessage: null,
             loading: true,
-            useTable: false,
             hasProfile: false,
-            isStudent: true
+            isStudent: false
         }
     },
     methods: {
@@ -209,16 +178,14 @@ export default {
             if(this.category === null){
                 this.errorMessage = "A Category Must Be Chosen";
             }
-            else if(this.category === 0){
-                this.useTable = true;
+
+            // Search students
+            if(this.category === 0){
                 this.hasProfile = true;
             }
-            else if(this.category === 1){
-                this.useTable = true;
+            // Search teachers
+            else{
                 this.hasProfile = false;
-            }
-            else if(this.category === 2){
-                this.useTable = false;
             }
 
             const url = `${this.$hostname}search/input`;
@@ -243,6 +210,7 @@ export default {
                         person.Courses = 'None';
                     }
                 });
+                AppSession.updateSession(response.data.SITtoken)
             })
             .catch(error =>{
                 this.errorMessage = error.response.data.Message
@@ -323,38 +291,19 @@ export default {
                 this.errorMessage = error.response.data.Message
             })
             
-        },
-        getAccount: function(){
-            this.errorMessage = "";
-
-            const url = `${this.$hostname}search/account`;
-            axios
-            .get(url, {
-                params:{
-                    AccountId: this.userId,
-                },
-                headers: { "Content-Type": "application/json", Authorization: "Bearer " + sessionStorage.SITtoken }
-                
-            })
-            .then(response =>{
-                this.userAccount = response.data;
-                this.isStudent = this.userAccount.IsStudent;
-                if(!this.isStudent){
-                    this.getSchools();
-                }else{
-                    this.school = this.userAccount.SchoolId;
-                    this.getDepartments();
-                }
-            })
-            .catch(error =>{
-                this.errorMessage = error.response.data.Message
-            })
         }
     },
     beforeMount(){
-        this.userId = sessionStorage.SITuserId;
+        this.userId = AppSession.state.userId;
+        if(AppSession.state.category === "Student"){
+            this.isStudent = true;
+            this.school = AppSession.state.schoolId
+            this.getDepartments(); 
+        }
+        else{
+            this.getSchools();
+        }
         //this.userId = "2"
-        this.getAccount()
     },
 }
 </script>

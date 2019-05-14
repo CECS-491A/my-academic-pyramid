@@ -46,6 +46,7 @@ export default {
                 })
                 .then(response => {
                   AppSession.setCategory(response.data.User.Category)
+                  AppSession.setSchoolId(response.data.User.SchoolId)
                   AppSession.updateSession(response.data.SITtoken)
                   this.userCategory = AppSession.state.category
                   this.targetURL = this.DIRECTED_PATHS[this.userCategory]

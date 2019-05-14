@@ -17,23 +17,18 @@ namespace DataAccessLayer.Models.Requests
             ForumPosts = new List<SearchForumPostDTO>();
         }
 
-        public SearchResponse(List<SearchPersonDTO> people)
+        public SearchResponse(List<SearchPersonDTO> people, string token)
         {
             People = people;
             ForumPosts = new List<SearchForumPostDTO>();
+            SITtoken = token;
         }
 
-        public SearchResponse(List<SearchForumPostDTO> posts)
+        public SearchResponse(List<SearchForumPostDTO> posts, string token)
         {
             ForumPosts = posts;
             People = new List<SearchPersonDTO>();
-        }
-
-        public SearchResponse(List<SearchPersonDTO> people, string message)
-        {
-            People = people;
-            ForumPosts = new List<SearchForumPostDTO>();
-            Message = message;
+            SITtoken = token;
         }
 
         public SearchResponse(string message)
@@ -43,8 +38,17 @@ namespace DataAccessLayer.Models.Requests
             ForumPosts = new List<SearchForumPostDTO>();
         }
 
+        public SearchResponse(string message, string token)
+        {
+            Message = message;
+            People = new List<SearchPersonDTO>();
+            ForumPosts = new List<SearchForumPostDTO>();
+            SITtoken = token;
+        }
+
         public List<SearchPersonDTO> People { get; set; }
         public List<SearchForumPostDTO> ForumPosts { get; set; }
         public string Message { get; set; }
+        public string SITtoken { get; set; }
     }
 }
