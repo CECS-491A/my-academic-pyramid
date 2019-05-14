@@ -116,6 +116,7 @@
     <Compile Include="Messenger\ChatConnectionMapping.cs" />
     <Compile Include="Messenger\IMessengerServices.cs" />
     <Compile Include="Messenger\MessengerServices.cs" />
+    <Compile Include="Archiving\ArchiveServices.cs" />
     <Compile Include="PasswordChecking\HashFunctions\IHashFunction.cs" />
     <Compile Include="HttpClients\HttpClientString.cs" />
     <Compile Include="PasswordChecking\HashFunctions\SHA256HashFunction.cs" />
