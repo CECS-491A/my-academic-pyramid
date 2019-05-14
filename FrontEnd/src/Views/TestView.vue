@@ -1,7 +1,7 @@
 <template> 
 <v-app>
   <v-container>
-    <!-- <ToolBarComponent></ToolBarComponent> -->
+    <ToolBarComponent></ToolBarComponent>
 
     <!-- <TestComponent></TestComponent> -->
     <PostQuestionDialog></PostQuestionDialog>
