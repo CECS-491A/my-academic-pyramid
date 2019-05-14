@@ -10,7 +10,7 @@ namespace DataAccessLayer.DTOs
     public class AnswerCreateRequestDTO
     {
         public int QuestionId { get; set; }
-        public int AccountId { get; set; }
+        //public int AccountId { get; set; }
         public string Text { get; set; }
     }
 
@@ -26,15 +26,5 @@ namespace DataAccessLayer.DTOs
         public int SpamCount { get; set; }
         public bool IsCorrectAnswer { get; set; }
         public DateTime CreatedDate { get; set; }
-
-
-        //public Answer Answer { get; set; }
-        //public string AccountName { get; set; }
-
-        //public AnswerDTOResponse(Answer answer, string accountName)
-        //{
-        //    Answer = answer;
-        //    AccountName = accountName;
-        //}
     }
 }

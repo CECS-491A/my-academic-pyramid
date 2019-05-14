@@ -4,8 +4,11 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using DataAccessLayer;
+using DataAccessLayer.DTOs;
 using DataAccessLayer.Models;
+using DataAccessLayer.Models.School;
 using ServiceLayer.UserManagement.UserClaimServices;
+using static ServiceLayer.ServiceExceptions.UserManagementExceptions;
 
 namespace ServiceLayer.UserManagement.UserAccountServices
 {
@@ -104,7 +107,11 @@ namespace ServiceLayer.UserManagement.UserAccountServices
                                         .FirstOrDefault();
             return user;
         }
-
+        /// <summary>
+        /// Find user by user name
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
         public Account FindByUsername(String username)
         {
             Account user = _DbContext.Set<Account>().Where( u => u.UserName.Equals(username)).FirstOrDefault();
@@ -199,6 +206,7 @@ namespace ServiceLayer.UserManagement.UserAccountServices
             return user;
         }
 
+        // Luis
         public Account AssignCategory(Account user, Category category)
         {
             Category existingCategory = _DbContext.Categories.FirstOrDefault(c => c.Value == category.Value);
@@ -215,6 +223,7 @@ namespace ServiceLayer.UserManagement.UserAccountServices
             return user;
         }
 
+        // Luis
         public int? FindIdBySsoId(Guid ssoId)
         {
             int? userId = null;
@@ -232,6 +241,7 @@ namespace ServiceLayer.UserManagement.UserAccountServices
             return userId;
         }
 
+        // Luis
         public Category GetCategory(string categoryValue)
         {
             // It can be null.
@@ -239,5 +249,73 @@ namespace ServiceLayer.UserManagement.UserAccountServices
                                         .FirstOrDefault();
         }
 
+        /// <summary>
+        /// Gets the profile information of a user
+        /// </summary>
+        /// <param name="accountId"></param>
+        /// <returns></returns>
+        public UserProfileDTO GetUserProfile(int accountId)
+        {
+            UserProfileDTO profile =  _DbContext.Students
+                .Include("Courses")
+                .Where(s => s.AccountId == accountId)
+                .Select(s => new UserProfileDTO
+                {
+                    FirstName = s.Account.FirstName,
+                    MiddleName = s.Account.MiddleName,
+                    LastName = s.Account.LastName,
+                    SchoolName = s.SchoolDepartment.School.Name,
+                    DepartmentName = s.SchoolDepartment.Department.Name,
+                    Ranking = s.Account.Exp,
+                    Courses = s.Courses.Select(c => c.Course.Name).ToList()
+                })
+                .FirstOrDefault();
+            return profile;
+        }
+
+
+        public Student FindStudentById(int accountId)
+        {
+            return _DbContext.Students
+                             .Where(s => s.AccountId == accountId)
+                             .FirstOrDefault();
+        }
+        
+        Boolean UserExists(int accountId)
+        {
+            bool userExists = false;
+            try
+            {
+                accountId = _DbContext.Users.Where(s => s.Id == accountId)
+                                            .Select(s => s.Id)
+                                            .First();
+                userExists = true;
+            }
+            catch (InvalidOperationException)
+            {
+                userExists = false; ;
+            }
+
+            return userExists;
+        }
+
+        /// <summary>
+        /// Update student account method 
+        /// </summary>
+        /// <param name="user"></param>
+        public Student UpdateStudent(Student user)
+        {
+            if (user == null)
+            {
+                return null;
+            }
+            Student studentToUpdate =  FindStudentById(user.AccountId);
+            if (studentToUpdate == null)
+            {
+                throw new NotAStudentException();
+            }
+            _DbContext.Entry(user).State = System.Data.Entity.EntityState.Modified;
+            return user;
+        }
     } // end of class
 }

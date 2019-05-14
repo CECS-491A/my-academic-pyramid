@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <v-form>
+<v-app>
+<v-form>
         <v-container>
             <v-layout row wrap>
                 <v-flex>
@@ -14,12 +14,46 @@
                 <v-flex>
                     <v-text-field
                       label="Solo"
+                      placeholder="Middle Name"
+                      solo
+                      v-model="middleName"
+                    ></v-text-field>
+                </v-flex>
+                <v-flex>
+                    <v-text-field
+                      label="Solo"
                       placeholder="Last Name"
                       solo
                       v-model="lastName"
                     ></v-text-field>
                 </v-flex>
             </v-layout>
+
+            <v-layout row>
+                <v-flex
+                
+                pa-1
+                >
+                <v-select
+                    v-model="school"
+                    :items="schools"
+                    label="School"
+                    @input="getDepartments"
+                ></v-select>
+                </v-flex>
+                
+                <v-flex
+                
+                pa-1
+                >
+                <v-select
+                    v-model="department"
+                    :items="departments"
+                    label="Department"
+                ></v-select>
+                </v-flex>
+            </v-layout>
+
             <v-layout row wrap>
               <v-flex xs12 sm6 md4>
                 <v-menu
@@ -55,9 +89,19 @@
 
           <v-btn @click="registerUser" color="primary">Complete Registration</v-btn>
           <v-btn @click="logoutFunc">Log Out</v-btn>
+
+          <v-alert
+              :value="errorMessage"
+              id="errorMessage"
+              type="error"
+              transition="scale-transition"
+          >
+              {{errorMessage}}
+          </v-alert>
         </v-container>
     </v-form>
-  </div>
+</v-app>
+  
 </template>
 
 <script>
@@ -69,10 +113,16 @@ export default {
   data () {
     return {
       firstName: "",
+      middleName: "",
       lastName: "",
       userName: "",
       email: "",
       dateOfBirth: null,
+      school: "",
+      schools: [],
+      department: "",
+      departments: [],
+      errorMessage: "",
       menu: false
     }
   },
@@ -89,8 +139,11 @@ export default {
     registerUser() {
         let requestPayload = {
           FirstName: this.firstName,
+          MiddleName: this.middleName,
           LastName: this.lastName,
-          DateOfBirth: this.dateOfBirth
+          DateOfBirth: this.dateOfBirth,
+          SchoolId: this.school,
+          DepartmentId: this.department
         }
         let headersObject = {
           headers: {
@@ -104,9 +157,20 @@ export default {
         Axios.post(urlRegistration, requestPayload, headersObject)
              .then(response => {
                AppSession.updateSession(response.data.SITtoken)
-               this.$router.push({name: "UserHomePage"})
+               return this.axios.get(
+                `${this.$hostname}UserManager/GetUserInfoWithId?id=${AppSession.state.userId}`, 
+                {headers: {'Accept': 'application/json',
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${AppSession.state.token}`}}
+               )
                })
-             .catch(error => {console.log(error)})
+             .then((response) => {
+                AppSession.setCategory(response.data.User.Category)
+                AppSession.updateSession(response.data.SITtoken)
+                this.$router.push({name: "UserHomePage"})})
+             .catch(error =>{
+                this.errorMessage = error.response.data.Message
+              })
     },
 
     logoutFunc() {
@@ -128,7 +192,51 @@ export default {
                 .catch(error => {
 
                 })
-    }
+    },
+    getSchools: function(){
+        this.errorMessage = "";
+
+        const url = `${this.$hostname}search/selections`;
+        Axios
+        .get(url, {
+            params:{
+                SearchCategory: 0
+            },
+            headers: { "Content-Type": "application/json", Authorization: "Bearer " + sessionStorage.SITtoken }
+            
+        })
+        .then(response =>{
+            this.schools = response.data;
+            if(this.schools.length > 0){
+                this.schools = [{id: 0, text: "NONE", value: 0 }].concat(this.schools)
+            }
+        })
+        .catch(error =>{
+            this.errorMessage = error.response.data.Message
+        })
+        
+    },
+    getDepartments: function(){
+        this.errorMessage = "";
+
+        const url = `${this.$hostname}search/selections`;
+        Axios
+        .get(url, {
+            params:{
+                SearchCategory: 1,
+                SearchSchool: this.school
+            },
+            headers: { "Content-Type": "application/json", Authorization: "Bearer " + sessionStorage.SITtoken }
+            
+        })
+        .then(response =>{
+            this.departments = response.data;
+        })
+        .catch(error =>{
+            this.errorMessage = error.response.data.Message
+        })
+        
+    },
   },
 
   created() {        
@@ -148,6 +256,9 @@ export default {
                   // delete token to logout the user.
                   // Redirect user to error page.
                 })
-  }
+  },
+  beforeMount(){
+        this.getSchools()
+    },
 }
 </script>

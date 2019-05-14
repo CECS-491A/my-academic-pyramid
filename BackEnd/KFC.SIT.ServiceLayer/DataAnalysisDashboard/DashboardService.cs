@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using DataAccessLayer;
-using DataAccessLayer.Logging;
 using DataAccessLayer.Models;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
@@ -11,6 +10,8 @@ using MongoDB.Bson;
 using System.Threading.Tasks;
 using DataAccessLayer.UADConstants;
 using System.Collections;
+using System.Collections.ObjectModel;
+using DataAccessLayer.Logging;
 
 namespace ServiceLayer.DataAnalysisDashboard
 {
@@ -23,14 +24,17 @@ namespace ServiceLayer.DataAnalysisDashboard
         private readonly IMongoCollection<ErrorLog> CollectionE;
         protected DatabaseContext _DbContext;
 
-        protected MongoDBRepo _repo;
+        protected LogRepository<TelemetryLog> _repoTelemetry;
+        protected LogRepository<ErrorLog> _repoError;
 
         public DashboardService(string url, string database)
         {
-            _repo = new MongoDBRepo(url, database);
+            _repoTelemetry = new LogRepository<TelemetryLog>("TelemetryLogs");
+            _repoError = new LogRepository<ErrorLog>("ErrorLogs");
             _DbContext = new DatabaseContext();
-            CollectionT = _repo.Db.GetCollection<TelemetryLog>(_collectionTName);
-            CollectionE = _repo.Db.GetCollection<ErrorLog>(_collectionEName);
+            CollectionT = _repoTelemetry._logCollection;
+            CollectionE = _repoError._logCollection;
+            //CollectionE = _repo.Db.GetCollection<ErrorLog>(_collectionEName);
         }
 
         /// <summary>
@@ -70,7 +74,7 @@ namespace ServiceLayer.DataAnalysisDashboard
         {
             Dictionary<int, long> failedLogin = new Dictionary<int, long>();
             var queryResult = CollectionE.Aggregate()
-                            .Match(x => x.Action == MongoDBAction.Login)
+                            .Match(x => x.Request == MongoDBAction.Login)
                             .Group(
                 x => x.Date.Month,
                 i => new
@@ -95,28 +99,34 @@ namespace ServiceLayer.DataAnalysisDashboard
         /// The order would be chrnological order January to December
         /// </summary>
         /// <returns></returns>
-        public long[] CountAverageSessionDuration()
+        public ICollection<DateTime> CountAverageSessionDuration(int chosenMonth, int chosenYear)
         {
-            long[] avgSessionDurMonth = new long[12];
+            ICollection<DateTime> timeList = new Collection<DateTime>();
+            DateTime validation1 = new DateTime(chosenYear, chosenMonth, 1);
+            DateTime validation2 = new DateTime(chosenYear, chosenMonth, DateTime.DaysInMonth(chosenYear, chosenMonth));
             var query = CollectionT.Aggregate()
-                        .Match(x => x.Action == "Login" || x.Action == "Logout")
-                        .SortByDescending(x => x.Date)
+                        .Match(x => x.Action == MongoDBAction.Login || x.Action == MongoDBAction.Logout)
+                        .Match(x => x.Date >= validation1)
+                        .Match(x => x.Date < validation2)
                         .Group(
-                x => x.Date.Month,
+                x => x.UserName,
                 i => new
                 {
-                    Result = i.Select(x => x.ID).Count(),
-                }
-                ).ToList();
+                    Name = i.Select(x => x.UserName).First(),
+                    Time = i.Select(x => x.Date).ToList(),
+                })
+                .ToList();
 
-            int count = 0;
             foreach (var monthly in query)
             {
-                avgSessionDurMonth[count] = monthly.Result;
-                count++;
-                if (count == 12) { break; }
+                Console.WriteLine(monthly.Name);
+                foreach(var userTime in monthly.Time)
+                {
+                    timeList.Add(userTime);
+                    Console.WriteLine(userTime);
+                }
             }
-            return avgSessionDurMonth;
+            return timeList;
         }
 
         /// <summary>
@@ -146,7 +156,7 @@ namespace ServiceLayer.DataAnalysisDashboard
         /// <returns></returns>
         public long CountTotalFailedLogin()
         {
-            Task<long> queryResult = CollectionE.CountDocumentsAsync(x => x.Action == "Login");
+            Task<long> queryResult = CollectionE.CountDocumentsAsync(x => x.Request == "Login");
             return queryResult.Result;
         }
     
@@ -207,23 +217,26 @@ namespace ServiceLayer.DataAnalysisDashboard
         /// return it
         /// </summary>
         /// <returns></returns>
-        public long CountUniqueLoggedInUsers(int chosenMonth)
+        public long CountUniqueLoggedInUsers(int chosenMonth, int chosenYear)
         {
+            DateTime validation1 = new DateTime(chosenYear, chosenMonth, 1);
+            DateTime validation2 = new DateTime(chosenYear, chosenMonth, DateTime.DaysInMonth(chosenYear, chosenMonth));
             var query = CollectionT.Aggregate()
                         .Match(x => x.Action == MongoDBAction.Login)
+                        .Match(x => x.Date >= validation1)
+                        .Match(x => x.Date < validation2)
                         .Group(
                 x => x.UserName,
                 i => new
                 {
                     User = i.Select(x => x.UserName).Count(),
-                    Name = i.Select(x => x.UserName).First(),
-                    Month = i.Select(x => x.Date.Month).First()
+                    Name = i.Select(x => x.UserName).First()
                 }
                 )
-                .Match(x => x.Month == chosenMonth)
-                .ToList().Count();
+                .ToList()
+                .Count();
             
             return query;
-        }
+       }
     }
 }

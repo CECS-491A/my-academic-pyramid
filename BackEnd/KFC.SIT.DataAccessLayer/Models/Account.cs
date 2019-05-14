@@ -30,6 +30,8 @@ namespace DataAccessLayer.Models
             //this.DepartmentQuestions = new List<DepartmentQuestion>();
             //this.CourseQuestions = new List<CourseQuestion>();
             this.Answers = new List<Answer>();
+            this.Exp = 0;
+            this.LogTelemetry = true;
         }
 
         [Key]
@@ -42,6 +44,7 @@ namespace DataAccessLayer.Models
         public string MiddleName { get; set; }
         public string LastName { get; set; }
         public Nullable<int> Exp { get; set; }
+        public bool LogTelemetry { get; set; }
 
         public Nullable<int> CategoryId { get; set; }
         public virtual Category Category { get; set; }
