@@ -44,7 +44,7 @@
 
         <v-btn id="btnPostQuestion" color="success" v-if="!validation" v-on:click="postQuestion">Post Question</v-btn>
 
-        <v-btn id="btnClose" color="grey" v-on:click="postQuestion">Close</v-btn>
+        <v-btn id="btnClose" color="grey" v-on:click="ClosePostQuestionForm()">Close</v-btn>
 
         </v-form>
 
@@ -96,6 +96,9 @@ export default {
     // close() {
     //   this.$emit('close');
     // },
+    ClosePostQuestionForm() {
+      ForumState.closePostQuestionForm()
+    },
     postQuestion: function () {
       this.error = "";
       if (this.text.length < 50 || this.text.length > 2000) {

@@ -31,9 +31,9 @@
     </v-flex>
     <v-spacer></v-spacer>
 
-    <v-btn small @click="postQuestion()" > My Drafts </v-btn>    
+    <v-btn small @click="myDrafts()" > My Drafts </v-btn>    
 
-    <v-btn small @click="myDrafts()" > Post </v-btn>
+    <v-btn small @click="postQuestion()" > Post </v-btn>
 
 
 
@@ -146,14 +146,14 @@ import ForumState from "@/services/ForumState";
       // End Krytal
 
       postQuestion() {
-        ForumState.setSchool(this.school);
-        ForumState.setDepartment(this.department);
-        ForumState.setCourse(this.course);
-        ForumState.openPostQuestionForm();
+        ForumState.setSchool(this.school)
+        ForumState.setDepartment(this.department)
+        ForumState.setCourse(this.course)
+        ForumState.openPostQuestionForm()
       },
       
       myDrafts() {
-        ForumState.viewDraftQuestions();
+        ForumState.viewDraftQuestions()
       },
     }
   }
