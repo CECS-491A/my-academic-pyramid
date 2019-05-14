@@ -9,7 +9,7 @@ namespace ManagerLayer.Archiving
 {
     public class ArchivingManager
     {
-        private static string archivePath = @"My-Academic-Pyramid\Archives";
+        private static string archivePath = @"C:C:\Users\Vik\Desktop\491B Logout\My-Academic-Pyramid\my-academic-pyramid\Archives";
         ArchiveServices ArchLogs = new ArchiveServices();
         private int errorcount = 0;
         private const int maxLogLife = 30;
