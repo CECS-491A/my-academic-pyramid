@@ -78,7 +78,7 @@ export default {
   name: "PostQuestionDialog",
   data () {
     return {
-     forumState: this.ForumState.state,
+     forumState: ForumState.state,
       //postQuestionDialog: true,
       validation: null,
       text: '',
@@ -92,7 +92,7 @@ export default {
     //   this.$emit('close');
     // },
     CloseEditQuestionForm() {
-      this.ForumState.closeEditQuestionForm()
+      ForumState.closeEditQuestionForm()
     },
     updateQuestion: function () {
       this.error = "";
@@ -112,7 +112,7 @@ export default {
 
       const url = 'DiscussionForum/UpdateQuestion'
       this.loading = true;
-      this.axios.post(this.$hostname + url, {
+      axios.post(this.$hostname + url, {
         QuestionId: this.forumState.question.QuestionId,
         AccountId: sessionStorage.SITuserId,
         Text: document.getElementById('text').value,
@@ -130,7 +130,7 @@ export default {
         })
         .finally(() => {
           this.loading = false;
-          this.ForumState.closeEditQuestionForm()
+          ForumState.closeEditQuestionForm()
         })
     },
   }

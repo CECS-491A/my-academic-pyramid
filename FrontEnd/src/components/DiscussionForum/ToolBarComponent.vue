@@ -10,6 +10,7 @@
       :items="schools"
       label="School"
       v-if="!isStudent"
+      @input="getDepartments"
     ></v-select>
     </v-flex>
       
@@ -18,7 +19,7 @@
         v-model="department"
         :items="departments"
         label="Department"
-        @input="getDepartments"
+        @input="getCourses"
     ></v-select>
     </v-flex>
             
@@ -27,7 +28,6 @@
         v-model="course"
         :items="courses"
         label="Course"
-        @input="getCourses"
     ></v-select>
     </v-flex>
 
@@ -62,6 +62,7 @@
 <script>
 import axios from 'axios'
 import ForumState from "@/services/ForumState";
+import AppSession from "@/services/AppSession"
 
   export default {
     name: "DFToolbar",
@@ -86,10 +87,10 @@ import ForumState from "@/services/ForumState";
     // },
     
     beforeMount(){
-        this.userId = this.AppSession.state.userId;
-        if(this.AppSession.state.category === "Student"){
+        this.userId = AppSession.state.userId;
+        if(AppSession.state.category === "Student"){
             this.isStudent = true;
-            this.school = this.AppSession.state.schoolId
+            this.school = AppSession.state.schoolId
             this.getDepartments(); 
         }
         else{
@@ -104,7 +105,7 @@ import ForumState from "@/services/ForumState";
           this.errorMessage = "";
 
           const url = `${this.$hostname}search/selections`;
-          this.Axios
+          axios
           .get(url, {
               params:{
                   SearchCategory: 0
@@ -127,7 +128,7 @@ import ForumState from "@/services/ForumState";
           this.errorMessage = "";
 
           const url = `${this.$hostname}search/selections`;
-          this.Axios
+          axios
           .get(url, {
               params:{
                   SearchCategory: 1,
@@ -147,7 +148,7 @@ import ForumState from "@/services/ForumState";
           this.errorMessage = "";
 
           const url = `${this.$hostname}search/selections`;
-          this.Axios
+          axios
           .get(url, {
               params:{
                   SearchCategory: 2,
@@ -167,30 +168,30 @@ import ForumState from "@/services/ForumState";
       // End Krytal
 
       postQuestion() {
-        this.ForumState.setSchool(this.school)
-        this.ForumState.setDepartment(this.department)
-        this.ForumState.setCourse(this.course)
-        this.ForumState.openPostQuestionForm()
+        ForumState.setSchool(this.school)
+        ForumState.setDepartment(this.department)
+        ForumState.setCourse(this.course)
+        ForumState.openPostQuestionForm()
       },
       
       myDrafts() {
-        this.ForumState.viewDraftQuestions()
+        ForumState.viewDraftQuestions()
       },
 
       viewQuestions() {
-        this.ForumState.setSchool(this.school)
-        this.ForumState.setDepartment(this.department)
-        this.ForumState.setCourse(this.course)
+        ForumState.setSchool(this.school)
+        ForumState.setDepartment(this.department)
+        ForumState.setCourse(this.course)
         if(this.course != null) {
-          this.ForumState.getCourseQuestions()
+          ForumState.getCourseQuestions()
         }
         else if(this.department != null) {
-          this.ForumState.getDepartmentQuestions()
+          ForumState.getDepartmentQuestions()
         }
         else if(this.school != null) {
-          this.ForumState.getSchoolQuestions()
+          ForumState.getSchoolQuestions()
         }
-        this.ForumState.viewPostedQuestions()
+        ForumState.viewPostedQuestions()
       },
     }
   }

@@ -117,7 +117,7 @@ import ForumState from "@/services/ForumState";
     name: "ViewQuestions",
     data () {
       return {
-        forumState: this.ForumState.state,
+        forumState: ForumState.state,
         questionState: this.forumState.questionsToGet,
         userAccount: null,
         isStudent: true,
@@ -155,7 +155,7 @@ import ForumState from "@/services/ForumState";
     // },
     methods: {
       viewAnswers(item) {
-            this.axios({
+            axios({
               headers: {
                 //Accept: "application/json", 
                 "Content-Type": "application/Json",
@@ -170,7 +170,7 @@ import ForumState from "@/services/ForumState";
             })
               .then(response => {
                   this.answers = response.data;
-                  this.ForumState.viewAnswers(item);
+                  ForumState.viewAnswers(item);
               })
               .catch(err => {
                   console.log(err);
@@ -178,7 +178,7 @@ import ForumState from "@/services/ForumState";
         },
       },
       postAnswer(item) {
-        this.ForumState.openPostAnswerForm(item);
+        ForumState.openPostAnswerForm(item);
       },
       closeQuestion(qId) {
             const url = `${this.$hostname}DiscussionForum/CloseQuestion`;
@@ -199,10 +199,10 @@ import ForumState from "@/services/ForumState";
             })
       },
       editQuestion(item) {
-            this.ForumState.openEditQuestionForm(item); 
+            ForumState.openEditQuestionForm(item); 
       },
       getSchoolQuestions() {
-            this.axios({
+            axios({
               headers: {
                 //Accept: "application/json", 
                 "Content-Type": "application/Json",
@@ -225,7 +225,7 @@ import ForumState from "@/services/ForumState";
               });
         },
         getDepartmentQuestions() {
-            this.axios({
+            axios({
               headers: {
                 //Accept: "application/json", 
                 "Content-Type": "application/Json",
@@ -247,7 +247,7 @@ import ForumState from "@/services/ForumState";
               });
         },
         getCourseQuestions() {
-            this.axios({
+            axios({
               headers: {
                 //Accept: "application/json", 
                 "Content-Type": "application/Json",
@@ -269,7 +269,7 @@ import ForumState from "@/services/ForumState";
               });
         },
         getDraftQuestions() {
-            this.axios({
+            axios({
               headers: {
                 //Accept: "application/json", 
                 "Content-Type": "application/Json",
@@ -290,7 +290,7 @@ import ForumState from "@/services/ForumState";
               });
         },
         increaseQuestionSpamCount(qId) {
-          this.axios({
+          axios({
               headers: {
                 //Accept: "application/json", 
                 "Content-Type": "application/Json",
@@ -311,7 +311,7 @@ import ForumState from "@/services/ForumState";
               });
         },
         increaseAnswerSpamCount(aId) {
-          this.axios({
+          axios({
               headers: {
                 //Accept: "application/json", 
                 "Content-Type": "application/Json",
@@ -332,7 +332,7 @@ import ForumState from "@/services/ForumState";
               });
         },
         increaseAnswerHelpfulCount(aId) {
-          this.axios({
+          axios({
               headers: {
                 //Accept: "application/json", 
                 "Content-Type": "application/Json",
@@ -353,7 +353,7 @@ import ForumState from "@/services/ForumState";
               });
         },
         increaseAnswerUnHelpfulCount(aId) {
-          this.axios({
+          axios({
               headers: {
                 //Accept: "application/json", 
                 "Content-Type": "application/Json",
@@ -374,7 +374,7 @@ import ForumState from "@/services/ForumState";
               });
         },
         markAsCorrectAnswer(aId) {
-          this.axios({
+          axios({
               headers: {
                 //Accept: "application/json", 
                 "Content-Type": "application/Json",
