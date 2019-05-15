@@ -15,5 +15,6 @@ namespace DataAccessLayer.DTOs
         public string SchoolName;
         public string DepartmentName;
         public List<string> Courses;
+        public bool AllowTelemetry;
     }
 }
