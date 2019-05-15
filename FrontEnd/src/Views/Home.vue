@@ -1,62 +1,135 @@
+
 <template>
-<v-app>
-  <v-parallax  src="https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg">
-  <h1>{{info}}</h1>
-    <v-layout row wrap>
-      <v-flex xs12 sm6 md4 lg3 v-for="person in team" :key="person.name">
-        <v-card flat class="text-xs-center ma-3">
-          <v-card-text>
-            <div class="subheading">{{person.name}}</div>
-            <div class="grey--text">{{person.role}}</div>
-          </v-card-text>
-        </v-card>
-      </v-flex>
-    </v-layout>
-</v-parallax>
-<v-layout>
-  <v-flex xs12 sm6 offset-sm3>
-    <v-card color="cyan lighten-4" >
-      <v-card-title primary-title > 
-        <h3 class="display-1"> Welcome to My Academic Pyramid application </h3>
-        
-      </v-card-title>
-      <div>{{welcome_text}}</div>
-    </v-card>
-  </v-flex>
+  <v-app>
+    <div class="home" >
+        <h3>Hello {{ username }}</h3>
+     
+        <v-flex lg9>
+          <h1 id="appSelection" class="display-3">Welcome Guest </h1>
+        </v-flex>
+            <v-container fluid grid-list-md>
+              <v-layout row wrap justify-center >
+                <v-flex xs4  v-for="(app, value) in appFeatures" :key="value">
+                  <v-card hover flat tile class="mx-auto" width="344">
+                    <v-img
+                      :aspect-ratio="16/9"
+                      :src="getImgUrl(app.LogoUrl)"
+                      @click="launch(app.route)"
+                    ></v-img>
+                    <v-card-title class="teal lighten-4" primary-title>
+                      <div>
+                        <span class="headline" row-wrap>{{app.name}}</span>
+                      </div>
+                    </v-card-title>
+                  </v-card>
+                </v-flex>
+              </v-layout>
+            </v-container>
+    </div>
+  </v-app>
 
-
-</v-layout>
-  <Timeline/>
-</v-app>
 </template>
-
 <script>
-import Timeline from '@/components/Timeline'
+//import axios from 'axios'
+import AppSession from "@/services/AppSession";
 
 export default {
-  components:{
-    Timeline
-  },
-  data () {
+  name: "UserHomePage",
+  data() {
     return {
-      info: "My Academic Pyramid Homepage",
-      team: [
-        { name: "Krystal Leon", role: 'Team Leader'},
-        { name: "Hyunwoo Kim", role: 'Fullstack developer'},
-        { name: "Luis Julian", role: 'Fullstack developer'},
-        { name: "Arturo Peña Contreras", role: 'Fullstack developer'},
-        { name: "Trong Nguyen", role: 'Fullstack developer'},
-        { name: "Victor Kim", role: 'Fullstack developer'}
-      ],
-      welcome_text : " Please login to access to full features"
+      username: "",
+      userid: "",
+      appFeatures: [
+        {
+          value: "discussionForum",
+          name: "Discussion Forum",
+          route: "/discussionForum",
+          LogoUrl: "FeatureLogos/forum.png"
+        },
+        // {
+        //   value: "chat",
+        //   name: "Chat Messenger",
+        //   route: "/chat",
+        //   LogoUrl: "FeatureLogos/chat.png"
+        // },
+        // {
+        //   value: "Search",
+        //   name: "Search",
+        //   route: "/search",
+        //   LogoUrl: "FeatureLogos/search.png"
+        // },
+        // {
+        //   value: "analysisDashboard",
+        //   name: "Analysis Dashboard",
+        //   route: "/Dashboard",
+        //   LogoUrl: "FeatureLogos/dashboard.png"
+        // },
+        // {
+        //   value: "logging",
+        //   name: "Logging",
+        //   route: "/Logging",
+        //   LogoUrl: "FeatureLogos/logging.png"
+        // },
+        // {
+        //   value: "userManagement",
+        //   name: "User Management",
+        //   route: "/UserManagement",
+        //   LogoUrl: "FeatureLogos/userManagement.png"
+
+        // },
+        // {
+        //   value: "userProfile",
+        //   name: "User Profile",
+        //   route: "",
+        //   LogoUrl: "FeatureLogos/profile.png"
+        // },
+        {
+          value: "schoolRegistration",
+          name: "School Registration",
+          route: "/SchoolRegistration",
+          LogoUrl: "FeatureLogos/SchoolRegistration.png"
+        }
+      ]
+    };
+  },
+
+  created() {
+    this.userid = AppSession.state.userId;
+    // TODO set header
+    console.log(`In created of UserHomePage: ${AppSession.state.token}`);
+    this.axios
+      .get(
+        `${this.$hostname}UserManager/GetUserInfoWithId?id=${
+          AppSession.state.userId
+        }`,
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + AppSession.state.token
+          }
+        }
+      )
+      .then(response => {
+        this.username = response.data.User.UserName;
+        console.log(
+          `Updating session in UserHomPage. New token ${response.data.SITtoken}`
+        );
+        AppSession.updateSession(response.data.SITtoken);
+      })
+      .catch(error => {
+        // display error
+      });
+  },
+  methods: {
+    launch(route) {
+      this.$router.push(route);
+    },
+
+    getImgUrl(pic) {
+      return require("../assets/" + pic);
     }
   }
-  
-}
+};
 </script>
-<style>
-.team h1 {
-  font-size:30pt;
-  color:rgb(26, 125, 182);
-}
-</style>
+

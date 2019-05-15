@@ -23,6 +23,7 @@ import TestView from '@/Views/TestView'
 
 import SchoolRegistration from '@/Views/SchoolRegistration'
 import Search from '@/Views/Search'
+import AboutUs from '@/Views/AboutUs'
 
 Vue.use(Router)
 Vue.use(Vuetify)
@@ -118,12 +119,17 @@ export default new Router({
     path: '/Profile/:id',
     name: 'Profile',
     component: Profile
-  }
-  // },
+  },
   // {
   //   path: '/DiscussionForum/PostQuestion',
   //   name: 'PostQuestion',
   //   component: PostQuestion
-  // }
+  // },
+  {
+    path: '/AboutUs',
+    name: 'About Us',
+    component: AboutUs
+  },
+
   ]
 })

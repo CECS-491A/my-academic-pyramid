@@ -140,10 +140,14 @@ namespace ManagerLayer.Gateways.SchoolRegistration
 
                         transaction.Commit();
                     }
+                    catch(SchoolRegistrationException schoolEX)
+                    {
+                        throw schoolEX;
+                    }
                     catch (Exception ex)
                     {
                         transaction.Rollback();
-                        Console.WriteLine("Error occurred.");
+                        
                     }
                 }
             }

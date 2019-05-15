@@ -29,7 +29,8 @@ namespace ServiceLayer.SchoolRegistration
 
         public Course CreateCourse(Course course)
         {
-            return _DbContext.Courses.Add(course);
+            var c = _DbContext.Courses.Add(course);
+            return c;
         }
 
         public Teacher CreateTeacher (Teacher teacher)
@@ -97,6 +98,13 @@ namespace ServiceLayer.SchoolRegistration
                                                         && sd.SchoolTeacher.Teacher.FirstName.Equals(teacherLName)
                                                         && sd.Course.Name.Equals(courseName)
                                                        ).FirstOrDefault();
+        }
+
+        public List<SchoolTeacherCourse> GetSchoolTeacherCourses(List<int> ids)
+        {
+            return _DbContext.SchoolTeacherCourses
+                .Where(stc => ids.Contains(stc.Id))
+                .ToList();
         }
 
 

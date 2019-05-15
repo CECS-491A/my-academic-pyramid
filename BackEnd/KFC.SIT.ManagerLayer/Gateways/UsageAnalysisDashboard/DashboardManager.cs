@@ -150,7 +150,7 @@ namespace ManagerLayer.Gateways.UsageAnalysisDashboard
 
             // Get the number of unique logged in users during the specific month
             // Flaw: request the data to the database for duration(6) times, it slows down the performance
-            for (int i = 1; i < duration + 1; i++)
+            for (int i = 0; i < duration; i++)
             {
                 successfulLoggedInUsers.Add(dateFormatConverter[monthToday], _dashboardService.CountUniqueLoggedInUsers(monthToday, yearToday));
                 monthToday--;

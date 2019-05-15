@@ -20,6 +20,9 @@
       <v-btn v-if="!sessionState.token" @click="goToLogin">
         <span>Login</span>
       </v-btn>
+      <v-btn  @click="goToAboutUs">
+        <span>About Us</span>
+      </v-btn>
 
 
     </v-toolbar>
@@ -71,6 +74,10 @@ export default {
     goToChatScreen() {
       this.$router.push("/Chat")
       NavBarState.messageIsRead()
+    },
+    
+    goToAboutUs(){
+      this.$router.push("/AboutUs")
     },
 
     flipDrawer() {

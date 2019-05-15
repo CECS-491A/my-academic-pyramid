@@ -9,7 +9,7 @@
         <v-avatar size="100">
           <img src="@/assets/Racoon.png">
         </v-avatar>
-        <div class="subheading">{{this.$authUserName}}</div>
+        <div class="subheading">Hello Racoon</div>
       </v-flex>
     </v-layout>
      </v-img>

@@ -24,10 +24,10 @@ namespace NewDemoProject
             //IList<Double> get3 = manager.GetAverageSuccessfulLogin();
             IDictionary<int, long> get4 = service.CountSuccessfulLogin(1);
 
-            IDictionary<int, long> test3 = service.CountFailedLogin(6);
-            foreach(var s in test3)
+            IDictionary<string, long> temp11 = manager.GetSuccessfulLoggedInUsers();
+            foreach (var s in temp11)
             {
-                Console.WriteLine("Is heere: " + s);
+                Console.WriteLine(s);
             }
             /**
             Console.WriteLine("succesufl");
