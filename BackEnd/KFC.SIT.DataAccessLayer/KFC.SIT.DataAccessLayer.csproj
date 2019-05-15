@@ -216,9 +216,9 @@
     <Compile Include="Logging\Models\Repository\ILogRepository.cs" />
     <Compile Include="Logging\MyLogger.cs" />
     <Compile Include="Logging\Models\Repository\LogRepository.cs" />
-    <Compile Include="Migrations\201905130052114_Initial.cs" />
-    <Compile Include="Migrations\201905130052114_Initial.Designer.cs">
-      <DependentUpon>201905130052114_Initial.cs</DependentUpon>
+    <Compile Include="Migrations\201905150608339_Initial.cs" />
+    <Compile Include="Migrations\201905150608339_Initial.Designer.cs">
+      <DependentUpon>201905150608339_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Category.cs" />
@@ -290,8 +290,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201905130052114_Initial.resx">
-      <DependentUpon>201905130052114_Initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201905150608339_Initial.resx">
+      <DependentUpon>201905150608339_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
