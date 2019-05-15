@@ -8,9 +8,11 @@ namespace DataAccessLayer.UADConstants
 {
     public static class MongoDBAction
     {
-        public static string Login = "Login";
-        public static string Logout = "Logout";
-        public static string[] Feature = { "Login", "Feature", "Feature2", "Feature3", "Feature4", "Feature5" };
+        public static readonly string Login = "Login";
+        public static readonly string Logout = "Logout";
+        public static readonly string[] Feature = { "Discussion Forum", "Search", "Registration", "Chat", "User Profile" };
+        public static readonly string[] Page = { "Discussion Forum Page", "Search Page", "Registration Page", "Chat Page",
+                                                    "User Profile Page", "Logging Page", "Dashboard Page" };
 
     }
 }

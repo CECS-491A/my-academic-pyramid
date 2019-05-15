@@ -104,6 +104,7 @@ namespace ServiceLayer.SchoolRegistration
         public Course FindCourse (String courseName)
         {
             return _DbContext.Courses.Where(s => s.Name.Equals(courseName)).FirstOrDefault();
+
         }
 
         public Teacher FindTeacher(String teacherFirstName, String teacherLastname)

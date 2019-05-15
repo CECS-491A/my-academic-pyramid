@@ -116,7 +116,6 @@ export default {
       )
       .then(response => {
         this.username = response.data.User.UserName;
-        this.$authUserName = response.data.User.UserName
         console.log(
           `Updating session in UserHomPage. New token ${response.data.SITtoken}`
         );

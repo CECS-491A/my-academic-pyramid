@@ -2,19 +2,58 @@
 import {Line} from 'vue-chartjs'
 
 export default {
-  extends: Line,
-  mounted () {
-    this.renderChart({
-      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-      datasets: [
-        {
-          label: '# of Average Session Duration',
-          backgroundColor: "rgba(54, 162, 235, 0.6)",
-          data: [40, 39, 10, 40, 39, 80, 40]
+    extends: Line,
+    props: {
+      chartData: {
+        type: Array,
+      },
+      chartLabels: {
+        type: Array,
+      }
+    },
+    data () {
+      return {
+        //Chart.js options that controls the appearance of the chart
+        options: {
+          scales: {
+            yAxes: [{
+              ticks: {
+                beginAtZero: true
+              },
+              gridLines: {
+                display: true
+              }
+            }],
+            xAxes: [ {
+              gridLines: {
+                display: false
+              }
+            }]
+          },
+          legend: {
+            display: true
+          },
+          responsive: true,
+          maintainAspectRatio: false
         }
-      ]
-    }, {responsive: true, maintainAspectRatio: false})
-
-  }
+      }
+    },
+  mounted () {
+      //renderChart function renders the chart with the datacollection and options object.
+      this.renderChart({
+        labels: this.chartLabels,
+          datasets: [
+            {
+              label: '# of Average Session Duration',
+              backgroundColor: "rgba(54, 162, 235, 0.6)",
+              pointBackgroundColor: 'white',
+              borderWidth: 1,
+              pointBorderColor: '#249EBF',
+              //Data to be represented on y-axis
+              data: this.chartData
+            }
+          ]
+      }, this.options)
+    }
 }
 </script>

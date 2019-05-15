@@ -14,6 +14,10 @@
             readonly/>
         </v-flex>
 
+     
+
+     
+
         <v-flex
           xs12
           md4
@@ -79,6 +83,7 @@
 </template>
 
 <script>
+
 export default {
   name: 'Profile',
     data () {
@@ -126,6 +131,8 @@ export default {
             })
             
         },
+
+        
     },
     beforeMount(){
         this.userId = sessionStorage.SITuserId;

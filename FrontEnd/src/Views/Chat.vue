@@ -219,6 +219,12 @@ export default {
         this.newMessage.contactUsername = friendUsername, // Set the receiver username received from friendlist component
         this.newMessageDialog = true; // Show newMessageDialog
       });
+      this.$eventBus.$on("MessageFromUserProfile", newMessage =>{
+        this.$router.push("/chat");
+        this.newMessage.contactUsername = newMessage.contactUsername,
+        this.newMessage.messageContent = newMessage.messageContent
+        this.sendMessageWithNewConversation()
+      })
 
       // Listen to reload the conversation panels from friendlist component
     this.$eventBus.$on("ReloadChatHistoryList", () => {

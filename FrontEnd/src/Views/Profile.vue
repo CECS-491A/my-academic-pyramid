@@ -5,6 +5,8 @@
         <v-card center row>
           <v-toolbar card prominent>
             <v-toolbar-title class="body-2">User Profile</v-toolbar-title>
+            <v-spacer/>
+            <NewConversation v-bind:contactUsername = "username"/>
             <template v-slot:extension>
               <v-tabs v-model="tab" align-with-title class="body-2">
                 <v-tabs-slider color="yellow"></v-tabs-slider>
@@ -82,8 +84,12 @@
 
 <script>
 import AppSession from '@/services/AppSession'
+import NewConversation from '@/components/Messenger/NewConversation'
 export default {
   name: "Profile",
+  components:{
+    NewConversation
+  },
   data() {
     return {
       tab: null,
