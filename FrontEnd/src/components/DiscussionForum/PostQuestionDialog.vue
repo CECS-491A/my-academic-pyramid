@@ -124,8 +124,8 @@ export default {
         //SchoolId: "1",        
         DepartmentId: this.forumState.department,
         CourseId: this.forumState.course,
-        Text: document.getElementById('text').value,
-        Exp: document.getElementById('exp').value.toString(),
+        Text: this.text,
+        Exp: this.exp,
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
@@ -165,8 +165,8 @@ export default {
         //'Send': 'application/json'
           QuestionType: "DraftQuestion",
           AccountId: sessionStorage.SITuserId,
-          Text: document.getElementById('text').value,
-          Exp: document.getElementById('exp').value.toString(),
+          Text: this.text,
+          Exp: this.exp,
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
