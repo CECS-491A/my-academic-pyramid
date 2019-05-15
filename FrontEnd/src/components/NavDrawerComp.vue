@@ -137,7 +137,7 @@ export default {
           let generateButton = false;
           if (link.onlyActive && this.sessionState.category != undefined
               && AllowedFeaturesService[this.sessionState.category].includes(link.name)) {
-            // if (link.name == )
+            
             generateButton = true;
           }
           return generateButton;

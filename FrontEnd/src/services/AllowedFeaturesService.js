@@ -10,11 +10,14 @@ export default {
         RouteNames.USERHOMEPAGE,
         RouteNames.PROFILE,
         RouteNames.SEARCH,
-        RouteNames.DASHBOARD,
+        RouteNames.DASHBOARD, //admin
         RouteNames.CHAT,
-        RouteNames.LOGGING,
+        RouteNames.LOGGING,   //
         RouteNames.PUBLISH,
         RouteNames.DISCUSSIONFORUM
+    ],
+    NewUser: [
+        
     ]
 
 }

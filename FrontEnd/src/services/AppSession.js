@@ -34,7 +34,7 @@ export default {
             this.state.userId = sessionStorage.SITuserId
         }
         if (sessionStorage.SITcategory != undefined) {
-            this.state.category = sessionStorage.category
+            this.state.category = sessionStorage.SITcategory
         }
     }
 }
