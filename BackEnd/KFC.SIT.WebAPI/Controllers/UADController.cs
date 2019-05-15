@@ -9,12 +9,12 @@ using System.Collections.Generic;
 
 namespace KFC.SIT.WebAPI.Controllers
 {
-    [EnableCors(origins: "*", headers: "*", methods: "*")]
-    public class UADController : ApiController
-    {
-        private const string url = "mongodb+srv://super:superheroes@myacademicpyramidlogging-if0cx.mongodb.net/test?retryWrites=true";
-        private const string database = "test";
-        private DashboardManager _dashboardManager = new DashboardManager(url, database);
+   [EnableCors(origins: "*", headers: "*", methods: "*")]
+   public class UADController : ApiController
+   {
+       private const string url = "mongodb+srv://super:superheroes@myacademicpyramidlogging-if0cx.mongodb.net/test?retryWrites=true";
+       private const string database = "test";
+       private DashboardManager _dashboardManager = new DashboardManager(url, database);
 
         [HttpGet]
         [ActionName("AvgSuccessfulLogin")]
@@ -70,5 +70,5 @@ namespace KFC.SIT.WebAPI.Controllers
             return featureNameNumUsedData;
         }
 
-    }
+   }
 }

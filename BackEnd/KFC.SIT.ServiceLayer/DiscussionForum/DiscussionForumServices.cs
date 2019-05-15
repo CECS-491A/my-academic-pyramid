@@ -25,7 +25,7 @@
 //            return question;
 //        }
 
-//        public QuestionDraft PostQuestionDraft(QuestionDraft qDraft)
+//        public Draft PostQuestionDraft(QuestionDraft qDraft)
 //        {
 //            _db.Entry(qDraft).State = EntityState.Added;
 //            return qDraft;
@@ -163,7 +163,7 @@
 //        public Question UpdateQuestion(Question question)
 //        {
 //            _db.Entry(question).State = EntityState.Modified;
-//            return question; 
+//            return question;
 //        }
 
 //        public QuestionDraft UpdateQuestionDraft(QuestionDraft qDraft)
@@ -310,16 +310,16 @@
 //        {
 //            AnswerResponseDTO aRDTO = new AnswerResponseDTO
 //            {
-//                AnswerId = answer.Id, 
+//                AnswerId = answer.Id,
 //                QuestionId = answer.QuestionId,
 //                AccountId = answer.AccountId,
-//                AccountName = answer.Account.UserName, 
+//                AccountName = answer.Account.UserName,
 //                Text = answer.Text,
-//                HelpfulCount = answer.HelpfulCount, 
-//                UnHelpfulCount = answer.UnHelpfulCount, 
+//                HelpfulCount = answer.HelpfulCount,
+//                UnHelpfulCount = answer.UnHelpfulCount,
 //                SpamCount = answer.UnHelpfulCount,
-//                IsCorrectAnswer = answer.IsCorrectAnswer, 
-//                CreatedDate = answer.CreatedDate 
+//                IsCorrectAnswer = answer.IsCorrectAnswer,
+//                CreatedDate = answer.CreatedDate
 //            };
 //            return aRDTO;
 //        }
