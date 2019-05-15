@@ -35,8 +35,8 @@ namespace ServiceLayer.DataAnalysisDashboard
         }
 
         /// <summary>
-        /// Use the query to get the list of the number of successful logged in users.
-        /// Each element represents a month and sorted by date. Starts from Jan to Dec.
+        /// Use the query to get the list of the number of successful logged in users
+        /// Each element represents a month and sorted by date in descending order
         /// </summary>
         /// <returns>successLogin</returns>
         public IDictionary<int, long> CountSuccessfulLogin(int numOfMonth)
@@ -96,7 +96,7 @@ namespace ServiceLayer.DataAnalysisDashboard
         /// The order would be chrnological order January to December
         /// </summary>
         /// <returns></returns>
-        public double CountTotalSessionTime(int chosenMonth, int chosenYear)
+        public double CountAverageSessionTime(int chosenMonth, int chosenYear)
         {
             DateTime validationFirstDayMonth = new DateTime(chosenYear, chosenMonth, 1);
             DateTime validationLastDayMonth = new DateTime(chosenYear, chosenMonth, DateTime.DaysInMonth(chosenYear, chosenMonth)).AddDays(1);
@@ -114,12 +114,16 @@ namespace ServiceLayer.DataAnalysisDashboard
                 .ToList();
 
             double totalSessionTime = 0;
-            foreach (var monthly in query)
+            int numOfUsers = 0;
+
+            // Go through the list of users who logged in
+            foreach (var user in query)
             {
-                Console.WriteLine(monthly.Name);
                 int validationLogout = 0;
                 DateTime dateTime = new DateTime();
-                foreach(var userTime in monthly.Time)
+
+                // find session duration by "login time - logout time"
+                foreach(var userTime in user.Time)
                 {
                     if (validationLogout % 2 == 0) // time that user logged in
                     {
@@ -127,13 +131,15 @@ namespace ServiceLayer.DataAnalysisDashboard
                     }
                     else // find the session time of the user.
                     {
-                        totalSessionTime += (dateTime.Subtract(userTime).TotalMinutes);
+                        totalSessionTime += (userTime.Subtract(dateTime).TotalMinutes);
+                        numOfUsers++;
                     }
                     validationLogout++;
-                    Console.WriteLine(userTime);
                 }
             }
-            return totalSessionTime;
+            if (numOfUsers == 0) { numOfUsers = 1; }
+            double averageSessionTime = totalSessionTime / numOfUsers;
+            return averageSessionTime;
         }
 
         /// <summary>
@@ -161,10 +167,8 @@ namespace ServiceLayer.DataAnalysisDashboard
         /// Save them into the dictionary and return it
         /// </summary>
         /// <returns></returns>
-        public IDictionary<string, long> CountAverageTimeSpentPage()
+        public IDictionary<string, double> CountAverageTimeSpentPage()
         {
-            // need to fix it @Todo
-            Dictionary<string, long> avgTime = new Dictionary<string, long>();
             var query = _collectionT.Aggregate()
                         .Match(x =>
                         x.Action == MongoDBAction.Page[0] ||
@@ -173,17 +177,51 @@ namespace ServiceLayer.DataAnalysisDashboard
                         x.Action == MongoDBAction.Page[3] ||
                         x.Action == MongoDBAction.Page[4] ||
                         x.Action == MongoDBAction.Page[5] ||
-                        x.Action == MongoDBAction.Page[6]
+                        x.Action == MongoDBAction.Page[6] ||
+                        x.Action == MongoDBAction.Logout
                         )
                         .Group(
-                x => x.Action,
+                x => x.UserName,
                 i => new
                 {
-                    Result = i.Select(x => x.ID).Count(),
-                }
-                ).ToList();
+                    Name = i.Select(x => x.UserName).First(),
+                    Time = i.Select(x => x.Date).ToList(),
+                    Page = i.Select(x => x.Action).ToList(),
+                })
+                .ToList();
 
-            return avgTime;
+            List<DateTime> timeList = new List<DateTime>();
+            List<string> pageList = new List<string>();
+            Dictionary<string, double> pageTimeList = new Dictionary<string, double>();
+            for (int i = 0; i < MongoDBAction.Page.Length; i++)
+            {
+                pageTimeList.Add(MongoDBAction.Page[i], 0);
+            }
+
+            foreach (var user in query)
+            {
+                foreach (var page in user.Page)
+                {
+                    pageList.Add(page);
+                    Console.WriteLine(page);
+                }
+                foreach (var time in user.Time)
+                {
+                    timeList.Add(time);
+                    Console.WriteLine(time);
+                }
+            }
+            for (int i = 0; i < timeList.Count() - 1; i++)
+            {
+                if (!(pageList[i].Equals(MongoDBAction.Logout)))
+                {
+                    double time = timeList[i + 1].Subtract(timeList[i]).TotalMinutes;
+                    pageTimeList[pageList[i]] += time;
+                }
+
+            }
+
+            return pageTimeList;
         }
 
         /// <summary>

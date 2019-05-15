@@ -70,20 +70,13 @@ namespace ManagerLayer.Gateways.UsageAnalysisDashboard
             int numOfMonth = BusinessRuleConstants.GetAverageSessionDuration_NumOfMonth; // 6
             int monthToday = DateTime.Today.Month;
             int yearToday = DateTime.Today.Year;
-            IDictionary<int, long> numLoginInCertainDuration = _dashboardService.CountSuccessfulLogin(6);
             IDictionary<string, double> monthAvgSessionDuration = new Dictionary<string, double>();
 
             // Request the total session time for the number of months
             // Flaw: request the data to the database for numOfMonth(6) times, it slows down the performance
             for (int i = 0; i < numOfMonth; i++)
             {
-                double totalSessionTime = _dashboardService.CountTotalSessionTime(monthToday, yearToday);
-                double numOfLogin = 0;
-                if (numLoginInCertainDuration.ContainsKey(monthToday))
-                {
-                    numOfLogin = numLoginInCertainDuration[monthToday];
-                }
-                double avgSessionTime = totalSessionTime / numOfLogin;
+                double avgSessionTime = _dashboardService.CountAverageSessionTime(monthToday, yearToday);
                 monthAvgSessionDuration.Add(dateFormatConverter[monthToday], avgSessionTime);
                 monthToday--;
                 if (monthToday == 0) { monthToday = 12; yearToday--; }
@@ -114,10 +107,17 @@ namespace ManagerLayer.Gateways.UsageAnalysisDashboard
             return totalSuccessFailed;
         }
 
-        public IDictionary<string, long> GetAverageTimeSpentPage()
+        public IDictionary<string, double> GetMostAverageTimeSpentPage()
         {
-            IDictionary<string, long> featureTime = _dashboardService.CountAverageTimeSpentPage();
-            return featureTime;
+            IDictionary<string, double> pageTime = _dashboardService.CountAverageTimeSpentPage();
+            IDictionary<string, double> pageTimeSorted = (IDictionary<string, double>)pageTime.AsQueryable().OrderByDescending(x => x.Value);
+            IList<string> keys = (IList<string>) pageTimeSorted.Keys;
+            IDictionary<string, double> average = new Dictionary<string, double>();
+            for (int i = 0; i < 5; i++)
+            {
+                average.Add(keys[i], pageTimeSorted[keys[i]]);
+            }
+            return average;
         }
 
         /// <summary>
@@ -140,7 +140,6 @@ namespace ManagerLayer.Gateways.UsageAnalysisDashboard
         {
             int duration = BusinessRuleConstants.GetSuccessfulLoggedInUsers_Duartion; // 6
             Dictionary<string, long> successfulLoggedInUsers = new Dictionary<string, long>();
-            long numTotalUser = _dashboardService.CountTotalUsers();
             int monthToday = DateTime.Today.Month;
             int yearToday = DateTime.Today.Year;
 

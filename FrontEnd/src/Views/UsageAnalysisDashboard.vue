@@ -73,7 +73,7 @@
     {
       fetchData() {
         this.axios
-          .get(`${this.$hostname}UAD/sLogin`, {
+          .get(`${this.$hostname}UAD/AvgSuccessfulLogin`, {
             headers: { "Content-Type": "application/Json" }
           })
           .then(response => {

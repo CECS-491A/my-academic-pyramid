@@ -32,8 +32,18 @@ namespace NewDemoProject
             {
                 Console.WriteLine(s);
             }
-            Console.WriteLine(service.CountTotalSuccessfulLogin());
-            Console.WriteLine(service.CountTotalUsers());
+            IDictionary<int, long> temp6 = new Dictionary<int, long>();
+            temp6.Add(0, 2);
+            temp6.Add(1, 3);
+            temp6.Add(2, 4);
+            temp6.Add(3, 5);
+            temp6.Add(4, 6);
+
+            IDictionary<string, double> test3 = service.CountAverageTimeSpentPage();
+            foreach(var temp in test3)
+            {
+                Console.WriteLine(temp);
+            }
             /**
             Console.WriteLine("succesufl");
             foreach (var s in get)
