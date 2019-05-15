@@ -257,7 +257,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="PeriodicArchiver.cs" />
     <Compile Include="Signalr\MessengerHub.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegistrationData.cs" />

@@ -53,7 +53,7 @@ namespace ServiceLayer.Archiving
             List<string> oldErrorLogList = new List<string>();
             foreach (string logID in logList)
             {
-                if (checkOldErrorLog(logID, maxLogLife) == true)
+                if (CheckOldErrorLog(logID, maxLogLife) == true)
                 {
                     oldErrorLogList.Add(logID);
                 }
@@ -66,14 +66,14 @@ namespace ServiceLayer.Archiving
             List<string> oldTelemetryLogList = new List<string>();
             foreach (string logID in logList)
             {
-                if (checkOldTelemetryLog(logID, maxLogLife) == true)
+                if (CheckOldTelemetryLog(logID, maxLogLife) == true)
                 {
                     oldTelemetryLogList.Add(logID);
                 }
             }
             return oldTelemetryLogList;
         }
-        public bool checkOldErrorLog(string fileId, int maxLogLife)
+        public bool CheckOldErrorLog(string fileId, int maxLogLife)
         {
             ErrorLog errorfile = _errors.Get(fileId);
             bool OldLog = false;
@@ -84,7 +84,7 @@ namespace ServiceLayer.Archiving
             return OldLog;
 
         }
-        public bool checkOldTelemetryLog(string fileId, int maxLogLife)
+        public bool CheckOldTelemetryLog(string fileId, int maxLogLife)
         {
             TelemetryLog errorfile = _telemetries.Get(fileId);
             bool OldLog = false;

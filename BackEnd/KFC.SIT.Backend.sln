@@ -23,6 +23,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KFC.SIT.WebAPI", "KFC.SIT.W
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewDemoProject", "NewDemoProject\NewDemoProject.csproj", "{AE9FC4E8-8999-4B28-AFC3-08E53DB2F847}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArchiveScheduler", "ArchiveScheduler\ArchiveScheduler.csproj", "{49869B14-1231-461A-93DD-9FF6F2BFBA2C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1F873DD8-8A42-411B-B217-EBE6E8EEB002} = {1F873DD8-8A42-411B-B217-EBE6E8EEB002}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +74,10 @@ Global
 		{AE9FC4E8-8999-4B28-AFC3-08E53DB2F847}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AE9FC4E8-8999-4B28-AFC3-08E53DB2F847}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AE9FC4E8-8999-4B28-AFC3-08E53DB2F847}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49869B14-1231-461A-93DD-9FF6F2BFBA2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49869B14-1231-461A-93DD-9FF6F2BFBA2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49869B14-1231-461A-93DD-9FF6F2BFBA2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49869B14-1231-461A-93DD-9FF6F2BFBA2C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

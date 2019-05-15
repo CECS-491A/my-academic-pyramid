@@ -5,31 +5,36 @@ using System.Web;
 using System.Threading;
 using ManagerLayer.Archiving;
 
-namespace KFC.SIT.WebAPI
+
+namespace ArchiveScheduler
+
 {
+    
     public class PeriodicArchiver
     {
-        public void archiveCall()
+        public static void ArchiveCall()
         {
             while (true)
             {
+
                 ArchivingManager archiver = new ArchivingManager();
                 var response = archiver.ArchiveOldLogFiles();
                 if (response == false)
                 {
-                    archiver.contactAdmin();
+                    archiver.ContactAdmin();
                 }
                 Thread.Sleep(1000 * 60);
             }
         }
     }
 
-    public class archiverMain
+    class Program
     {
-        PeriodicArchiver archive = new PeriodicArchiver();
-        public void Main()
+        
+        static void Main(String[] args)
         {
-            Thread thr = new Thread(new ThreadStart(archive.archiveCall));
+            
+            Thread thr = new Thread(new ThreadStart(PeriodicArchiver.ArchiveCall));
             thr.Start();
             while (true)
             {
@@ -39,3 +44,4 @@ namespace KFC.SIT.WebAPI
     }
 
 }
+

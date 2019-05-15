@@ -85,7 +85,7 @@ namespace ManagerLayer.Archiving
         }
 
 
-        public void contactAdmin()
+        public void ContactAdmin()
         {
             if (errorcount >= 3)
             {
