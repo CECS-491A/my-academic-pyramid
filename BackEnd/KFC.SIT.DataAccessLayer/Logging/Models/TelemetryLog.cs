@@ -27,9 +27,6 @@ namespace DataAccessLayer.Models
 
         [BsonElement("Session Duration")]
         public DateTime SessionDuration { get; set; }
-
-        [BsonElement("Month")]
-        public int Month { get; set; }
     }
 
     public class RequestLog

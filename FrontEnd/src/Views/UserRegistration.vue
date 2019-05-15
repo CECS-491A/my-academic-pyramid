@@ -157,10 +157,20 @@ export default {
         Axios.post(urlRegistration, requestPayload, headersObject)
              .then(response => {
                AppSession.updateSession(response.data.SITtoken)
-               this.$router.push({name: "UserHomePage"})
+               return this.axios.get(
+                `${this.$hostname}UserManager/GetUserInfoWithId?id=${AppSession.state.userId}`, 
+                {headers: {'Accept': 'application/json',
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${AppSession.state.token}`}}
+               )
                })
+             .then((response) => {
+                AppSession.setCategory(response.data.User.Category)
+                AppSession.setSchoolId(school)
+                AppSession.updateSession(response.data.SITtoken)
+                this.$router.push({name: "UserHomePage"})})
              .catch(error =>{
-                  this.errorMessage = error.response.data.Message
+                this.errorMessage = error.response.data.Message
               })
     },
 

@@ -19,8 +19,7 @@ namespace ServiceLayer.Search
         List<SearchForumPostDTO> GetSchoolQuestions(Expression<Func<SchoolQuestion, bool>> predicate);
         List<SearchForumPostDTO> GetDepartmentQuestions(Expression<Func<DepartmentQuestion, bool>> predicate);
         List<SearchForumPostDTO> GetCourseQuestions(Expression<Func<CourseQuestion, bool>> predicate);
-
-        Student FindStudentByAccountId(int id);
+        
         List<SearchFilterSelectionDTO> GetSchools();
         List<SearchFilterSelectionDTO> GetDepartments(int schoolId);
         List<SearchFilterSelectionDTO> GetCourses(int schoolId, int departmentId);

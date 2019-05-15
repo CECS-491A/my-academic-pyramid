@@ -216,10 +216,9 @@
     <Compile Include="Logging\Models\Repository\ILogRepository.cs" />
     <Compile Include="Logging\MyLogger.cs" />
     <Compile Include="Logging\Models\Repository\LogRepository.cs" />
-   
-    <Compile Include="Migrations\201905080342363_Initial.cs" />
-    <Compile Include="Migrations\201905080342363_Initial.Designer.cs">
-      <DependentUpon>201905080342363_Initial.cs</DependentUpon>
+    <Compile Include="Migrations\201905150608339_Initial.cs" />
+    <Compile Include="Migrations\201905150608339_Initial.Designer.cs">
+      <DependentUpon>201905150608339_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Category.cs" />
@@ -227,6 +226,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="DatabaseContext.cs" />
     <Compile Include="Logging\Models\ErrorLog.cs" />
+    <Compile Include="Models\Dashboard\GraphData.cs" />
     <Compile Include="Models\DiscussionForum\Answer.cs" />
     <Compile Include="Models\DiscussionForum\CourseQuestion.cs" />
     <Compile Include="Models\DiscussionForum\DepartmentQuestion.cs" />
@@ -291,8 +291,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201905080342363_Initial.resx">
-      <DependentUpon>201905080342363_Initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201905150608339_Initial.resx">
+      <DependentUpon>201905150608339_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

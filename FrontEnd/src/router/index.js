@@ -13,6 +13,7 @@ import UserRegistration from '@/Views/UserRegistration'
 import UserHomePage from '@/Views/UserHomePage'
 import Redirect from '@/Views/Redirect'
 import UsageAnalysisDashboard from '@/Views/UsageAnalysisDashboard'
+import Profile from '@/Views/Profile'
 //import Search from '@/Views/Search'
 import DiscussionForum from '@/Views/DiscussionForum'
 //import PostQuestion from '@/components/DiscussionForum/PostQuestion'
@@ -22,7 +23,6 @@ import TestView from '@/Views/TestView'
 
 import SchoolRegistration from '@/Views/SchoolRegistration'
 import Search from '@/Views/Search'
-import Profile from '@/Views/UserProfile'
 
 Vue.use(Router)
 Vue.use(Vuetify)

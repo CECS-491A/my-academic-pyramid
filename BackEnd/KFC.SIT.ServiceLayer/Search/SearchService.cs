@@ -22,6 +22,11 @@ namespace ServiceLayer.Search
             _db = db;
         }
 
+        /// <summary>
+        /// Get a list of students
+        /// </summary>
+        /// <param name="predicate"></param>
+        /// <returns></returns>
         public List<SearchPersonDTO> GetStudents(Expression<Func<Student, bool>> predicate)
         {
             return _db.Students
@@ -34,12 +39,18 @@ namespace ServiceLayer.Search
                     MiddleName = s.Account.MiddleName,
                     LastName = s.Account.LastName,
                     SchoolName = s.SchoolDepartment.School.Name,
-                    DepartmentName = s.SchoolDepartment.Department.Name
+                    DepartmentName = s.SchoolDepartment.Department.Name,
+                    Courses = s.Courses.Select(c => c.Course.Name).ToList()
                 })
                 .OrderBy(s => s.FirstName)
                 .ToList();
         }
 
+        /// <summary>
+        /// Get a list of teachers
+        /// </summary>
+        /// <param name="predicate"></param>
+        /// <returns></returns>
         public List<SearchPersonDTO> GetTeachers(Expression<Func<SchoolTeacher, bool>> predicate)
         {
 
@@ -60,6 +71,11 @@ namespace ServiceLayer.Search
                 .ToList();
         }
 
+        /// <summary>
+        /// Get a list of school questions
+        /// </summary>
+        /// <param name="predicate"></param>
+        /// <returns></returns>
         public List<SearchForumPostDTO> GetSchoolQuestions(Expression<Func<SchoolQuestion,bool>> predicate)
         {
             return _db.Questions
@@ -85,6 +101,11 @@ namespace ServiceLayer.Search
                 .ToList();
         }
 
+        /// <summary>
+        /// Get a list of department questions
+        /// </summary>
+        /// <param name="predicate"></param>
+        /// <returns></returns>
         public List<SearchForumPostDTO> GetDepartmentQuestions(Expression<Func<DepartmentQuestion, bool>> predicate)
         {
             return _db.Questions
@@ -110,6 +131,11 @@ namespace ServiceLayer.Search
                 .ToList();
         }
 
+        /// <summary>
+        /// Get a list of course questions
+        /// </summary>
+        /// <param name="predicate"></param>
+        /// <returns></returns>
         public List<SearchForumPostDTO> GetCourseQuestions(Expression<Func<CourseQuestion, bool>> predicate)
         {
             return _db.Questions
@@ -135,6 +161,10 @@ namespace ServiceLayer.Search
                 .ToList();
         }
 
+        /// <summary>
+        /// Get a list of all schools
+        /// </summary>
+        /// <returns></returns>
         public List<SearchFilterSelectionDTO> GetSchools()
         {
             return _db.Schools
@@ -143,6 +173,11 @@ namespace ServiceLayer.Search
                 .ToList();
         }
 
+        /// <summary>
+        /// Get a list of all departments in a school
+        /// </summary>
+        /// <param name="schoolId"></param>
+        /// <returns></returns>
         public List<SearchFilterSelectionDTO> GetDepartments(int schoolId)
         {
             return _db.SchoolDepartments
@@ -152,6 +187,12 @@ namespace ServiceLayer.Search
                 .ToList();
         }
 
+        /// <summary>
+        /// Get a list of all courses in a department in a school
+        /// </summary>
+        /// <param name="schoolId"></param>
+        /// <param name="departmentId"></param>
+        /// <returns></returns>
         public List<SearchFilterSelectionDTO> GetCourses(int schoolId, int departmentId)
         {
             return _db.SchoolTeacherCourses
@@ -161,16 +202,14 @@ namespace ServiceLayer.Search
                 .ToList();
         }
 
+        /// <summary>
+        /// Get a course
+        /// </summary>
+        /// <param name="courseId"></param>
+        /// <returns></returns>
         public Course GetCourse(int courseId)
         {
             return _db.Courses.Find(courseId);
-        }
-
-        public Student FindStudentByAccountId(int id)
-        {
-            return _db.Students
-                .Where(s => s.AccountId == id)
-                .FirstOrDefault();
         }
    }
 }

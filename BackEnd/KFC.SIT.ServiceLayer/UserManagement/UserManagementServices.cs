@@ -6,7 +6,9 @@ using System.Linq;
 using DataAccessLayer;
 using DataAccessLayer.DTOs;
 using DataAccessLayer.Models;
+using DataAccessLayer.Models.School;
 using ServiceLayer.UserManagement.UserClaimServices;
+using static ServiceLayer.ServiceExceptions.UserManagementExceptions;
 
 namespace ServiceLayer.UserManagement.UserAccountServices
 {
@@ -254,7 +256,7 @@ namespace ServiceLayer.UserManagement.UserAccountServices
         /// <returns></returns>
         public UserProfileDTO GetUserProfile(int accountId)
         {
-            return _DbContext.Students
+            UserProfileDTO profile =  _DbContext.Students
                 .Include("Courses")
                 .Where(s => s.AccountId == accountId)
                 .Select(s => new UserProfileDTO
@@ -265,10 +267,56 @@ namespace ServiceLayer.UserManagement.UserAccountServices
                     SchoolName = s.SchoolDepartment.School.Name,
                     DepartmentName = s.SchoolDepartment.Department.Name,
                     Ranking = s.Account.Exp,
+                    AllowTelemetry = s.Account.LogTelemetry,
                     Courses = s.Courses.Select(c => c.Course.Name).ToList()
                 })
                 .FirstOrDefault();
+            return profile;
         }
 
+
+        public Student FindStudentById(int accountId)
+        {
+            return _DbContext.Students
+                             .Where(s => s.AccountId == accountId)
+                             .FirstOrDefault();
+        }
+        
+        Boolean UserExists(int accountId)
+        {
+            bool userExists = false;
+            try
+            {
+                accountId = _DbContext.Users.Where(s => s.Id == accountId)
+                                            .Select(s => s.Id)
+                                            .First();
+                userExists = true;
+            }
+            catch (InvalidOperationException)
+            {
+                userExists = false; ;
+            }
+
+            return userExists;
+        }
+
+        /// <summary>
+        /// Update student account method 
+        /// </summary>
+        /// <param name="user"></param>
+        public Student UpdateStudent(Student user)
+        {
+            if (user == null)
+            {
+                return null;
+            }
+            Student studentToUpdate =  FindStudentById(user.AccountId);
+            if (studentToUpdate == null)
+            {
+                throw new NotAStudentException();
+            }
+            _DbContext.Entry(user).State = System.Data.Entity.EntityState.Modified;
+            return user;
+        }
     } // end of class
 }

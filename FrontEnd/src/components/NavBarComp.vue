@@ -21,7 +21,7 @@
         <span>Login</span>
       </v-btn>
 
-      
+
     </v-toolbar>
     
 </template>
@@ -36,8 +36,8 @@ export default {
   data () {
     return {
       info: "My Academic Pyramid Homepage",
+      navigationBarState: NavBarState.state,
       sessionState: AppSession.state,
-      navigationBarState: NavBarState.state
     }
   },
   methods: {

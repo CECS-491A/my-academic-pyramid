@@ -17,6 +17,7 @@ namespace ServiceLayer.SchoolRegistration
         SchoolDepartment FindSchoolDepartment(int schoolId, int departmentId);
         SchoolDepartment FindSchoolDepartment(string schoolName, string departmentName);
         SchoolTeacher FindSchoolTeacher(string schoolName, string departmentName, string teacherFName, string teacherLName);
+        SchoolTeacherCourse FindSchoolTeacherCourse(string schoolName, string departmentName, string teacherFName, string teacherLName, string courseName);
         School FindSchool(int schoolId);
         School FindSchool(string schoolName);
         Teacher FindTeacher(string teacherFirstName, string teacherLastname);

@@ -6,5 +6,8 @@ module.exports = {
         'Access-Control-Allow-Headers': 'content-type'
       },
       port: 8080
+    },
+    configureWebpack: {
+      devtool: 'source-map'
     }
   };
