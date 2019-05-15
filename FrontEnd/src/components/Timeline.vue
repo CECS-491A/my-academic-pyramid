@@ -132,7 +132,7 @@
           <v-container>
             <v-layout>
               <v-flex>
-                Comming soon
+                Coming soon
               </v-flex>
             </v-layout>
           </v-container>
