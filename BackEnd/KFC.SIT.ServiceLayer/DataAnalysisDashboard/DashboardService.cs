@@ -137,7 +137,7 @@ namespace ServiceLayer.DataAnalysisDashboard
                     validationLogout++;
                 }
             }
-            if (numOfUsers == 0) { numOfUsers = 1; }
+            if (numOfUsers == 0) { numOfUsers = 1; } // prevents division by zero
             double averageSessionTime = totalSessionTime / numOfUsers;
             return averageSessionTime;
         }
