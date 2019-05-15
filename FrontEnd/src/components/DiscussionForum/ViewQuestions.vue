@@ -36,6 +36,7 @@
 </v-container>
 
 <v-container v-if="!forumState.postedQuestion">
+{{getDraftQuestions()}}
 <v-card class="mx-auto" dark max-width="1400" max-height="800" v-for="item in questions" :key="item.AccountName">
 
   <!-- <v-card class="mx-auto" dark max-width="1400" max-height="800"> -->

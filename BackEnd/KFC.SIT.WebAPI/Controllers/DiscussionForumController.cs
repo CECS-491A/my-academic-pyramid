@@ -582,12 +582,12 @@ namespace KFC.SIT.WebAPI.Controllers
             //{
             //    "CanPostQuestion"
             //};
-            if (!authorizationManager.CheckClaims(requiredClaims))
-            {
-                return 0;
-            }
-            else
-            {
+            //if (!authorizationManager.CheckClaims(requiredClaims))
+            //{
+            //    return 0;
+            //}
+            //else
+            //{
                 UserManager um = new UserManager();
                 Account user = um.FindByUserName(securityContext.UserName);
                 if (user == null)
@@ -595,7 +595,7 @@ namespace KFC.SIT.WebAPI.Controllers
                     return 0;
                 }
                 authUserId = um.FindByUserName(securityContext.UserName).Id;
-            }
+            //}
             return authUserId;
         }
 
