@@ -47,9 +47,9 @@ namespace KFC.SIT.WebAPI.Controllers
         [ActionName("MostVisitedPage")]
         public GraphData<double> GetMostVisitedPage()
         {
-            IDictionary<string, double> totalSuccessfulFailed = _dashboardManager.GetMostAverageTimeSpentPage();
-            GraphData<double> totalSuccessFailedNumData = new GraphData<double>(totalSuccessfulFailed.Keys, totalSuccessfulFailed.Values);
-            return totalSuccessFailedNumData;
+            IDictionary<string, double> mostVisitedPage = _dashboardManager.GetMostAverageTimeSpentPage();
+            GraphData<double> mostVisitedPageData = new GraphData<double>(mostVisitedPage.Keys, mostVisitedPage.Values);
+            return mostVisitedPageData;
         }
 
         [HttpGet]
@@ -65,9 +65,9 @@ namespace KFC.SIT.WebAPI.Controllers
         [ActionName("UniqueLoggedInUser")]
         public GraphData<long> GetUniqueLoggedInUser()
         {
-            IDictionary<string, long> mostUsedFeature = _dashboardManager.GetSuccessfulLoggedInUsers();
-            GraphData<long> featureNameNumUsedData = new GraphData<long>(mostUsedFeature.Keys, mostUsedFeature.Values);
-            return featureNameNumUsedData;
+            IDictionary<string, long> successfulLoggedInUser = _dashboardManager.GetSuccessfulLoggedInUsers();
+            GraphData<long> successfulLoggedInUserData = new GraphData<long>(successfulLoggedInUser.Keys, successfulLoggedInUser.Values);
+            return successfulLoggedInUserData;
         }
 
    }
