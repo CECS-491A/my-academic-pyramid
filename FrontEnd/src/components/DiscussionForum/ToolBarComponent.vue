@@ -72,9 +72,16 @@ import ForumState from "@/services/ForumState";
     // },
     
     beforeMount(){
-        this.userId = sessionStorage.SITuserId;
+        this.userId = AppSession.state.userId;
+        if(AppSession.state.category === "Student"){
+            this.isStudent = true;
+            this.school = AppSession.state.schoolId
+            this.getDepartments(); 
+        }
+        else{
+            this.getSchools();
+        }
         //this.userId = "2"
-        //this.getAccount()
     },
     methods: {
       // @Author: Krystal 
@@ -155,7 +162,7 @@ import ForumState from "@/services/ForumState";
       myDrafts() {
         ForumState.viewDraftQuestions()
       },
-      
+
       viewQuestions() {
         ForumState.setSchool(this.school)
         ForumState.setDepartment(this.department)
