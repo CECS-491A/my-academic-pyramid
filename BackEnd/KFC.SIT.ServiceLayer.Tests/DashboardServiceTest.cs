@@ -16,7 +16,8 @@ namespace ServiceLayer.Tests
 
         DashboardServiceTest()
         {
-            _dashboardService = new DashboardService(url, database);
+            //_dashboardService = new DashboardService(url, database);
+            _dashboardService = new DashboardService();
         }
 
         [Fact]
