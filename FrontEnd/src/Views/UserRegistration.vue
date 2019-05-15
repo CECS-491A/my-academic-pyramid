@@ -288,7 +288,7 @@ export default {
         Axios
         .get(url, {
             params:{
-                SearchCategory: 2,
+                SearchCategory: 3,
                 SearchSchool: this.school,
                 SearchDepartment: this.courseDepartment
             },
@@ -309,7 +309,7 @@ export default {
         Axios
         .get(url, {
             params:{
-                SearchCategory: 3,
+                SearchCategory: 4,
                 SearchSchool: this.school,
                 SearchDepartment: this.courseDepartment,
                 SearchCourse: this.courseId
