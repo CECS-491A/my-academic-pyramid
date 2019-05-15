@@ -16,7 +16,7 @@ using System.Net;
 using System.Web;
 using System.Web.Http;
 using System.Web.Http.Cors;
-// TODO: Make text constants
+
 namespace KFC.SIT.WebAPI.Controllers
 {
     [Route("api/[controller]")]
@@ -85,7 +85,7 @@ namespace KFC.SIT.WebAPI.Controllers
             if (!ModelState.IsValid)
             {
                 // 412 Response
-                return Content(HttpStatusCode.PreconditionFailed, new SearchResponse("Invalid Request"));
+                return Content(HttpStatusCode.PreconditionFailed, new SearchResponse(Constants.InvalidRequest));
             }
 
             try
@@ -105,7 +105,7 @@ namespace KFC.SIT.WebAPI.Controllers
                         case 2:
                             return Content(HttpStatusCode.OK, manager.GetCourses(request.SearchSchool, request.SearchDepartment));
                     }
-                    throw new ArgumentException("Invalid Search Selection Request");
+                    throw new ArgumentException(Constants.InvalidSearchSelection);
                 }
             }
             catch (Exception x) when (x is ArgumentException)

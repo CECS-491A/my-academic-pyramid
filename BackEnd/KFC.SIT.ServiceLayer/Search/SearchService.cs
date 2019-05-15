@@ -39,7 +39,8 @@ namespace ServiceLayer.Search
                     MiddleName = s.Account.MiddleName,
                     LastName = s.Account.LastName,
                     SchoolName = s.SchoolDepartment.School.Name,
-                    DepartmentName = s.SchoolDepartment.Department.Name
+                    DepartmentName = s.SchoolDepartment.Department.Name,
+                    Courses = s.Courses.Select(c => c.Course.Name).ToList()
                 })
                 .OrderBy(s => s.FirstName)
                 .ToList();
