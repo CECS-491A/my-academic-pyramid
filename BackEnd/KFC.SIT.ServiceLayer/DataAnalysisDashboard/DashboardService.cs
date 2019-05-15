@@ -26,7 +26,7 @@ namespace ServiceLayer.DataAnalysisDashboard
         protected LogRepository<TelemetryLog> _repoTelemetry;
         protected LogRepository<ErrorLog> _repoError;
 
-        public DashboardService(string url, string database)
+        public DashboardService()
         {
             _repoTelemetry = new LogRepository<TelemetryLog>(_collectionTName);
             _repoError = new LogRepository<ErrorLog>(_collectionEName);
@@ -137,7 +137,7 @@ namespace ServiceLayer.DataAnalysisDashboard
                     validationLogout++;
                 }
             }
-            if (numOfUsers == 0) { numOfUsers = 1; }
+            if (numOfUsers == 0) { numOfUsers = 1; } // prevents division by zero
             double averageSessionTime = totalSessionTime / numOfUsers;
             return averageSessionTime;
         }

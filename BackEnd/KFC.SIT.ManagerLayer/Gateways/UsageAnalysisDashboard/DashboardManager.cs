@@ -10,13 +10,11 @@ namespace ManagerLayer.Gateways.UsageAnalysisDashboard
     public class DashboardManager
     {
         private DashboardService _dashboardService;
-        private const string url = "mongodb+srv://super:superheroes@myacademicpyramidlogging-if0cx.mongodb.net/test?retryWrites=true";
-        private const string database = "test";
         public static string[] dateFormatConverter = { "Empty", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
 
         public DashboardManager(string url, string database)
         {
-            _dashboardService = new DashboardService(url, database);
+            _dashboardService = new DashboardService();
         }
 
         /// <summary>

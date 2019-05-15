@@ -18,7 +18,7 @@ namespace NewDemoProject
         static void Main(string[] args)
         {
             DashboardManager manager = new DashboardManager(url, database);
-            DashboardService service = new DashboardService(url, database);
+            DashboardService service = new DashboardService();
             IDictionary<int, long> get = service.CountSuccessfulLogin(24);
             IDictionary<int, long> get2 = service.CountFailedLogin(12);
             //IList<Double> get3 = manager.GetAverageSuccessfulLogin();
