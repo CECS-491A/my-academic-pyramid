@@ -13,5 +13,6 @@ namespace KFC.SIT.WebAPI
         public DateTime DateOfBirth { get; set; }
         public int SchoolId { get; set; }
         public int DepartmentId { get; set; }
+        public List<int> selectedCourseIds { get; set; }
     }
 }

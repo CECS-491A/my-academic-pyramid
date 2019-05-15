@@ -22,6 +22,8 @@ namespace ServiceLayer.Search
         
         List<SearchFilterSelectionDTO> GetSchools();
         List<SearchFilterSelectionDTO> GetDepartments(int schoolId);
+        List<SearchFilterSelectionDTO> GetCourses(int schoolId, int departmentId);
+        List<SearchFilterSelectionDTO> GetSchoolTeacherCourses(int schoolId, int departmentId, int courseId);
         List<SearchFilterSelectionDTO> GetCourses(int schoolDepartmentId);
 
         Course GetCourse(int courseId);
