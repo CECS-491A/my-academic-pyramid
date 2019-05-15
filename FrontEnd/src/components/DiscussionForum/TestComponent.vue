@@ -169,6 +169,7 @@
   </v-card>
 </v-container>
 </v-container>
+</v-container>
 </template>
 
 
@@ -430,37 +431,13 @@ import ForumState from "@/services/ForumState";
         course: "",
         courses: [],
         response: '',
-        forumState: ForumState.state,
-        questionState: ForumState.state.questionsToGet,
-        viewPostedQuestions: ForumState.state.viewPostedQuestions,
-        userAccount: null,
-        isStudent: true,
         userId: "",
-        schools: [],
-        departments: [],
-        courses: [],
-        response: '',
         questions: [ ],
         anwers: [ ],
-        forumState: ForumState.state,
-      //postQuestionDialog: true,
       validation: null,
       text: '',
       exp: '',
       underMaintenance: false,
-      error: '',
-      loading: false,
-       forumState: ForumState.state,
-      //postQuestionDialog: true,
-      validation: null,
-      text: '',
-      exp: '',
-      error: '',
-      loading: false,
-      forumState: ForumState.state,
-      validation: null,
-      text: '',
-      exp: '',
       error: '',
       loading: false,
       }
