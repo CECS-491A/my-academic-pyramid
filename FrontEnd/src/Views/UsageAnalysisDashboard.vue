@@ -10,15 +10,21 @@
       </div>
       <div class="column">
         <h3>Average Session Duration</h3>
-        <avg-session-duration-bar-chart></avg-session-duration-bar-chart>
+        <avg-session-duration-bar-chart v-if="loaded"
+        :chart-data="data"
+        :chart-labels="label"></avg-session-duration-bar-chart>
       </div>
       <div class="column">
         <h3>Failed login attempts vs Successful login attempts</h3>
-        <failed-vs-successful-login-bar-chart></failed-vs-successful-login-bar-chart>
+        <failed-vs-successful-login-bar-chart v-if="loaded"
+        :chart-data="data"
+        :chart-labels="label"></failed-vs-successful-login-bar-chart>
       </div>
       <div class="column">
         <h3>Top 5 average time spent per page</h3>
-        <top-5-avg-time-spent-per-page-bar-chart></top-5-avg-time-spent-per-page-bar-chart>
+        <top-5-avg-time-spent-per-page-bar-chart v-if="loaded"
+        :chart-data="data"
+        :chart-labels="label"></top-5-avg-time-spent-per-page-bar-chart>
       </div>
       <div class="column">
         <h3>Top 5 most used feature</h3>
@@ -64,31 +70,105 @@
     },
     data () {
       return {
-        loaded: false,
-        data: [],
-        label: []
+        AvgSuccessfulLoginBarChart: {
+          loaded: false,
+          data: [],
+          label: []
+
+        },
+        AvgSessionDurationBarChart: {
+          loaded: false,
+          data: [],
+          label: []
+
+        },
+        FailedVsSuccessfulLoginBarChart: {
+          loaded: false,
+          data: [],
+          label: []
+        },
+        Top5AvgTimeSpentPerPageBarChart: {
+          loaded: false,
+          data: [],
+          label: []
+        },
+        Top5MostUsedFeatureBarChart: {
+          loaded: false,
+          data: [],
+          label: []
+        },
+        NumOfLoggedInUsersLineChart: {
+          loaded: false,
+          data: [],
+          label: []
+        }
       }
     },
     methods:
     {
-      fetchData() {
+      fetchData1() {
         this.axios
           .get(`${this.$hostname}UAD/AvgSuccessfulLogin`, {
+            headers: { "Content-Type": "application/Json" }
+          })
+          .then(response => {
+            this.AvgSuccessfulLoginBarChart.data = response.data.data;
+            this.AvgSuccessfulLoginBarChart.label = response.data.labels;
+            this.loaded = true;
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      },
+      fetchData2() {
+        this.axios
+          .get(`${this.$hostname}UAD/AvgSessionDuration`, {
             headers: { "Content-Type": "application/Json" }
           })
           .then(response => {
             this.data = response.data.data;
             this.label = response.data.labels;
             this.loaded = true;
-            console.log(response.data);
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      },
+      fetchData3() {
+        this.axios
+          .get(`${this.$hostname}UAD/TotalFailedSuccessfulLogin`, {
+            headers: { "Content-Type": "application/Json" }
+          })
+          .then(response => {
+            FailedVsSuccessfulLoginBarChart.data = response.data.data;
+            FailedVsSuccessfulLoginBarChart.label = response.data.labels;
+            this.loaded = true;
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      },
+      fetchData4() {
+        this.axios
+          .get(`${this.$hostname}UAD/MostVisitedPage`, {
+            headers: { "Content-Type": "application/Json" }
+          })
+          .then(response => {
+            this.Top5AvgTimeSpentPerPageBarChart.data = response.data.data;
+            this.Top5AvgTimeSpentPerPageBarChart.label = response.data.labels;
+            this.loaded = true;
           })
           .catch(error => {
             console.log(error);
           });
       }
     },
+    
     async mounted () {
-      this.fetchData()
+      this.fetchData1()
+      this.fetchData2()
+      this.fetchData3()
+      this.fetchData4()
   }
 }
 </script>
