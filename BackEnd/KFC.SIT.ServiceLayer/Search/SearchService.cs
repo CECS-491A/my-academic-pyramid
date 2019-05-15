@@ -182,7 +182,7 @@ namespace ServiceLayer.Search
         {
             return _db.SchoolDepartments
                 .Where(sd => sd.SchoolId == schoolId)
-                .Select(sd => new SearchFilterSelectionDTO { id = sd.DepartmentID, text = sd.Department.Name, value = sd.DepartmentID })
+                .Select(sd => new SearchFilterSelectionDTO { id = sd.Id, text = sd.Department.Name, value = sd.Id })
                 .OrderBy(sd => sd.text)
                 .ToList();
         }
@@ -193,13 +193,19 @@ namespace ServiceLayer.Search
         /// <param name="schoolId"></param>
         /// <param name="departmentId"></param>
         /// <returns></returns>
-        public List<SearchFilterSelectionDTO> GetCourses(int schoolId, int departmentId)
+        public List<SearchFilterSelectionDTO> GetCourses(int schoolDepartmentId)
         {
-            return _db.SchoolTeacherCourses
-                .Where(c => c.SchoolTeacher.SchoolDepartment.SchoolId == schoolId && c.SchoolTeacher.SchoolDepartment.DepartmentID == departmentId)
-                .Select(c => new SearchFilterSelectionDTO { id = c.CourseId, text = c.Course.Name, value = c.CourseId })
+            return _db.Courses
+                .Where(c => c.SchoolDeparmentId == schoolDepartmentId)
+                .Select(c => new SearchFilterSelectionDTO { id = c.Id, text = c.Name, value = c.Id })
                 .OrderBy(c => c.text)
                 .ToList();
+
+            //return _db.SchoolTeacherCourses
+            //    .Where(c => c.SchoolTeacher.SchoolDepartment.SchoolId == schoolId && c.SchoolTeacher.SchoolDepartment.DepartmentID == departmentId)
+            //    .Select(c => new SearchFilterSelectionDTO { id = c.CourseId, text = c.Course.Name, value = c.CourseId })
+            //    .OrderBy(c => c.text)
+            //    .ToList();
         }
 
         /// <summary>

@@ -117,8 +117,8 @@ import ForumState from "@/services/ForumState";
     name: "ViewQuestions",
     data () {
       return {
-        forumState: ForumState.state,
-        questionState: forumState.questionsToGet,
+        forumState: this.ForumState.state,
+        questionState: this.forumState.questionsToGet,
         userAccount: null,
         isStudent: true,
         userId: "",
@@ -137,14 +137,14 @@ import ForumState from "@/services/ForumState";
 
     watch: {
       questionState: function() {
-          if(questionState == "school") {
-              getSchoolQuestions()
+          if(this.questionState == "school") {
+              this.getSchoolQuestions()
           }
-          else if(questionState == "department") {
-              getDepartmentQuestions()
+          else if(this.questionState == "department") {
+              this.getDepartmentQuestions()
           }
-          else if(questionState == "course") {
-              getDepartmentQuestions()
+          else if(this.questionState == "course") {
+              this.getDepartmentQuestions()
           }
       }, 
     },
@@ -170,7 +170,7 @@ import ForumState from "@/services/ForumState";
             })
               .then(response => {
                   this.answers = response.data;
-                  ForumState.viewAnswers(item);
+                  this.ForumState.viewAnswers(item);
               })
               .catch(err => {
                   console.log(err);
@@ -178,7 +178,7 @@ import ForumState from "@/services/ForumState";
         },
       },
       postAnswer(item) {
-        ForumState.openPostAnswerForm(item);
+        this.ForumState.openPostAnswerForm(item);
       },
       closeQuestion(qId) {
             const url = `${this.$hostname}DiscussionForum/CloseQuestion`;
@@ -199,7 +199,7 @@ import ForumState from "@/services/ForumState";
             })
       },
       editQuestion(item) {
-            ForumState.openEditQuestionForm(item); 
+            this.ForumState.openEditQuestionForm(item); 
       },
       getSchoolQuestions() {
             this.axios({
