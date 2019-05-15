@@ -16,6 +16,5 @@ namespace ManagerLayer.Gateways.Search
         List<SearchFilterSelectionDTO> GetSchools();
         List<SearchFilterSelectionDTO> GetDepartments(int schoolId);
         List<SearchFilterSelectionDTO> GetCourses(int schoolId, int departmentId);
-        AccountDTO GetAccount(int AccountId);
     }
 }

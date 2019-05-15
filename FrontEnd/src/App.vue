@@ -1,4 +1,5 @@
 <template>
+<div v-bind="{backgroundImage:'url(' + require('@/assets/background.jpg') + ')' }">
   <v-app>
     <NavBarComp/>
     <NavDrawerComp></NavDrawerComp>
@@ -9,6 +10,7 @@
       </keep-alive>
     </v-content>
   </v-app>
+</div>
 </template>
 
 <script>

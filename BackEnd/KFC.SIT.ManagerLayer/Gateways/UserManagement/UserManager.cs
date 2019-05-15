@@ -441,5 +441,10 @@ namespace WebAPI.Gateways.UserManagement
             this._DbContext.SaveChanges();
 
         }
+
+        public Student FindStudentById(int accountId)
+        {
+            return _userManagementServices.FindStudentById(accountId);
+        }
     }
 }

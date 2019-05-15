@@ -27,13 +27,18 @@ namespace ManagerLayer.Gateways.Search
             _db = db;
             _searchService = new SearchService(_db);
         }
-
-        // TODO: Make all messages constants
+        
+        /// <summary>
+        /// Search through a category given SearchRequest filters
+        /// </summary>
+        /// <param name="request">Search input and filters</param>
+        /// <returns></returns>
         public dynamic Search(SearchRequest request)
         {
+            // No search input was given
             if (request.SearchInput is null)
             {
-                throw new ArgumentNullException("Search Input is Null");
+                throw new ArgumentNullException(DataAccessLayer.Constants.NullSearchInput);
             }
 
             switch (request.SearchCategory)
@@ -64,6 +69,7 @@ namespace ManagerLayer.Gateways.Search
                         return _searchService.GetStudents(studentPredicate);
                     }
 
+                    // Filter by course
                     var students = _searchService.GetStudents(studentPredicate);
                     var studentCourse = _searchService.GetCourse(request.SearchCourse);
 
@@ -75,6 +81,7 @@ namespace ManagerLayer.Gateways.Search
                         {
                             for (int j = 0; j < students[i].Courses.Count; j++)
                             {
+                                // Student is enrolled in a course
                                 if (students[i].Courses[j].Equals(studentCourse.Name))
                                 {
                                     filteredStudents.Add(students[i]);
@@ -84,7 +91,7 @@ namespace ManagerLayer.Gateways.Search
                         }
                         
                     }
-
+                    
                     return filteredStudents;
 
                 // Search Teachers
@@ -113,6 +120,7 @@ namespace ManagerLayer.Gateways.Search
                         return _searchService.GetTeachers(teacherPredicate);
                     }
 
+                    // Filter by course
                     var teachers = _searchService.GetTeachers(teacherPredicate);
                     var teacherCourse = _searchService.GetCourse(request.SearchCourse);
 
@@ -124,6 +132,7 @@ namespace ManagerLayer.Gateways.Search
                         {
                             for (int j = 0; j < teachers[i].Courses.Count; j++)
                             {
+                                // Teacher teaches a course
                                 if (teachers[i].Courses[j].Equals(teacherCourse.Name))
                                 {
                                     filteredTeachers.Add(teachers[i]);
@@ -138,6 +147,7 @@ namespace ManagerLayer.Gateways.Search
                 // Search Discussion Forum Posts
                 case 2:
 
+                    // Filter by school
                     if(request.SearchDepartment == 0)
                     {
                         var schoolQuestionPredicate = PredicateBuilder.True<SchoolQuestion>();
@@ -145,7 +155,7 @@ namespace ManagerLayer.Gateways.Search
                         schoolQuestionPredicate = schoolQuestionPredicate.And(q => q.SchoolId == request.SearchSchool);
                         return _searchService.GetSchoolQuestions(schoolQuestionPredicate);
                     }
-
+                    // Filter by department
                     if(request.SearchCourse == 0)
                     {
                         var departmentQuestionPredicate = PredicateBuilder.True<DepartmentQuestion>();
@@ -154,7 +164,7 @@ namespace ManagerLayer.Gateways.Search
                         departmentQuestionPredicate = departmentQuestionPredicate.And(q => q.SchoolDepartment.DepartmentID == request.SearchDepartment);
                         return _searchService.GetDepartmentQuestions(departmentQuestionPredicate);
                     }
-
+                    // Filter by course
                     var courseQuestionPredicate = PredicateBuilder.True<CourseQuestion>();
                     courseQuestionPredicate = courseQuestionPredicate.And(q => q.Text.Contains(request.SearchInput));
                     courseQuestionPredicate = courseQuestionPredicate.And(q => q.Course.SchoolDepartment.SchoolId == request.SearchSchool);
@@ -163,47 +173,38 @@ namespace ManagerLayer.Gateways.Search
                     return _searchService.GetCourseQuestions(courseQuestionPredicate);
             }
             
-            throw new ArgumentException("Invalid Search Category");
+            throw new ArgumentException(DataAccessLayer.Constants.InvalidSearchCategory);
 
         }
         
+        /// <summary>
+        /// Get a list of all schools
+        /// </summary>
+        /// <returns></returns>
         public List<SearchFilterSelectionDTO> GetSchools()
         {
             return _searchService.GetSchools();
         }
 
+        /// <summary>
+        /// Get a list of all departments in a school
+        /// </summary>
+        /// <param name="schoolId"></param>
+        /// <returns></returns>
         public List<SearchFilterSelectionDTO> GetDepartments(int schoolId)
         {
             return _searchService.GetDepartments(schoolId);
         }
 
+        /// <summary>
+        /// Get a list of all courses in a department in a school
+        /// </summary>
+        /// <param name="schoolId"></param>
+        /// <param name="departmentId"></param>
+        /// <returns></returns>
         public List<SearchFilterSelectionDTO> GetCourses(int schoolId, int departmentId)
         {
             return _searchService.GetCourses(schoolId, departmentId);
-        }
-
-        public AccountDTO GetAccount(int accountId)
-        {
-            UserManager userManager = new UserManager();
-            var account = userManager.FindUserById(accountId);
-
-            if (account is null)
-            {
-                throw new ArgumentException("User Account Does Not Exist");
-            }
-
-            var student = _searchService.FindStudentByAccountId(account.Id);
-
-            if(student is null)
-            {
-                return new AccountDTO();
-            }
-
-            return new AccountDTO
-            {
-                IsStudent = true,
-                SchoolId = student.SchoolDepartment.SchoolId
-            };
         }
     }
 }

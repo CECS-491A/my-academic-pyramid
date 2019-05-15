@@ -166,6 +166,7 @@ export default {
                })
              .then((response) => {
                 AppSession.setCategory(response.data.User.Category)
+                AppSession.setSchoolId(school)
                 AppSession.updateSession(response.data.SITtoken)
                 this.$router.push({name: "UserHomePage"})})
              .catch(error =>{

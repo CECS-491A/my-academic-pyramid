@@ -1,6 +1,7 @@
 <script>
   //Importing Bar class from the vue-chartjs wrapper
   import { Bar } from 'vue-chartjs'
+  import axios from 'axios'
   //Exporting this so it can be used in other components
   export default {
     extends: Bar,
@@ -46,16 +47,22 @@
         }
       }
     },
-    // TODO need to fix 
-    fetchDataset() {
-      this.axios
-        .get(this.$hostname + "UserManager/", {
-          headers: { "Content-Type": "application/Json" }
-        })
-        .then(response => {
-          this.data = response.data;
-          //console.log(response.data);
-        })
+    methods:
+    {
+      fetchData() {
+        this.axios
+          .get(`${this.$hostname}UAD/sLogin`, {
+            headers: { "Content-Type": "application/Json" }
+          })
+          .then(response => {
+            this.datacollection.datasets[0].data = response.data.data;
+            this.datacollection.labels = response.data.labels;
+            console.log(response.data);
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      }
     },
     mounted () {
       //renderChart function renders the chart with the datacollection and options object.

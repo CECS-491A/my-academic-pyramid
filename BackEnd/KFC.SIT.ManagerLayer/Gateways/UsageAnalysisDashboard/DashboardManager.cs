@@ -40,12 +40,12 @@ namespace ManagerLayer.Gateways.UsageAnalysisDashboard
         /// It will get the data of recent 12 month according to the business rules. 
         /// </summary>
         /// <returns>avgLogin</returns>
-        public IList<double> GetAverageSuccessfulLogin()
+        public IDictionary<string, double> GetAverageSuccessfulLogin()
         {
             int numOfMonth = BusinessRuleConstants.GetAverageSuccessfulLogin_NumOfMonth;
             IDictionary<int, long> successLogin = _dashboardService.CountSuccessfulLogin(numOfMonth);
             IDictionary<int, long> failedLogin = _dashboardService.CountFailedLogin(numOfMonth);
-            IList<double> avgLogin = new List<double>();
+            IDictionary<string, double> avgLogin = new Dictionary<string, double>();
             int monthToday = DateTime.Today.Month;
 
             for (int i = 1; i < numOfMonth + 1; i++)
@@ -65,7 +65,7 @@ namespace ManagerLayer.Gateways.UsageAnalysisDashboard
                     double totalLoginAttempt = numSuccessfulLogin + numFailedLogin;
                     avgSuccessfulLogin = numSuccessfulLogin / totalLoginAttempt;
                 }
-                avgLogin.Add(avgSuccessfulLogin);
+                avgLogin.Add(dateFormatConverter[monthToday], avgSuccessfulLogin);
                 monthToday--;
                 if (monthToday == 0) { monthToday = 12; }
             }
@@ -132,6 +132,8 @@ namespace ManagerLayer.Gateways.UsageAnalysisDashboard
             return featureNumUsed;
         }
 
+        // Line Chart
+
         public long[] GetAvgSessionDurationSixMonth()
         {
             throw new Exception();
@@ -149,7 +151,6 @@ namespace ManagerLayer.Gateways.UsageAnalysisDashboard
             int monthToday = DateTime.Today.Month;
             int yearToday = DateTime.Today.Year;
 
-            successfulLoggedInUsers.Add("total", numTotalUser);
             for (int i = 1; i < duration + 1; i++)
             {
                 successfulLoggedInUsers.Add(dateFormatConverter[monthToday], _dashboardService.CountUniqueLoggedInUsers(monthToday, yearToday));

@@ -19,6 +19,7 @@ namespace DataAccessLayer.DTOs
         public String DateOfBirth { get; set; }
         //public String Location { get; set; }
         public string Email { get; set; }
-        public String CreatedAt { get; set; }
+        public string CreatedAt { get; set; }
+        public int SchoolId { get; set; }
     }
 }
