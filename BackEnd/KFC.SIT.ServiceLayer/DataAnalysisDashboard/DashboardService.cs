@@ -26,7 +26,7 @@ namespace ServiceLayer.DataAnalysisDashboard
         protected LogRepository<TelemetryLog> _repoTelemetry;
         protected LogRepository<ErrorLog> _repoError;
 
-        public DashboardService(string url, string database)
+        public DashboardService()
         {
             _repoTelemetry = new LogRepository<TelemetryLog>(_collectionTName);
             _repoError = new LogRepository<ErrorLog>(_collectionEName);
