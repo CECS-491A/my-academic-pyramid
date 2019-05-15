@@ -39,10 +39,10 @@ namespace NewDemoProject
             temp6.Add(3, 5);
             temp6.Add(4, 6);
 
-            IDictionary<string, double> test3 = service.CountAverageTimeSpentPage();
-            foreach(var temp in test3)
+            IDictionary<int, long> test3 = service.CountSuccessfulLogin(6);
+            foreach(var s in test3)
             {
-                Console.WriteLine(temp);
+                Console.WriteLine("Is heere: " + s);
             }
             /**
             Console.WriteLine("succesufl");

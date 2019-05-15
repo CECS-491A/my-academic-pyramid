@@ -29,9 +29,9 @@ namespace KFC.SIT.WebAPI.Controllers
         [ActionName("AvgSessionDuration")]
         public GraphData<double> GetAvgSessionDuration()
         {
-            IDictionary<string, double> avgSuccessfulLogin = _dashboardManager.GetAverageSuccessfulLogin();
-            GraphData<double> successfulLoginData = new GraphData<double>(avgSuccessfulLogin.Keys, avgSuccessfulLogin.Values);
-            return successfulLoginData;
+            IDictionary<string, double> avgSessionDuration = _dashboardManager.GetAverageSessionDuration();
+            GraphData<double> avgSessionDurationData = new GraphData<double>(avgSessionDuration.Keys, avgSessionDuration.Values);
+            return avgSessionDurationData;
         }
 
         [HttpGet]

@@ -48,7 +48,7 @@ namespace ServiceLayer.DataAnalysisDashboard
                 x => x.Date.Month,
                 i => new
                 {
-                    Result = i.Select(x => x.ID).Count(),
+                    Result = i.Select(x => x.UserName).Count(),
                     Date = i.Select(x => x.Date).First()
                 })
                 .SortByDescending(x => x.Date)
@@ -58,6 +58,7 @@ namespace ServiceLayer.DataAnalysisDashboard
             foreach (var monthly in queryResult)
             {
                 successLogin.Add(monthly.Date.Month, monthly.Result);
+                Console.WriteLine(monthly.Result + ": " + monthly.Date);
             }
             return successLogin;
         }
@@ -76,7 +77,7 @@ namespace ServiceLayer.DataAnalysisDashboard
                 x => x.Date.Month,
                 i => new
                 {
-                    Result = i.Select(x => x.ID).Count(),
+                    Result = i.Select(x => x.UserName).Count(),
                     Date = i.Select(x => x.Date).First()
                 })
                 .SortByDescending(x => x.Date)
@@ -203,12 +204,10 @@ namespace ServiceLayer.DataAnalysisDashboard
                 foreach (var page in user.Page)
                 {
                     pageList.Add(page);
-                    Console.WriteLine(page);
                 }
                 foreach (var time in user.Time)
                 {
                     timeList.Add(time);
-                    Console.WriteLine(time);
                 }
             }
             for (int i = 0; i < timeList.Count() - 1; i++)

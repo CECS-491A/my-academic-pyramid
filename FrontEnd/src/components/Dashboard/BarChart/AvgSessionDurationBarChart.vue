@@ -1,7 +1,7 @@
 <script>
   //Importing Bar class from the vue-chartjs wrapper
   import { Bar } from 'vue-chartjs'
-  
+
   //Exporting this so it can be used in other components
   export default {
     extends: Bar,
@@ -46,7 +46,7 @@
         labels: this.chartLabels,
           datasets: [
             {
-              label: '# of Average Successful Login',
+              label: '# of Average Session Duration',
               backgroundColor: "rgba(54, 162, 235, 0.6)",
               pointBackgroundColor: 'green',
               borderWidth: 1,

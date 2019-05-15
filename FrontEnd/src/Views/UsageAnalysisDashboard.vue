@@ -4,39 +4,45 @@
     <div class="Chart">
       <div class="column">
         <h3>Average Successful Login</h3>
-        <avg-successful-login-bar-chart v-if="loaded"
-        :chart-data="data"
-        :chart-labels="label"></avg-successful-login-bar-chart>
+        <avg-successful-login-bar-chart v-if="AvgSuccessfulLoginBarChartLoaded"
+        :chart-data="AvgSuccessfulLoginBarChartData"
+        :chart-labels="AvgSuccessfulLoginBarChartLabel"></avg-successful-login-bar-chart>
       </div>
       <div class="column">
         <h3>Average Session Duration</h3>
-        <avg-session-duration-bar-chart v-if="loaded"
-        :chart-data="data"
-        :chart-labels="label"></avg-session-duration-bar-chart>
+        <avg-session-duration-bar-chart v-if="AvgSessionDurationBarChartLoaded"
+        :chart-data="AvgSessionDurationBarChartData"
+        :chart-labels="AvgSessionDurationBarChartLabel"></avg-session-duration-bar-chart>
       </div>
       <div class="column">
         <h3>Failed login attempts vs Successful login attempts</h3>
-        <failed-vs-successful-login-bar-chart v-if="loaded"
-        :chart-data="data"
-        :chart-labels="label"></failed-vs-successful-login-bar-chart>
+        <failed-vs-successful-login-bar-chart v-if="FailedVsSuccessfulLoginBarChartLoaded"
+        :chart-data="FailedVsSuccessfulLoginBarChartData"
+        :chart-labels="FailedVsSuccessfulLoginBarChartLabel"></failed-vs-successful-login-bar-chart>
       </div>
       <div class="column">
         <h3>Top 5 average time spent per page</h3>
-        <top-5-avg-time-spent-per-page-bar-chart v-if="loaded"
-        :chart-data="data"
-        :chart-labels="label"></top-5-avg-time-spent-per-page-bar-chart>
+        <top-5-avg-time-spent-per-page-bar-chart v-if="Top5AvgTimeSpentPerPageBarChartLoaded"
+        :chart-data="Top5AvgTimeSpentPerPageBarChartData"
+        :chart-labels="Top5AvgTimeSpentPerPageBarChartLabel"></top-5-avg-time-spent-per-page-bar-chart>
       </div>
       <div class="column">
         <h3>Top 5 most used feature</h3>
-        <top-5-most-used-feature-bar-chart></top-5-most-used-feature-bar-chart>
+        <top-5-most-used-feature-bar-chart v-if="Top5MostUsedFeatureBarChartLoaded"
+        :chart-data="Top5MostUsedFeatureBarChartData"
+        :chart-labels="Top5MostUsedFeatureBarChartLabel"></top-5-most-used-feature-bar-chart>
       </div>
       <div class="column">
         <h3>Timeline of average session duration</h3>
-        <avg-session-duration-line-chart></avg-session-duration-line-chart>
+        <avg-session-duration-line-chart v-if="AvgSessionDurationBarChartLoaded"
+        :chart-data="AvgSessionDurationBarChartData"
+        :chart-labels="AvgSessionDurationBarChartLabel"></avg-session-duration-line-chart>
       </div>
       <div class="column">
         <h3>Timeline of number of logged in users per month</h3>
-        <num-of-logged-in-users-line-chart></num-of-logged-in-users-line-chart>
+        <num-of-logged-in-users-line-chart v-if="NumOfLoggedInUsersLineChartLoaded"
+        :chart-data="NumOfLoggedInUsersLineChartData"
+        :chart-labels="NumOfLoggedInUsersLineChartLabel"></num-of-logged-in-users-line-chart>
       </div>
     </div>
   </section>
@@ -70,105 +76,126 @@
     },
     data () {
       return {
-        AvgSuccessfulLoginBarChart: {
-          loaded: false,
-          data: [],
-          label: []
+        AvgSuccessfulLoginBarChartLoaded: false,
+        AvgSuccessfulLoginBarChartData: [],
+        AvgSuccessfulLoginBarChartLabel: [],
 
-        },
-        AvgSessionDurationBarChart: {
-          loaded: false,
-          data: [],
-          label: []
+        AvgSessionDurationBarChartLoaded: false,
+        AvgSessionDurationBarChartData: [],
+        AvgSessionDurationBarChartLabel: [],
 
-        },
-        FailedVsSuccessfulLoginBarChart: {
-          loaded: false,
-          data: [],
-          label: []
-        },
-        Top5AvgTimeSpentPerPageBarChart: {
-          loaded: false,
-          data: [],
-          label: []
-        },
-        Top5MostUsedFeatureBarChart: {
-          loaded: false,
-          data: [],
-          label: []
-        },
-        NumOfLoggedInUsersLineChart: {
-          loaded: false,
-          data: [],
-          label: []
-        }
+        FailedVsSuccessfulLoginBarChartLoaded: false,
+        FailedVsSuccessfulLoginBarChartData: [],
+        FailedVsSuccessfulLoginBarChartLabel: [],
+
+        Top5AvgTimeSpentPerPageBarChartLoaded: false,
+        Top5AvgTimeSpentPerPageBarChartData: [],
+        Top5AvgTimeSpentPerPageBarChartLabel: [],
+
+        Top5MostUsedFeatureBarChartLoaded: false,
+        Top5MostUsedFeatureBarChartData: [],
+        Top5MostUsedFeatureBarChartLabel: [],
+
+        NumOfLoggedInUsersLineChartLoaded: false,
+        NumOfLoggedInUsersLineChartData: [],
+        NumOfLoggedInUsersLineChartLabel: []
       }
     },
     methods:
     {
-      fetchData1() {
+      fetchAvgLoginData() {
         this.axios
           .get(`${this.$hostname}UAD/AvgSuccessfulLogin`, {
             headers: { "Content-Type": "application/Json" }
           })
           .then(response => {
-            this.AvgSuccessfulLoginBarChart.data = response.data.data;
-            this.AvgSuccessfulLoginBarChart.label = response.data.labels;
-            this.loaded = true;
+            this.AvgSuccessfulLoginBarChartData = response.data.data;
+            this.AvgSuccessfulLoginBarChartLabel = response.data.labels;
+            this.AvgSuccessfulLoginBarChartLoaded = true;
           })
           .catch(error => {
             console.log(error);
           });
       },
-      fetchData2() {
+      
+      fetchAvgSessionDurationData() {
         this.axios
           .get(`${this.$hostname}UAD/AvgSessionDuration`, {
             headers: { "Content-Type": "application/Json" }
           })
           .then(response => {
-            this.data = response.data.data;
-            this.label = response.data.labels;
-            this.loaded = true;
+            this.AvgSessionDurationBarChartData = response.data.data;
+            this.AvgSessionDurationBarChartLabel = response.data.labels;
+            this.AvgSessionDurationBarChartLoaded = true;
           })
           .catch(error => {
             console.log(error);
           });
       },
-      fetchData3() {
+      fetchTotalFailedSuccessfulLoginData() {
         this.axios
           .get(`${this.$hostname}UAD/TotalFailedSuccessfulLogin`, {
             headers: { "Content-Type": "application/Json" }
           })
           .then(response => {
-            FailedVsSuccessfulLoginBarChart.data = response.data.data;
-            FailedVsSuccessfulLoginBarChart.label = response.data.labels;
-            this.loaded = true;
+            this.FailedVsSuccessfulLoginBarChartData = response.data.data;
+            this.FailedVsSuccessfulLoginBarChartLabel = response.data.labels;
+            this.FailedVsSuccessfulLoginBarChartLoaded = true;
           })
           .catch(error => {
             console.log(error);
           });
       },
-      fetchData4() {
+      fetchMostVisitedPageData() {
         this.axios
           .get(`${this.$hostname}UAD/MostVisitedPage`, {
             headers: { "Content-Type": "application/Json" }
           })
           .then(response => {
-            this.Top5AvgTimeSpentPerPageBarChart.data = response.data.data;
-            this.Top5AvgTimeSpentPerPageBarChart.label = response.data.labels;
-            this.loaded = true;
+            this.Top5AvgTimeSpentPerPageBarChartData = response.data.data;
+            this.Top5AvgTimeSpentPerPageBarChartLabel = response.data.labels;
+            this.Top5AvgTimeSpentPerPageBarChartLoaded = true;
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      },
+      fetchMostUsedFeatureData() {
+        this.axios
+          .get(`${this.$hostname}UAD/MostUsedFeature`, {
+            headers: { "Content-Type": "application/Json" }
+          })
+          .then(response => {
+            this.Top5MostUsedFeatureBarChartData = response.data.data;
+            this.Top5MostUsedFeatureBarChartLabel = response.data.labels;
+            this.Top5MostUsedFeatureBarChartLoaded = true;
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      },
+      fetchUniqueLoggedInUserData() {
+        this.axios
+          .get(`${this.$hostname}UAD/UniqueLoggedInUser`, {
+            headers: { "Content-Type": "application/Json" }
+          })
+          .then(response => {
+            this.NumOfLoggedInUsersLineChartData = response.data.data;
+            this.NumOfLoggedInUsersLineChartLabel = response.data.labels;
+            this.NumOfLoggedInUsersLineChartLoaded = true;
           })
           .catch(error => {
             console.log(error);
           });
       }
     },
-    
     async mounted () {
-      this.fetchData1()
-      this.fetchData2()
-      this.fetchData3()
-      this.fetchData4()
+      this.fetchAvgLoginData()
+      this.fetchAvgSessionDurationData()
+      this.fetchTotalFailedSuccessfulLoginData()
+      this.fetchMostVisitedPageData()
+      this.fetchMostUsedFeatureData()
+      this.fetchUniqueLoggedInUserData()
   }
 }
 </script>
