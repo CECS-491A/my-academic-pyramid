@@ -19,20 +19,6 @@ namespace ManagerLayer.Gateways.UsageAnalysisDashboard
             _dashboardService = new DashboardService(url, database);
         }
 
-        public IList<string> GetRecentMonths()
-        {
-            int numOfMonth = BusinessRuleConstants.GetRecentMonths_Months;
-            int monthToday = DateTime.Today.Month;
-            IList<string> dateList = new List<string>();
-            for (int i = 0; i < numOfMonth; i++)
-            {
-                dateList.Add(dateFormatConverter[monthToday]);
-                monthToday--;
-                if (monthToday == 0) { monthToday = 12; }
-            }
-            return dateList;
-        }
-
         /// <summary>
         /// Get the list of number of successful login and list of number of failed login per month 
         /// Divide number of successful login by the number of total login attempts
@@ -40,14 +26,15 @@ namespace ManagerLayer.Gateways.UsageAnalysisDashboard
         /// It will get the data of recent 12 month according to the business rules. 
         /// </summary>
         /// <returns>avgLogin</returns>
-        public IList<double> GetAverageSuccessfulLogin()
+        public IDictionary<string, double> GetAverageSuccessfulLogin()
         {
             int numOfMonth = BusinessRuleConstants.GetAverageSuccessfulLogin_NumOfMonth;
             IDictionary<int, long> successLogin = _dashboardService.CountSuccessfulLogin(numOfMonth);
             IDictionary<int, long> failedLogin = _dashboardService.CountFailedLogin(numOfMonth);
-            IList<double> avgLogin = new List<double>();
+            IDictionary<string, double> avgLogin = new Dictionary<string, double>();
             int monthToday = DateTime.Today.Month;
 
+            // Calculate average successful login per month
             for (int i = 1; i < numOfMonth + 1; i++)
             {
                 double avgSuccessfulLogin = 0;
@@ -58,14 +45,14 @@ namespace ManagerLayer.Gateways.UsageAnalysisDashboard
                     double numFailedLogin = 0;
                     numSuccessfulLogin = successLogin[monthToday];
 
-                    if (failedLogin.ContainsKey(monthToday)) // checks there is failed logged attempts in the month
+                    if (failedLogin.ContainsKey(monthToday)) // checks there is failed logged attempt in the month
                     {
                         numFailedLogin = failedLogin[monthToday];
                     }
                     double totalLoginAttempt = numSuccessfulLogin + numFailedLogin;
                     avgSuccessfulLogin = numSuccessfulLogin / totalLoginAttempt;
                 }
-                avgLogin.Add(avgSuccessfulLogin);
+                avgLogin.Add(dateFormatConverter[monthToday], avgSuccessfulLogin * 100); // percentage
                 monthToday--;
                 if (monthToday == 0) { monthToday = 12; }
             }
@@ -73,30 +60,29 @@ namespace ManagerLayer.Gateways.UsageAnalysisDashboard
         }
 
         /// <summary>
-        /// 
+        /// Get the list of successful login and the number of total session time in specific duration
+        /// Get average session duration by dividing the total session duration by number of successful login
+        /// return the dictionary that contains months and average session duration per month
         /// </summary>
         /// <returns></returns>
-        public long[] GetAverageSessionDuration()
+        public IDictionary<string, double> GetAverageSessionDuration()
         {
-            int duration = 6;
+            int numOfMonth = BusinessRuleConstants.GetAverageSessionDuration_NumOfMonth; // 6
             int monthToday = DateTime.Today.Month;
             int yearToday = DateTime.Today.Year;
-            long[] output = new long[1000];
-            IDictionary<int, long> numLoginInCertainDuration = _dashboardService.CountSuccessfulLogin(6);
-            for (int i = 0; i < duration; i++)
-            {
-                ICollection<DateTime> dateLogInNOut = _dashboardService.CountAverageSessionDuration(monthToday, yearToday);
-                int count = 0;
-                for (int j = 0; j < dateLogInNOut.Count(); j++)
-                {
+            IDictionary<string, double> monthAvgSessionDuration = new Dictionary<string, double>();
 
-                }
+            // Request the total session time for the number of months
+            // Flaw: request the data to the database for numOfMonth(6) times, it slows down the performance
+            for (int i = 0; i < numOfMonth; i++)
+            {
+                double avgSessionTime = _dashboardService.CountAverageSessionTime(monthToday, yearToday);
+                monthAvgSessionDuration.Add(dateFormatConverter[monthToday], avgSessionTime);
                 monthToday--;
                 if (monthToday == 0) { monthToday = 12; yearToday--; }
             }
 
-            return null;
-            //return avgSessionDur;
+            return monthAvgSessionDuration;
         }
 
         /// <summary>
@@ -106,20 +92,32 @@ namespace ManagerLayer.Gateways.UsageAnalysisDashboard
         /// index 2 = Total number of attempted login
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<long> GetFailedSuccessfulLogIn()
+        public IDictionary<string, long> GetFailedSuccessfulLogIn()
         {
-            long[] successFailed = new long[3];
-            successFailed[0] = _dashboardService.CountTotalSuccessfulLogin();
-            successFailed[1] = _dashboardService.CountTotalFailedLogin();
-            successFailed[2] = successFailed[0] + successFailed[1];
+            IDictionary<string, long> totalSuccessFailed = new Dictionary<string, long>();
 
-            return successFailed;
+            long numSuccessLogin = _dashboardService.CountTotalSuccessfulLogin();
+            long numFailedLogin = _dashboardService.CountTotalFailedLogin();
+            long totalLogin = numSuccessLogin + numFailedLogin;
+
+            totalSuccessFailed.Add(BusinessRuleConstants.GetFailedSuccessfulLogIn_Total, totalLogin); // Total
+            totalSuccessFailed.Add(BusinessRuleConstants.GetFailedSuccessfulLogIn_Successful, numSuccessLogin); // Successful
+            totalSuccessFailed.Add(BusinessRuleConstants.GetFailedSuccessfulLogIn_Failed, numFailedLogin); // Failed
+
+            return totalSuccessFailed;
         }
 
-        public IDictionary<string, long> GetAverageTimeSpentPage()
+        public IDictionary<string, double> GetMostAverageTimeSpentPage()
         {
-            IDictionary<string, long> featureTime = _dashboardService.CountAverageTimeSpentPage();
-            return featureTime;
+            IDictionary<string, double> pageTime = _dashboardService.CountAverageTimeSpentPage();
+            IDictionary<string, double> pageTimeSorted = (IDictionary<string, double>)pageTime.AsQueryable().OrderByDescending(x => x.Value);
+            IList<string> keys = (IList<string>) pageTimeSorted.Keys;
+            IDictionary<string, double> average = new Dictionary<string, double>();
+            for (int i = 0; i < 5; i++)
+            {
+                average.Add(keys[i], pageTimeSorted[keys[i]]);
+            }
+            return average;
         }
 
         /// <summary>
@@ -132,10 +130,7 @@ namespace ManagerLayer.Gateways.UsageAnalysisDashboard
             return featureNumUsed;
         }
 
-        public long[] GetAvgSessionDurationSixMonth()
-        {
-            throw new Exception();
-        }
+        // Line Chart
 
         /// <summary>
         /// Get the list of logged in users and number of total users 
@@ -145,16 +140,16 @@ namespace ManagerLayer.Gateways.UsageAnalysisDashboard
         {
             int duration = BusinessRuleConstants.GetSuccessfulLoggedInUsers_Duartion; // 6
             Dictionary<string, long> successfulLoggedInUsers = new Dictionary<string, long>();
-            long numTotalUser = _dashboardService.CountTotalUsers();
             int monthToday = DateTime.Today.Month;
             int yearToday = DateTime.Today.Year;
 
-            successfulLoggedInUsers.Add("total", numTotalUser);
+            // Get the number of unique logged in users during the specific month
+            // Flaw: request the data to the database for duration(6) times, it slows down the performance
             for (int i = 1; i < duration + 1; i++)
             {
                 successfulLoggedInUsers.Add(dateFormatConverter[monthToday], _dashboardService.CountUniqueLoggedInUsers(monthToday, yearToday));
                 monthToday--;
-                if (monthToday == 0) { monthToday = 12; }
+                if (monthToday == 0) { monthToday = 12; yearToday--; }
             }
 
             return successfulLoggedInUsers;

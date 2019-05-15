@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using ManagerLayer.Gateways.UsageAnalysisDashboard;
+using DataAccessLayer.Models.Dashboard;
 using System.Collections.Generic;
 
 namespace KFC.SIT.WebAPI.Controllers
@@ -16,38 +17,57 @@ namespace KFC.SIT.WebAPI.Controllers
         private DashboardManager _dashboardManager = new DashboardManager(url, database);
 
         [HttpGet]
-        [ActionName("recentMonths")]
-        public IList<string> GetRecentMonths()
+        [ActionName("AvgSuccessfulLogin")]
+        public GraphData<double> GetAvgSuccessfulLogin()
         {
-            return _dashboardManager.GetRecentMonths();
+            IDictionary<string, double> avgSuccessfulLogin = _dashboardManager.GetAverageSuccessfulLogin();
+            GraphData<double> successfulLoginData = new GraphData<double>(avgSuccessfulLogin.Keys, avgSuccessfulLogin.Values);
+            return successfulLoginData;
         }
 
         [HttpGet]
-        [ActionName("sLogin")]
-        public IList<double> GetScuessfulLogin()
+        [ActionName("AvgSessionDuration")]
+        public GraphData<double> GetAvgSessionDuration()
         {
-            return _dashboardManager.GetAverageSuccessfulLogin();
+            IDictionary<string, double> avgSuccessfulLogin = _dashboardManager.GetAverageSuccessfulLogin();
+            GraphData<double> successfulLoginData = new GraphData<double>(avgSuccessfulLogin.Keys, avgSuccessfulLogin.Values);
+            return successfulLoginData;
         }
 
         [HttpGet]
-        [ActionName("avgSession")]
-        public long[] GetavgSessionTime()
+        [ActionName("TotalFailedSuccessfulLogin")]
+        public GraphData<long> GetTotalFailedSuccessfulLogin()
         {
-            return _dashboardManager.GetAverageSessionDuration();
+            IDictionary<string, long> totalSuccessfulFailed = _dashboardManager.GetFailedSuccessfulLogIn();
+            GraphData<long> totalSuccessFailedNumData = new GraphData<long>(totalSuccessfulFailed.Keys, totalSuccessfulFailed.Values);
+            return totalSuccessFailedNumData;
         }
 
         [HttpGet]
-        [Route("api/dashboard/fslogin")]
-        public long[] GetFSLogin()
+        [ActionName("MostVisitedPage")]
+        public GraphData<double> GetMostVisitedPage()
         {
-            return (long[]) _dashboardManager.GetFailedSuccessfulLogIn();
+            IDictionary<string, double> totalSuccessfulFailed = _dashboardManager.GetMostAverageTimeSpentPage();
+            GraphData<double> totalSuccessFailedNumData = new GraphData<double>(totalSuccessfulFailed.Keys, totalSuccessfulFailed.Values);
+            return totalSuccessFailedNumData;
         }
 
         [HttpGet]
-        [ActionName("api/dashboard/feature")]
-        public IDictionary<string, long> GetFeatureData()
+        [ActionName("MostUsedFeature")]
+        public GraphData<long> GetMostUsedFeature()
         {
-            return _dashboardManager.GetMostUsedFeature();
+            IDictionary<string, long> mostUsedFeature = _dashboardManager.GetMostUsedFeature();
+            GraphData<long> featureNameNumUsedData = new GraphData<long>(mostUsedFeature.Keys, mostUsedFeature.Values);
+            return featureNameNumUsedData;
+        }
+
+        [HttpGet]
+        [ActionName("UniqueLoggedInUser")]
+        public GraphData<long> GetUniqueLoggedInUser()
+        {
+            IDictionary<string, long> mostUsedFeature = _dashboardManager.GetSuccessfulLoggedInUsers();
+            GraphData<long> featureNameNumUsedData = new GraphData<long>(mostUsedFeature.Keys, mostUsedFeature.Values);
+            return featureNameNumUsedData;
         }
 
     }

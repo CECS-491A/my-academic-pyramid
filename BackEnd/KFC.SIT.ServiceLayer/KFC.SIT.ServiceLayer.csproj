@@ -99,7 +99,6 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataAnalysisDashboard\BusinessRuleConstants.cs" />
     <Compile Include="DiscussionForum\AnswerServices.cs" />
     <Compile Include="DiscussionForum\CourseQuestionServices.cs" />
     <Compile Include="DiscussionForum\DepartmentQuestionServices.cs" />

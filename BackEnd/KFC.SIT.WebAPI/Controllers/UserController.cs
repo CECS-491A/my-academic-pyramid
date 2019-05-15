@@ -67,5 +67,10 @@ namespace KFC.SIT.WebAPI.Controllers
                 return InternalServerError();
             }
         }
+
+        //public IHttpActionResult GetSchoolInfo(UserProfileDTO newProfileInfo)
+        //{
+
+        //}
     }
 }

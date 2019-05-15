@@ -41,7 +41,7 @@ export default {
     return {
       info: "My Academic Pyramid Homepage",
       team: [
-        { name: "Krystal Leon", role: 'Scrum Manager'},
+        { name: "Krystal Leon", role: 'Team Leader'},
         { name: "Hyunwoo Kim", role: 'Fullstack developer'},
         { name: "Luis Julian", role: 'Fullstack developer'},
         { name: "Arturo Peña Contreras", role: 'Fullstack developer'},
