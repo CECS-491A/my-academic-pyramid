@@ -20,7 +20,8 @@
           scales: {
             yAxes: [{
               ticks: {
-                beginAtZero: true
+                beginAtZero: true,
+                max:100
               },
               gridLines: {
                 display: true
@@ -46,7 +47,7 @@
         labels: this.chartLabels,
           datasets: [
             {
-              label: 'Percentage of Average Successful',
+              label: 'Percentage of Average Successful Login',
               backgroundColor: "rgba(54, 162, 235, 0.6)",
               pointBackgroundColor: 'white',
               borderWidth: 1,
