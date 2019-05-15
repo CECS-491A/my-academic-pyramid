@@ -48,7 +48,7 @@ namespace ServiceLayer.DataAnalysisDashboard
                 x => x.Date.Month,
                 i => new
                 {
-                    Result = i.Select(x => x.ID).Count(),
+                    Result = i.Select(x => x.UserName).Count(),
                     Date = i.Select(x => x.Date).First()
                 })
                 .SortByDescending(x => x.Date)
@@ -63,8 +63,8 @@ namespace ServiceLayer.DataAnalysisDashboard
         }
 
         /// <summary>
-        /// Use the query to get the list of the number of failed logged in users.
-        /// Each element represents a month and sorted by date. Starts from Jan to Dec.
+        /// Use the query to get the list of the number of failed logged in users
+        /// Each element represents a month and sorted by date in descending order
         /// </summary>
         /// <returns>failedLogin</returns>
         public IDictionary<int, long> CountFailedLogin(int numOfMonth)
@@ -76,7 +76,7 @@ namespace ServiceLayer.DataAnalysisDashboard
                 x => x.Date.Month,
                 i => new
                 {
-                    Result = i.Select(x => x.ID).Count(),
+                    Result = i.Select(x => x.UserName).Count(),
                     Date = i.Select(x => x.Date).First()
                 })
                 .SortByDescending(x => x.Date)
@@ -203,12 +203,10 @@ namespace ServiceLayer.DataAnalysisDashboard
                 foreach (var page in user.Page)
                 {
                     pageList.Add(page);
-                    Console.WriteLine(page);
                 }
                 foreach (var time in user.Time)
                 {
                     timeList.Add(time);
-                    Console.WriteLine(time);
                 }
             }
             for (int i = 0; i < timeList.Count() - 1; i++)

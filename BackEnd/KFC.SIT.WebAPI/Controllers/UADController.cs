@@ -9,12 +9,12 @@ using System.Collections.Generic;
 
 namespace KFC.SIT.WebAPI.Controllers
 {
-    [EnableCors(origins: "*", headers: "*", methods: "*")]
-    public class UADController : ApiController
-    {
-        private const string url = "mongodb+srv://super:superheroes@myacademicpyramidlogging-if0cx.mongodb.net/test?retryWrites=true";
-        private const string database = "test";
-        private DashboardManager _dashboardManager = new DashboardManager(url, database);
+   [EnableCors(origins: "*", headers: "*", methods: "*")]
+   public class UADController : ApiController
+   {
+       private const string url = "mongodb+srv://super:superheroes@myacademicpyramidlogging-if0cx.mongodb.net/test?retryWrites=true";
+       private const string database = "test";
+       private DashboardManager _dashboardManager = new DashboardManager(url, database);
 
         [HttpGet]
         [ActionName("AvgSuccessfulLogin")]
@@ -29,9 +29,9 @@ namespace KFC.SIT.WebAPI.Controllers
         [ActionName("AvgSessionDuration")]
         public GraphData<double> GetAvgSessionDuration()
         {
-            IDictionary<string, double> avgSuccessfulLogin = _dashboardManager.GetAverageSuccessfulLogin();
-            GraphData<double> successfulLoginData = new GraphData<double>(avgSuccessfulLogin.Keys, avgSuccessfulLogin.Values);
-            return successfulLoginData;
+            IDictionary<string, double> avgSessionDuration = _dashboardManager.GetAverageSessionDuration();
+            GraphData<double> avgSessionDurationData = new GraphData<double>(avgSessionDuration.Keys, avgSessionDuration.Values);
+            return avgSessionDurationData;
         }
 
         [HttpGet]
@@ -47,9 +47,9 @@ namespace KFC.SIT.WebAPI.Controllers
         [ActionName("MostVisitedPage")]
         public GraphData<double> GetMostVisitedPage()
         {
-            IDictionary<string, double> totalSuccessfulFailed = _dashboardManager.GetMostAverageTimeSpentPage();
-            GraphData<double> totalSuccessFailedNumData = new GraphData<double>(totalSuccessfulFailed.Keys, totalSuccessfulFailed.Values);
-            return totalSuccessFailedNumData;
+            IDictionary<string, double> mostVisitedPage = _dashboardManager.GetMostAverageTimeSpentPage();
+            GraphData<double> mostVisitedPageData = new GraphData<double>(mostVisitedPage.Keys, mostVisitedPage.Values);
+            return mostVisitedPageData;
         }
 
         [HttpGet]
@@ -65,10 +65,10 @@ namespace KFC.SIT.WebAPI.Controllers
         [ActionName("UniqueLoggedInUser")]
         public GraphData<long> GetUniqueLoggedInUser()
         {
-            IDictionary<string, long> mostUsedFeature = _dashboardManager.GetSuccessfulLoggedInUsers();
-            GraphData<long> featureNameNumUsedData = new GraphData<long>(mostUsedFeature.Keys, mostUsedFeature.Values);
-            return featureNameNumUsedData;
+            IDictionary<string, long> successfulLoggedInUser = _dashboardManager.GetSuccessfulLoggedInUsers();
+            GraphData<long> successfulLoggedInUserData = new GraphData<long>(successfulLoggedInUser.Keys, successfulLoggedInUser.Values);
+            return successfulLoggedInUserData;
         }
 
-    }
+   }
 }

@@ -1,14 +1,15 @@
 <template>
-<v-container fuild>
+<!-- <v-app> -->
   <v-toolbar dark>
   <v-layout row>
-  <v-toolbar-title centered>Discussion Forum   </v-toolbar-title> 
+  <v-toolbar-title centered>Discussion Forum </v-toolbar-title> 
     
     <v-flex shrink pa-1>
     <v-select
       v-model="school"
       :items="schools"
       label="School"
+      v-if="!isStudent"
     ></v-select>
     </v-flex>
       
@@ -29,51 +30,54 @@
         @input="getCourses"
     ></v-select>
     </v-flex>
+
+    <v-flex grow pa-1    >
+    <v-text-field
+        class="searchBar"
+        v-model="searchInput" 
+        label="Search..." 
+        append-icon="search" 
+        
+        hide-details>
+    </v-text-field>
+    </v-flex>
+
     <v-spacer></v-spacer>
 
-    <v-btn small @click="postQuestionDialog = !postQuestionDialog" > My Drafts </v-btn>    
+    <v-btn small @click="myDrafts()" > My Drafts </v-btn>    
 
-    <v-btn small @click="postQuestionDialog = !postQuestionDialog"  > Post </v-btn>
-
+    <v-btn small @click="postQuestion()" > Post </v-btn>
 
 
 
     <v-btn icon>
-      <v-icon>refresh</v-icon>
+      <v-icon @click="viewQuestions()">refresh</v-icon>
     </v-btn>
 
   </v-layout>
   </v-toolbar>
-    
-  <v-dialog v-model="postQuestionDialog" max-width="750">
-      <PostQuestionDialog></PostQuestionDialog>
-  </v-dialog>
-
-</v-container>
+  <!-- </v-app> -->
 </template>
 
 <script>
-import PostQuestionDialog from "@/components/DiscussionForum/PostQuestionDialog";
-
 import axios from 'axios'
+import ForumState from "@/services/ForumState";
+
   export default {
     name: "DFToolbar",
-    components: {
-        PostQuestionDialog,
-    },
     data () {
       return {
-        postQuestionDialog: false,
         userAccount: null,
-        isStudent: true,
+        isStudent: false,
         userId: "",
-        school: "",
+        school: 0,
         schools: [],
-        department: "",
+        department: 0,
         departments: [],
-        course: "",
+        course: 0,
         courses: [],
-        response: ''
+        response: '',
+        searchInput: ''
       }
     },
 
@@ -82,47 +86,25 @@ import axios from 'axios'
     // },
     
     beforeMount(){
-        this.userId = sessionStorage.SITuserId;
+        this.userId = this.AppSession.state.userId;
+        if(this.AppSession.state.category === "Student"){
+            this.isStudent = true;
+            this.school = this.AppSession.state.schoolId
+            this.getDepartments(); 
+        }
+        else{
+            this.getSchools();
+        }
         //this.userId = "2"
-        this.getAccount()
     },
     methods: {
-      close() {
-      // this.$emit('close');
-          postQuestionDialag = false;
-      },
-      // @Author: Krystal
-      getAccount: function(){
-          this.errorMessage = "";
-
-          const url = `${this.$hostname}search/account`;
-          axios
-          .get(url, {
-              params:{
-                  AccountId: this.userId,
-              },
-              headers: { "Content-Type": "application/json", Authorization: "Bearer " + sessionStorage.SITtoken }
-              
-          })
-          .then(response =>{
-              this.userAccount = response.data;
-              this.isStudent = this.userAccount.IsStudent;
-              if(!this.isStudent){
-                  this.getSchools();
-              }else{
-                  this.school = this.userAccount.SchoolId;
-                  this.getDepartments();
-              }
-          })
-          .catch(error =>{
-              this.errorMessage = error.response.data.Message
-          })
-      },
+      // @Author: Krystal 
+      
       getSchools: function(){
           this.errorMessage = "";
 
           const url = `${this.$hostname}search/selections`;
-          Axios
+          this.Axios
           .get(url, {
               params:{
                   SearchCategory: 0
@@ -145,7 +127,7 @@ import axios from 'axios'
           this.errorMessage = "";
 
           const url = `${this.$hostname}search/selections`;
-          Axios
+          this.Axios
           .get(url, {
               params:{
                   SearchCategory: 1,
@@ -165,7 +147,7 @@ import axios from 'axios'
           this.errorMessage = "";
 
           const url = `${this.$hostname}search/selections`;
-          Axios
+          this.Axios
           .get(url, {
               params:{
                   SearchCategory: 2,
@@ -183,8 +165,32 @@ import axios from 'axios'
           })
       },
       // End Krytal
-      PostQuestion () {
-        //this.$router.push("/DiscussionForum/PostQuestion")
+
+      postQuestion() {
+        this.ForumState.setSchool(this.school)
+        this.ForumState.setDepartment(this.department)
+        this.ForumState.setCourse(this.course)
+        this.ForumState.openPostQuestionForm()
+      },
+      
+      myDrafts() {
+        this.ForumState.viewDraftQuestions()
+      },
+
+      viewQuestions() {
+        this.ForumState.setSchool(this.school)
+        this.ForumState.setDepartment(this.department)
+        this.ForumState.setCourse(this.course)
+        if(this.course != null) {
+          this.ForumState.getCourseQuestions()
+        }
+        else if(this.department != null) {
+          this.ForumState.getDepartmentQuestions()
+        }
+        else if(this.school != null) {
+          this.ForumState.getSchoolQuestions()
+        }
+        this.ForumState.viewPostedQuestions()
       },
     }
   }

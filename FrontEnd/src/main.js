@@ -11,8 +11,8 @@ import 'hchs-vue-charts'
 
 Vue.prototype.$hostname = "https://api.myacademicpyramid.com/api/"
 Vue.prototype.$signalRHostName = "https://api.myacademicpyramid.com/"
-// Vue.prototype.$hostname = "http://localhost:59364/api/"
-// Vue.prototype.$signalRHostName = "http://localhost:59364/"
+//Vue.prototype.$hostname = "http://localhost:59364/api/"
+//Vue.prototype.$signalRHostName = "http://localhost:59364/"
 
 Vue.prototype.$ssoLoginPage = "https://kfc-sso.com/#/login"
 Vue.prototype.$eventBus = new Vue()
