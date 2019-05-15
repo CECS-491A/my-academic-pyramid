@@ -116,7 +116,7 @@ export default {
       departments: null,
       viewingUserId: AppSession.state.userId,
       allowTelemetry: false
-    };
+    }
   },
   methods: {
     async getUserInfo(profileUserId) {
@@ -204,6 +204,7 @@ export default {
         
   //   }
   // },
+  },
   computed: {
     name() {
       return this.userInfo.firstName + " " + this.userInfo.lastName;
@@ -243,7 +244,7 @@ export default {
           })
   }
 }
-}
+
 </script>
 
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using DataAccessLayer.Models.School;
 
 namespace ServiceLayer.SchoolRegistration
@@ -18,6 +19,7 @@ namespace ServiceLayer.SchoolRegistration
         SchoolDepartment FindSchoolDepartment(string schoolName, string departmentName);
         SchoolTeacher FindSchoolTeacher(string schoolName, string departmentName, string teacherFName, string teacherLName);
         SchoolTeacherCourse FindSchoolTeacherCourse(string schoolName, string departmentName, string teacherFName, string teacherLName, string courseName);
+        List<SchoolTeacherCourse> GetSchoolTeacherCourses(List<int> ids);
         School FindSchool(int schoolId);
         School FindSchool(string schoolName);
         Teacher FindTeacher(string teacherFirstName, string teacherLastname);

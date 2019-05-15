@@ -4,7 +4,7 @@
     <ToolBarComponent></ToolBarComponent>
 
     <!-- <TestComponent></TestComponent> -->
-    <!-- <ViewQuestions></ViewQuestions> -->
+    <ViewQuestions></ViewQuestions>
     <PostQuestionDialog></PostQuestionDialog>
     <PostAnswerDialog></PostAnswerDialog>
     <EditQuestionDialog></EditQuestionDialog>

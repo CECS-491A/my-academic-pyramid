@@ -36,6 +36,7 @@
 </v-container>
 
 <v-container v-if="!forumState.postedQuestion">
+{{getDraftQuestions()}}
 <v-card class="mx-auto" dark max-width="1400" max-height="800" v-for="item in questions" :key="item.AccountName">
 
   <!-- <v-card class="mx-auto" dark max-width="1400" max-height="800"> -->
@@ -118,7 +119,7 @@ import ForumState from "@/services/ForumState";
     data () {
       return {
         forumState: ForumState.state,
-        questionState: this.forumState.questionsToGet,
+        questionState: ForumState.state.questionsToGet,
         userAccount: null,
         isStudent: true,
         userId: "",
@@ -213,7 +214,7 @@ import ForumState from "@/services/ForumState";
               url: this.$hostname + "DiscussionForum/GetQuestionsBySchool",
               params: {
                   // or id? if not change backend from id to name
-                  schoolId: this.school
+                  schoolId: this.forumState.school
               }
             })
               .then(response => {
@@ -235,7 +236,7 @@ import ForumState from "@/services/ForumState";
               crossDomain: true,
               url: this.$hostname + "DiscussionForum/GetQuestionsByDepartment",
               params: {
-                  departmentId: this.department
+                  departmentId: this.forumState.department
               }
             })
               .then(response => {
@@ -257,7 +258,7 @@ import ForumState from "@/services/ForumState";
               crossDomain: true,
               url: this.$hostname + "DiscussionForum/GetQuestionsByCourse",
               params: {
-                  courseId: this.course
+                  courseId: this.forumState.course
               }
             })
               .then(response => {
@@ -277,7 +278,7 @@ import ForumState from "@/services/ForumState";
               },
               method: "GET", 
               crossDomain: true,
-              url: this.$hostname + "DiscussionForum/DraftQuestions",
+              url: this.$hostname + "DiscussionForum/GetDraftQuestions",
               // params: {
               // }
             })
