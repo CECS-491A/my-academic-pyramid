@@ -11,7 +11,7 @@
             <v-text-field
               id="UserName"
               v-model="newMessage.contactUserName"
-           
+              :error-messages="usernameErrors"
               required
             @input="$v.newMessage.contactUsername.$touch()"
             @blur="$v.newMessage.contactUsername.$touch()"
@@ -72,18 +72,18 @@ export default {
 
   },
   computed: {
-    // usernameErrors() {
-    //   const errors = [];
+    usernameErrors() {
+      const errors = [];
 
-    //   if (!this.$v.newMessage.contactUsername.$dirty) return errors;
+      if (!this.$v.newMessage.contactUsername.$dirty) return errors;
 
-    //   !this.$v.newMessage.contactUsername.email && errors.push("Must be valid e-mail");
+      !this.$v.newMessage.contactUsername.email && errors.push("Must be valid e-mail");
       
 
-    //   !this.$v.newMessage.contactUsername.required && errors.push("E-mail is required");
+      !this.$v.newMessage.contactUsername.required && errors.push("E-mail is required");
 
-    //   return errors;
-    // },
+      return errors;
+    },
     messageErrors(){
       const errors = [];
       if (!this.$v.newMessage.messageContent.$dirty) return errors;

@@ -2,10 +2,8 @@
 <template>
 
   <v-app>
-    <div class="home" v-bind="{backgroundImage:'url(' + require('@/assets/background.jpg') + ')' }">
-      <div class="home">
+    <div class="home" >
         <h3>Hello {{ username }}</h3>
-      </div>
       <v-layout row wrap>
         <v-flex lg9>
           <h1 id="appSelection">All Features</h1>
@@ -140,6 +138,7 @@ export default {
 .home {
   background-image: url("../assets/background.jpg");
   width: 2000px;
+  height: 1000px;
   margin: auto;
 }
 </style>
