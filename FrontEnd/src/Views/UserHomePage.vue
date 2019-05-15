@@ -1,6 +1,5 @@
 
 <template>
-
   <v-app>
     <div class="home" >
         <h3>Hello {{ username }}</h3>
@@ -82,7 +81,7 @@ export default {
         {
           value: "userProfile",
           name: "User Profile",
-          route: "",
+          route: "/Profile/:id",
           LogoUrl: "FeatureLogos/profile.png"
         },
         {
