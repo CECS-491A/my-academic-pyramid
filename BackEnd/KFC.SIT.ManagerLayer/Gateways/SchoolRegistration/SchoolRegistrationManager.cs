@@ -40,6 +40,7 @@ namespace ManagerLayer.Gateways.SchoolRegistration
                                 EmailDomain = schoolDto.SchoolEmailDomain
                             };
                             foundSchool = schoolRegServ.CreateSchool(newSchool);
+                            context.SaveChanges();
                         }
 
                         foreach (DepartmentDTO d in departmentDTOs)
@@ -52,6 +53,7 @@ namespace ManagerLayer.Gateways.SchoolRegistration
                                     Name = d.DepartmentName
                                 };
                                 foundDepartment = schoolRegServ.CreateDepartment(newDepartment);
+                                context.SaveChanges();
 
                             }
 
@@ -64,6 +66,7 @@ namespace ManagerLayer.Gateways.SchoolRegistration
                                     Department = foundDepartment,
                                 };
                                 foundSchoolDepartment = schoolRegServ.CreateSchoolDepartment(newSchoolDepartment);
+                                context.SaveChanges();
 
                             }
 
@@ -79,6 +82,7 @@ namespace ManagerLayer.Gateways.SchoolRegistration
                                         var newTeacher = new Teacher(t.FirstName, t.LastName);
 
                                         foundTeacher = schoolRegServ.CreateTeacher(newTeacher);
+                                        context.SaveChanges();
                                     }
 
                                     SchoolTeacher foundSchoolTeacher = schoolRegServ.FindSchoolTeacher(foundSchool.Name, foundDepartment.Name, foundTeacher.FirstName, foundTeacher.LastName);
@@ -91,6 +95,7 @@ namespace ManagerLayer.Gateways.SchoolRegistration
                                             SchoolDepartment = foundSchoolDepartment
                                         };
                                         foundSchoolTeacher = schoolRegServ.CreateSchoolTeacher(newSchoolTeacher);
+                                        context.SaveChanges();
                                     }
 
                                     foreach (CourseDTO c in courseDTOs)
@@ -123,6 +128,7 @@ namespace ManagerLayer.Gateways.SchoolRegistration
 
                                                 };
                                                 schoolRegServ.CreateSchoolTeacherCourse(newSchoolTeacherCourse);
+                                                context.SaveChanges();
                                             }
 
                                         }
