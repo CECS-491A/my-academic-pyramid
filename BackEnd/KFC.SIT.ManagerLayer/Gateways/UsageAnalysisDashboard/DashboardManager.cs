@@ -109,14 +109,19 @@ namespace ManagerLayer.Gateways.UsageAnalysisDashboard
 
         public IDictionary<string, double> GetMostAverageTimeSpentPage()
         {
+            int numOfPages = BusinessRuleConstants.GetMostAverageTimeSpentPage_NumOfPage; // 5
             IDictionary<string, double> pageTime = _dashboardService.CountAverageTimeSpentPage();
-            IDictionary<string, double> pageTimeSorted = (IDictionary<string, double>)pageTime.AsQueryable().OrderByDescending(x => x.Value);
-            IList<string> keys = (IList<string>) pageTimeSorted.Keys;
             IDictionary<string, double> average = new Dictionary<string, double>();
-            for (int i = 0; i < 5; i++)
+
+            var pageTimeSorted = from page in pageTime orderby page.Value descending select (page.Key, page.Value);
+            pageTimeSorted = pageTimeSorted.Take(numOfPages);
+
+            // add an item into the dictionary
+            foreach (var pageNum in pageTimeSorted)
             {
-                average.Add(keys[i], pageTimeSorted[keys[i]]);
+                average.Add(pageNum.Key, pageNum.Value);
             }
+
             return average;
         }
 

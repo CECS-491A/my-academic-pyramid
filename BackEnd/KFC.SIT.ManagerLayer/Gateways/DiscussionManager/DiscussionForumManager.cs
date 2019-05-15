@@ -133,7 +133,15 @@ namespace ManagerLayer.DiscussionManager
             switch (q.QuestionType)
             {
                 case _schoolQuestion:
-                    questionToPost = (SchoolQuestion)questionToPost;
+                    //Validate Ids?
+                    questionToPost = new SchoolQuestion()
+                    {
+                        AccountId = accountId,
+                        SchoolId = q.SchoolId,
+                        Text = q.Text,
+                        ExpNeededToAnswer = q.ExpNeededToAnswer
+                    };
+                    _questionServices.DeleteQuestion(q.QuestionDraftId);
                     return _questionServices.UpdateQuestion(questionToPost);
                 case _departmentQuestion:
                     //Validate Ids?
@@ -144,6 +152,8 @@ namespace ManagerLayer.DiscussionManager
                         Text = q.Text,
                         ExpNeededToAnswer = q.ExpNeededToAnswer
                     };
+                    // Delete question then return posted question 
+                    _questionServices.DeleteQuestion(q.QuestionDraftId);
                     return _questionServices.PostQuestion(questionToPost);
                 case _courseQuestion:
                     questionToPost = new CourseQuestion()
@@ -153,14 +163,7 @@ namespace ManagerLayer.DiscussionManager
                         Text = q.Text,
                         ExpNeededToAnswer = q.ExpNeededToAnswer
                     };
-                    return _questionServices.PostQuestion(questionToPost);
-                case _draftQuestion:
-                    questionToPost = new DraftQuestion()
-                    {
-                        AccountId = accountId,
-                        Text = q.Text,
-                        ExpNeededToAnswer = q.ExpNeededToAnswer
-                    };
+                    _questionServices.DeleteQuestion(q.QuestionDraftId);
                     return _questionServices.PostQuestion(questionToPost);
                 default:
                     throw new ArgumentException("Invalid Question type");
@@ -415,86 +418,85 @@ namespace ManagerLayer.DiscussionManager
         // update spam count
         // email sys admin if a question or answer reaches spam limit 
         // TODO go back to database and 
-        //public Question IncreaseQuestionSpamCount(int questionId, int accountId)
-        //{
-        //    Question question = _discussionservices.GetQuestion(questionId);
+        public PostedQuestion IncreaseQuestionSpamCount(int questionId, int accountId)
+        {
+            PostedQuestion question = _questionServices.GetPostedQuestion(questionId);
 
-        //    // Validate
-        //    if (accountId == question.AccountId)
-        //    {
-        //        throw new InvalidAccountException("User cannot mark their own question as spam");
-        //    }
+            // Validate
+            if (accountId == question.AccountId)
+            {
+                throw new InvalidAccountException("User cannot mark their own question as spam");
+            }
 
-        //    question = _discussionservices.IncreaseQuestionSpamCount(questionId);
-        //    if (question.SpamCount == _spamLimit)
-        //    {
-        //        //               // call service to email admin because question reached spam limit
-        //    }
-        //    return question;
-        //}
+            question = _questionServices.IncreaseQuestionSpamCount(questionId);
+            if (question.SpamCount == _spamLimit)
+            {
+                //               // call service to email admin because question reached spam limit
+            }
+            return question;
+        }
 
-        //// update spam count
-        //// email sys admin if a question or answer reaches spam limit 
-        //public Answer IncreaseAnswerSpamCount(int answerId, int accountId)
-        //{
-        //    Answer answer = _discussionservices.GetAnswer(answerId);
+        // update spam count
+        // email sys admin if a question or answer reaches spam limit 
+        public Answer IncreaseAnswerSpamCount(int answerId, int accountId)
+        {
+            Answer answer = _answerServices.GetAnswer(answerId);
 
-        //    // Validate
-        //    if (accountId == answer.AccountId)
-        //    {
-        //        throw new InvalidAccountException("User cannot mark their own answer as spam");
-        //    }
+            // Validate
+            if (accountId == answer.AccountId)
+            {
+                throw new InvalidAccountException("User cannot mark their own answer as spam");
+            }
 
-        //    answer = _discussionservices.IncreaseAnswerSpamCount(answerId);
-        //    if (answer.SpamCount == _spamLimit)
-        //    {
-        //        //               // call service to email admin because question reached spam limit
-        //    }
-        //    return answer;
-        //}
+            answer = _answerServices.IncreaseAnswerSpamCount(answerId);
+            if (answer.SpamCount == _spamLimit)
+            {
+                //               // call service to email admin because question reached spam limit
+            }
+            return answer;
+        }
 
 
 
-        //// update answer with increased helpful count and update user Exp
-        //public Answer IncreaseHelpfulCount(int answerId, int accountId)
-        //{
-        //    Answer answer = _discussionservices.GetAnswer(answerId);
+        // update answer with increased helpful count and update user Exp
+        public Answer IncreaseHelpfulCount(int answerId, int accountId)
+        {
+            Answer answer = _answerServices.GetAnswer(answerId);
 
-        //    // Validate
-        //    if (accountId == answer.AccountId)
-        //    {
-        //        throw new InvalidAccountException("User cannot mark their own answer as helpful");
-        //    }
+            // Validate
+            if (accountId == answer.AccountId)
+            {
+                throw new InvalidAccountException("User cannot mark their own answer as helpful");
+            }
 
-        //    answer = _discussionservices.IncreaseHelpfulCount(answerId);
-        //    // update user exp
-        //    Account user = _usermanagementservices.FindById(answer.AccountId);
-        //    user.Exp += _expGainHelpfullAns;
-        //    user = _usermanagementservices.UpdateUser(user);
-        //    _db.SaveChanges();
-        //    return answer;
-        //}
+            answer = _answerServices.IncreaseHelpfulCount(answerId);
+            // update user exp
+            Account user = _userManagementServices.FindById(answer.AccountId);
+            user.Exp += _expGainHelpfullAns;
+            user = _userManagementServices.UpdateUser(user);
+            return answer;
+        }
 
-        //// update answer with increased unhelpful count 
-        //// don't think UnHulpful affects a user's Exp? 
-        //public Answer IncreaseUnHelpfulCount(int answerId, int accountId)
-        //{
-        //    Answer answer = _discussionservices.GetAnswer(answerId);
+        // update answer with increased unhelpful count 
+        // don't think UnHulpful affects a user's Exp? 
+        public Answer IncreaseUnHelpfulCount(int answerId, int accountId)
+        {
+            Answer answer = _answerServices.GetAnswer(answerId);
 
-        //    // Validate
-        //    if (accountId == answer.AccountId)
-        //    {
-        //        throw new InvalidAccountException("User cannot mark their own answer as unhelpful");
-        //    }
+            // Validate
+            if (accountId == answer.AccountId)
+            {
+                throw new InvalidAccountException("User cannot mark their own answer as unhelpful");
+            }
 
-        //    answer = _discussionservices.IncreaseUnHelpfulCount(answerId);
-        //    // update user exp
-        //    //User user = _usermanagementservices.FindById(answer.PosterId);
-        //    //user.Exp -= 2;
-        //    //user = _usermanagementservices.UpdateUser(user);
-        //    //_db.SaveChanges();
-        //    return answer;
-        //}
+            answer = _answerServices.IncreaseUnHelpfulCount(answerId);
+            // update user exp
+            //User user = _usermanagementservices.FindById(answer.PosterId);
+            //user.Exp -= 2;
+            //user = _usermanagementservices.UpdateUser(user);
+            //_db.SaveChanges();
+            return answer;
+        }
 
 
 

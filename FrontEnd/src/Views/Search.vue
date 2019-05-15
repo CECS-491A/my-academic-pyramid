@@ -275,7 +275,6 @@ export default {
             .get(url, {
                 params:{
                     SearchCategory: 2,
-                    SearchSchool: this.school,
                     SearchDepartment: this.department
                 },
                 headers: { "Content-Type": "application/json", Authorization: "Bearer " + sessionStorage.SITtoken }

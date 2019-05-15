@@ -16,11 +16,14 @@ import UsageAnalysisDashboard from '@/Views/UsageAnalysisDashboard'
 import Profile from '@/Views/Profile'
 //import Search from '@/Views/Search'
 import DiscussionForum from '@/Views/DiscussionForum'
-import PostQuestion from '@/components/DiscussionForum/PostQuestion'
+//import PostQuestion from '@/components/DiscussionForum/PostQuestion'
 // delete later
 import TestComponent from '@/components/DiscussionForum/TestComponent'
+import TestView from '@/Views/TestView'
+
 import SchoolRegistration from '@/Views/SchoolRegistration'
 import Search from '@/Views/Search'
+import AboutUs from '@/Views/AboutUs'
 
 Vue.use(Router)
 Vue.use(Vuetify)
@@ -96,6 +99,12 @@ export default new Router({
     name: "TestComponent",
     component: TestComponent
   },
+  // delete later
+  {
+    path: "/TestView",
+    name: "TestView",
+    component: TestView
+  },
   {
     path: "/SchoolRegistration",
     name: "SchoolRegistration",
@@ -111,10 +120,16 @@ export default new Router({
     name: 'Profile',
     component: Profile
   },
+  // {
+  //   path: '/DiscussionForum/PostQuestion',
+  //   name: 'PostQuestion',
+  //   component: PostQuestion
+  // },
   {
-    path: '/DiscussionForum/PostQuestion',
-    name: 'PostQuestion',
-    component: PostQuestion
-  }
+    path: '/AboutUs',
+    name: 'About Us',
+    component: AboutUs
+  },
+
   ]
 })

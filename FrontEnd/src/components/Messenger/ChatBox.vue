@@ -3,9 +3,14 @@
     <v-toolbar dark color="primary darken-1">
       <!-- Hold the username of user talking with  -->
       <h2 class="text-primary text-center">{{contactUsername}}</h2>  
+      <v-alert :value="connectionSuccess" type="success" transition="scale-transition">{{connectionSuccess}}</v-alert>
+    <v-alert :value="connectionFail" type="error" transition="scale-transition">{{connectionFail}}</v-alert>
     </v-toolbar>
+    
     <div class="card">
+      
       <div class="card-body">
+        
         <v-card>
           <p class="nomessages text-secondary" v-if="messages.length == 0">[No messages yet!]</p>
           <!-- List of message that scrollable -->
@@ -82,7 +87,9 @@ export default {
 
       connection: "", // connection for SignalR hub
       hubProxy: "", // Hold SignalR HubConnection created from the connection above
-      error: ""
+      error: "",
+      connectionSuccess: "TEST",
+      connectionFail:""
     };
   },
   watch: {
@@ -131,16 +138,20 @@ export default {
         .then(response => {
           this.authUserId = response.data.authUserId,
           this.authUsername = response.data.authUsername,
+          this.connectionSuccess = "You are connected"
 
           // Attach the auth user id with signalR request to the backend for connection id mapping
           this.connection.qs = "authUserId=" + this.authUserId,
           this.connection
             .start()
             .done(function() {
-              console.log("SignalR Hub Now connected");
+              console.log("SignalR Hub Now connected")
+              
             })
             .fail(function() {
-              console.log("SignalR Hub Could not connect");
+              console.log("SignalR Hub Could not connect")
+              
+              
             });
 
           // sessionStorage.SITtoken = response.data.SITtoken
@@ -148,6 +159,7 @@ export default {
         .catch(err => {
           /* eslint no-console: "off" */
           console.log(err);
+          this.connectionFail = "You are disconnected"
         });
     },
 

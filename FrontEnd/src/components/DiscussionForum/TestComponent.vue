@@ -1,177 +1,192 @@
 <template>
-  <v-app>
-    <div class="post question">
-      <v-container>
-      <v-card dark > 
-        <v-responsive aspect-ration= "9/16">
-        <h1>Post Question</h1>
+<v-container fuild>
+  <v-toolbar dark>
+  <v-layout row>
+  <v-toolbar-title centered>Discussion Forum   </v-toolbar-title> 
+    
+    <v-flex shrink pa-1>
+    <v-select
+      v-model="school"
+      :items="schools"
+      label="School"
+    ></v-select>
+    </v-flex>
+      
+    <v-flex shrink pa-1>
+    <v-select
+        v-model="department"
+        :items="departments"
+        label="Department"
+        @input="getDepartments"
+    ></v-select>
+    </v-flex>
+            
+    <v-flex shrink pa-1>
+    <v-select
+        v-model="course"
+        :items="courses"
+        label="Course"
+        @input="getCourses"
+    ></v-select>
+    </v-flex>
+    <v-spacer></v-spacer>
 
-        <v-form>
-        <v-textarea
-            name="text"
-            id="text"
-            type="text"
-            v-model="text"
-            label="Enter question between 50 and 2000 characters"
-            auto-grow
-            v-if="!validation"
-            rows="3"
-            /><br />
-        <v-text-field
-            name="exp"
-            id="exp"
-            type="exp"
-            v-model="exp"
-            label="Enter exp a user needs to answer your question" 
-            v-if="!validation"
-            /><br />
-        
-          <v-btn id="btnDraft" color="grey" v-if="!validation" v-on:click="postDraft">Save Draft</v-btn>
+    <v-btn small @click="postQuestionDialog = !postQuestionDialog" > My Drafts </v-btn>    
 
-
-        
-        <v-alert
-            :value="error"
-            id="error"
-            type="error"
-            transition="scale-transition"
-        >
-            {{error}}
-        </v-alert>
-
-        <div v-if="validation" id="postQuestion">
-            <h3>{{ validation }}</h3>
-        </div>
+    <v-btn small @click="postQuestionDialog = !postQuestionDialog"  > Post </v-btn>
 
 
-        <v-btn id="btnPostQuestion" color="success" v-if="!validation" v-on:click="postQuestion">Post Question</v-btn>
 
-        </v-form>
 
-        <v-dialog
-          v-model="loading"
-          hide-overlay
-          persistent
-          width="300"
-        >
-          <v-card
-            color="primary"
-            dark
-          >
-            <v-card-text>
-              Loading
-              <v-progress-linear
-                indeterminate
-                color="white"
-                class="mb-0"
-              ></v-progress-linear>
-            </v-card-text>
-          </v-card>
-        </v-dialog>
-        </v-responsive>
-      </v-card> 
-      </v-container>
-    </div>
-  </v-app>
+    <v-btn icon>
+      <v-icon>refresh</v-icon>
+    </v-btn>
+
+  </v-layout>
+  </v-toolbar>
+    
+  <v-dialog v-model="postQuestionDialog" max-width="750">
+      <PostQuestionDialog></PostQuestionDialog>
+  </v-dialog>
+
+</v-container>
 </template>
 
 <script>
+import PostQuestionDialog from "@/components/DiscussionForum/PostQuestionDialog";
+
 import axios from 'axios'
-
-export default {
-  data () {
-    return {
-      validation: null,
-      text: '',
-      exp: '',
-      underMaintenance: false,
-      error: '',
-      loading: false
-    }
-  },
-  methods: {
-    postQuestion: function () {
-      this.error = "";
-      if (this.text.length < 50 || this.text.length > 2000) {
-        this.error = "Invalid text length";
-      }
-
-      if (this.exp.length == 0) {
-        this.exp = 0;
-      }
-
-      if (this.exp < 0) {
-        this.error = "Invalid exp number";
-      }
-
-      if (this.error) return;
-
-      const url = 'DiscussionForum/PostQuestion'
-      this.loading = true;
-      this.axios.post(url, {
-        QuestionType: "DraftQuestion",
-        SchoolId: getSchoolId(),
-        DepartmentId: getDepartmentId(),
-        CourseId: getCourseId(),
-        Text: document.getElementById('text').value,
-        Exp: document.getElementById('exp').value,
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        }
-      })
-        .then(response => {
-          this.validation = response.data.Message // Retrieve validation message from response
-        })
-        .catch(err => {
-          this.error = err.response.data.Message
-        })
-        .finally(() => {
-          this.loading = false;
-        })
+  export default {
+    name: "DFToolbar",
+    components: {
+        PostQuestionDialog,
     },
-    postDraft: function () {
-      this.error = "";
-      if (this.text.length > 2000) {
-        this.error = "Invalid text length";
+    data () {
+      return {
+        postQuestionDialog: false,
+        userAccount: null,
+        isStudent: true,
+        userId: "",
+        school: "",
+        schools: [],
+        department: "",
+        departments: [],
+        course: "",
+        courses: [],
+        response: ''
       }
+    },
 
-      if (this.exp.length == 0) {
-        this.exp = 0;
-      }
+    // created() {
+    //     this.getSchoolQuestions()
+    // },
+    
+    beforeMount(){
+        this.userId = sessionStorage.SITuserId;
+        //this.userId = "2"
+        this.getAccount()
+    },
+    methods: {
+      close() {
+      // this.$emit('close');
+          postQuestionDialag = false;
+      },
+      // @Author: Krystal
+      getAccount: function(){
+          this.errorMessage = "";
 
-      if (this.exp < 0) {
-        this.error = "Invalid exp number";
-      }
+          const url = `${this.$hostname}search/account`;
+          axios
+          .get(url, {
+              params:{
+                  AccountId: this.userId,
+              },
+              headers: { "Content-Type": "application/json", Authorization: "Bearer " + sessionStorage.SITtoken }
+              
+          })
+          .then(response =>{
+              this.userAccount = response.data;
+              this.isStudent = this.userAccount.IsStudent;
+              if(!this.isStudent){
+                  this.getSchools();
+              }else{
+                  this.school = this.userAccount.SchoolId;
+                  this.getDepartments();
+              }
+          })
+          .catch(error =>{
+              this.errorMessage = error.response.data.Message
+          })
+      },
+      getSchools: function(){
+          this.errorMessage = "";
 
-      if (this.error) return;
+          const url = `${this.$hostname}search/selections`;
+          Axios
+          .get(url, {
+              params:{
+                  SearchCategory: 0
+              },
+              headers: { "Content-Type": "application/json", Authorization: "Bearer " + sessionStorage.SITtoken }
+              
+          })
+          .then(response =>{
+              this.schools = response.data;
+              if(this.schools.length > 0){
+                  this.schools = [{id: 0, text: "NONE", value: 0 }].concat(this.schools)
+              }
+          })
+          .catch(error =>{
+              this.errorMessage = error.response.data.Message
+          })
+        
+      },
+      getDepartments: function(){
+          this.errorMessage = "";
 
-      const url = 'DiscussionForum/PostQuestion'
-      this.loading = true;
-      this.axios.post(this.$hostname + url, {
-         
-        //'Send': 'application/json'
-          QuestionType: "DraftQuestion",
-          Text: document.getElementById('text').value,
-          Exp: document.getElementById('exp').value.toString(),
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-      })
-        .then(response => {
-          this.validation = response.data 
-        })
-        .catch(err => {
-          this.error = err.response.data
-        })
-        .finally(() => {
-          this.loading = false;
-        })
+          const url = `${this.$hostname}search/selections`;
+          Axios
+          .get(url, {
+              params:{
+                  SearchCategory: 1,
+                  SearchSchool: this.school
+              },
+              headers: { "Content-Type": "application/json", Authorization: "Bearer " + sessionStorage.SITtoken }
+              
+          })
+          .then(response =>{
+              this.departments = response.data;
+          })
+          .catch(error =>{
+              this.errorMessage = error.response.data.Message
+          })
+      },
+      getCourses: function(){
+          this.errorMessage = "";
+
+          const url = `${this.$hostname}search/selections`;
+          Axios
+          .get(url, {
+              params:{
+                  SearchCategory: 2,
+                  SearchSchool: this.school,
+                  SearchDepartment: this.department
+              },
+              headers: { "Content-Type": "application/json", Authorization: "Bearer " + sessionStorage.SITtoken }
+              
+          })
+          .then(response =>{
+              this.courses = response.data;
+          })
+          .catch(error =>{
+              this.errorMessage = error.response.data.Message
+          })
+      },
+      // End Krytal
+      PostQuestion () {
+        //this.$router.push("/DiscussionForum/PostQuestion")
+      },
     }
   }
-}
-
 </script>
-
 

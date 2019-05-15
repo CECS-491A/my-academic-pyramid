@@ -63,7 +63,7 @@ namespace ManagerLayer.Gateways.Search
                         return _searchService.GetStudents(studentPredicate);
                     }
                     // Filter by department
-                    studentPredicate = studentPredicate.And(s => s.SchoolDepartment.DepartmentID == request.SearchDepartment);
+                    studentPredicate = studentPredicate.And(s => s.SchoolDepartment.Id == request.SearchDepartment);
                     if (request.SearchCourse == 0)
                     {
                         return _searchService.GetStudents(studentPredicate);
@@ -114,7 +114,7 @@ namespace ManagerLayer.Gateways.Search
                         return _searchService.GetTeachers(teacherPredicate);
                     }
                     // Filter by department
-                    teacherPredicate = teacherPredicate.And(st => st.SchoolDepartment.DepartmentID == request.SearchDepartment);
+                    teacherPredicate = teacherPredicate.And(st => st.SchoolDepartment.Id == request.SearchDepartment);
                     if (request.SearchCourse == 0)
                     {
                         return _searchService.GetTeachers(teacherPredicate);
@@ -202,9 +202,9 @@ namespace ManagerLayer.Gateways.Search
         /// <param name="schoolId"></param>
         /// <param name="departmentId"></param>
         /// <returns></returns>
-        public List<SearchFilterSelectionDTO> GetCourses(int schoolId, int departmentId)
+        public List<SearchFilterSelectionDTO> GetCourses(int schoolDepartmentId)
         {
-            return _searchService.GetCourses(schoolId, departmentId);
+            return _searchService.GetCourses(schoolDepartmentId);
         }
 
         public List<SearchFilterSelectionDTO> GetSchoolTeacherCourses(int schoolId, int departmentId, int courseId)
