@@ -1,8 +1,8 @@
 <template>
-<v-container fuild>
+<!-- <v-app> -->
   <v-toolbar dark>
   <v-layout row>
-  <v-toolbar-title centered>Discussion Forum   </v-toolbar-title> 
+  <v-toolbar-title centered>Discussion Forum </v-toolbar-title> 
     
     <v-flex shrink pa-1>
     <v-select
@@ -31,39 +31,29 @@
     </v-flex>
     <v-spacer></v-spacer>
 
-    <v-btn small @click="postQuestionDialog = !postQuestionDialog" > My Drafts </v-btn>    
+    <v-btn small @click="myDrafts()" > My Drafts </v-btn>    
 
-    <v-btn small @click="postQuestionDialog = !postQuestionDialog"  > Post </v-btn>
-
+    <v-btn small @click="postQuestion()" > Post </v-btn>
 
 
 
     <v-btn icon>
-      <v-icon>refresh</v-icon>
+      <v-icon @click="viewQuestions()">refresh</v-icon>
     </v-btn>
 
   </v-layout>
   </v-toolbar>
-    
-  <v-dialog v-model="postQuestionDialog" max-width="750">
-      <PostQuestionDialog></PostQuestionDialog>
-  </v-dialog>
-
-</v-container>
+  <!-- </v-app> -->
 </template>
 
 <script>
-import PostQuestionDialog from "@/components/DiscussionForum/PostQuestionDialog";
-
 import axios from 'axios'
+import ForumState from "@/services/ForumState";
+
   export default {
     name: "DFToolbar",
-    components: {
-        PostQuestionDialog,
-    },
     data () {
       return {
-        postQuestionDialog: false,
         userAccount: null,
         isStudent: true,
         userId: "",
@@ -82,42 +72,20 @@ import axios from 'axios'
     // },
     
     beforeMount(){
-        this.userId = sessionStorage.SITuserId;
+        this.userId = AppSession.state.userId;
+        if(AppSession.state.category === "Student"){
+            this.isStudent = true;
+            this.school = AppSession.state.schoolId
+            this.getDepartments(); 
+        }
+        else{
+            this.getSchools();
+        }
         //this.userId = "2"
-        this.getAccount()
     },
     methods: {
-      close() {
-      // this.$emit('close');
-          postQuestionDialag = false;
-      },
-      // @Author: Krystal
-      getAccount: function(){
-          this.errorMessage = "";
-
-          const url = `${this.$hostname}search/account`;
-          axios
-          .get(url, {
-              params:{
-                  AccountId: this.userId,
-              },
-              headers: { "Content-Type": "application/json", Authorization: "Bearer " + sessionStorage.SITtoken }
-              
-          })
-          .then(response =>{
-              this.userAccount = response.data;
-              this.isStudent = this.userAccount.IsStudent;
-              if(!this.isStudent){
-                  this.getSchools();
-              }else{
-                  this.school = this.userAccount.SchoolId;
-                  this.getDepartments();
-              }
-          })
-          .catch(error =>{
-              this.errorMessage = error.response.data.Message
-          })
-      },
+      // @Author: Krystal 
+      
       getSchools: function(){
           this.errorMessage = "";
 
@@ -183,8 +151,32 @@ import axios from 'axios'
           })
       },
       // End Krytal
-      PostQuestion () {
-        //this.$router.push("/DiscussionForum/PostQuestion")
+
+      postQuestion() {
+        ForumState.setSchool(this.school)
+        ForumState.setDepartment(this.department)
+        ForumState.setCourse(this.course)
+        ForumState.openPostQuestionForm()
+      },
+      
+      myDrafts() {
+        ForumState.viewDraftQuestions()
+      },
+
+      viewQuestions() {
+        ForumState.setSchool(this.school)
+        ForumState.setDepartment(this.department)
+        ForumState.setCourse(this.course)
+        if(this.course != null) {
+          ForumState.getCourseQuestions()
+        }
+        else if(this.department != null) {
+          ForumState.getDepartmentQuestions()
+        }
+        else if(this.school != null) {
+          ForumState.getSchoolQuestions()
+        }
+        ForumState.viewPostedQuestions()
       },
     }
   }
