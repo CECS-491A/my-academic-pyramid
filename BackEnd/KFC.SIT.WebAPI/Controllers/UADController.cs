@@ -17,13 +17,14 @@ namespace KFC.SIT.WebAPI.Controllers
         private DashboardManager _dashboardManager = new DashboardManager(url, database);
 
         [HttpGet]
-        [ActionName("sLogin")]
-        public GraphData<double> GetScuessfulLogin()
+        [ActionName("sAvgLogin")]
+        public GraphData<double> GetAvgSuccessfulLogin()
         {
             IDictionary<string, double> avgSuccessfulLogin = _dashboardManager.GetAverageSuccessfulLogin();
-            GraphData<double> successfulLogin = new GraphData<double>(avgSuccessfulLogin.Keys, avgSuccessfulLogin.Values);
-            return successfulLogin;
+            GraphData<double> successfulLoginData = new GraphData<double>(avgSuccessfulLogin.Keys, avgSuccessfulLogin.Values);
+            return successfulLoginData;
         }
+
         /*
         [HttpGet]
         [ActionName("avgSession")]
@@ -35,17 +36,21 @@ namespace KFC.SIT.WebAPI.Controllers
         */
 
         [HttpGet]
-        [Route("api/dashboard/fslogin")]
-        public long[] GetFSLogin()
+        [ActionName("totalFailedSuccessfulLogin")]
+        public GraphData<long> GetTotalFailedSuccessfulLogin()
         {
-            return (long[]) _dashboardManager.GetFailedSuccessfulLogIn();
+            IDictionary<string, long> totalSuccessfulFailed = _dashboardManager.GetFailedSuccessfulLogIn();
+            GraphData<long> totalSuccessFailedNumData = new GraphData<long>(totalSuccessfulFailed.Keys, totalSuccessfulFailed.Values);
+            return totalSuccessFailedNumData;
         }
 
         [HttpGet]
-        [ActionName("api/dashboard/feature")]
-        public IDictionary<string, long> GetFeatureData()
+        [ActionName("mostUsedFeature")]
+        public GraphData<long> GetMostUsedFeature()
         {
-            return _dashboardManager.GetMostUsedFeature();
+            IDictionary<string, long> mostUsedFeature = _dashboardManager.GetMostUsedFeature();
+            GraphData<long> featureNameNumUsedData = new GraphData<long>(mostUsedFeature.Keys, mostUsedFeature.Values);
+            return featureNameNumUsedData;
         }
 
     }

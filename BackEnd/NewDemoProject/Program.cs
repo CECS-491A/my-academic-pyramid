@@ -32,13 +32,8 @@ namespace NewDemoProject
             {
                 Console.WriteLine(s);
             }
-            Console.WriteLine("Avg");
-            DateTime temp1 = DateTime.Today;
-            DateTime temp2 = temp1.AddDays(2);
-            Console.WriteLine(temp1.Month);
-            Console.WriteLine(temp1.AddDays(2));
-            Console.WriteLine(temp1.Month);
-            Console.WriteLine(temp1.Subtract(temp2));
+            Console.WriteLine(service.CountTotalSuccessfulLogin());
+            Console.WriteLine(service.CountTotalUsers());
             /**
             Console.WriteLine("succesufl");
             foreach (var s in get)
@@ -56,11 +51,11 @@ namespace NewDemoProject
                 Console.WriteLine(s.Key + "," + s.Value);
             }
             **/
-            ICollection<DateTime> list = service.CountAverageSessionDuration(1, 2019);
-            for (int i = 0; i < list.Count(); i++)
-            {
-                Console.WriteLine("Print:" + list.ElementAt(i));
-            }
+            //ICollection<DateTime> list = service.CountAverageSessionDuration(1, 2019);
+            //for (int i = 0; i < list.Count(); i++)
+            //{
+            //    Console.WriteLine("Print:" + list.ElementAt(i));
+            //}
             long sum = service.CountUniqueLoggedInUsers(1, 2019);
             Console.WriteLine("sum:" + sum);
             //IDictionary<string, long> something3 = service.CountMostUsedFiveFeature(2);
