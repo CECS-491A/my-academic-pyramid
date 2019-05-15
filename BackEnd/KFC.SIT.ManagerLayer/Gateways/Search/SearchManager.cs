@@ -207,9 +207,9 @@ namespace ManagerLayer.Gateways.Search
             return _searchService.GetCourses(schoolId, departmentId);
         }
 
-        public List<SearchFilterSelectionDTO> GetTeachers(int schoolId, int departmentId, int courseId)
+        public List<SearchFilterSelectionDTO> GetSchoolTeacherCourses(int schoolId, int departmentId, int courseId)
         {
-            return _searchService.GetTeachers(schoolId, departmentId, courseId);
+            return _searchService.GetSchoolTeacherCourses(schoolId, departmentId, courseId);
         }
     }
 }

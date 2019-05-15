@@ -49,12 +49,23 @@
                 <v-select
                     v-model="department"
                     :items="departments"
-                    label="Department"
+                    label="Department of Major"
+                ></v-select>
+                </v-flex>
+            </v-layout>
+            <v-layout>
+              <v-flex
+                
+                pa-1
+                >
+                <v-select
+                    v-model="courseDepartment"
+                    :items="departments"
+                    label="Course Department"
                     @input="getCourses"
                 ></v-select>
                 </v-flex>
             </v-layout>
-
             <v-layout>
               <v-flex
                 pa-1
@@ -63,18 +74,21 @@
                   v-model="courseId"
                   :items="courses"
                   label="Course"
-                  @input="getTeachers"
+                  @input="getTeacherCourses"
                 ></v-select>
-                </v-flex>
-                <v-flex
-                pa-1
-                >
-                <v-select
-                  v-model="teacherId"
-                  :items="teachers"
-                  label="Teacher"
-                ></v-select>
-                </v-flex>
+              </v-flex>
+            </v-layout>
+
+            <v-layout>
+              <v-select
+                v-model="selectedTeacherCourses"
+                :items="teacherCourses"
+                :menu-props="{ maxHeight: '400' }"
+                label="Select Course"
+                multiple
+                hint="Pick your favorite states"
+                persistent-hint
+              ></v-select>
             </v-layout>
 
             <v-layout row wrap>
@@ -145,10 +159,12 @@ export default {
       schools: [],
       department: "",
       departments: [],
+      courseDepartment: "",
       courseId: "",
       courses: [],
-      teacherId: "",
-      teachers: [],
+      teacherCourseId: "",
+      teacherCourses: [],
+      selectedTeacherCourses: [],
       errorMessage: "",
       menu: false
     }
@@ -170,7 +186,8 @@ export default {
           LastName: this.lastName,
           DateOfBirth: this.dateOfBirth,
           SchoolId: this.school,
-          DepartmentId: this.department
+          DepartmentId: this.department,
+          selectedCourseIds: this.selectedTeacherCourses
         }
         let headersObject = {
           headers: {
@@ -193,7 +210,7 @@ export default {
                })
              .then((response) => {
                 AppSession.setCategory(response.data.User.Category)
-                AppSession.setSchoolId(school)
+                AppSession.setSchoolId(this.school)
                 AppSession.updateSession(response.data.SITtoken)
                 this.$router.push({name: "UserHomePage"})})
              .catch(error =>{
@@ -273,7 +290,7 @@ export default {
             params:{
                 SearchCategory: 2,
                 SearchSchool: this.school,
-                SearchDepartment: this.department
+                SearchDepartment: this.courseDepartment
             },
             headers: { "Content-Type": "application/json", Authorization: "Bearer " + sessionStorage.SITtoken }
             
@@ -285,7 +302,7 @@ export default {
             this.errorMessage = error.response.data.Message
         })  
     },
-    getTeachers: function() {
+    getTeacherCourses: function() {
       this.errorMessage = "";
 
         const url = `${this.$hostname}search/selections`;
@@ -294,14 +311,14 @@ export default {
             params:{
                 SearchCategory: 3,
                 SearchSchool: this.school,
-                SearchDepartment: this.department,
+                SearchDepartment: this.courseDepartment,
                 SearchCourse: this.courseId
             },
             headers: { "Content-Type": "application/json", Authorization: "Bearer " + sessionStorage.SITtoken }
             
         })
         .then(response =>{
-            this.teachers = response.data;
+            this.teacherCourses = response.data;
         })
         .catch(error =>{
             this.errorMessage = error.response.data.Message

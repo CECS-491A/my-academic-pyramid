@@ -204,6 +204,7 @@ export default {
         
   //   }
   // },
+  },
   computed: {
     name() {
       return this.userInfo.firstName + " " + this.userInfo.lastName;
@@ -242,8 +243,8 @@ export default {
 
           })
   }
- }
 }
+
 </script>
 
 

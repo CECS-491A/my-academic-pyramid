@@ -105,7 +105,7 @@ namespace KFC.SIT.WebAPI.Controllers
                         case 2:
                             return Content(HttpStatusCode.OK, manager.GetCourses(request.SearchSchool, request.SearchDepartment));
                         case 3:
-                            return Content(HttpStatusCode.OK, manager.GetTeachers(request.SearchSchool, request.SearchDepartment, request.SearchCourse));
+                            return Content(HttpStatusCode.OK, manager.GetSchoolTeacherCourses(request.SearchSchool, request.SearchDepartment, request.SearchCourse));
                     }
                     throw new ArgumentException(Constants.InvalidSearchSelection);
                 }

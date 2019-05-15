@@ -75,6 +75,8 @@ namespace KFC.SIT.WebAPI.Controllers.Controllers
                         if (school.EmailDomain.Equals(user.UserName.Substring(domainIndex + 1))){
                             var schoolDepartment = srs.FindSchoolDepartment(registrationData.SchoolId, registrationData.DepartmentId);
                             Student student = new Student(user.Id, schoolDepartment.Id);
+                            var selectedCourses = srs.GetSchoolTeacherCourses(registrationData.selectedCourseIds);
+                            student.Courses = selectedCourses;
                             user.Students.Add(student);
                         }
                         else

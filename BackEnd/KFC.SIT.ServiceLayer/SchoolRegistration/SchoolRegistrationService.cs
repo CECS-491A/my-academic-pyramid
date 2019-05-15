@@ -100,6 +100,13 @@ namespace ServiceLayer.SchoolRegistration
                                                        ).FirstOrDefault();
         }
 
+        public List<SchoolTeacherCourse> GetSchoolTeacherCourses(List<int> ids)
+        {
+            return _DbContext.SchoolTeacherCourses
+                .Where(stc => ids.Contains(stc.Id))
+                .ToList();
+        }
+
 
         public Course FindCourse (String courseName)
         {
