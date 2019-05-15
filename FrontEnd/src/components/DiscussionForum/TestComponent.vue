@@ -128,9 +128,9 @@
 <v-container v-if="viewAnswers">
   <v-card class="mx-auto" dark color="pink" max-width="1400" max-height="800">
 
-    <v-card-title>{{forumState.question.AccountName}}
+    <v-card-title>{{question.AccountName}}
       <v-spacer></v-spacer>
-      {{forumState.question.DateCreated}}
+      {{question.DateCreated}}
     </v-card-title>
     
     <v-card-text class="headline font-weight-bold"> {{question.Text}} </v-card-text>
@@ -152,8 +152,8 @@
     <v-card-actions>   
       <v-layout align-center>
         <v-btn small v-if="userId != item.AccoutId" @click="increaseAnswerSpamCount(item.AnswerId)">Mark As Spam</v-btn> {{"Spam Count: " + item.SpamCount}}
-        <v-icon small v-if="userId != item.AccountId" @click="icreaseAnswerHelpfulCount(itemAnswerId)">thumb_up</v-icon> {{"Helpful: " + item.HelpfulCount}}
-        <v-icon small v-if="userId != item.AccountId" @click="icreaseAnswerUnHelpfulCount(itemAnswerId)">thumb_down</v-icon> {{"UnHelpful: " + item.UnHelpfulCount}}
+        <v-icon small v-if="userId != item.AccountId" @click="icreaseAnswerHelpfulCount(item.AnswerId)">thumb_up</v-icon> {{"Helpful: " + item.HelpfulCount}}
+        <v-icon small v-if="userId != item.AccountId" @click="icreaseAnswerUnHelpfulCount(item.AnswerId)">thumb_down</v-icon> {{"UnHelpful: " + item.UnHelpfulCount}}
 
         <v-spacer></v-spacer>
 
@@ -529,14 +529,14 @@ import ForumState from "@/services/ForumState";
       // End Krytal
 
       postQuestion() {
-        postQuestionForum = true;
+        this.postQuestionForum = true;
         this.viewAnswers = false;
       },
       
       myDrafts() {
         this.postedQuestion = false;
         this.viewAnswers = false;
-        getDraftQuestions()
+        this.getDraftQuestions()
       },
 
       viewQuestions() {
@@ -585,20 +585,21 @@ import ForumState from "@/services/ForumState";
                 this.errorMessage = error.response.data.Message
             })
       },
-      editQuestion(item) {
-            ForumState.openEditQuestionForm(item); 
+      editQuestion(qId) {
+          this.question = qId;
+            this.openEditQuestionForm = true; 
       },
-      getQuestions() {
-            if(questionState == "school") {
-              getSchoolQuestions()
-          }
-          else if(questionState == "department") {
-              getDepartmentQuestions()
-          }
-          else if(questionState == "course") {
-              getDepartmentQuestions()
-          }
-      },
+    //   getQuestions() {
+    //         if(questionState == "school") {
+    //           thigetSchoolQuestions()
+    //       }
+    //       else if(questionState == "department") {
+    //           getDepartmentQuestions()
+    //       }
+    //       else if(questionState == "course") {
+    //           getDepartmentQuestions()
+    //       }
+    //   },
       getSchoolQuestions() {
           this.postedQuestion = true;
             this.axios({
@@ -803,15 +804,15 @@ import ForumState from "@/services/ForumState";
     },
     postQuestion: function () {
       this.error = "";
-      if (this.text.length < 50 || this.text.length > 2000) {
+      if (this.textq.length < 50 || this.textq.length > 2000) {
         this.error = "Invalid text length";
       }
 
-      if (this.exp.length == 0) {
-        this.exp = 0;
+      if (this.expq.length == 0) {
+        this.expq = 0;
       }
 
-      if (this.exp < 0) {
+      if (this.expq < 0) {
         this.error = "Invalid exp number";
       }
 
@@ -841,7 +842,7 @@ import ForumState from "@/services/ForumState";
         })
         .finally(() => {
           this.loading = false;
-          ForumState.closePostQuestionForm()
+          this.postQuestionForm = false;
         })
     },
     postDraft: function () {
@@ -886,19 +887,19 @@ import ForumState from "@/services/ForumState";
         })
     },
     CloseEditQuestionForm() {
-      this.editQuestionForm;
+      this.editQuestionForm = false;
     },
     updateQuestion(qId) {
       this.error = "";
-      if (this.text.length < 50 || this.text.length > 2000) {
+      if (this.texte.length < 50 || this.texte.length > 2000) {
         this.error = "Invalid text length";
       }
 
-      if (this.exp.length == 0) {
+      if (this.expe.length == 0) {
         this.exp = 0;
       }
 
-      if (this.exp < 0) {
+      if (this.expe < 0) {
         this.error = "Invalid exp number";
       }
 
@@ -937,7 +938,7 @@ import ForumState from "@/services/ForumState";
       this.loading = true;
       this.axios.post(this.$hostname + url, {
         QuestionId: qid,
-        Text: document.getElementById('text').value,
+        Text: this.texte,
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
@@ -951,7 +952,7 @@ import ForumState from "@/services/ForumState";
         })
         .finally(() => {
           this.loading = false;
-          ForumState.closePostAnswerForm()
+          this.postAnswerForm = false;
         })
     },
 
