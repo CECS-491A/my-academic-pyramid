@@ -110,7 +110,7 @@ export default {
       departments: null,
       viewingUserId: AppSession.state.userId,
       allowTelemetry: false
-    };
+    }
   },
   methods: {
     async getUserInfo(profileUserId) {
@@ -236,7 +236,8 @@ export default {
 
           })
   }
-};
+ }
+}
 </script>
 
 

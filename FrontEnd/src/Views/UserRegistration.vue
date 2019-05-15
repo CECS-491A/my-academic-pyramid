@@ -50,6 +50,29 @@
                     v-model="department"
                     :items="departments"
                     label="Department"
+                    @input="getCourses"
+                ></v-select>
+                </v-flex>
+            </v-layout>
+
+            <v-layout>
+              <v-flex
+                pa-1
+                >
+                <v-select
+                  v-model="courseId"
+                  :items="courses"
+                  label="Course"
+                  @input="getTeachers"
+                ></v-select>
+                </v-flex>
+                <v-flex
+                pa-1
+                >
+                <v-select
+                  v-model="teacherId"
+                  :items="teachers"
+                  label="Teacher"
                 ></v-select>
                 </v-flex>
             </v-layout>
@@ -122,6 +145,10 @@ export default {
       schools: [],
       department: "",
       departments: [],
+      courseId: "",
+      courses: [],
+      teacherId: "",
+      teachers: [],
       errorMessage: "",
       menu: false
     }
@@ -218,26 +245,68 @@ export default {
         
     },
     getDepartments: function(){
-        this.errorMessage = "";
+      this.errorMessage = "";
+
+      const url = `${this.$hostname}search/selections`;
+      Axios
+      .get(url, {
+          params:{
+              SearchCategory: 1,
+              SearchSchool: this.school
+          },
+          headers: { "Content-Type": "application/json", Authorization: "Bearer " + sessionStorage.SITtoken }
+          
+      })
+      .then(response =>{
+          this.departments = response.data;
+      })
+      .catch(error =>{
+          this.errorMessage = error.response.data.Message
+      })   
+    },
+    getCourses: function() {
+      this.errorMessage = "";
 
         const url = `${this.$hostname}search/selections`;
         Axios
         .get(url, {
             params:{
-                SearchCategory: 1,
-                SearchSchool: this.school
+                SearchCategory: 2,
+                SearchSchool: this.school,
+                SearchDepartment: this.department
             },
             headers: { "Content-Type": "application/json", Authorization: "Bearer " + sessionStorage.SITtoken }
             
         })
         .then(response =>{
-            this.departments = response.data;
+            this.courses = response.data;
         })
         .catch(error =>{
             this.errorMessage = error.response.data.Message
-        })
-        
+        })  
     },
+    getTeachers: function() {
+      this.errorMessage = "";
+
+        const url = `${this.$hostname}search/selections`;
+        Axios
+        .get(url, {
+            params:{
+                SearchCategory: 3,
+                SearchSchool: this.school,
+                SearchDepartment: this.department,
+                SearchCourse: this.courseId
+            },
+            headers: { "Content-Type": "application/json", Authorization: "Bearer " + sessionStorage.SITtoken }
+            
+        })
+        .then(response =>{
+            this.teachers = response.data;
+        })
+        .catch(error =>{
+            this.errorMessage = error.response.data.Message
+        })  
+    }
   },
 
   created() {        

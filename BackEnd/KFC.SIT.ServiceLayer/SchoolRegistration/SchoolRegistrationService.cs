@@ -29,7 +29,8 @@ namespace ServiceLayer.SchoolRegistration
 
         public Course CreateCourse(Course course)
         {
-            return _DbContext.Courses.Add(course);
+            var c = _DbContext.Courses.Add(course);
+            return c;
         }
 
         public Teacher CreateTeacher (Teacher teacher)

@@ -196,7 +196,22 @@ namespace ServiceLayer.Search
         {
             return _db.SchoolTeacherCourses
                 .Where(c => c.SchoolTeacher.SchoolDepartment.SchoolId == schoolId && c.SchoolTeacher.SchoolDepartment.DepartmentID == departmentId)
-                .Select(c => new SearchFilterSelectionDTO { id = c.CourseId, text = c.Course.Name, value = c.CourseId })
+                .GroupBy(c => c.CourseId)
+                .Select(g => g.FirstOrDefault())
+                .Select(cf => new SearchFilterSelectionDTO { id = cf.CourseId, text = cf.Course.Name, value = cf.CourseId })
+                .OrderBy(c => c.text)
+                .ToList();
+        }
+
+        public List<SearchFilterSelectionDTO> GetTeachers(int schoolId, int departmentId, int courseId)
+        {
+            return _db.SchoolTeacherCourses
+                .Where(stc => stc.SchoolTeacher.SchoolDepartment.SchoolId == schoolId
+                        && stc.SchoolTeacher.SchoolDepartment.DepartmentID == departmentId
+                        && stc.CourseId == courseId)
+                .Select(stc => new SearchFilterSelectionDTO { id = stc.SchoolTeacher.TeacherId,
+                                                              text = stc.SchoolTeacher.Teacher.LastName + ", " + stc.SchoolTeacher.Teacher.FirstName,
+                                                              value = stc.CourseId })
                 .OrderBy(c => c.text)
                 .ToList();
         }

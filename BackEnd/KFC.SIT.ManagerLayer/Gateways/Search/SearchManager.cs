@@ -27,7 +27,7 @@ namespace ManagerLayer.Gateways.Search
             _db = db;
             _searchService = new SearchService(_db);
         }
-        
+
         /// <summary>
         /// Search through a category given SearchRequest filters
         /// </summary>
@@ -75,9 +75,9 @@ namespace ManagerLayer.Gateways.Search
 
                     var filteredStudents = new List<SearchPersonDTO>();
 
-                    for(int i = 0; i < students.Count; i++)
+                    for (int i = 0; i < students.Count; i++)
                     {
-                        if(students[i].Courses != null)
+                        if (students[i].Courses != null)
                         {
                             for (int j = 0; j < students[i].Courses.Count; j++)
                             {
@@ -89,9 +89,9 @@ namespace ManagerLayer.Gateways.Search
                                 }
                             }
                         }
-                        
+
                     }
-                    
+
                     return filteredStudents;
 
                 // Search Teachers
@@ -128,7 +128,7 @@ namespace ManagerLayer.Gateways.Search
 
                     for (int i = 0; i < teachers.Count; i++)
                     {
-                        if(teachers[i].Courses != null)
+                        if (teachers[i].Courses != null)
                         {
                             for (int j = 0; j < teachers[i].Courses.Count; j++)
                             {
@@ -148,7 +148,7 @@ namespace ManagerLayer.Gateways.Search
                 case 2:
 
                     // Filter by school
-                    if(request.SearchDepartment == 0)
+                    if (request.SearchDepartment == 0)
                     {
                         var schoolQuestionPredicate = PredicateBuilder.True<SchoolQuestion>();
                         schoolQuestionPredicate = schoolQuestionPredicate.And(q => q.Text.Contains(request.SearchInput));
@@ -156,7 +156,7 @@ namespace ManagerLayer.Gateways.Search
                         return _searchService.GetSchoolQuestions(schoolQuestionPredicate);
                     }
                     // Filter by department
-                    if(request.SearchCourse == 0)
+                    if (request.SearchCourse == 0)
                     {
                         var departmentQuestionPredicate = PredicateBuilder.True<DepartmentQuestion>();
                         departmentQuestionPredicate = departmentQuestionPredicate.And(q => q.Text.Contains(request.SearchInput));
@@ -172,11 +172,11 @@ namespace ManagerLayer.Gateways.Search
                     courseQuestionPredicate = courseQuestionPredicate.And(q => q.CourseId == request.SearchCourse);
                     return _searchService.GetCourseQuestions(courseQuestionPredicate);
             }
-            
+
             throw new ArgumentException(DataAccessLayer.Constants.InvalidSearchCategory);
 
         }
-        
+
         /// <summary>
         /// Get a list of all schools
         /// </summary>
@@ -205,6 +205,11 @@ namespace ManagerLayer.Gateways.Search
         public List<SearchFilterSelectionDTO> GetCourses(int schoolId, int departmentId)
         {
             return _searchService.GetCourses(schoolId, departmentId);
+        }
+
+        public List<SearchFilterSelectionDTO> GetTeachers(int schoolId, int departmentId, int courseId)
+        {
+            return _searchService.GetTeachers(schoolId, departmentId, courseId);
         }
     }
 }
