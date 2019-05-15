@@ -1,9 +1,9 @@
 <template>
-  <v-dialog v-model="forumState.postQuestionForm" max-width="750">
+  <v-dialog v-model="forumState.editQuestionForm" max-width="750">
     <!-- <div class="modal">  -->
       <!-- <v-container>     -->
       <v-card dark > 
-        <h1>Post Question</h1>
+        <h1>Edit Question</h1>
 
         <v-form>
         <v-textarea
@@ -25,10 +25,6 @@
             v-if="!validation"
             /><br />
         
-          <v-btn id="btnDraft" color="grey" v-if="!validation" v-on:click="postDraft">Save Draft</v-btn>
-
-
-        
         <v-alert
             :value="error"
             id="error"
@@ -42,9 +38,9 @@
             <h3>{{ validation }}</h3>
         </div>
 
-        <v-btn id="btnPostQuestion" color="success" v-if="!validation" v-on:click="postQuestion">Post Question</v-btn>
+        <v-btn id="btnPostQuestion" color="success" v-if="!validation" v-on:click="updateQuestion">Update Question</v-btn>
 
-        <v-btn id="btnClose" color="grey" v-on:click="ClosePostQuestionForm()">Close</v-btn>
+        <v-btn id="btnClose" color="grey" v-on:click="CloseEditQuestionForm()">Close</v-btn>
 
         </v-form>
 
@@ -87,7 +83,6 @@ export default {
       validation: null,
       text: '',
       exp: '',
-      underMaintenance: false,
       error: '',
       loading: false
     }
@@ -96,10 +91,10 @@ export default {
     // close() {
     //   this.$emit('close');
     // },
-    ClosePostQuestionForm() {
-      ForumState.closePostQuestionForm()
+    CloseEditQuestionForm() {
+      ForumState.closeEditQuestionForm()
     },
-    postQuestion: function () {
+    updateQuestion: function () {
       this.error = "";
       if (this.text.length < 50 || this.text.length > 2000) {
         this.error = "Invalid text length";
@@ -115,15 +110,11 @@ export default {
 
       if (this.error) return;
 
-      const url = 'DiscussionForum/PostQuestion'
+      const url = 'DiscussionForum/UpdateQuestion'
       this.loading = true;
       this.axios.post(this.$hostname + url, {
-        QuestionType: "SchoolQuestion",
+        QuestionId: forumState.question.QuestionId,
         AccountId: sessionStorage.SITuserId,
-        SchoolId: forumState.school,
-        //SchoolId: "1",        
-        DepartmentId: forumState.department,
-        CourseId: forumState.course,
         Text: document.getElementById('text').value,
         Exp: document.getElementById('exp').value.toString(),
         headers: {
@@ -139,50 +130,9 @@ export default {
         })
         .finally(() => {
           this.loading = false;
-          ForumState.closePostQuestionForm()
+          ForumState.closeEditQuestionForm()
         })
     },
-    postDraft: function () {
-      this.error = "";
-      if (this.text.length > 2000) {
-        this.error = "Invalid text length";
-      }
-
-      if (this.exp.length == 0) {
-        this.exp = 0;
-      }
-
-      if (this.exp < 0) {
-        this.error = "Invalid exp number";
-      }
-
-      if (this.error) return;
-
-      const url = 'DiscussionForum/PostQuestion'
-      this.loading = true;
-      this.axios.post(this.$hostname + url, {
-         
-        //'Send': 'application/json'
-          QuestionType: "DraftQuestion",
-          AccountId: sessionStorage.SITuserId,
-          Text: document.getElementById('text').value,
-          Exp: document.getElementById('exp').value.toString(),
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-      })
-        .then(response => {
-          this.validation = response.data 
-        })
-        .catch(err => {
-          this.error = err.response.data
-        })
-        .finally(() => {
-          this.loading = false;
-          ForumState.closePostQuestionForm()
-        })
-    }
   }
 }
 </script>

@@ -1,6 +1,6 @@
 export default {
     state: {
-        postQuestionForm: true,
+        postQuestionForm: false,
         postAnswerForm: false,
         editQuestionForm: false,
         viewAnswers: false,
@@ -9,6 +9,7 @@ export default {
         department: "",
         course: "",
         question: null,
+        questionsToGet: "",
 
     },
     openPostQuestionForm() {
@@ -18,8 +19,9 @@ export default {
         this.state.postQuestionForm = false
     },
 
-    openPostAnswerForm() {
+    openPostAnswerForm(item) {
         this.state.postAnswerForm = true
+        this.question = item
     },
     closePostAnswerForm() {
         this.state.postAnswerForm = false
@@ -55,5 +57,15 @@ export default {
     },
     setCourse(courseName) {
         this.state.course = courseName
-    }
+    },
+
+    getSchoolQuestions() {
+        this.state.questionsToGet = "school"
+    },
+    getDepartmentQuestions() {
+        this.state.questionsToGet = "department"
+    },
+    getCourseQuestions() {
+        this.state.questionsToGet = "course"
+    },
 }

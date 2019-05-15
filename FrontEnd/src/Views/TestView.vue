@@ -4,9 +4,11 @@
     <ToolBarComponent></ToolBarComponent>
 
     <!-- <TestComponent></TestComponent> -->
-    <PostQuestionDialog></PostQuestionDialog>
-
     <!-- <ViewQuestions></ViewQuestions> -->
+    <PostQuestionDialog></PostQuestionDialog>
+    <PostAnswerDialog></PostAnswerDialog>
+    <EditQuestionDialog></EditQuestionDialog>
+
 
   </v-container> 
  </v-app>  
@@ -16,7 +18,8 @@
 import ToolBarComponent from "@/components/DiscussionForum/ToolBarComponent";
 import ViewQuestions from "@/components/DiscussionForum/ViewQuestions";
 import PostQuestionDialog from "@/components/DiscussionForum/PostQuestionDialog";
-
+import PostAnswerDialog from "@/components/DiscussionForum/PostAnswerDialog";
+import EditQuestionDialog from "@/components/DiscussionForum/EditQuestionDialog";
 // import TestComponent from "@/components/DiscussionForum/TestComponent";
 
 export default {
@@ -24,7 +27,9 @@ export default {
   components: {
     ToolBarComponent,
     ViewQuestions,
-    PostQuestionDialog
+    PostQuestionDialog,
+    PostAnswerDialog,
+    EditQuestionDialog,
     // TestComponent,
   },
 //   data() {

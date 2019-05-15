@@ -38,7 +38,7 @@
 
 
     <v-btn icon>
-      <v-icon>refresh</v-icon>
+      <v-icon @click="viewQuestions()">refresh</v-icon>
     </v-btn>
 
   </v-layout>
@@ -154,6 +154,22 @@ import ForumState from "@/services/ForumState";
       
       myDrafts() {
         ForumState.viewDraftQuestions()
+      },
+      
+      viewQuestions() {
+        ForumState.setSchool(this.school)
+        ForumState.setDepartment(this.department)
+        ForumState.setCourse(this.course)
+        if(this.course != null) {
+          ForumState.getCourseQuestions()
+        }
+        else if(this.department != null) {
+          ForumState.getDepartmentQuestions()
+        }
+        else if(this.school != null) {
+          ForumState.getSchoolQuestions()
+        }
+        ForumState.viewPostedQuestions()
       },
     }
   }

@@ -14,9 +14,9 @@
 
     <v-card-actions>   
       <v-layout align-center>
-        <v-btn small v-if="userId != item.AccoutId">Mark As Spam</v-btn> {{"Spam Count: " + item.SpamCount}}
-        <v-btn small @click="viewAnswers()">See Answers</v-btn> {{"Answers: " + item.AnswerCount}}
-        <v-btn small v-if="userId != item.AccountId" @click="postAnswer()">Post Answer</v-btn> {{"Exp needed to answer: " + item.ExpNeededToAnswer}}
+        <v-btn small v-if="userId != item.AccoutId" @click="increaseQuestionSpamCount(item.QuestionId)">Mark As Spam</v-btn> {{"Spam Count: " + item.SpamCount}}
+        <v-btn small @click="viewAnswers(item)">See Answers</v-btn> {{"Answers: " + item.AnswerCount}}
+        <v-btn small v-if="userId != item.AccountId" @click="postAnswer(item)">Post Answer</v-btn> {{"Exp needed to answer: " + item.ExpNeededToAnswer}}
 
         <v-spacer></v-spacer>
 
@@ -63,32 +63,48 @@
   </v-container>
 
 <v-container v-if="forumState.viewAnswers">
-<v-card class="mx-auto" dark max-width="1400" max-height="800" v-for="item in questions" :key="item.AccountName">
+  <v-card class="mx-auto" dark color="pink" max-width="1400" max-height="800">
+
+    <v-card-title>{{forumState.question.AccountName}}
+      <v-spacer></v-spacer>
+      {{forumState.question.DateCreated}}
+    </v-card-title>
+    
+    <v-card-text class="headline font-weight-bold"> {{forumState.question.Text}} </v-card-text>
+
+    <v-card-footer>{{ forumState.question.SchoolName + "/" + forumState.question.DepartmentName + "/" + forumState.question.CourseName }}</v-card-footer>
+    
+  </v-card>
+  <v-card class="mx-auto" dark max-width="1400" max-height="800" v-for="item in answers" :key="item.AccountName">
 
   <!-- <v-card class="mx-auto" dark max-width="1400" max-height="800"> -->
 
     <v-card-title>{{item.AccountName}}
       <v-spacer></v-spacer>
-      {{item.DateCreated}}
+      {{item.CreatedDate}}
     </v-card-title>
     
     <v-card-text class="headline font-weight-bold"> {{item.Text}} </v-card-text>
 
     <v-card-actions>   
       <v-layout align-center>
+        <v-btn small v-if="userId != item.AccoutId" @click="increaseAnswerSpamCount(item.AnswerId)">Mark As Spam</v-btn> {{"Spam Count: " + item.SpamCount}}
+        <v-icon small v-if="userId != item.AccountId" @click="icreaseAnswerHelpfulCount(itemAnswerId)">thumb_up</v-icon> {{"Helpful: " + item.HelpfulCount}}
+        <v-icon small v-if="userId != item.AccountId" @click="icreaseAnswerUnHelpfulCount(itemAnswerId)">thumb_down</v-icon> {{"UnHelpful: " + item.UnHelpfulCount}}
 
         <v-spacer></v-spacer>
 
-        <v-icon small v-if="userId == item.AccountId" @click="editQuestion(item.QuestionId)">edit</v-icon>
+        <v-btn small v-if="userId == forumState.question.AccountId" @click="markAsCorrectAnswer(item.AnswerId)">Mark as Correct</v-btn> 
 
       </v-layout>
     </v-card-actions>
 
+    <v-card-footer>{{ "Is Correct Ans: " + item.IsCorrectAnswer }}</v-card-footer>
+
     <v-divider class ="ma-3"></v-divider>
     
   </v-card>
-  </v-container>
-  
+</v-container>
 </v-container>
 </template>
 
@@ -102,6 +118,7 @@ import ForumState from "@/services/ForumState";
     data () {
       return {
         forumState: ForumState.state,
+        questionState: forumState.questionsToGet,
         userAccount: null,
         isStudent: true,
         userId: "",
@@ -109,12 +126,27 @@ import ForumState from "@/services/ForumState";
         departments: [],
         courses: [],
         response: '',
-        questions: [ ]
+        questions: [ ],
+        anwers: [ ]
       }
     },
 
     created() {
-        this.getSchoolQuestions()
+        // this.getSchoolQuestions()
+    },
+
+    watch: {
+      questionState: function() {
+          if(questionState == "school") {
+              getSchoolQuestions()
+          }
+          else if(questionState == "department") {
+              getDepartmentQuestions()
+          }
+          else if(questionState == "course") {
+              getDepartmentQuestions()
+          }
+      }, 
     },
     
     // beforeMount(){
@@ -122,11 +154,31 @@ import ForumState from "@/services/ForumState";
     //     this.getAccount()
     // },
     methods: {
-      viewAnswers() {
-        ForumState.viewAnswers();
+      viewAnswers(item) {
+            this.axios({
+              headers: {
+                //Accept: "application/json", 
+                "Content-Type": "application/Json",
+                //Authorization: "Bearer" + sessionStorage.SITtoken
+              },
+              method: "GET", 
+              crossDomain: true,
+              url: this.$hostname + "DiscussionForum/GetAnswers",
+              params: {
+                  questionId: item.QuestionId
+              }
+            })
+              .then(response => {
+                  this.answers = response.data;
+                  ForumState.viewAnswers(item);
+              })
+              .catch(err => {
+                  console.log(err);
+              });
+        },
       },
-      postAnswer() {
-        ForumState.openPostAnswerForm();
+      postAnswer(item) {
+        ForumState.openPostAnswerForm(item);
       },
       closeQuestion(qId) {
             const url = `${this.$hostname}DiscussionForum/CloseQuestion`;
@@ -237,7 +289,112 @@ import ForumState from "@/services/ForumState";
                   console.log(err);
               });
         },
+        increaseQuestionSpamCount(qId) {
+          this.axios({
+              headers: {
+                //Accept: "application/json", 
+                "Content-Type": "application/Json",
+                //Authorization: "Bearer" + sessionStorage.SITtoken
+              },
+              method: "POST", 
+              crossDomain: true,
+              url: this.$hostname + "DiscussionForum/IncreaseQuestionSpamCount",
+              params: {
+                  questionId: qId
+              }
+            })
+              .then(response => {
+                  this.item.SpamCount = response.data;
+              })
+              .catch(err => {
+                  console.log(err);
+              });
+        },
+        increaseAnswerSpamCount(aId) {
+          this.axios({
+              headers: {
+                //Accept: "application/json", 
+                "Content-Type": "application/Json",
+                //Authorization: "Bearer" + sessionStorage.SITtoken
+              },
+              method: "POST", 
+              crossDomain: true,
+              url: this.$hostname + "DiscussionForum/IncreaseAnswerSpamCount",
+              params: {
+                  answerId: aId
+              }
+            })
+              .then(response => {
+                  this.item.SpamCount = response.data;
+              })
+              .catch(err => {
+                  console.log(err);
+              });
+        },
+        increaseAnswerHelpfulCount(aId) {
+          this.axios({
+              headers: {
+                //Accept: "application/json", 
+                "Content-Type": "application/Json",
+                //Authorization: "Bearer" + sessionStorage.SITtoken
+              },
+              method: "POST", 
+              crossDomain: true,
+              url: this.$hostname + "DiscussionForum/IncreaseAnswerHelpfulCount",
+              params: {
+                  answerId: aId
+              }
+            })
+              .then(response => {
+                  this.item.HelpfulCount = response.data;
+              })
+              .catch(err => {
+                  console.log(err);
+              });
+        },
+        increaseAnswerUnHelpfulCount(aId) {
+          this.axios({
+              headers: {
+                //Accept: "application/json", 
+                "Content-Type": "application/Json",
+                //Authorization: "Bearer" + sessionStorage.SITtoken
+              },
+              method: "POST", 
+              crossDomain: true,
+              url: this.$hostname + "DiscussionForum/IncreaseAnswerUnHelpfulCount",
+              params: {
+                  answerId: aId
+              }
+            })
+              .then(response => {
+                  this.item.UnHelpfulCount = response.data;
+              })
+              .catch(err => {
+                  console.log(err);
+              });
+        },
+        markAsCorrectAnswer(aId) {
+          this.axios({
+              headers: {
+                //Accept: "application/json", 
+                "Content-Type": "application/Json",
+                //Authorization: "Bearer" + sessionStorage.SITtoken
+              },
+              method: "POST", 
+              crossDomain: true,
+              url: this.$hostname + "DiscussionForum/MarkAsCorrectAnswer",
+              params: {
+                  answerId: aId
+              }
+            })
+              .then(response => {
+                  this.item.UnHelpfulCount = response.data;
+              })
+              .catch(err => {
+                  console.log(err);
+              });
+        },
     }
-  }
+  
 </script>
 
