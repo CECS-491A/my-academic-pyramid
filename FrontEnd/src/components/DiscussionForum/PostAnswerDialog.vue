@@ -57,7 +57,7 @@ export default {
   name: "PostAnwerDialog",
   data () {
     return {
-     forumState: this.ForumState.state,
+     forumState: ForumState.state,
       validation: null,
       text: '',
       exp: '',
@@ -70,14 +70,14 @@ export default {
     //   this.$emit('close');
     // },
     ClosePostAnswerForm() {
-      this.ForumState.closePostAnswerForm()
+      ForumState.closePostAnswerForm()
     },
     postAnswer: function () {
       this.error = "";
 
       const url = 'DiscussionForum/PostAnswer'
       this.loading = true;
-      this.axios.post(this.$hostname + url, {
+      axios.post(this.$hostname + url, {
         QuestionId: this.forumState.question.QuestionId,
         Text: document.getElementById('text').value,
         headers: {
@@ -93,7 +93,7 @@ export default {
         })
         .finally(() => {
           this.loading = false;
-          this.ForumState.closePostAnswerForm()
+          ForumState.closePostAnswerForm()
         })
     },
   }

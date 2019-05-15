@@ -184,7 +184,7 @@ import axios from 'axios'
     },
     methods: {
         getAnswers() {
-            this.axios({
+            axios({
               headers: {
                 //Accept: "application/json", 
                 "Content-Type": "application/Json",

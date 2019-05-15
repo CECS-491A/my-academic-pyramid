@@ -82,7 +82,7 @@ export default {
   name: "PostQuestionDialog",
   data () {
     return {
-     forumState: this.ForumState.state,
+     forumState: ForumState.state,
       //postQuestionDialog: true,
       validation: null,
       text: '',
@@ -97,7 +97,7 @@ export default {
     //   this.$emit('close');
     // },
     ClosePostQuestionForm() {
-      this.ForumState.closePostQuestionForm()
+      ForumState.closePostQuestionForm()
     },
     postQuestion: function () {
       this.error = "";
@@ -117,7 +117,7 @@ export default {
 
       const url = 'DiscussionForum/PostQuestion'
       this.loading = true;
-      this.axios.post(this.$hostname + url, {
+      axios.post(this.$hostname + url, {
         QuestionType: "SchoolQuestion",
         AccountId: sessionStorage.SITuserId,
         SchoolId: this.forumState.school,
@@ -139,7 +139,7 @@ export default {
         })
         .finally(() => {
           this.loading = false;
-          this.ForumState.closePostQuestionForm()
+          ForumState.closePostQuestionForm()
         })
     },
     postDraft: function () {
@@ -160,7 +160,7 @@ export default {
 
       const url = 'DiscussionForum/PostQuestion'
       this.loading = true;
-      this.axios.post(this.$hostname + url, {
+      axios.post(this.$hostname + url, {
          
         //'Send': 'application/json'
           QuestionType: "DraftQuestion",
@@ -180,7 +180,7 @@ export default {
         })
         .finally(() => {
           this.loading = false;
-          this.ForumState.closePostQuestionForm()
+          ForumState.closePostQuestionForm()
         })
     }
   }
