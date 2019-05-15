@@ -58,14 +58,13 @@ namespace ServiceLayer.DataAnalysisDashboard
             foreach (var monthly in queryResult)
             {
                 successLogin.Add(monthly.Date.Month, monthly.Result);
-                Console.WriteLine(monthly.Result + ": " + monthly.Date);
             }
             return successLogin;
         }
 
         /// <summary>
-        /// Use the query to get the list of the number of failed logged in users.
-        /// Each element represents a month and sorted by date. Starts from Jan to Dec.
+        /// Use the query to get the list of the number of failed logged in users
+        /// Each element represents a month and sorted by date in descending order
         /// </summary>
         /// <returns>failedLogin</returns>
         public IDictionary<int, long> CountFailedLogin(int numOfMonth)

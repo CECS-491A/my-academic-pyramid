@@ -46,7 +46,7 @@
         labels: this.chartLabels,
           datasets: [
             {
-              label: '# of Average Session Duration',
+              label: '# of Average Session Duration (Minutes)',
               backgroundColor: "rgba(54, 162, 235, 0.6)",
               pointBackgroundColor: 'green',
               borderWidth: 1,
