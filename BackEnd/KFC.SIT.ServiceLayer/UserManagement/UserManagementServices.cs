@@ -267,6 +267,7 @@ namespace ServiceLayer.UserManagement.UserAccountServices
                     SchoolName = s.SchoolDepartment.School.Name,
                     DepartmentName = s.SchoolDepartment.Department.Name,
                     Ranking = s.Account.Exp,
+                    AllowTelemetry = s.Account.LogTelemetry,
                     Courses = s.Courses.Select(c => c.Course.Name).ToList()
                 })
                 .FirstOrDefault();

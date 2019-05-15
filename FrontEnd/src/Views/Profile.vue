@@ -50,10 +50,19 @@
                     <v-divider></v-divider>
                   </v-layout>
                   <v-layout row wrap>
-                    <v-text-field v-model="updatedUserInfo.newDepartmentName" :label="`Department`"></v-text-field>
+                    <v-flex
+                
+                    pa-1
+                    >
+                    <v-select
+                        v-model="updatedUserInfo.newDepartmentName"
+                        :items="departments"
+                        label="Department"
+                    ></v-select>
+                    </v-flex>
                   </v-layout>
                   <v-layout row wrap>
-                    <v-checkbox v-model="allowTelemetry" :label="`Allow telemetric data recording.`"></v-checkbox>
+                    <v-checkbox v-model="updatedUserInfo.newAllowTelemetry" :label="`Allow telemetric data recording.`"></v-checkbox>
                   </v-layout>
                   <v-layout>
                     <v-btn @click="modifyProfile">Enter</v-btn>
@@ -86,6 +95,7 @@ export default {
         schoolName: "",
         departmentName: "",
         ranking: "",
+        allowTelemetry: false,
         courses: "",
       },
       memberSince: "",
@@ -95,8 +105,9 @@ export default {
         newMiddleName: "new",
         newLastName: "New",
         newDepartmentName: "New",
-        allowTelemetry: false
+        newAllowTelemetry: false
       },
+      departments: null,
       viewingUserId: AppSession.state.userId,
       allowTelemetry: false
     };
@@ -116,6 +127,7 @@ export default {
                     this.userInfo.lastName = response.data.User.LastName
                     this.userInfo.schoolName = response.data.User.SchoolName
                     this.userInfo.departmentName = response.data.User.DepartmentName
+                    this.userInfo.allowTelemetry = response.data.User.AllowTelemetry
                     this.userInfo.courses = response.data.user.Courses
                     console.log('About to finish getUserInfo')
                 })
@@ -130,6 +142,7 @@ export default {
           FirstName: this.updatedUserInfo.newFirstName,
           MiddleName: this.updatedUserInfo.newMiddleName,
           LastName: this.updatedUserInfo.newLastName,
+          AllowTelemetry: this.updatedUserInfo.newAllowTelemetry,
           DepartmentName: this.updatedUserInfo.newDepartmentName
         }
       let headersObject = {
@@ -161,10 +174,30 @@ export default {
       this.updatedUserInfo.newMiddleName = this.userInfo.middleName
       this.updatedUserInfo.newLastName = this.userInfo.lastName
       this.updatedUserInfo.newDepartmentName = this.userInfo.departmentName
-      this.updatedUserInfo.allowTelemetry = this.userInfo.allowTelemetry
+      this.updatedUserInfo.newAllowTelemetry = this.userInfo.allowTelemetry
       
-    }
-  },
+    },
+  //   getDepartments: function(){
+
+  //       const url = `${this.$hostname}search/selections`;
+  //       this.axios.get(url, {
+  //           params:{
+  //               SearchCategory: 1,
+  //               SearchSchool: this.userInfo.schoolName
+  //           },
+  //           headers: { "Content-Type": "application/json", Authorization: "Bearer " + sessionStorage.SITtoken }
+            
+  //       })
+  //       .then(response =>{
+  //         // finish this.
+  //         this.departments = response.data;
+  //       })
+  //       .catch(error =>{
+  //           this.errorMessage = error.response.data.Message
+  //       })
+        
+  //   }
+  // },
   computed: {
     name() {
       return this.userInfo.firstName + " " + this.userInfo.lastName;
@@ -181,8 +214,9 @@ export default {
       if(to.params.id != undefined) {
         this.getUserInfo(to.params.id).then(() =>  {
           console.log('getUserInfo is complete in watch')
-          if (this.isOwnUser()) {
+          if (this.isOwnUser) {
             this.synchToInputs()
+            this.getDepartments()
           }
         }).catch((error)=> {
 
@@ -196,6 +230,7 @@ export default {
         .then(() => {
           if (this.isOwnUser) {
             this.synchToInputs()
+            this.getDepartments()
           }
         }).catch((error)=> {
 
