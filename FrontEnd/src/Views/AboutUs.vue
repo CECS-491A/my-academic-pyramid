@@ -17,7 +17,7 @@
   <v-flex xs12 sm6 offset-sm3>
     <v-card color="cyan lighten-4" >
       <v-card-title primary-title > 
-        <h3 class="display-1"> Welcome to My Academic Pyramid application </h3>
+        <h3 class="display-1"> About My Academic Pyramid application </h3>
         
       </v-card-title>
       <div>{{welcome_text}}</div>
@@ -39,7 +39,7 @@ export default {
   },
   data () {
     return {
-      info: "My Academic Pyramid Homepage",
+      info: "Who we are ?",
       team: [
         { name: "Krystal Leon", role: 'Scrum Manager'},
         { name: "Hyunwoo Kim", role: 'Fullstack developer'},
