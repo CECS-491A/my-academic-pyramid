@@ -11,7 +11,7 @@
   "dependencies": {
     "axios": "^0.18.1",
     "chai": "^4.2.0",
-    "chart.js": "^2.8.0",
+    "chart.js": "^2.9.4",
     "chartkick": "^3.1.1",
     "copy-webpack-plugin": "^5.0.4",
     "hchs-vue-charts": "^1.2.8",
