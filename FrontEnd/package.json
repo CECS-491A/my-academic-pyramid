@@ -15,7 +15,7 @@
     "chartkick": "^3.1.1",
     "copy-webpack-plugin": "^5.0.4",
     "hchs-vue-charts": "^1.2.8",
-    "mocha": "^6.1.4",
+    "mocha": "^10.2.0",
     "moment": "^2.24.0",
     "ms-signalr-client": "^2.2.7",
     "ms-signalr-client-jquery-3": "^2.2.10",
